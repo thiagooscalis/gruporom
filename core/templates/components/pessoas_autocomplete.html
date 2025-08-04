@@ -4,7 +4,9 @@
          data-pessoa-id="{{ pessoa.pk }}" 
          data-pessoa-nome="{{ pessoa.nome }}"
          data-pessoa-doc="{{ pessoa.doc }}"
-         style="cursor: pointer;">
+         style="cursor: pointer;"
+         onmouseover="this.style.backgroundColor='#f8f9fa'"
+         onmouseout="this.style.backgroundColor='white'">
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <strong>{{ pessoa.nome }}</strong>

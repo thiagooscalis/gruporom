@@ -1,0 +1,58 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+
+<form method="post" 
+      {% if turno_id %}
+          hx-post="{% url action_url turno_id %}"
+      {% else %}
+          hx-post="{% url action_url %}"
+      {% endif %}
+      hx-target="#modalTurno .modal-content" 
+      hx-swap="innerHTML">
+    {% csrf_token %}
+    
+    <div class="modal-body">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-12">
+                {{ form.nome|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.inicio|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.fim|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check">
+                    {{ form.ativo }}
+                    <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                        {{ form.ativo.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Salvar
+        </button>
+    </div>
+</form>

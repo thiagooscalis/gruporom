@@ -1,0 +1,88 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+
+<form hx-post="{% if colaborador_id %}{% url action_url colaborador_id %}{% else %}{% url action_url %}{% endif %}" hx-target="#modalColaborador .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    
+    <div class="modal-body">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        
+        <!-- Campo de busca de pessoa com autocomplete -->
+        {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_url selected_label="Pessoa selecionada:" %}
+        
+        <!-- Cargo e Salário -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.cargo|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.salario|as_crispy_field }}
+            </div>
+        </div>
+        
+        <!-- Datas -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.data_admissao|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.data_demissao|as_crispy_field }}
+            </div>
+        </div>
+        
+        <!-- Comissão e Checkboxes -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.comissao|as_crispy_field }}
+            </div>
+            <div class="col-md-3">
+                <div class="form-check mt-4">
+                    {{ form.gorjeta }}
+                    <label class="form-check-label" for="{{ form.gorjeta.id_for_label }}">
+                        {{ form.gorjeta.label }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check mt-4">
+                    {{ form.ativo }}
+                    <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                        {{ form.ativo.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Turnos -->
+        <div class="row">
+            <div class="col-12">
+                <label class="form-label">{{ form.turnos.label }}</label>
+                <div class="border rounded p-3" style="max-height: 150px; overflow-y: auto;">
+                    {% for choice in form.turnos %}
+                        <div class="form-check">
+                            {{ choice.tag }}
+                            <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                {{ choice.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Salvar
+        </button>
+    </div>
+</form>

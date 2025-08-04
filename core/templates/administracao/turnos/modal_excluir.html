@@ -1,0 +1,75 @@
+<div class="modal-header">
+    <h5 class="modal-title text-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>{{ title }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-warning d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-3"></i>
+        <div>
+            <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+        </div>
+    </div>
+    
+    <p class="mb-3">Você tem certeza que deseja excluir o turno:</p>
+    
+    <div class="card bg-light">
+        <div class="card-body">
+            <h6 class="card-title mb-2">{{ turno.nome }}</h6>
+            <div class="row">
+                <div class="col-sm-6">
+                    <small class="text-muted">Horário:</small><br>
+                    <span class="fw-bold">{{ turno.inicio|time:"H:i" }} - {{ turno.fim|time:"H:i" }}</span>
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted">Duração:</small><br>
+                    <span class="fw-bold">{{ turno.duracao_horas|floatformat:1 }}h</span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-6">
+                    <small class="text-muted">Tipo:</small><br>
+                    {% if turno.eh_noturno %}
+                        <span class="badge bg-dark">
+                            <i class="fas fa-moon me-1"></i>Noturno
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-sun me-1"></i>Diurno
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted">Status:</small><br>
+                    {% if turno.ativo %}
+                        <span class="badge bg-success">Ativo</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inativo</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if error %}
+        <div class="alert alert-danger mt-3">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <form method="post" 
+          hx-post="{% url action_url turno.id %}"
+          hx-target="#modalTurno .modal-content" 
+          hx-swap="innerHTML"
+          class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-2"></i>Sim, excluir turno
+        </button>
+    </form>
+</div>

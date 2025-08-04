@@ -1,0 +1,34 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="modalCargoLabel">{{ title }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+<form hx-post="{% if cargo_id %}{% url action_url cargo_id %}{% else %}{% url action_url %}{% endif %}" hx-target="#modalCargo .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="modal-body">
+        {{ form.nome|as_crispy_field }}
+        {{ form.empresa|as_crispy_field }}
+        
+        <div class="form-check form-switch">
+            {{ form.ativo }}
+            <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                {{ form.ativo.label }}
+            </label>
+        </div>
+        
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger mt-3">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-1"></i> Salvar
+        </button>
+    </div>
+</form>

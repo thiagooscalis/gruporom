@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Turnos - Administração{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Turnos' %}
+            
+            <!-- Busca -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-10">
+                            <input type="text" name="search" class="form-control" 
+                                   placeholder="Buscar por nome do turno..." 
+                                   value="{{ search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="fas fa-search me-2"></i>Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Listagem -->
+            <div class="card">
+                <div class="card-body">
+                    {% if page_obj %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome do Turno</th>
+                                    <th>Horário</th>
+                                    <th class="text-center">Duração</th>
+                                    <th class="text-center">Tipo</th>
+                                    <th class="text-center">Status</th>
+                                    <th width="120">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for turno in page_obj %}
+                                <tr>
+                                    <td>{{ turno.nome }}</td>
+                                    <td>
+                                        <span class="text-muted">
+                                            {{ turno.inicio|time:"H:i" }} - {{ turno.fim|time:"H:i" }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info">{{ turno.duracao_horas|floatformat:1 }}h</span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if turno.eh_noturno %}
+                                            <span class="badge bg-dark">
+                                                <i class="fas fa-moon me-1"></i>Noturno
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-sun me-1"></i>Diurno
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if turno.ativo %}
+                                            <span class="badge bg-success">Ativo</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inativo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalTurno"
+                                                hx-get="{% url 'administracao:turnos_editar_modal' turno.id %}"
+                                                hx-target="#modalTurno .modal-content"
+                                                hx-swap="innerHTML">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalTurno"
+                                                hx-get="{% url 'administracao:turnos_excluir_modal' turno.id %}"
+                                                hx-target="#modalTurno .modal-content"
+                                                hx-swap="innerHTML">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        Nenhum turno encontrado
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    {% if page_obj.has_other_pages %}
+                    <nav aria-label="Paginação" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-center text-muted">Nenhum turno cadastrado.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Action Button -->
+<button type="button" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center" 
+        style="width: 56px; height: 56px;"
+        data-bs-toggle="modal" 
+        data-bs-target="#modalTurno"
+        hx-get="{% url 'administracao:turnos_novo_modal' %}"
+        hx-target="#modalTurno .modal-content"
+        hx-swap="innerHTML"
+        title="Novo Turno">
+    <i class="fas fa-plus"></i>
+</button>
+
+<!-- Modal Container -->
+<div class="modal fade" id="modalTurno" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

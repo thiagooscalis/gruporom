@@ -1,0 +1,47 @@
+{% if cambio_hoje %}
+<div class="cambio-widget d-flex align-items-center">
+    <div class="me-2">
+        <i class="fas fa-dollar-sign text-success"></i>
+    </div>
+    <div>
+        <div class="fw-bold text-success">
+            R$ {{ cambio_hoje.valor|floatformat:4 }}
+        </div>
+        {% if mostrar_data %}
+        <small class="text-muted">
+            {{ cambio_hoje.data|date:"d/m/Y" }}
+        </small>
+        {% endif %}
+        {% if mostrar_variacao and variacao is not None %}
+        <div class="small">
+            {% if variacao > 0 %}
+                <span class="text-success">
+                    <i class="fas fa-arrow-up"></i> +{{ variacao|floatformat:4 }}
+                </span>
+            {% elif variacao < 0 %}
+                <span class="text-danger">
+                    <i class="fas fa-arrow-down"></i> {{ variacao|floatformat:4 }}
+                </span>
+            {% else %}
+                <span class="text-muted">
+                    <i class="fas fa-minus"></i> {{ variacao|floatformat:4 }}
+                </span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% elif erro %}
+<div class="cambio-widget">
+    <span class="text-muted">
+        <i class="fas fa-exclamation-triangle"></i>
+        Câmbio indisponível
+    </span>
+</div>
+{% else %}
+<div class="cambio-widget">
+    <div class="spinner-border spinner-border-sm text-muted" role="status">
+        <span class="visually-hidden">Carregando câmbio...</span>
+    </div>
+</div>
+{% endif %}

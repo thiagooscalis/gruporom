@@ -1,0 +1,116 @@
+<div class="modal-header">
+    <h5 class="modal-title text-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>{{ title }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-warning d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-3"></i>
+        <div>
+            <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+        </div>
+    </div>
+    
+    <p class="mb-3">Você tem certeza que deseja excluir o colaborador:</p>
+    
+    <div class="card bg-light">
+        <div class="card-body">
+            <h6 class="card-title mb-3">{{ colaborador.nome }}</h6>
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <small class="text-muted">Documento:</small><br>
+                    <span class="fw-bold">{{ colaborador.documento }}</span>
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted">Cargo:</small><br>
+                    <span class="fw-bold">{{ colaborador.cargo.nome }}</span>
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col-sm-6">
+                    <small class="text-muted">Empresa:</small><br>
+                    <span class="fw-bold">{{ colaborador.empresa.nome }}</span>
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted">Salário:</small><br>
+                    <span class="fw-bold">R$ {{ colaborador.salario|floatformat:2 }}</span>
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col-sm-6">
+                    <small class="text-muted">Data de Admissão:</small><br>
+                    <span class="fw-bold">{{ colaborador.data_admissao|date:"d/m/Y" }}</span>
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted">Status:</small><br>
+                    {% if colaborador.esta_ativo %}
+                        <span class="badge bg-success">Ativo</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inativo</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if colaborador.data_demissao %}
+            <div class="row mt-2">
+                <div class="col-sm-6">
+                    <small class="text-muted">Data de Demissão:</small><br>
+                    <span class="fw-bold">{{ colaborador.data_demissao|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Benefícios -->
+            {% if colaborador.gorjeta or colaborador.comissao > 0 %}
+            <div class="row mt-2">
+                <div class="col-12">
+                    <small class="text-muted">Benefícios:</small><br>
+                    {% if colaborador.gorjeta %}
+                        <span class="badge bg-success me-1">Gorjeta</span>
+                    {% endif %}
+                    {% if colaborador.comissao > 0 %}
+                        <span class="badge bg-info">Comissão {{ colaborador.comissao|floatformat:1 }}%</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Turnos -->
+            {% if colaborador.turnos.exists %}
+            <div class="row mt-2">
+                <div class="col-12">
+                    <small class="text-muted">Turnos:</small><br>
+                    {% for turno in colaborador.turnos.all %}
+                        <span class="badge bg-secondary me-1">{{ turno.nome }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if error %}
+        <div class="alert alert-danger mt-3">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <form method="post" 
+          hx-post="{% url action_url colaborador.id %}"
+          hx-target="#modalColaborador .modal-content" 
+          hx-swap="innerHTML"
+          class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-2"></i>Sim, excluir colaborador
+        </button>
+    </form>
+</div>

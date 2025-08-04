@@ -3,6 +3,41 @@
     <div class="text-center">
         <img src="{% static 'logo_gruporom.svg' %}" alt="logo" class='img-fluid p-4' style="max-width: 150px">
     </div>
+    
+    <!-- Informações do usuário -->
+    <div class="px-3 pb-3 mb-3 border-bottom">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <div class="bg-primary bg-opacity-10 p-2 rounded-circle">
+                    <i class="fas fa-user text-primary"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <div class="fw-bold small">{{ user.pessoa.nome|default:user.username }}</div>
+                <div class="text-muted" style="font-size: 0.75rem;">
+                    {% for group in user.groups.all %}
+                        {{ group.name }}
+                    {% empty %}
+                        Usuario
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Câmbio do dia -->
+    {% if cambio_hoje %}
+    <div class="px-3 pb-3 mb-3 border-bottom">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-dollar-sign text-success me-2"></i>
+            <div>
+                <div class="fw-bold text-success">R$ {{ dolar_hoje|floatformat:4 }}</div>
+                <small class="text-muted" style="font-size: 0.75rem;">USD/BRL</small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
     <ul class="nav flex-column">
         {% include 'menu/'|add:area|add:'.html' %}
     </ul>

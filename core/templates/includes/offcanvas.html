@@ -30,6 +30,19 @@
             </div>
         </div>
         
+        <!-- Câmbio do dia -->
+        {% if cambio_hoje %}
+        <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-dollar-sign text-success me-2"></i>
+                <div>
+                    <div class="fw-bold text-success">R$ {{ dolar_hoje|floatformat:4 }}</div>
+                    <small class="text-muted" style="font-size: 0.75rem;">USD/BRL - {{ cambio_hoje.data|date:"d/m" }}</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
         <ul class="nav flex-column">
             {% include 'menu/'|add:area|add:'.html' %}
         </ul>
