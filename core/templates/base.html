@@ -10,7 +10,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body class="h-100 d-flex">
-    {% include 'includes/offcanvas.html' %}
+    {% include 'includes/aside.html' %}
     <main id="main" class="flex-fill">
         {% include 'includes/navbar.html' %}
         <div class="p-3">
@@ -18,8 +18,20 @@
             {% block content %}{% endblock content %}
         </div>
     </main>
-
+    {% include 'includes/offcanvas.html' %}
+    
+    <!-- Modal de Logout -->
+    {% include 'includes/modal_logout.html' %}
+    
+    <!-- Modal de Alterar Senha -->
+    {% include 'includes/modal_alterar_senha.html' %}
+    
+    <!-- Modals -->
+    {% block modals %}{% endblock %}
+    
     <script src="{% static 'app.js' %}"></script>
+    
+    <!-- Scripts extras -->
     {% block extra_js %}{% endblock %}
 </body>
 </html>

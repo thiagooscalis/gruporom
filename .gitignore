@@ -13,3 +13,4 @@ wheels/
 .pytest_cache/
 node_modules/
 *.sqlite3
+gruporom.sublime-workspace

@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "/home/thiago/Projetos/gruporom",
+		},
+		{
+			"path": ".",
+		},
+	],
+	"settings": {
+		"LSP": {
+			"LSP-pylsp": {
+				"settings": {
+					"pylsp.plugins.jedi.environment": "./.venv",
+				},
+			},
+		},
+	},
+}
