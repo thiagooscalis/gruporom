@@ -1,0 +1,9 @@
+{% load static %}
+<aside id="aside" style="width:250px; height: 100%;" class='d-none d-lg-block bg-light shadow'>
+    <div class="text-center">
+        <img src="{% static 'logo_gruporom.svg' %}" alt="logo" class='img-fluid p-4' style="max-width: 150px">
+    </div>
+    <ul class="nav flex-column">
+        {% include 'menu/'|add:area|add:'.html' %}
+    </ul>
+</aside>

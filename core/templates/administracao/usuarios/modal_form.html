@@ -1,0 +1,41 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Usuário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="{% url 'administracao:usuarios_criar' %}" hx-target="#form-content" hx-swap="innerHTML">
+                <div id="form-content">
+                    {% include 'administracao/usuarios/form_content.html' %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializa o modal do Bootstrap quando carregado via HTMX
+    (function() {
+        const modalElement = document.getElementById('usuarioModal');
+        if (modalElement && window.bootstrap) {
+            // Verifica se já existe um modal aberto
+            const existingModal = window.bootstrap.Modal.getInstance(modalElement);
+            const modal = existingModal || new window.bootstrap.Modal(modalElement);
+            
+            // Remove os elementos do DOM quando o modal for fechado
+            if (!existingModal) {
+                modalElement.addEventListener('hidden.bs.modal', function() {
+                    modalElement.remove();
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) backdrop.remove();
+                });
+            }
+            
+            // Mostra o modal imediatamente
+            modal.show();
+        }
+    })();
+</script>

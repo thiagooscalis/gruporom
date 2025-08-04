@@ -1,0 +1,115 @@
+{% load crispy_forms_tags %}
+
+{% csrf_token %}
+<div class="modal-body">
+    <!-- Seção: Dados da Pessoa -->
+    <div class="card border-0 bg-light mb-4">
+        <div class="card-header bg-transparent border-0 pb-0">
+            <h6 class="text-primary mb-0">
+                <i class="fas fa-user me-2"></i>Pessoa Vinculada
+            </h6>
+        </div>
+        <div class="card-body pt-2">
+            {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_url selected_label="Pessoa selecionada:" %}
+        </div>
+    </div>
+
+    <!-- Seção: Credenciais de Acesso -->
+    <div class="card border-0 bg-light mb-4">
+        <div class="card-header bg-transparent border-0 pb-0">
+            <h6 class="text-primary mb-0">
+                <i class="fas fa-key me-2"></i>Credenciais de Acesso
+            </h6>
+        </div>
+        <div class="card-body pt-2">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form.username|as_crispy_field }}
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    {{ form.password|as_crispy_field }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.password_confirm|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Configurações do Usuário -->
+    <div class="card border-0 bg-light mb-4">
+        <div class="card-header bg-transparent border-0 pb-0">
+            <h6 class="text-primary mb-0">
+                <i class="fas fa-cog me-2"></i>Configurações
+            </h6>
+        </div>
+        <div class="card-body pt-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check form-switch">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                            <strong>{{ form.is_active.label }}</strong>
+                            <small class="d-block text-muted">Usuário pode fazer login no sistema</small>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check form-switch">
+                        {{ form.is_staff }}
+                        <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
+                            <strong>{{ form.is_staff.label }}</strong>
+                            <small class="d-block text-muted">Acesso ao painel administrativo Django</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Grupos de Acesso -->
+    <div class="card border-0 bg-light">
+        <div class="card-header bg-transparent border-0 pb-0">
+            <h6 class="text-primary mb-0">
+                <i class="fas fa-users me-2"></i>Grupos de Acesso
+            </h6>
+            <small class="text-muted">Selecione os grupos que definem as permissões do usuário</small>
+        </div>
+        <div class="card-body pt-2">
+            {% if form.groups.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.groups.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if form.groups %}
+            <div class="row">
+                {% for choice in form.groups %}
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-check-lg p-3 border rounded bg-white {% if form.groups.errors %}border-danger{% endif %}">
+                        {{ choice.tag }}
+                        <label class="form-check-label w-100" for="{{ choice.id_for_label }}">
+                            <strong class="d-block">{{ choice.choice_label }}</strong>
+                            <small class="text-muted">Acesso à área {{ choice.choice_label|lower }}</small>
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Nenhum grupo disponível. Crie grupos no Django Admin primeiro.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save me-2"></i>Salvar
+    </button>
+</div>

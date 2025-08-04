@@ -1,0 +1,117 @@
+{% load static %}
+
+<!-- Sidebar Desktop -->
+<aside class="d-none d-lg-block bg-light border-end" style="width: 280px; min-height: 100vh;">
+    <div class="p-3 border-bottom bg-white text-center">
+        <a href="{% url 'redirect_to_group' %}" class="text-decoration-none">
+            <img src="{% static 'logo_gruporom.svg' %}" alt="Grupo ROM" height="50" class="mb-2">
+            <div class="fw-bold text-dark">Grupo ROM</div>
+        </a>
+    </div>
+    
+    <div class="p-3 border-bottom bg-white">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <div class="bg-primary bg-opacity-10 p-2 rounded-circle">
+                    <i class="fas fa-user text-primary"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <div class="fw-bold small">{{ user.pessoa.nome|default:user.username }}</div>
+                <div class="text-muted" style="font-size: 0.75rem;">
+                    {% for group in user.groups.all %}
+                        {{ group.name }}
+                    {% empty %}
+                        Usuario
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="p-3">
+        {% block sidebar_menu %}
+        {% include 'menu/'|add:area|add:'.html' %}
+        {% endblock %}
+    </nav>
+    
+    <div class="p-3 border-top bg-white mt-auto">
+        <div class="d-grid">
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-sign-out-alt me-1"></i>
+                Sair
+            </a>
+        </div>
+    </div>
+</aside>
+
+<!-- Offcanvas Mobile -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">
+            <img src="{% static 'logo_gruporom.svg' %}" alt="Grupo ROM" height="30" class="me-2">
+            Menu
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    
+    <div class="offcanvas-body">
+        <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-circle">
+                        <i class="fas fa-user text-primary"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="fw-bold small">{{ user.pessoa.nome|default:user.username }}</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">
+                        {% for group in user.groups.all %}
+                            {{ group.name }}
+                        {% empty %}
+                            Usuario
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <nav>
+            {% include 'menu/'|add:area|add:'.html' %}
+        </nav>
+        
+        <div class="mt-auto pt-3 border-top">
+            <div class="d-grid">
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt me-1"></i>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.nav-item .nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.nav-item .nav-link:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--bs-primary);
+}
+
+.nav-item .nav-link.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+.nav-item .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+</style>

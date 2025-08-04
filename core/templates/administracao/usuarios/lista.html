@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Usuários - Administração{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Usuários</h1>
+                <button type="button" class="btn btn-primary" 
+                        hx-get="{% url 'administracao:usuarios_novo_modal' %}"
+                        hx-target="body"
+                        hx-swap="beforeend">
+                    <i class="fas fa-plus me-2"></i>Novo Usuário
+                </button>
+            </div>
+            
+            <!-- Busca -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-10">
+                            <input type="text" name="search" class="form-control" 
+                                   placeholder="Buscar por nome de usuário, nome da pessoa ou email..." 
+                                   value="{{ search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="fas fa-search me-2"></i>Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Listagem -->
+            <div class="card">
+                <div class="card-body">
+                    {% if page_obj %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Nome da Pessoa</th>
+                                    <th>Email</th>
+                                    <th>Grupos</th>
+                                    <th class="text-center">Status</th>
+                                    <th width="120">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in page_obj %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ usuario.username }}</strong>
+                                        {% if usuario.is_staff %}
+                                            <span class="badge bg-warning ms-1">Admin</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ usuario.pessoa.nome }}</td>
+                                    <td>{{ usuario.pessoa.email|default:"-" }}</td>
+                                    <td>
+                                        {% for group in usuario.groups.all %}
+                                            <span class="badge bg-secondary me-1">{{ group.name }}</span>
+                                        {% empty %}
+                                            <span class="text-muted">Nenhum grupo</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if usuario.is_active %}
+                                            <span class="badge bg-success">Ativo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inativo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
+                                                hx-get="{% url 'administracao:usuarios_editar_modal' usuario.pk %}"
+                                                hx-target="body"
+                                                hx-swap="beforeend">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
+                                                hx-get="{% url 'administracao:usuarios_excluir_modal' usuario.pk %}"
+                                                hx-target="body"
+                                                hx-swap="beforeend">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        Nenhum usuário encontrado
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    {% if page_obj.has_other_pages %}
+                    <nav aria-label="Paginação" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-center text-muted">Nenhum usuário cadastrado.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

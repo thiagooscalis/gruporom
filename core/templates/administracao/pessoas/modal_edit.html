@@ -1,0 +1,100 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="pessoaEditModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Pessoa - {{ pessoa.nome }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="{% url 'administracao:pessoas_atualizar' pessoa.pk %}" hx-target="#pessoaEditModal" hx-swap="outerHTML">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            {{ form.nome|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            {{ form.tipo_doc|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.doc|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.nascimento|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.telefone|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.sexo|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">Endereço</h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.endereco|as_crispy_field }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            {{ form.numero|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.complemento|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            {{ form.bairro|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.cidade|as_crispy_field }}
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            {{ form.estado|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.cep|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            {{ form.pais|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Atualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializa o modal do Bootstrap quando carregado via HTMX
+    (function() {
+        const modalElement = document.getElementById('pessoaEditModal');
+        if (modalElement && window.bootstrap) {
+            const modal = new window.bootstrap.Modal(modalElement);
+            
+            // Remove os elementos do DOM quando o modal for fechado
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                modalElement.remove();
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+            });
+            
+            // Mostra o modal imediatamente
+            modal.show();
+        }
+    })();
+</script>

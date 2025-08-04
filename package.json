@@ -1,0 +1,19 @@
+{
+  "name": "gruporom",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node_modules/.bin/parcel build ./core/assets/app.js ./core/assets/style.scss --dist-dir=./core/static"
+  },
+  "keywords": [],
+  "author": "Thiago Martins",
+  "private": true,
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.0",
+    "@parcel/transformer-sass": "^2.15.4",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.7",
+    "htmx.org": "^2.0.6",
+    "parcel": "^2.15.4"
+  }
+}
