@@ -23,6 +23,7 @@ class PessoaForm(forms.ModelForm):
             'estado',
             'pais',
             'cep',
+            'empresa_gruporom',
         ]
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
@@ -40,6 +41,7 @@ class PessoaForm(forms.ModelForm):
             'estado': forms.TextInput(attrs={'class': 'form-control', 'maxlength': '2'}),
             'pais': forms.TextInput(attrs={'class': 'form-control'}),
             'cep': forms.TextInput(attrs={'class': 'form-control'}),
+            'empresa_gruporom': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
             'tipo_doc': 'Tipo de Documento',
@@ -48,4 +50,5 @@ class PessoaForm(forms.ModelForm):
             'endereco': 'Endereço',
             'numero': 'Número',
             'pais': 'País',
+            'empresa_gruporom': 'Empresa do Grupo ROM',
         }

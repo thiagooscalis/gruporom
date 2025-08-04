@@ -75,6 +75,10 @@ class Pessoa(models.Model):
         null=True,
         verbose_name="Sexo",
     )
+    empresa_gruporom = models.BooleanField(
+        default=False,
+        verbose_name="Empresa do Grupo ROM"
+    )
 
     class Meta:
         ordering = ["nome"]

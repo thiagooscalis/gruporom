@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
-{% block title %}Usuários - Administração{% endblock %}
+{% block title %}Fornecedores - Administração{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Usuários' %}
+            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Fornecedores' %}
             
             <!-- Busca -->
             <div class="card mb-4">
@@ -15,7 +14,7 @@
                     <form method="get" class="row g-3">
                         <div class="col-md-10">
                             <input type="text" name="search" class="form-control" 
-                                   placeholder="Buscar por nome de usuário, nome da pessoa ou email..." 
+                                   placeholder="Buscar por nome, CPF/CNPJ, email ou tipo de empresa..." 
                                    value="{{ search }}">
                         </div>
                         <div class="col-md-2">
@@ -35,50 +34,45 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Usuário</th>
-                                    <th>Nome da Pessoa</th>
+                                    <th>Nome</th>
+                                    <th>CPF/CNPJ</th>
                                     <th>Email</th>
-                                    <th>Grupos</th>
-                                    <th class="text-center">Status</th>
+                                    <th>Tipo de Empresa</th>
+                                    <th class="text-center">Empresa Grupo ROM</th>
                                     <th width="120">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for usuario in page_obj %}
+                                {% for fornecedor in page_obj %}
                                 <tr>
+                                    <td>{{ fornecedor.pessoa.nome }}</td>
+                                    <td>{{ fornecedor.pessoa.doc|default:"-" }}</td>
+                                    <td>{{ fornecedor.pessoa.email|default:"-" }}</td>
                                     <td>
-                                        <strong>{{ usuario.username }}</strong>
-                                        {% if usuario.is_staff %}
-                                            <span class="badge bg-warning ms-1">Admin</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ usuario.pessoa.nome }}</td>
-                                    <td>{{ usuario.pessoa.email|default:"-" }}</td>
-                                    <td>
-                                        {% for group in usuario.groups.all %}
-                                            <span class="badge bg-secondary me-1">{{ group.name }}</span>
-                                        {% empty %}
-                                            <span class="text-muted">Nenhum grupo</span>
-                                        {% endfor %}
+                                        <span class="badge bg-info">{{ fornecedor.tipo_empresa }}</span>
                                     </td>
                                     <td class="text-center">
-                                        {% if usuario.is_active %}
-                                            <span class="badge bg-success">Ativo</span>
+                                        {% if fornecedor.pessoa.empresa_gruporom %}
+                                            <span class="badge bg-success">Sim</span>
                                         {% else %}
-                                            <span class="badge bg-danger">Inativo</span>
+                                            <span class="badge bg-secondary">Não</span>
                                         {% endif %}
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
-                                                hx-get="{% url 'administracao:usuarios_editar_modal' usuario.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalFornecedor"
+                                                hx-get="{% url 'administracao:fornecedores_editar_modal' fornecedor.id %}"
+                                                hx-target="#modalFornecedor .modal-content"
+                                                hx-swap="innerHTML">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
-                                                hx-get="{% url 'administracao:usuarios_excluir_modal' usuario.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalFornecedor"
+                                                hx-get="{% url 'administracao:fornecedores_excluir_modal' fornecedor.id %}"
+                                                hx-target="#modalFornecedor .modal-content"
+                                                hx-swap="innerHTML">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -86,7 +80,7 @@
                                 {% empty %}
                                 <tr>
                                     <td colspan="6" class="text-center text-muted py-4">
-                                        Nenhum usuário encontrado
+                                        Nenhum fornecedor encontrado
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -137,7 +131,7 @@
                     </nav>
                     {% endif %}
                     {% else %}
-                    <p class="text-center text-muted">Nenhum usuário cadastrado.</p>
+                    <p class="text-center text-muted">Nenhum fornecedor cadastrado.</p>
                     {% endif %}
                 </div>
             </div>
@@ -146,12 +140,27 @@
 </div>
 
 <!-- Floating Action Button -->
-<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
-   style="width: 56px; height: 56px;"
-   hx-get="{% url 'administracao:usuarios_novo_modal' %}"
-   hx-target="body"
-   hx-swap="beforeend"
-   title="Novo Usuário">
+<button type="button" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center" 
+        style="width: 56px; height: 56px;"
+        data-bs-toggle="modal" 
+        data-bs-target="#modalFornecedor"
+        hx-get="{% url 'administracao:fornecedores_novo_modal' %}"
+        hx-target="#modalFornecedor .modal-content"
+        hx-swap="innerHTML"
+        title="Novo Fornecedor">
     <i class="fas fa-plus"></i>
-</a>
+</button>
+
+<!-- Modal Container -->
+<div class="modal fade" id="modalFornecedor" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

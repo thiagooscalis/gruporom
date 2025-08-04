@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from core.models import Pessoa
+from core.models import Pessoa, Fornecedor
 from core.decorators import group_area_required
 
 
@@ -11,9 +11,11 @@ from core.decorators import group_area_required
 def buscar_pessoas(request, area):
     """
     API para busca de pessoas via HTMX autocomplete
-    Retorna pessoas disponíveis (sem usuário vinculado)
+    Por padrão retorna pessoas sem usuário vinculado
+    Use all=true para buscar todas as pessoas
     """
     query = request.GET.get("q", "").strip()
+    all_pessoas = request.GET.get("all", "false").lower() == "true"
 
     if len(query) < 2:
         # Não busca com menos de 2 caracteres
@@ -21,10 +23,15 @@ def buscar_pessoas(request, area):
             request, "components/pessoas_autocomplete.html", {"pessoas": []}
         )
 
-    # Busca pessoas sem usuário
+    # Busca pessoas
+    pessoas_query = Pessoa.objects.all()
+    
+    # Se não especificou all=true, filtra apenas pessoas sem usuário
+    if not all_pessoas:
+        pessoas_query = pessoas_query.filter(usuario__isnull=True)
+
     pessoas = (
-        Pessoa.objects.filter(usuario__isnull=True)
-        .filter(
+        pessoas_query.filter(
             Q(nome__icontains=query)
             | Q(doc__icontains=query)
             | Q(email__icontains=query)

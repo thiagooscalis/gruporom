@@ -9,3 +9,11 @@ $light: #f8f9fa;
 $dark: #212529;
 
 @import "bootstrap/scss/bootstrap";
+
+// Classe utilitária para posicionar elementos no canto inferior direito
+.fixed-br {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1050;
+}

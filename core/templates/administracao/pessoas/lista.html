@@ -7,15 +7,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3">Pessoas</h1>
-                <button type="button" class="btn btn-primary" 
-                        hx-get="{% url 'administracao:pessoas_nova_modal' %}"
-                        hx-target="body"
-                        hx-swap="beforeend">
-                    <i class="fas fa-plus me-2"></i>Nova Pessoa
-                </button>
-            </div>
+            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Pessoas' %}
             
             <!-- Busca -->
             <div class="card mb-4">
@@ -141,4 +133,14 @@
         </div>
     </div>
 </div>
+
+<!-- Floating Action Button -->
+<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
+   style="width: 56px; height: 56px;"
+   hx-get="{% url 'administracao:pessoas_nova_modal' %}"
+   hx-target="body"
+   hx-swap="beforeend"
+   title="Nova Pessoa">
+    <i class="fas fa-plus"></i>
+</a>
 {% endblock %}

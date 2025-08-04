@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="modalFornecedorLabel">{{ title }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
+<form hx-post="{% url action_url fornecedor.id %}" hx-target="#modalFornecedor .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="alert alert-warning d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+            <div>
+                <h6 class="alert-heading mb-1">Confirmar Exclusão</h6>
+                <p class="mb-0">Tem certeza que deseja excluir este fornecedor?</p>
+            </div>
+        </div>
+        
+        <!-- Informações do fornecedor -->
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6 class="card-title mb-2">
+                    <i class="fas fa-user me-2"></i>{{ fornecedor.pessoa.nome }}
+                </h6>
+                <div class="row text-sm">
+                    <div class="col-md-6">
+                        <strong>{{ fornecedor.pessoa.get_tipo_doc_display }}:</strong>
+                        {{ fornecedor.pessoa.doc|default:"-" }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Email:</strong>
+                        {{ fornecedor.pessoa.email|default:"-" }}
+                    </div>
+                    <div class="col-md-6 mt-1">
+                        <strong>Tipo de Empresa:</strong>
+                        <span class="badge bg-info">{{ fornecedor.tipo_empresa }}</span>
+                    </div>
+                    <div class="col-md-6 mt-1">
+                        <strong>Empresa Grupo ROM:</strong>
+                        {% if fornecedor.pessoa.empresa_gruporom %}
+                            <span class="badge bg-success">Sim</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Não</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if fornecedor.empresas.exists %}
+                <div class="mt-3">
+                    <strong>Empresas Associadas:</strong>
+                    <div class="mt-1">
+                        {% for empresa in fornecedor.empresas.all %}
+                            <span class="badge bg-primary me-1">{{ empresa.nome }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if error %}
+            <div class="alert alert-danger mt-3">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="alert alert-danger mt-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Atenção:</strong> Esta ação não pode ser desfeita. O fornecedor será removido permanentemente do sistema.
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-1"></i> Excluir Fornecedor
+        </button>
+    </div>
+</form>
