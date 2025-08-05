@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load core_tags %}
 
 {% block title %}Pessoas - Administração{% endblock %}
 
@@ -47,9 +48,9 @@
                                 {% for pessoa in page_obj %}
                                 <tr>
                                     <td>{{ pessoa.nome }}</td>
-                                    <td>{{ pessoa.doc|default:"-" }}</td>
+                                    <td>{{ pessoa.doc|doc|default:"-" }}</td>
                                     <td>{{ pessoa.email|default:"-" }}</td>
-                                    <td>{{ pessoa.telefone|default:"-" }}</td>
+                                    <td>{{ pessoa.telefone|fone|default:"-" }}</td>
                                     <td class="text-center">
                                         {% if pessoa.tipo_pessoa == 'FISICA' %}
                                             <span class="badge bg-info">{{ pessoa.get_tipo_pessoa_display }}</span>
