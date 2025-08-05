@@ -1,0 +1,130 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-shield-alt text-info me-2"></i>
+        Teste de Permissões da API - {{ account.name }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-{% if test_result.success %}success{% else %}warning{% endif %}">
+        <h6 class="alert-heading mb-2">
+            <i class="fas fa-{% if test_result.success %}check-circle{% else %}exclamation-triangle{% endif %} me-2"></i>
+            {{ test_result.message }}
+        </h6>
+        <small>
+            {% if test_result.success %}
+                Todas as permissões necessárias estão funcionando corretamente.
+            {% else %}
+                Alguns testes falharam. Verifique as configurações da conta.
+            {% endif %}
+        </small>
+    </div>
+
+    <!-- Informações da Conta -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-info-circle me-2"></i>
+            Informações da Conta
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <small><strong>Nome:</strong> {{ account.name }}</small><br>
+                    <small><strong>Telefone:</strong> {{ account.display_phone }}</small><br>
+                    <small><strong>Status:</strong> 
+                        <span class="badge bg-{% if account.status == 'active' %}success{% else %}secondary{% endif %}">
+                            {{ account.get_status_display }}
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <small><strong>Business Account ID:</strong><br>
+                        <code>{{ account.business_account_id }}</code>
+                    </small><br>
+                    <small><strong>Phone Number ID:</strong><br>
+                        <code>{{ account.phone_number_id }}</code>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resultados dos Testes -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-clipboard-check me-2"></i>
+            Resultados dos Testes
+        </div>
+        <div class="card-body">
+            {% for test in tests %}
+            <div class="border rounded p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">{{ test.test }}</h6>
+                    <span class="badge bg-{% if test.status == 'PASS' %}success{% elif test.status == 'FAIL' %}danger{% else %}warning{% endif %}">
+                        {{ test.status }}
+                    </span>
+                </div>
+                
+                {% if test.status == 'PASS' %}
+                    <div class="text-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        <small>Teste aprovado</small>
+                    </div>
+                    {% if test.data %}
+                    <details class="mt-2">
+                        <summary class="text-muted" style="cursor: pointer;">
+                            <small>Ver dados retornados</small>
+                        </summary>
+                        <pre class="bg-light p-2 mt-1 small"><code>{{ test.data|pprint }}</code></pre>
+                    </details>
+                    {% endif %}
+                    
+                {% elif test.status == 'FAIL' %}
+                    <div class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        <small><strong>Falha:</strong> {{ test.error }}</small>
+                    </div>
+                    
+                {% else %}
+                    <div class="text-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        <small><strong>Erro:</strong> {{ test.error }}</small>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Dicas de Solução -->
+    {% if not test_result.success %}
+    <div class="alert alert-info mt-3">
+        <h6 class="alert-heading">💡 Dicas para Resolver Problemas</h6>
+        <ul class="mb-0 small">
+            <li><strong>Business Account Info fail:</strong> Verifique se o Business Account ID está correto</li>
+            <li><strong>List Templates fail:</strong> Token pode não ter permissão whatsapp_business_messaging</li>
+            <li><strong>Token Info fail:</strong> Access Token pode estar expirado ou inválido</li>
+            <li><strong>HTTP 403:</strong> Token não tem permissões necessárias</li>
+            <li><strong>HTTP 401:</strong> Token inválido ou expirado</li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Fechar
+    </button>
+    {% if not test_result.success %}
+    <a href="{% url 'administracao:whatsapp:account_edit_modal' account.id %}" 
+       class="btn btn-warning"
+       data-bs-toggle="modal" 
+       data-bs-target="#modalWhatsAppAccount"
+       hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+       hx-target="#modalWhatsAppAccount .modal-content"
+       hx-swap="innerHTML">
+        <i class="fas fa-edit me-2"></i>Editar Configurações
+    </a>
+    {% endif %}
+</div>

@@ -60,6 +60,46 @@
         {{ form.body_text|as_crispy_field }}
         {{ form.footer_text|as_crispy_field }}
         
+        <!-- Exemplos de Variáveis -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3 mt-4">
+            <h6 class="mb-0">
+                <i class="fas fa-tags me-2"></i>
+                Exemplos das Variáveis
+            </h6>
+        </div>
+        
+        <div id="variable-examples-section">
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.variable_1|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.variable_2|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.variable_3|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.variable_4|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form.variable_5|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <small>
+                <i class="fas fa-lightbulb me-1"></i>
+                <strong>Dica:</strong> Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.). 
+                Estes exemplos serão enviados para o WhatsApp durante a aprovação.
+            </small>
+        </div>
+        
         <!-- Configurações -->
         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3 mt-4">
             <h6 class="mb-0">
@@ -182,13 +222,23 @@ function updateTemplatePreview() {
     
     // Body
     if (bodyText.trim()) {
-        // Substitui variáveis por exemplos
-        let previewBodyText = bodyText
-            .replace(/\{\{1\}\}/g, 'João Silva')
-            .replace(/\{\{2\}\}/g, '50% de desconto')
-            .replace(/\{\{3\}\}/g, 'hoje')
-            .replace(/\{\{4\}\}/g, 'R$ 100,00')
-            .replace(/\{\{5\}\}/g, 'www.exemplo.com');
+        // Substitui variáveis por exemplos dos campos ou valores padrão
+        let previewBodyText = bodyText;
+        
+        // Usa valores dos campos de exemplo se preenchidos
+        const var1 = document.getElementById('id_variable_1')?.value || 'João Silva';
+        const var2 = document.getElementById('id_variable_2')?.value || '50% de desconto';
+        const var3 = document.getElementById('id_variable_3')?.value || 'hoje';
+        const var4 = document.getElementById('id_variable_4')?.value || 'R$ 100,00';
+        const var5 = document.getElementById('id_variable_5')?.value || 'www.exemplo.com';
+        
+        previewBodyText = previewBodyText
+            .replace(/\{\{1\}\}/g, var1)
+            .replace(/\{\{2\}\}/g, var2)
+            .replace(/\{\{3\}\}/g, var3)
+            .replace(/\{\{4\}\}/g, var4)
+            .replace(/\{\{5\}\}/g, var5);
+        
         previewBody.textContent = previewBodyText;
     } else {
         previewBody.textContent = 'Digite o conteúdo do template...';
@@ -205,7 +255,7 @@ function updateTemplatePreview() {
 
 // Event listeners para atualizar prévia
 document.addEventListener('DOMContentLoaded', function() {
-    const fields = ['id_header_text', 'id_body_text', 'id_footer_text'];
+    const fields = ['id_header_text', 'id_body_text', 'id_footer_text', 'id_variable_1', 'id_variable_2', 'id_variable_3', 'id_variable_4', 'id_variable_5'];
     fields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {

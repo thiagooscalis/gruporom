@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Submit, Button
+from crispy_forms.layout import Layout, Row, Column, Submit, Button, HTML
 from crispy_forms.bootstrap import FormActions
 from core.models import WhatsAppAccount, WhatsAppTemplate, Usuario
 
@@ -243,6 +243,57 @@ class WhatsAppTemplateForm(forms.ModelForm):
     Formulário para criar/editar templates do WhatsApp
     """
     
+    # Campos dinâmicos para exemplos de variáveis
+    variable_1 = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Exemplo: João Silva'
+        }),
+        label='Exemplo para {{1}}'
+    )
+    
+    variable_2 = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Exemplo: Grupo ROM'
+        }),
+        label='Exemplo para {{2}}'
+    )
+    
+    variable_3 = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Exemplo: 12345'
+        }),
+        label='Exemplo para {{3}}'
+    )
+    
+    variable_4 = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Exemplo: 10/01/2025'
+        }),
+        label='Exemplo para {{4}}'
+    )
+    
+    variable_5 = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Exemplo: 14:30'
+        }),
+        label='Exemplo para {{5}}'
+    )
+    
     class Meta:
         model = WhatsAppTemplate
         fields = [
@@ -344,6 +395,22 @@ class WhatsAppTemplateForm(forms.ModelForm):
             'header_text',
             'body_text',
             'footer_text',
+            # Seção de exemplos de variáveis
+            HTML('<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'),
+            HTML('<div id="variable-examples-section">'),
+            Row(
+                Column('variable_1', css_class='col-md-6 variable-field', css_id='field-variable-1'),
+                Column('variable_2', css_class='col-md-6 variable-field', css_id='field-variable-2'),
+            ),
+            Row(
+                Column('variable_3', css_class='col-md-6 variable-field', css_id='field-variable-3'),
+                Column('variable_4', css_class='col-md-6 variable-field', css_id='field-variable-4'),
+            ),
+            Row(
+                Column('variable_5', css_class='col-md-6 variable-field', css_id='field-variable-5'),
+            ),
+            HTML('</div>'),
+            HTML('<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'),
             Row(
                 Column('has_buttons', css_class='col-md-6 d-flex align-items-center'),
                 Column('is_active', css_class='col-md-6 d-flex align-items-center'),
@@ -436,7 +503,78 @@ class WhatsAppTemplateForm(forms.ModelForm):
         if not template.pk and self.user:
             template.criado_por = self.user
         
+        # Salva exemplos das variáveis se fornecidos
+        examples = {}
+        for i in range(1, 6):  # variáveis 1 a 5
+            var_value = self.cleaned_data.get(f'variable_{i}')
+            if var_value and var_value.strip():
+                examples[str(i)] = var_value.strip()
+        
+        if examples:
+            template.variables_examples = examples
+        
         if commit:
             template.save()
         
         return template
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        # Filtra apenas contas ativas
+        self.fields['account'].queryset = WhatsAppAccount.objects.filter(is_active=True)
+        
+        # Se for edição, desabilita campos que não podem ser alterados após aprovação
+        if self.instance and self.instance.pk and self.instance.status == 'approved':
+            self.fields['name'].widget.attrs['readonly'] = True
+            self.fields['category'].widget.attrs['disabled'] = True
+            self.fields['language'].widget.attrs['disabled'] = True
+        
+        # Se está editando, preenche os campos de variáveis
+        if self.instance and self.instance.pk and self.instance.variables_examples:
+            for var_num, example in self.instance.variables_examples.items():
+                field_name = f'variable_{var_num}'
+                if field_name in self.fields:
+                    self.fields[field_name].initial = example
+        
+        # Configuração do Crispy Forms
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = 'needs-validation'
+        self.helper.attrs = {'novalidate': True}
+        
+        self.helper.layout = Layout(
+            Row(
+                Column('account', css_class='col-md-6'),
+                Column('category', css_class='col-md-6'),
+            ),
+            Row(
+                Column('name', css_class='col-md-6'),
+                Column('language', css_class='col-md-6'),
+            ),
+            'display_name',
+            'header_text',
+            'body_text',
+            'footer_text',
+            # Seção de exemplos de variáveis
+            HTML('<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'),
+            HTML('<div id="variable-examples-section">'),
+            Row(
+                Column('variable_1', css_class='col-md-6 variable-field', css_id='field-variable-1'),
+                Column('variable_2', css_class='col-md-6 variable-field', css_id='field-variable-2'),
+            ),
+            Row(
+                Column('variable_3', css_class='col-md-6 variable-field', css_id='field-variable-3'),
+                Column('variable_4', css_class='col-md-6 variable-field', css_id='field-variable-4'),
+            ),
+            Row(
+                Column('variable_5', css_class='col-md-6 variable-field', css_id='field-variable-5'),
+            ),
+            HTML('</div>'),
+            HTML('<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'),
+            Row(
+                Column('has_buttons', css_class='col-md-6 d-flex align-items-center'),
+                Column('is_active', css_class='col-md-6 d-flex align-items-center'),
+            ),
+        )

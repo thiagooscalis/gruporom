@@ -213,6 +213,29 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         
+                                        <!-- Enviar para Aprovação -->
+                                        {% if template.status in 'pending,rejected' and not template.template_id %}
+                                        <form method="post" action="{% url 'administracao:whatsapp:template_submit_approval' template.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-success" 
+                                                    title="Enviar para Aprovação"
+                                                    onclick="return confirm('Deseja enviar este template para aprovação no WhatsApp Business?');">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        
+                                        <!-- Verificar Status -->
+                                        {% if template.template_id or template.name %}
+                                        <form method="post" action="{% url 'administracao:whatsapp:template_check_status' template.id %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-warning" 
+                                                    title="Verificar Status">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        
                                         <!-- Excluir -->
                                         <button type="button" class="btn btn-sm btn-outline-danger" 
                                                 data-bs-toggle="modal" 

@@ -38,4 +38,9 @@ urlpatterns = [
     path('template/<int:template_id>/edit/', views.template_edit_modal, name='template_edit_modal'),
     path('template/<int:template_id>/delete/', views.template_delete_modal, name='template_delete_modal'),
     path('template/<int:template_id>/preview/', views.template_preview_modal, name='template_preview_modal'),
+    path('template/<int:template_id>/submit-approval/', views.template_submit_approval, name='template_submit_approval'),
+    path('template/<int:template_id>/check-status/', views.template_check_status, name='template_check_status'),
+    
+    # API Debug
+    path('account/<int:account_id>/api-test/', views.api_permissions_test, name='api_permissions_test'),
 ]

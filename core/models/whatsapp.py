@@ -544,6 +544,14 @@ class WhatsAppTemplate(models.Model):
         help_text="JSON com configuração dos botões"
     )
     
+    # Exemplos de variáveis para aprovação
+    variables_examples = models.JSONField(
+        blank=True,
+        null=True,
+        verbose_name="Exemplos de Variáveis",
+        help_text="Exemplos das variáveis {{1}}, {{2}}, etc. para envio à API"
+    )
+    
     # Campos de auditoria
     criado_por = models.ForeignKey(
         Usuario,

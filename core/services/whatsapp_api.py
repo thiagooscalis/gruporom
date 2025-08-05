@@ -183,6 +183,466 @@ class WhatsAppAPIService:
                 'data': None
             }
     
+    def create_message_template(self, template_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Cria um novo template de mensagem para aprovação
+        
+        Args:
+            template_data: Dados do template conforme API do WhatsApp
+        
+        Returns:
+            Dict com resultado da operação
+        """
+        url = f"{self.BASE_URL}/{self.account.business_account_id}/message_templates"
+        
+        try:
+            response = requests.post(url, headers=self.headers, json=template_data, timeout=30)
+            response.raise_for_status()
+            
+            result = response.json()
+            logger.info(f"Template criado com sucesso: {result.get('id')}")
+            return {
+                'success': True,
+                'template_id': result.get('id'),
+                'status': result.get('status'),
+                'data': result
+            }
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao criar template: {e}")
+            logger.error(f"URL da requisição: {url}")
+            logger.error(f"Headers enviados: {self.headers}")
+            logger.error(f"Payload enviado: {json.dumps(template_data, indent=2, ensure_ascii=False)}")
+            
+            error_response = {}
+            error_details = None
+            error_text = ""
+            
+            try:
+                if hasattr(e, 'response') and e.response is not None:
+                    # Status code da resposta
+                    logger.error(f"Status HTTP: {e.response.status_code}")
+                    
+                    # Headers da resposta
+                    response_headers = dict(e.response.headers)
+                    logger.error(f"Headers da resposta: {json.dumps(response_headers, indent=2)}")
+                    
+                    # Conteúdo da resposta
+                    try:
+                        error_text = e.response.text
+                        logger.error(f"Resposta completa da API: {error_text}")
+                        
+                        if error_text.strip():
+                            try:
+                                error_response = e.response.json()
+                                error_details = error_response.get('error', {})
+                                logger.error(f"JSON do erro: {json.dumps(error_response, indent=2, ensure_ascii=False)}")
+                            except json.JSONDecodeError as json_err:
+                                logger.error(f"Resposta não é JSON válido: {json_err}")
+                                error_response = {'raw_response': error_text}
+                        else:
+                            logger.error("Resposta vazia da API")
+                            error_response = {'error': 'Resposta vazia'}
+                            
+                    except Exception as content_error:
+                        logger.error(f"Erro ao ler conteúdo da resposta: {content_error}")
+                        error_response = {'error': 'Erro ao ler resposta'}
+                else:
+                    logger.error("Nenhuma resposta HTTP disponível")
+                    error_response = {'error': 'Sem resposta HTTP'}
+                    
+            except Exception as parse_error:
+                logger.error(f"Erro ao processar resposta: {parse_error}")
+                error_response = {'error': f'Erro de parsing: {str(parse_error)}'}
+            
+            return {
+                'success': False,
+                'error': str(e),
+                'error_details': error_response,
+                'error_message': error_details.get('message') if error_details else str(e),
+                'error_code': error_details.get('code') if error_details else None,
+                'raw_response': error_text,
+                'data': None
+            }
+    
+    def submit_template_for_approval(self, template) -> Dict[str, Any]:
+        """
+        Submete um template local para aprovação na API do WhatsApp
+        
+        Args:
+            template: Instância de WhatsAppTemplate
+        
+        Returns:
+            Dict com resultado da operação
+        """
+        # Extrai variáveis do template e gera exemplos
+        import re
+        
+        def extract_variables_and_examples(text, custom_examples=None):
+            """Extrai variáveis {{n}} e gera exemplos"""
+            if not text:
+                return None
+                
+            variables = re.findall(r'\{\{(\d+)\}\}', text)
+            if not variables:
+                return None
+            
+            # Exemplos padrão para cada posição de variável
+            default_example_values = [
+                "João Silva",           # Nome
+                "Grupo ROM",            # Empresa
+                "12345",               # Código/ID
+                "10/01/2025",          # Data
+                "14:30",               # Hora
+                "São Paulo",           # Cidade
+                "R$ 100,00",           # Valor
+                "www.gruporom.com",    # URL
+                "Produto X",           # Produto
+                "50%"                  # Percentual
+            ]
+            
+            examples = []
+            for var in sorted(set(variables), key=int):
+                var_index = int(var) - 1
+                
+                # Usa exemplo customizado se fornecido, senão usa padrão
+                if custom_examples and str(var) in custom_examples:
+                    examples.append(custom_examples[str(var)])
+                elif var_index < len(default_example_values):
+                    examples.append(default_example_values[var_index])
+                else:
+                    examples.append(f"Exemplo{var}")
+            
+            return examples
+        
+        # Monta a estrutura do template conforme API do WhatsApp
+        components = []
+        
+        # Obtém exemplos customizados do template
+        custom_examples = template.variables_examples if hasattr(template, 'variables_examples') and template.variables_examples else None
+        
+        # Adiciona header se existir
+        if template.header_text:
+            header_component = {
+                "type": "HEADER",
+                "format": "TEXT",
+                "text": template.header_text
+            }
+            
+            # Adiciona exemplos se houver variáveis no header
+            header_examples = extract_variables_and_examples(template.header_text, custom_examples)
+            if header_examples:
+                header_component["example"] = {
+                    "header_text": header_examples
+                }
+            
+            components.append(header_component)
+        
+        # Adiciona body (obrigatório)
+        body_component = {
+            "type": "BODY",
+            "text": template.body_text
+        }
+        
+        # Adiciona exemplos se houver variáveis no body
+        body_examples = extract_variables_and_examples(template.body_text, custom_examples)
+        if body_examples:
+            body_component["example"] = {
+                "body_text": [body_examples]  # API espera array de arrays
+            }
+        
+        components.append(body_component)
+        
+        # Adiciona footer se existir
+        if template.footer_text:
+            components.append({
+                "type": "FOOTER",
+                "text": template.footer_text
+            })
+        
+        # Adiciona botões se configurados
+        if template.has_buttons and template.buttons_config:
+            # Formata botões corretamente
+            formatted_buttons = []
+            for button in template.buttons_config:
+                if isinstance(button, dict):
+                    button_data = {
+                        "type": button.get("type", "QUICK_REPLY"),
+                        "text": button.get("text", "")
+                    }
+                    
+                    # Adiciona campos específicos por tipo
+                    if button.get("type") == "URL":
+                        button_data["url"] = button.get("url", "")
+                    elif button.get("type") == "PHONE_NUMBER":
+                        button_data["phone_number"] = button.get("phone_number", "")
+                    
+                    formatted_buttons.append(button_data)
+            
+            if formatted_buttons:
+                components.append({
+                    "type": "BUTTONS",
+                    "buttons": formatted_buttons
+                })
+        
+        # Mapeia o código de idioma para o formato aceito pela API
+        language_mapping = {
+            'pt_BR': 'pt_BR',
+            'en_US': 'en_US',
+            'es_ES': 'es',
+            'en': 'en',
+            'pt': 'pt_BR'
+        }
+        
+        language_code = language_mapping.get(template.language, template.language)
+        
+        # Monta o payload completo - Formato correto da API v19.0
+        template_data = {
+            "name": template.name.lower().replace('-', '_'),  # Garante formato correto do nome
+            "category": template.category.upper(),
+            "language": language_code,
+            "components": components
+        }
+        
+        # Adiciona allow_category_change apenas para categorias que permitem
+        if template.category.upper() in ['MARKETING', 'UTILITY']:
+            template_data["allow_category_change"] = True
+        
+        # Validações do payload antes de enviar
+        validation_errors = []
+        
+        # Valida nome do template
+        if not template_data.get('name'):
+            validation_errors.append("Nome do template é obrigatório")
+        elif not re.match(r'^[a-z0-9_]+$', template_data['name']):
+            validation_errors.append("Nome deve conter apenas letras minúsculas, números e underscore")
+        
+        # Valida categoria
+        valid_categories = ['UTILITY', 'MARKETING', 'AUTHENTICATION']
+        if template_data.get('category') not in valid_categories:
+            validation_errors.append(f"Categoria deve ser uma de: {', '.join(valid_categories)}")
+        
+        # Valida idioma
+        if not template_data.get('language'):
+            validation_errors.append("Idioma é obrigatório")
+        
+        # Valida business_account_id
+        if not self.account.business_account_id:
+            validation_errors.append("Business Account ID não configurado na conta")
+        elif not str(self.account.business_account_id).isdigit():
+            validation_errors.append("Business Account ID deve ser numérico")
+        
+        # Valida componentes
+        if not template_data.get('components') or len(template_data['components']) == 0:
+            validation_errors.append("Pelo menos um componente é obrigatório")
+        else:
+            # Verifica se tem pelo menos um BODY
+            has_body = any(comp.get('type') == 'BODY' for comp in template_data['components'])
+            if not has_body:
+                validation_errors.append("Componente BODY é obrigatório")
+        
+        if validation_errors:
+            error_msg = "Validação falhou: " + "; ".join(validation_errors)
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'error_details': {'validation_errors': validation_errors},
+                'data': None
+            }
+        
+        # Log do payload para debug
+        logger.info(f"Enviando template para aprovação: {template.name}")
+        logger.info(f"URL da API: {self.BASE_URL}/{self.account.business_account_id}/message_templates")
+        logger.info(f"Business Account ID: {self.account.business_account_id}")
+        logger.info(f"Payload do template: {json.dumps(template_data, indent=2, ensure_ascii=False)}")
+        
+        # Chama a API para criar o template
+        result = self.create_message_template(template_data)
+        
+        # Atualiza o template local com o resultado
+        if result['success']:
+            template.template_id = result.get('template_id')
+            template.status = 'pending'  # Status inicial após submissão
+            template.save(update_fields=['template_id', 'status', 'atualizado_em'])
+            logger.info(f"Template {template.name} submetido para aprovação com ID: {template.template_id}")
+        else:
+            # Salva o motivo do erro se houver
+            error_details = result.get('error_details', {}).get('error', {})
+            error_msg = error_details.get('message', str(result.get('error')))
+            
+            # Se for erro de template duplicado, adiciona sugestões
+            if error_details.get('error_subcode') == 2388024:
+                suggestions = [
+                    f"{template.name}_v2",
+                    f"{template.name}_2025", 
+                    f"{template.name}_new",
+                    f"{template.name}_{timezone.now().strftime('%m%d')}"
+                ]
+                error_msg = f"{error_details.get('error_user_msg', error_msg)}. Sugestões de nomes: {', '.join(suggestions)}"
+            
+            template.rejection_reason = f"Erro ao submeter: {error_msg}"
+            template.save(update_fields=['rejection_reason', 'atualizado_em'])
+            logger.error(f"Falha ao submeter template {template.name}: {error_msg}")
+        
+        return result
+    
+    def get_template_status(self, template_id: str) -> Dict[str, Any]:
+        """
+        Consulta o status de um template na API
+        
+        Args:
+            template_id: ID do template no WhatsApp
+        
+        Returns:
+            Dict com status e informações do template
+        """
+        url = f"{self.BASE_URL}/{self.account.business_account_id}/message_templates"
+        params = {
+            'fields': 'id,name,status,category,language,components,rejected_reason',
+            'limit': 1,
+            'name': template_id
+        }
+        
+        try:
+            response = requests.get(url, headers=self.headers, params=params, timeout=30)
+            response.raise_for_status()
+            
+            result = response.json()
+            templates = result.get('data', [])
+            
+            if templates:
+                template_info = templates[0]
+                return {
+                    'success': True,
+                    'status': template_info.get('status'),
+                    'rejected_reason': template_info.get('rejected_reason'),
+                    'data': template_info
+                }
+            else:
+                return {
+                    'success': False,
+                    'error': 'Template não encontrado',
+                    'data': None
+                }
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao consultar status do template: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'data': None
+            }
+    
+    def update_template_status(self, template) -> Dict[str, Any]:
+        """
+        Atualiza o status de um template consultando a API
+        
+        Args:
+            template: Instância de WhatsAppTemplate
+        
+        Returns:
+            Dict com resultado da operação
+        """
+        if not template.template_id and not template.name:
+            return {
+                'success': False,
+                'error': 'Template não tem ID ou nome para consulta',
+                'updated': False
+            }
+        
+        # Tenta buscar pelo nome do template
+        result = self.get_template_status(template.name)
+        
+        if result['success']:
+            api_status = result['status'].lower()
+            api_rejected_reason = result.get('rejected_reason', '')
+            
+            # Mapeia status da API para status local
+            status_mapping = {
+                'approved': 'approved',
+                'rejected': 'rejected', 
+                'pending': 'pending',
+                'disabled': 'disabled',
+                'paused': 'disabled'
+            }
+            
+            new_status = status_mapping.get(api_status, 'pending')
+            
+            # Verifica se houve mudança no status ou motivo de rejeição
+            status_changed = new_status != template.status
+            reason_changed = (new_status == 'rejected' and 
+                            api_rejected_reason != template.rejection_reason)
+            
+            if status_changed or reason_changed:
+                old_status = template.status
+                template.status = new_status
+                
+                # Atualiza motivo de rejeição se aplicável
+                if new_status == 'rejected':
+                    template.rejection_reason = api_rejected_reason or 'Motivo não especificado'
+                elif new_status == 'approved':
+                    # Limpa motivo de rejeição se foi aprovado
+                    template.rejection_reason = ''
+                
+                # Salva no banco de dados
+                template.save(update_fields=['status', 'rejection_reason', 'atualizado_em'])
+                
+                logger.info(f"Template {template.name} atualizado: {old_status} → {new_status}")
+                
+                return {
+                    'success': True,
+                    'updated': True,
+                    'old_status': old_status,
+                    'new_status': new_status,
+                    'rejection_reason': template.rejection_reason if new_status == 'rejected' else None
+                }
+            else:
+                return {
+                    'success': True,
+                    'updated': False,
+                    'current_status': template.status,
+                    'message': 'Status não mudou'
+                }
+        else:
+            return {
+                'success': False,
+                'error': result.get('error', 'Erro ao consultar API'),
+                'updated': False
+            }
+    
+    def delete_template(self, template_name: str) -> Dict[str, Any]:
+        """
+        Deleta um template da API do WhatsApp
+        
+        Args:
+            template_name: Nome do template
+        
+        Returns:
+            Dict com resultado da operação
+        """
+        url = f"{self.BASE_URL}/{self.account.business_account_id}/message_templates"
+        params = {'name': template_name}
+        
+        try:
+            response = requests.delete(url, headers=self.headers, params=params, timeout=30)
+            response.raise_for_status()
+            
+            result = response.json()
+            logger.info(f"Template {template_name} deletado com sucesso")
+            return {
+                'success': True,
+                'data': result
+            }
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao deletar template: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'data': None
+            }
+    
     def upload_media(self, file_path: str, media_type: str) -> Dict[str, Any]:
         """
         Faz upload de mídia para o WhatsApp
@@ -323,6 +783,99 @@ class WhatsAppAPIService:
                 'error': str(e),
                 'data': None
             }
+    
+    def test_api_permissions(self) -> Dict[str, Any]:
+        """
+        Testa se o access token tem as permissões necessárias
+        """
+        tests = []
+        
+        # Teste 1: Verificar informações da conta de negócios
+        try:
+            url = f"{self.BASE_URL}/{self.account.business_account_id}"
+            params = {'fields': 'id,name,timezone_offset_min'}
+            
+            response = requests.get(url, headers=self.headers, params=params, timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                tests.append({
+                    'test': 'Business Account Info',
+                    'status': 'PASS',
+                    'data': data
+                })
+            else:
+                tests.append({
+                    'test': 'Business Account Info',
+                    'status': 'FAIL',
+                    'error': f"HTTP {response.status_code}: {response.text}"
+                })
+        except Exception as e:
+            tests.append({
+                'test': 'Business Account Info',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+        
+        # Teste 2: Listar templates existentes
+        try:
+            url = f"{self.BASE_URL}/{self.account.business_account_id}/message_templates"
+            params = {'limit': 1}
+            
+            response = requests.get(url, headers=self.headers, params=params, timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                tests.append({
+                    'test': 'List Templates Permission',
+                    'status': 'PASS',
+                    'data': data
+                })
+            else:
+                tests.append({
+                    'test': 'List Templates Permission',
+                    'status': 'FAIL',
+                    'error': f"HTTP {response.status_code}: {response.text}"
+                })
+        except Exception as e:
+            tests.append({
+                'test': 'List Templates Permission',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+        
+        # Teste 3: Token info
+        try:
+            url = f"{self.BASE_URL}/me"
+            params = {'fields': 'id,name'}
+            
+            response = requests.get(url, headers=self.headers, params=params, timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                tests.append({
+                    'test': 'Token Info',
+                    'status': 'PASS',
+                    'data': data
+                })
+            else:
+                tests.append({
+                    'test': 'Token Info',
+                    'status': 'FAIL',
+                    'error': f"HTTP {response.status_code}: {response.text}"
+                })
+        except Exception as e:
+            tests.append({
+                'test': 'Token Info',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+        
+        # Verifica se todos os testes passaram
+        all_passed = all(test['status'] == 'PASS' for test in tests)
+        
+        return {
+            'success': all_passed,
+            'tests': tests,
+            'message': 'Todos os testes passaram' if all_passed else 'Alguns testes falharam'
+        }
     
     def _get_mime_type(self, media_type: str) -> str:
         """

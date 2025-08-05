@@ -571,6 +571,168 @@ def template_preview_modal(request, template_id):
 
 @login_required
 @group_area_required
+@require_http_methods(["POST"])
+def template_submit_approval(request, template_id):
+    """
+    Submete um template para aprovação na API do WhatsApp
+    """
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    # Verifica se o template já foi submetido
+    if template.template_id:
+        messages.warning(request, 'Este template já foi submetido para aprovação.')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+    # Verifica se o template tem status pendente
+    if template.status not in ['pending', 'rejected']:
+        messages.warning(request, 'Este template não pode ser submetido no status atual.')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+    try:
+        # Cria instância do serviço da API
+        api_service = WhatsAppAPIService(template.account)
+        
+        # Submete o template para aprovação
+        result = api_service.submit_template_for_approval(template)
+        
+        if result['success']:
+            messages.success(
+                request, 
+                f'Template "{template.display_name}" enviado para aprovação com sucesso! '
+                f'ID: {result.get("template_id", "N/A")}'
+            )
+        else:
+            error_details = result.get('error_details', {}).get('error', {})
+            error_msg = result.get('error_message', result.get('error'))
+            error_code = result.get('error_code', '')
+            error_subcode = error_details.get('error_subcode')
+            
+            # Mensagem específica para template duplicado
+            if error_subcode == 2388024:
+                user_msg = error_details.get('error_user_msg', '')
+                messages.error(
+                    request, 
+                    f'❌ Template já existe: {user_msg}. Tente usar um nome diferente como: '
+                    f'{template.name}_v2, {template.name}_2025, ou {template.name}_new'
+                )
+            elif error_code:
+                messages.error(
+                    request, 
+                    f'❌ Erro ao enviar template: {error_msg} (Código: {error_code})'
+                )
+            else:
+                messages.error(
+                    request, 
+                    f'❌ Erro ao enviar template para aprovação: {error_msg}'
+                )
+            
+            # Log detalhado para debug
+            logger.error(f"Erro completo da API: {result.get('error_details', {})}")
+    
+    except Exception as e:
+        logger.error(f"Erro ao submeter template {template_id}: {e}")
+        messages.error(request, f'Erro inesperado ao enviar template: {str(e)}')
+    
+    # Retorna para a página anterior ou lista de templates
+    return HttpResponseRedirect(
+        request.META.get('HTTP_REFERER', f'/administracao/whatsapp/templates/{template.account.id}/')
+    )
+
+
+@login_required
+@group_area_required
+def api_permissions_test(request, account_id):
+    """
+    Testa as permissões da API do WhatsApp para uma conta
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    try:
+        # Cria instância do serviço da API
+        api_service = WhatsAppAPIService(account)
+        
+        # Executa testes de permissão
+        result = api_service.test_api_permissions()
+        
+        context = {
+            'area': request.area,
+            'account': account,
+            'test_result': result,
+            'tests': result.get('tests', [])
+        }
+        
+        return render(request, 'administracao/whatsapp/modals/api_test_results.html', context)
+        
+    except Exception as e:
+        logger.error(f"Erro ao testar permissões da API para conta {account_id}: {e}")
+        return JsonResponse({
+            'error': f'Erro ao testar permissões: {str(e)}'
+        }, status=500)
+
+
+@login_required
+@group_area_required
+@require_http_methods(["POST"])
+def template_check_status(request, template_id):
+    """
+    Verifica o status de um template na API do WhatsApp
+    """
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    if not template.template_id and not template.name:
+        messages.warning(request, 'Este template ainda não foi submetido para aprovação.')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+    try:
+        # Cria instância do serviço da API
+        api_service = WhatsAppAPIService(template.account)
+        
+        # Atualiza o status do template
+        result = api_service.update_template_status(template)
+        
+        if result['success']:
+            if result['updated']:
+                old_status = result.get('old_status', '')
+                new_status = result.get('new_status', '')
+                
+                if new_status == 'approved':
+                    messages.success(
+                        request, 
+                        f'✅ Template aprovado! Status: {old_status} → {template.get_status_display()}'
+                    )
+                elif new_status == 'rejected':
+                    rejection_reason = result.get('rejection_reason', 'Motivo não especificado')
+                    messages.error(
+                        request, 
+                        f'❌ Template rejeitado. Status: {old_status} → {template.get_status_display()}. '
+                        f'Motivo: {rejection_reason}'
+                    )
+                else:
+                    messages.info(
+                        request, 
+                        f'📋 Status atualizado: {old_status} → {template.get_status_display()}'
+                    )
+            else:
+                current_status = result.get('current_status', template.status)
+                messages.info(
+                    request, 
+                    f'ℹ️ Status atual: {template.get_status_display()}. Nenhuma mudança detectada.'
+                )
+        else:
+            error_msg = result.get('error', 'Erro desconhecido')
+            messages.error(request, f'❌ Erro ao verificar status: {error_msg}')
+    
+    except Exception as e:
+        logger.error(f"Erro ao verificar status do template {template_id}: {e}")
+        messages.error(request, f'Erro ao verificar status: {str(e)}')
+    
+    return HttpResponseRedirect(
+        request.META.get('HTTP_REFERER', f'/administracao/whatsapp/templates/{template.account.id}/')
+    )
+
+
+@login_required
+@group_area_required
 def contacts_list(request, account_id):
     """
     Lista de contatos de uma conta
