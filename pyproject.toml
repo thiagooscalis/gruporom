@@ -12,6 +12,9 @@ dependencies = [
     "psycopg[binary]>=3.2.9",
     "python-dotenv>=1.1.1",
     "requests>=2.31.0",
+    "channels>=4.1.0",
+    "channels-redis>=4.2.0",
+    "daphne>=4.1.2",
 ]
 
 [dependency-groups]

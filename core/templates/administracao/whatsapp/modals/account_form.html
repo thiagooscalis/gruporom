@@ -1,0 +1,159 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fab fa-whatsapp text-success me-2"></i>
+        {{ title }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form hx-post="{{ action_url }}" hx-target="#modalWhatsAppAccount .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="modal-body">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Informações Gerais -->
+        <div class="row">
+            <div class="col-md-8">
+                {{ form.name|as_crispy_field }}
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <div class="form-check form-switch">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                        {{ form.is_active.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.phone_number|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.status|as_crispy_field }}
+            </div>
+        </div>
+        
+        <!-- Configurações da API -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <h6 class="mb-0">
+                <i class="fas fa-cog me-2"></i>
+                Configurações da API WhatsApp
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-info" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalFacebookGuide">
+                <i class="fas fa-question-circle me-1"></i>Como obter?
+            </button>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.phone_number_id|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.business_account_id|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.app_id|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.app_secret|as_crispy_field }}
+            </div>
+        </div>
+        
+        {{ form.access_token|as_crispy_field }}
+        
+        <div class="row">
+            <div class="col-md-8">
+                {{ form.webhook_verify_token|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.responsavel|as_crispy_field }}
+            </div>
+        </div>
+        
+        {% if account %}
+        <!-- Informações da Conta Existente -->
+        <div class="alert alert-info">
+            <h6 class="alert-heading">
+                <i class="fas fa-info-circle me-2"></i>
+                Informações da Conta
+            </h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <small><strong>Criada em:</strong> {{ account.criado_em|date:"d/m/Y H:i" }}</small>
+                </div>
+                <div class="col-md-6">
+                    <small><strong>Última atualização:</strong> {{ account.atualizado_em|date:"d/m/Y H:i" }}</small>
+                </div>
+            </div>
+            {% if account.is_active %}
+                <hr class="my-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">URL do Webhook para configuração no Facebook:</small>
+                    <button type="button" class="btn btn-sm btn-outline-info" onclick="copyWebhookUrl()">
+                        <i class="fas fa-copy"></i> Copiar URL
+                    </button>
+                </div>
+                <code id="webhookUrl" class="d-block mt-1 small">{{ request.scheme }}://{{ request.get_host }}/webhook/whatsapp/{{ account.id }}/</code>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        {% if account %}
+            <button type="button" class="btn btn-warning me-2" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalTestAccount"
+                    hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
+                    hx-target="#modalTestAccount .modal-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-vial me-2"></i>Testar Conexão
+            </button>
+        {% endif %}
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save me-2"></i>
+            {% if account %}Atualizar{% else %}Criar{% endif %} Conta
+        </button>
+    </div>
+</form>
+
+<script>
+// Função para copiar URL do webhook
+function copyWebhookUrl() {
+    const url = document.getElementById('webhookUrl').textContent;
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check text-success"></i> Copiado!';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+        }, 2000);
+    });
+}
+
+// Evento de sucesso do HTMX para fechar modal e recarregar
+document.body.addEventListener('htmx:afterRequest', function(event) {
+    if (event.detail.successful && event.detail.xhr.getResponseHeader('HX-Trigger') === 'whatsappAccountSaved') {
+        bootstrap.Modal.getInstance(document.getElementById('modalWhatsAppAccount')).hide();
+        location.reload();
+    }
+});
+</script>

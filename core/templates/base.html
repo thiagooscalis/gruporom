@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br" class="h-100">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,9 @@
     <link href="{% static 'app.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
-<body class="h-100 d-flex">
+<body>
     {% include 'includes/aside.html' %}
-    <main id="main" class="flex-fill">
+    <main id="main">
         {% include 'includes/navbar.html' %}
         <div class="p-3">
             {% include 'includes/messages.html' %}

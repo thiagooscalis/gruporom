@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}WhatsApp Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fab fa-whatsapp text-success me-2"></i>
+            Dashboard WhatsApp
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-success" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalWhatsAppAccount"
+                    hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
+                    hx-target="#modalWhatsAppAccount .modal-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-plus me-2"></i>Nova Conta
+            </button>
+        </div>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Contas Ativas</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ total_accounts }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-phone fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Contatos</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ total_contacts }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Mensagens 24h</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ messages_24h }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Recebidas/Enviadas</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ inbound_24h }}/{{ outbound_24h }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exchange-alt fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Contas Ativas -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-phone me-1"></i>
+                    Contas WhatsApp Ativas
+                </div>
+                <div class="card-body">
+                    {% if active_accounts %}
+                        <div class="list-group list-group-flush">
+                            {% for account in active_accounts %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ account.name }}</h6>
+                                    <p class="mb-1 text-muted small">{{ account.display_phone }}</p>
+                                    <small class="text-muted">Responsável: {{ account.responsavel.username }}</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success rounded-pill">{{ account.get_status_display }}</span>
+                                    <div class="btn-group ms-2" role="group">
+                                        <a href="{% url 'administracao:whatsapp:chat_interface' account.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-comments"></i> Chat
+                                        </a>
+                                        <a href="{% url 'administracao:whatsapp:templates_list' account.id %}" class="btn btn-sm btn-outline-success">
+                                            <i class="fas fa-file-alt"></i> Templates
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalWhatsAppAccount"
+                                                hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+                                                hx-target="#modalWhatsAppAccount .modal-content"
+                                                hx-swap="innerHTML"
+                                                title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-warning" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalTestAccount"
+                                                hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
+                                                hx-target="#modalTestAccount .modal-content"
+                                                hx-swap="innerHTML"
+                                                title="Testar">
+                                            <i class="fas fa-vial"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">Nenhuma conta ativa encontrada.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mensagens Recentes -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-comments me-1"></i>
+                    Mensagens Recentes
+                </div>
+                <div class="card-body">
+                    {% if recent_messages %}
+                        <div class="list-group list-group-flush">
+                            {% for message in recent_messages %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            {% if message.direction == 'inbound' %}
+                                                <i class="fas fa-arrow-left text-success me-2"></i>
+                                            {% else %}
+                                                <i class="fas fa-arrow-right text-primary me-2"></i>
+                                            {% endif %}
+                                            <h6 class="mb-0">{{ message.contact.display_name }}</h6>
+                                            <small class="text-muted ms-2">{{ message.account.name }}</small>
+                                        </div>
+                                        <p class="mb-1">{{ message.get_display_content|truncatechars:80 }}</p>
+                                        <small class="text-muted">{{ message.timestamp|timesince }} atrás</small>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-{{ message.status|yesno:'success,warning,danger' }} rounded-pill">
+                                            {{ message.get_status_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">Nenhuma mensagem recente.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ações Rápidas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-bolt me-1"></i>
+                    Ações Rápidas
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="{% url 'administracao:whatsapp:accounts_list' %}" class="btn btn-outline-primary btn-lg w-100 mb-3">
+                                <i class="fas fa-phone-alt d-block mb-2"></i>
+                                Gerenciar Contas
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'administracao:whatsapp:messages_list' %}" class="btn btn-outline-success btn-lg w-100 mb-3">
+                                <i class="fas fa-comments d-block mb-2"></i>
+                                Ver Mensagens
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            {% if active_accounts %}
+                            <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" class="btn btn-outline-warning btn-lg w-100 mb-3">
+                                <i class="fas fa-file-alt d-block mb-2"></i>
+                                Gerenciar Templates
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-warning btn-lg w-100 mb-3" disabled>
+                                <i class="fas fa-file-alt d-block mb-2"></i>
+                                Gerenciar Templates
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info btn-lg w-100 mb-3" onclick="alert('Funcionalidade em desenvolvimento')">
+                                <i class="fas fa-chart-bar d-block mb-2"></i>
+                                Relatórios
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Modal para conta WhatsApp -->
+<div class="modal fade" id="modalWhatsAppAccount" tabindex="-1" aria-labelledby="modalWhatsAppAccountLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para teste de conta -->
+<div class="modal fade" id="modalTestAccount" tabindex="-1" aria-labelledby="modalTestAccountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para exclusão de conta -->
+<div class="modal fade" id="modalDeleteAccount" tabindex="-1" aria-labelledby="modalDeleteAccountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para guia do Facebook -->
+<div class="modal fade" id="modalFacebookGuide" tabindex="-1" aria-labelledby="modalFacebookGuideLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            {% include 'administracao/whatsapp/modals/facebook_guide.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

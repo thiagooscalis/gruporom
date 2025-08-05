@@ -1,0 +1,855 @@
+# -*- coding: utf-8 -*-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q, Count, Max
+from django.db import models
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.utils.decorators import method_decorator
+from django.utils import timezone
+from datetime import datetime, timedelta
+import json
+import logging
+
+from core.models import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate
+from core.decorators import group_area_required
+from core.services.whatsapp_api import WhatsAppAPIService, WhatsAppWebhookProcessor
+from core.forms.whatsapp import WhatsAppAccountForm, WhatsAppAccountTestForm, WhatsAppTemplateForm
+
+# Logger
+logger = logging.getLogger(__name__)
+
+
+@login_required
+@group_area_required
+def dashboard(request):
+    """
+    Dashboard principal do WhatsApp
+    """
+    # Estatísticas gerais
+    total_accounts = WhatsAppAccount.objects.filter(is_active=True).count()
+    total_contacts = WhatsAppContact.objects.count()
+    
+    # Mensagens das últimas 24h
+    yesterday = timezone.now() - timedelta(days=1)
+    messages_24h = WhatsAppMessage.objects.filter(
+        timestamp__gte=yesterday
+    ).count()
+    
+    # Mensagens por direção nas últimas 24h
+    inbound_24h = WhatsAppMessage.objects.filter(
+        timestamp__gte=yesterday,
+        direction='inbound'
+    ).count()
+    
+    outbound_24h = WhatsAppMessage.objects.filter(
+        timestamp__gte=yesterday,
+        direction='outbound'
+    ).count()
+    
+    # Contas ativas
+    active_accounts = WhatsAppAccount.objects.filter(
+        is_active=True,
+        status='active'
+    ).select_related('responsavel')
+    
+    # Mensagens recentes
+    recent_messages = WhatsAppMessage.objects.select_related(
+        'account', 'contact', 'sent_by'
+    ).order_by('-timestamp')[:10]
+    
+    context = {
+        'area': request.area,
+        'total_accounts': total_accounts,
+        'total_contacts': total_contacts,
+        'messages_24h': messages_24h,
+        'inbound_24h': inbound_24h,
+        'outbound_24h': outbound_24h,
+        'active_accounts': active_accounts,
+        'recent_messages': recent_messages,
+    }
+    
+    return render(request, 'administracao/whatsapp/dashboard.html', context)
+
+
+@login_required
+@group_area_required
+def accounts_list(request):
+    """
+    Lista de contas WhatsApp
+    """
+    # Busca
+    search = request.GET.get('search', '')
+    
+    # Query base
+    accounts = WhatsAppAccount.objects.select_related('responsavel')
+    
+    # Aplica filtro de busca
+    if search:
+        accounts = accounts.filter(
+            Q(name__icontains=search) |
+            Q(phone_number__icontains=search) |
+            Q(responsavel__username__icontains=search)
+        )
+    
+    # Ordenação
+    accounts = accounts.order_by('name')
+    
+    # Paginação
+    paginator = Paginator(accounts, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'area': request.area,
+        'page_obj': page_obj,
+        'search': search,
+    }
+    
+    return render(request, 'administracao/whatsapp/accounts_list.html', context)
+
+
+@login_required
+@group_area_required
+def chat_interface(request, account_id):
+    """
+    Interface de chat para uma conta específica
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id, is_active=True)
+    
+    # Contatos com mensagens recentes
+    contacts_with_messages = WhatsAppContact.objects.filter(
+        account=account,
+        messages__isnull=False
+    ).annotate(
+        last_message_time=models.Max('messages__timestamp'),
+        unread_count=models.Count(
+            'messages',
+            filter=models.Q(
+                messages__direction='inbound',
+                messages__status__in=['delivered', 'sent']
+            )
+        )
+    ).order_by('-last_message_time')[:50]
+    
+    context = {
+        'area': request.area,
+        'account': account,
+        'contacts': contacts_with_messages,
+    }
+    
+    return render(request, 'administracao/whatsapp/chat_interface.html', context)
+
+
+@login_required
+@group_area_required
+def contact_chat(request, contact_id):
+    """
+    Chat com contato específico
+    """
+    contact = get_object_or_404(
+        WhatsAppContact.objects.select_related('account'),
+        id=contact_id
+    )
+    
+    # Verifica se o usuário tem acesso à conta
+    # TODO: Implementar verificação de permissões mais granular
+    
+    # Mensagens do contato (paginadas)
+    messages = WhatsAppMessage.objects.filter(
+        contact=contact
+    ).select_related('sent_by').order_by('-timestamp')
+    
+    paginator = Paginator(messages, 50)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    # Marca mensagens inbound como lidas
+    unread_messages = WhatsAppMessage.objects.filter(
+        contact=contact,
+        direction='inbound',
+        status__in=['delivered', 'sent']
+    )
+    unread_messages.update(status='read', read_at=timezone.now())
+    
+    context = {
+        'area': request.area,
+        'contact': contact,
+        'account': contact.account,
+        'page_obj': page_obj,
+    }
+    
+    return render(request, 'administracao/whatsapp/contact_chat.html', context)
+
+
+@login_required
+@group_area_required
+@require_http_methods(["POST"])
+def send_message(request):
+    """
+    API para enviar mensagem
+    """
+    try:
+        data = json.loads(request.body)
+        contact_id = data.get('contact_id')
+        message_text = data.get('message', '').strip()
+        message_type = data.get('type', 'text')
+        reply_to_id = data.get('reply_to')
+        
+        if not contact_id or not message_text:
+            return JsonResponse({
+                'success': False,
+                'error': 'Contato e mensagem são obrigatórios'
+            })
+        
+        # Busca contato
+        contact = get_object_or_404(WhatsAppContact, id=contact_id)
+        account = contact.account
+        
+        # Cria mensagem no banco
+        message = WhatsAppMessage.objects.create(
+            account=account,
+            contact=contact,
+            direction='outbound',
+            message_type=message_type,
+            content=message_text,
+            status='pending',
+            sent_by=request.user,
+            timestamp=timezone.now()
+        )
+        
+        # Envia via API do WhatsApp
+        api_service = WhatsAppAPIService(account)
+        
+        if message_type == 'text':
+            result = api_service.send_text_message(
+                to=contact.phone_number.replace('+', ''),
+                message=message_text,
+                reply_to_message_id=reply_to_id
+            )
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': 'Tipo de mensagem não suportado ainda'
+            })
+        
+        if result['success']:
+            # Atualiza mensagem com ID do WhatsApp
+            message.wamid = result['message_id']
+            message.status = 'sent'
+            message.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message_id': message.id,
+                'wamid': message.wamid
+            })
+        else:
+            # Marca como falhou
+            message.status = 'failed'
+            message.error_message = result['error']
+            message.save()
+            
+            return JsonResponse({
+                'success': False,
+                'error': result['error']
+            })
+    
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'JSON inválido'
+        })
+    except Exception as e:
+        logger.error(f"Erro ao enviar mensagem: {e}")
+        return JsonResponse({
+            'success': False,
+            'error': 'Erro interno do servidor'
+        })
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def webhook(request, account_id):
+    """
+    Webhook para receber notificações do WhatsApp
+    """
+    try:
+        account = WhatsAppAccount.objects.get(id=account_id, is_active=True)
+    except WhatsAppAccount.DoesNotExist:
+        return HttpResponse(status=404)
+    
+    if request.method == 'GET':
+        # Verificação do webhook
+        mode = request.GET.get('hub.mode')
+        token = request.GET.get('hub.verify_token')
+        challenge = request.GET.get('hub.challenge')
+        
+        if mode == 'subscribe' and WhatsAppAPIService.verify_webhook(token, account.webhook_verify_token):
+            logger.info(f"Webhook verificado com sucesso para conta {account_id}")
+            return HttpResponse(challenge)
+        else:
+            logger.warning(f"Falha na verificação do webhook para conta {account_id}")
+            return HttpResponse(status=403)
+    
+    elif request.method == 'POST':
+        # Processamento do webhook
+        try:
+            # Log detalhado para debug
+            logger.info(f"=== WEBHOOK RECEBIDO ===")
+            logger.info(f"Conta ID: {account_id}")
+            logger.info(f"Headers: {dict(request.headers)}")
+            logger.info(f"Body bruto: {request.body.decode('utf-8')}")
+            
+            payload = json.loads(request.body)
+            logger.info(f"Payload JSON: {payload}")
+            
+            # Processa webhook de forma assíncrona
+            processor = WhatsAppWebhookProcessor(account)
+            # TODO: Processar de forma assíncrona usando Celery ou similar
+            # Por enquanto, processa síncronamente
+            import asyncio
+            result = asyncio.run(processor.process_webhook(payload))
+            
+            logger.info(f"Webhook processado com sucesso: {result}")
+            return HttpResponse(status=200)
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Erro ao decodificar JSON do webhook: {e}")
+            logger.error(f"Body recebido: {request.body}")
+            return HttpResponse(status=400)
+        except Exception as e:
+            logger.error(f"Erro ao processar webhook: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
+            return HttpResponse(status=500)
+    
+    return HttpResponse(status=405)
+
+
+@login_required
+@group_area_required
+def webhook_debug(request, account_id):
+    """
+    View para debug do webhook - mostra informações da conta e testa conectividade
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    debug_info = {
+        'account_info': {
+            'id': account.id,
+            'name': account.name,
+            'phone_number': account.phone_number,
+            'phone_number_id': account.phone_number_id,
+            'business_account_id': account.business_account_id,
+            'access_token': account.access_token[:20] + '...' if account.access_token else None,
+            'webhook_verify_token': account.webhook_verify_token,
+            'is_active': account.is_active,
+            'status': account.get_status_display(),
+        },
+        'webhook_url': request.build_absolute_uri(f'/webhook/whatsapp/{account.id}/'),
+        'recent_messages': list(WhatsAppMessage.objects.filter(
+            account=account
+        ).order_by('-timestamp')[:5].values(
+            'direction', 'message_type', 'content', 'status', 'timestamp'
+        )),
+        'webhook_logs': []  # TODO: Implementar logs específicos do webhook
+    }
+    
+    # Testa API do WhatsApp
+    try:
+        api_service = WhatsAppAPIService(account)
+        # TODO: Implementar teste de conectividade
+        debug_info['api_status'] = 'OK'
+    except Exception as e:
+        debug_info['api_status'] = f'Erro: {str(e)}'
+    
+    return JsonResponse(debug_info, json_dumps_params={'indent': 2})
+
+
+# ==================== VIEWS DE TEMPLATES ====================
+
+@login_required
+@group_area_required
+def templates_list(request, account_id):
+    """
+    Lista de templates de uma conta
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    # Busca
+    search = request.GET.get('search', '')
+    status_filter = request.GET.get('status', '')
+    category_filter = request.GET.get('category', '')
+    
+    # Query base
+    templates = WhatsAppTemplate.objects.filter(account=account)
+    
+    # Filtros
+    if search:
+        templates = templates.filter(
+            Q(display_name__icontains=search) |
+            Q(name__icontains=search) |
+            Q(body_text__icontains=search)
+        )
+    
+    if status_filter:
+        templates = templates.filter(status=status_filter)
+    
+    if category_filter:
+        templates = templates.filter(category=category_filter)
+    
+    # Paginação
+    paginator = Paginator(templates, 20)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    # Estatísticas
+    stats = {
+        'total': templates.count(),
+        'approved': templates.filter(status='approved').count(),
+        'pending': templates.filter(status='pending').count(),
+        'rejected': templates.filter(status='rejected').count(),
+    }
+    
+    context = {
+        'area': 'administracao',  # Adiciona a área para o menu
+        'account': account,
+        'page_obj': page_obj,
+        'search': search,
+        'status_filter': status_filter,
+        'category_filter': category_filter,
+        'stats': stats,
+        'status_choices': WhatsAppTemplate.TEMPLATE_STATUS_CHOICES,
+        'category_choices': WhatsAppTemplate.TEMPLATE_CATEGORY_CHOICES,
+    }
+    
+    return render(request, 'administracao/whatsapp/templates_list.html', context)
+
+
+@login_required
+@group_area_required
+def template_create_modal(request):
+    """
+    Modal para criar template
+    """
+    if request.method == 'POST':
+        form = WhatsAppTemplateForm(request.POST, user=request.user)
+        if form.is_valid():
+            template = form.save()
+            
+            messages.success(request, f'Template "{template.display_name}" criado com sucesso!')
+            
+            response = HttpResponse()
+            response['HX-Trigger'] = 'templateSaved'
+            return response
+        else:
+            # Retorna o formulário com erros
+            return render(request, 'administracao/whatsapp/modals/template_form.html', {
+                'form': form,
+                'title': 'Criar Template',
+                'action_url': request.get_full_path(),
+            })
+    else:
+        form = WhatsAppTemplateForm(user=request.user)
+        
+        return render(request, 'administracao/whatsapp/modals/template_form.html', {
+            'form': form,
+            'title': 'Criar Template',
+            'action_url': request.get_full_path(),
+        })
+
+
+@login_required
+@group_area_required
+def template_edit_modal(request, template_id):
+    """
+    Modal para editar template
+    """
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    if request.method == 'POST':
+        form = WhatsAppTemplateForm(request.POST, instance=template, user=request.user)
+        if form.is_valid():
+            template = form.save()
+            
+            messages.success(request, f'Template "{template.display_name}" atualizado com sucesso!')
+            
+            response = HttpResponse()
+            response['HX-Trigger'] = 'templateSaved'
+            return response
+        else:
+            # Retorna o formulário com erros
+            return render(request, 'administracao/whatsapp/modals/template_form.html', {
+                'form': form,
+                'template': template,
+                'title': 'Editar Template',
+                'action_url': request.get_full_path(),
+            })
+    else:
+        form = WhatsAppTemplateForm(instance=template, user=request.user)
+        
+        return render(request, 'administracao/whatsapp/modals/template_form.html', {
+            'form': form,
+            'template': template,
+            'title': 'Editar Template',  
+            'action_url': request.get_full_path(),
+        })
+
+
+@login_required
+@group_area_required  
+def template_delete_modal(request, template_id):
+    """
+    Modal para excluir template
+    """
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    if request.method == 'POST':
+        template_name = template.display_name
+        template.delete()
+        
+        messages.success(request, f'Template "{template_name}" excluído com sucesso!')
+        
+        response = HttpResponse()
+        response['HX-Trigger'] = 'templateDeleted'
+        return response
+    
+    return render(request, 'administracao/whatsapp/modals/template_delete.html', {
+        'template': template,
+        'action_url': request.get_full_path(),
+    })
+
+
+@login_required
+@group_area_required
+def template_preview_modal(request, template_id):
+    """
+    Modal para prévia do template
+    """
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    # Exemplo de variáveis para preview
+    sample_variables = []
+    for i in range(1, 11):  # Máximo 10 variáveis
+        var_display = f"{{{{{i}}}}}"  # Gera {{1}}, {{2}}, etc.
+        var_values = [
+            "João Silva", "50% de desconto", "hoje", "R$ 100,00", "www.exemplo.com",
+            "Produto X", "amanhã", "código123", "15:30", "Grupo ROM"
+        ]
+        sample_variables.append({
+            'number': i,
+            'display': var_display,
+            'value': var_values[i-1] if i <= len(var_values) else f"Valor {i}"
+        })
+    
+    # Gera preview com variáveis substituídas
+    preview_content = {
+        'header': template.header_text,
+        'body': template.body_text,
+        'footer': template.footer_text,
+    }
+    
+    # Substitui variáveis no preview
+    import re
+    for section, text in preview_content.items():
+        if text:
+            for variable in sample_variables:
+                var_pattern = rf'\{{\{{{variable["number"]}\}}\}}'
+                text = re.sub(var_pattern, str(variable["value"]), text)
+            preview_content[section] = text
+    
+    return render(request, 'administracao/whatsapp/modals/template_preview.html', {
+        'template': template,
+        'preview_content': preview_content,
+        'sample_variables': sample_variables,
+    })
+
+
+@login_required
+@group_area_required
+def contacts_list(request, account_id):
+    """
+    Lista de contatos de uma conta
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    # Busca
+    search = request.GET.get('search', '')
+    
+    # Query base
+    contacts = WhatsAppContact.objects.filter(account=account)
+    
+    # Aplica filtro de busca
+    if search:
+        contacts = contacts.filter(
+            Q(name__icontains=search) |
+            Q(phone_number__icontains=search) |
+            Q(profile_name__icontains=search)
+        )
+    
+    # Anota com estatísticas
+    contacts = contacts.annotate(
+        total_messages=Count('messages'),
+        last_message_time=models.Max('messages__timestamp')
+    ).order_by('-last_message_time')
+    
+    # Paginação
+    paginator = Paginator(contacts, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'area': request.area,
+        'account': account,
+        'page_obj': page_obj,
+        'search': search,
+    }
+    
+    return render(request, 'administracao/whatsapp/contacts_list.html', context)
+
+
+@login_required
+@group_area_required
+def messages_list(request):
+    """
+    Lista de todas as mensagens
+    """
+    # Filtros
+    account_id = request.GET.get('account')
+    direction = request.GET.get('direction')
+    message_type = request.GET.get('type')
+    status = request.GET.get('status')
+    search = request.GET.get('search', '')
+    
+    # Query base
+    messages = WhatsAppMessage.objects.select_related(
+        'account', 'contact', 'sent_by'
+    )
+    
+    # Aplica filtros
+    if account_id:
+        messages = messages.filter(account_id=account_id)
+    
+    if direction:
+        messages = messages.filter(direction=direction)
+    
+    if message_type:
+        messages = messages.filter(message_type=message_type)
+    
+    if status:
+        messages = messages.filter(status=status)
+    
+    if search:
+        messages = messages.filter(
+            Q(content__icontains=search) |
+            Q(contact__name__icontains=search) |
+            Q(contact__phone_number__icontains=search)
+        )
+    
+    # Ordenação
+    messages = messages.order_by('-timestamp')
+    
+    # Paginação
+    paginator = Paginator(messages, 30)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Dados para filtros
+    accounts = WhatsAppAccount.objects.filter(is_active=True)
+    
+    context = {
+        'area': request.area,
+        'page_obj': page_obj,
+        'accounts': accounts,
+        'filters': {
+            'account': account_id,
+            'direction': direction,
+            'type': message_type,
+            'status': status,
+            'search': search,
+        },
+        'direction_choices': WhatsAppMessage.DIRECTION_CHOICES,
+        'type_choices': WhatsAppMessage.MESSAGE_TYPE_CHOICES,
+        'status_choices': WhatsAppMessage.MESSAGE_STATUS_CHOICES,
+    }
+    
+    return render(request, 'administracao/whatsapp/messages_list.html', context)
+
+
+@login_required
+@group_area_required
+def account_create_modal(request):
+    """
+    Modal para criar nova conta WhatsApp
+    """
+    if request.method == 'POST':
+        form = WhatsAppAccountForm(request.POST)
+        if form.is_valid():
+            account = form.save()
+            messages.success(request, f'Conta WhatsApp "{account.name}" criada com sucesso!')
+            response = HttpResponse()
+            response['HX-Trigger'] = 'whatsappAccountSaved'
+            return response
+    else:
+        form = WhatsAppAccountForm()
+    
+    return render(request, 'administracao/whatsapp/modals/account_form.html', {
+        'form': form,
+        'title': 'Nova Conta WhatsApp',
+        'action_url': request.path
+    })
+
+
+@login_required
+@group_area_required
+def account_edit_modal(request, account_id):
+    """
+    Modal para editar conta WhatsApp
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    if request.method == 'POST':
+        form = WhatsAppAccountForm(request.POST, instance=account)
+        if form.is_valid():
+            account = form.save()
+            messages.success(request, f'Conta WhatsApp "{account.name}" atualizada com sucesso!')
+            response = HttpResponse()
+            response['HX-Trigger'] = 'whatsappAccountSaved'
+            return response
+    else:
+        form = WhatsAppAccountForm(instance=account)
+    
+    return render(request, 'administracao/whatsapp/modals/account_form.html', {
+        'form': form,
+        'account': account,
+        'title': f'Editar Conta - {account.name}',
+        'action_url': request.path
+    })
+
+
+@login_required
+@group_area_required
+def account_delete_modal(request, account_id):
+    """
+    Modal para excluir conta WhatsApp
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    if request.method == 'POST':
+        try:
+            account_name = account.name
+            
+            # Verifica se há mensagens relacionadas
+            messages_count = WhatsAppMessage.objects.filter(account=account).count()
+            contacts_count = WhatsAppContact.objects.filter(account=account).count()
+            
+            if messages_count > 0:
+                messages.warning(
+                    request, 
+                    f'Não é possível excluir a conta "{account_name}" pois possui {messages_count} mensagens e {contacts_count} contatos relacionados. Desative a conta em vez de excluí-la.'
+                )
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Conta possui {messages_count} mensagens relacionadas. Desative em vez de excluir.'
+                })
+            
+            account.delete()
+            messages.success(request, f'Conta WhatsApp "{account_name}" excluída com sucesso!')
+            return JsonResponse({
+                'success': True,
+                'message': 'Conta excluída com sucesso!',
+                'redirect': request.META.get('HTTP_REFERER', '/administracao/whatsapp/')
+            })
+            
+        except Exception as e:
+            logger.error(f"Erro ao excluir conta WhatsApp {account_id}: {e}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Erro interno. Tente novamente.'
+            })
+    
+    # Calcula estatísticas para exibir no modal
+    messages_count = WhatsAppMessage.objects.filter(account=account).count()
+    contacts_count = WhatsAppContact.objects.filter(account=account).count()
+    
+    return render(request, 'administracao/whatsapp/modals/account_delete.html', {
+        'account': account,
+        'messages_count': messages_count,
+        'contacts_count': contacts_count,
+        'action_url': request.path
+    })
+
+
+@login_required
+@group_area_required
+def account_test_modal(request, account_id):
+    """
+    Modal para testar conectividade da conta WhatsApp
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    if request.method == 'POST':
+        form = WhatsAppAccountTestForm(request.POST, account=account)
+        if form.is_valid():
+            test_phone = form.cleaned_data['test_phone_number']
+            template = form.cleaned_data['template']
+            
+            try:
+                # Testa conexão com a API
+                api_service = WhatsAppAPIService(account)
+                
+                # Primeiro tenta obter perfil (teste mais leve)
+                profile_result = api_service.get_business_profile()
+                
+                if not profile_result['success']:
+                    return JsonResponse({
+                        'success': False,
+                        'message': f'Erro na conexão: {profile_result["error"]}'
+                    })
+                
+                # Se perfil OK, simula envio de template de teste  
+                # TODO: Implementar envio real de template na API
+                
+                # Gera valores de exemplo para as variáveis
+                template_variables = []
+                if template.variables_count > 0:
+                    sample_values = [
+                        "Cliente Teste", "Produto Demo", "50%", "hoje", 
+                        "www.exemplo.com", "Código123", "15:30", "valor",
+                        "desconto", "promoção"
+                    ]
+                    template_variables = sample_values[:template.variables_count]
+                
+                # Simula sucesso (em produção, usar API real de templates)
+                fake_message_id = f"wamid_test_{template.id}_{hash(test_phone)}"
+                
+                messages.success(
+                    request, 
+                    f'Teste simulado com sucesso! Template "{template.display_name}" seria enviado para {test_phone}'
+                )
+                
+                # Retorna template de sucesso
+                return render(request, 'administracao/whatsapp/modals/test_success.html', {
+                    'account': account,
+                    'phone': test_phone,
+                    'template': template,
+                    'template_variables': template_variables,
+                    'message_id': fake_message_id,
+                    'profile': profile_result.get('data', {})
+                })
+                    
+            except Exception as e:
+                logger.error(f"Erro no teste da conta {account_id}: {e}")
+                messages.error(request, f'Erro interno: {str(e)[:100]}')
+    else:
+        form = WhatsAppAccountTestForm(account=account)
+    
+    return render(request, 'administracao/whatsapp/modals/account_test.html', {
+        'form': form,
+        'account': account,
+        'action_url': request.path
+    })

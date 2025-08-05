@@ -10,4 +10,5 @@ urlpatterns = [
     path('cargos/', include('core.urls.administracao.cargos')),
     path('turnos/', include('core.urls.administracao.turnos')),
     path('colaboradores/', include('core.urls.administracao.colaboradores')),
+    path('whatsapp/', include('core.urls.administracao.whatsapp')),
 ]

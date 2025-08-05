@@ -1,0 +1,98 @@
+<div class="modal-header">
+    <h5 class="modal-title text-success">
+        <i class="fas fa-check-circle me-2"></i>
+        Teste Realizado com Sucesso!
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-success">
+        <h6 class="alert-heading">
+            <i class="fas fa-check-circle me-2"></i>
+            Template Testado com Sucesso!
+        </h6>
+        <p class="mb-2">O template <strong>"{{ template.display_name }}"</strong> foi testado para <strong>{{ phone }}</strong>.</p>
+        <p class="mb-0"><strong>ID da Mensagem:</strong> <code>{{ message_id }}</code></p>
+    </div>
+    
+    {% if template %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-file-alt me-2"></i>
+            Template Usado: {{ template.display_name }}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <small><strong>Nome técnico:</strong> {{ template.name }}</small><br>
+                    <small><strong>Categoria:</strong> {{ template.get_category_display }}</small><br>
+                    <small><strong>Idioma:</strong> {{ template.get_language_display }}</small>
+                </div>
+                <div class="col-md-6">
+                    <small><strong>Status:</strong> <span class="badge {{ template.get_status_badge_class }}">{{ template.get_status_display }}</span></small><br>
+                    <small><strong>Variáveis:</strong> {{ template.variables_count }}</small>
+                </div>
+            </div>
+            
+            {% if template_variables %}
+            <hr>
+            <div>
+                <small class="text-muted"><strong>Valores usados no teste:</strong></small><br>
+                {% for variable in template_variables %}
+                    <span class="badge bg-light text-dark me-1 mt-1">{{ "{{" }}{{ forloop.counter }}{{ "}}" }} = {{ variable }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="card">
+        <div class="card-body">
+            <h6 class="card-title">
+                <i class="fab fa-whatsapp text-success me-2"></i>
+                {{ account.name }}
+            </h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <small><strong>Telefone:</strong> {{ account.display_phone }}</small><br>
+                    <small><strong>Status:</strong> <span class="badge bg-success">Conectado</span></small>
+                </div>
+                <div class="col-md-6">
+                    {% if profile.verified_name %}
+                        <small><strong>Nome Verificado:</strong> {{ profile.verified_name }}</small><br>
+                    {% endif %}
+                    {% if profile.quality_rating %}
+                        <small><strong>Qualidade:</strong> {{ profile.quality_rating }}</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-info mt-3">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Sobre este teste:</strong>
+        <ul class="mb-0 mt-2">
+            <li>Este foi um teste simulado do template</li>
+            <li>Em produção, o template seria enviado via WhatsApp Business API</li>
+            <li>O template precisa estar aprovado pelo WhatsApp para envio real</li>
+            <li>Configure o webhook para receber respostas dos clientes</li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+        <i class="fas fa-check me-2"></i>Concluir
+    </button>
+    <button type="button" class="btn btn-outline-primary" 
+            data-bs-toggle="modal" 
+            data-bs-target="#modalWhatsAppAccount"
+            hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+            hx-target="#modalWhatsAppAccount .modal-content"
+            hx-swap="innerHTML">
+        <i class="fas fa-edit me-2"></i>Editar Conta
+    </button>
+</div>

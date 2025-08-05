@@ -1,0 +1,228 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-file-alt text-primary me-2"></i>
+        {{ title }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form hx-post="{{ action_url }}" hx-target="#modalWhatsAppTemplate .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="modal-body">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Informações Básicas -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <h6 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                Informações Básicas
+            </h6>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.account|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.category|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.name|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.language|as_crispy_field }}
+            </div>
+        </div>
+        
+        {{ form.display_name|as_crispy_field }}
+        
+        <!-- Conteúdo do Template -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3 mt-4">
+            <h6 class="mb-0">
+                <i class="fas fa-edit me-2"></i>
+                Conteúdo do Template
+            </h6>
+            <small class="text-muted">Use {{1}}, {{2}}, etc. para variáveis</small>
+        </div>
+        
+        {{ form.header_text|as_crispy_field }}
+        {{ form.body_text|as_crispy_field }}
+        {{ form.footer_text|as_crispy_field }}
+        
+        <!-- Configurações -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3 mt-4">
+            <h6 class="mb-0">
+                <i class="fas fa-cog me-2"></i>
+                Configurações
+            </h6>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="form-check form-switch">
+                    {{ form.has_buttons }}
+                    <label class="form-check-label" for="{{ form.has_buttons.id_for_label }}">
+                        {{ form.has_buttons.label }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="form-check form-switch">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                        {{ form.is_active.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        {% if template %}
+        <!-- Informações do Template Existente -->
+        <div class="alert alert-info mt-4">
+            <h6 class="alert-heading">
+                <i class="fas fa-info-circle me-2"></i>
+                Informações do Template
+            </h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <small><strong>Status:</strong> 
+                        <span class="badge {{ template.get_status_badge_class }}">{{ template.get_status_display }}</span>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <small><strong>Variáveis:</strong> {{ template.variables_count }}</small>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <small><strong>Criado em:</strong> {{ template.criado_em|date:"d/m/Y H:i" }}</small>
+                </div>
+                <div class="col-md-6">
+                    <small><strong>Por:</strong> {{ template.criado_por.username }}</small>
+                </div>
+            </div>
+            {% if template.template_id %}
+                <hr class="my-2">
+                <small><strong>ID na API:</strong> <code>{{ template.template_id }}</code></small>
+            {% endif %}
+            {% if template.rejection_reason %}
+                <hr class="my-2">
+                <div class="text-danger">
+                    <strong>Motivo da Rejeição:</strong><br>
+                    {{ template.rejection_reason }}
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Prévia em tempo real -->
+        <div class="alert alert-light mt-4">
+            <h6 class="alert-heading">
+                <i class="fas fa-eye me-2"></i>
+                Prévia do Template
+            </h6>
+            <div id="template-preview" class="border rounded p-3 bg-white">
+                <div id="preview-header" class="fw-bold text-primary mb-2" style="display: none;"></div>
+                <div id="preview-body" class="mb-2">Digite o conteúdo do template...</div>
+                <div id="preview-footer" class="text-muted small" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        {% if template %}
+            <button type="button" class="btn btn-info me-2" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalTemplatePreview"
+                    hx-get="{% url 'administracao:whatsapp:template_preview_modal' template.id %}"
+                    hx-target="#modalTemplatePreview .modal-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-eye me-2"></i>Visualizar
+            </button>
+        {% endif %}
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save me-2"></i>
+            {% if template %}Atualizar{% else %}Criar{% endif %} Template
+        </button>
+    </div>
+</form>
+
+<script>
+// Atualiza prévia do template em tempo real
+function updateTemplatePreview() {
+    const headerText = document.getElementById('id_header_text').value;
+    const bodyText = document.getElementById('id_body_text').value;
+    const footerText = document.getElementById('id_footer_text').value;
+    
+    const previewHeader = document.getElementById('preview-header');
+    const previewBody = document.getElementById('preview-body');
+    const previewFooter = document.getElementById('preview-footer');
+    
+    // Header
+    if (headerText.trim()) {
+        previewHeader.textContent = headerText;
+        previewHeader.style.display = 'block';
+    } else {
+        previewHeader.style.display = 'none';
+    }
+    
+    // Body
+    if (bodyText.trim()) {
+        // Substitui variáveis por exemplos
+        let previewBodyText = bodyText
+            .replace(/\{\{1\}\}/g, 'João Silva')
+            .replace(/\{\{2\}\}/g, '50% de desconto')
+            .replace(/\{\{3\}\}/g, 'hoje')
+            .replace(/\{\{4\}\}/g, 'R$ 100,00')
+            .replace(/\{\{5\}\}/g, 'www.exemplo.com');
+        previewBody.textContent = previewBodyText;
+    } else {
+        previewBody.textContent = 'Digite o conteúdo do template...';
+    }
+    
+    // Footer
+    if (footerText.trim()) {
+        previewFooter.textContent = footerText;
+        previewFooter.style.display = 'block';
+    } else {
+        previewFooter.style.display = 'none';
+    }
+}
+
+// Event listeners para atualizar prévia
+document.addEventListener('DOMContentLoaded', function() {
+    const fields = ['id_header_text', 'id_body_text', 'id_footer_text'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', updateTemplatePreview);
+            field.addEventListener('keyup', updateTemplatePreview);
+        }
+    });
+    
+    // Atualiza prévia inicial
+    updateTemplatePreview();
+});
+
+// Evento de sucesso do HTMX para fechar modal e recarregar
+document.body.addEventListener('htmx:afterRequest', function(event) {
+    if (event.detail.successful && event.detail.xhr.getResponseHeader('HX-Trigger') === 'templateSaved') {
+        bootstrap.Modal.getInstance(document.getElementById('modalWhatsAppTemplate')).hide();
+        location.reload();
+    }
+});
+</script>

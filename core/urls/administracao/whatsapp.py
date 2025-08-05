@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+from django.urls import path
+from core.views.administracao import whatsapp as views
+
+app_name = 'whatsapp'
+
+urlpatterns = [
+    # Dashboard
+    path('', views.dashboard, name='dashboard'),
+    
+    # Contas
+    path('accounts/', views.accounts_list, name='accounts_list'),
+    
+    # Chat
+    path('chat/<int:account_id>/', views.chat_interface, name='chat_interface'),
+    path('contact/<int:contact_id>/', views.contact_chat, name='contact_chat'),
+    
+    # API
+    path('api/send-message/', views.send_message, name='send_message'),
+    
+    
+    # Listas
+    path('contacts/<int:account_id>/', views.contacts_list, name='contacts_list'),
+    path('messages/', views.messages_list, name='messages_list'),
+    
+    # Modals CRUD
+    path('account/create/', views.account_create_modal, name='account_create_modal'),
+    path('account/<int:account_id>/edit/', views.account_edit_modal, name='account_edit_modal'),
+    path('account/<int:account_id>/delete/', views.account_delete_modal, name='account_delete_modal'),
+    path('account/<int:account_id>/test/', views.account_test_modal, name='account_test_modal'),
+    
+    # Debug
+    path('account/<int:account_id>/debug/', views.webhook_debug, name='webhook_debug'),
+    
+    # Templates
+    path('account/<int:account_id>/templates/', views.templates_list, name='templates_list'),
+    path('template/create/', views.template_create_modal, name='template_create_modal'),
+    path('template/<int:template_id>/edit/', views.template_edit_modal, name='template_edit_modal'),
+    path('template/<int:template_id>/delete/', views.template_delete_modal, name='template_delete_modal'),
+    path('template/<int:template_id>/preview/', views.template_preview_modal, name='template_preview_modal'),
+]

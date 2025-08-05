@@ -1,0 +1,176 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-eye text-info me-2"></i>
+        Prévia do Template
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <!-- Informações do Template -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h6>{{ template.display_name }}</h6>
+            <p class="text-muted mb-1">
+                <small>
+                    <strong>Nome técnico:</strong> {{ template.name }} |
+                    <strong>Categoria:</strong> {{ template.get_category_display }} |
+                    <strong>Idioma:</strong> {{ template.get_language_display }}
+                </small>
+            </p>
+        </div>
+        <div class="col-md-4 text-end">
+            <span class="badge {{ template.get_status_badge_class }} mb-2">
+                {{ template.get_status_display }}
+            </span>
+            {% if template.variables_count > 0 %}
+                <br><small class="text-muted">{{ template.variables_count }} variável{{ template.variables_count|pluralize:"is" }}</small>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Prévia Visual do WhatsApp -->
+    <div class="row">
+        <div class="col-md-6">
+            <h6><i class="fab fa-whatsapp text-success me-2"></i>Como aparece no WhatsApp</h6>
+            
+            <!-- Simulação da interface do WhatsApp -->
+            <div class="border rounded-3 p-3 bg-light position-relative" style="max-width: 350px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <!-- Header do WhatsApp simulado -->
+                <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                    <div class="rounded-circle bg-success d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                        <i class="fas fa-building text-white small"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold small">{{ template.account.name }}</div>
+                        <div class="text-muted" style="font-size: 11px;">Template Message</div>
+                    </div>
+                </div>
+                
+                <!-- Mensagem do template -->
+                <div class="bg-white rounded-3 p-3 shadow-sm position-relative" style="max-width: 280px;">
+                    <!-- Indicador de template -->
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-file-alt text-muted me-1" style="font-size: 10px;"></i>
+                        <span class="text-muted" style="font-size: 10px;">TEMPLATE</span>
+                    </div>
+                    
+                    <!-- Header do template -->
+                    {% if preview_content.header %}
+                    <div class="fw-bold text-primary mb-2 small">
+                        {{ preview_content.header }}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Body do template -->
+                    <div class="mb-2" style="font-size: 14px; line-height: 1.4;">
+                        {{ preview_content.body|linebreaks }}
+                    </div>
+                    
+                    <!-- Footer do template -->
+                    {% if preview_content.footer %}
+                    <div class="text-muted small mt-2 pt-2 border-top">
+                        {{ preview_content.footer }}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Timestamp -->
+                    <div class="text-end mt-2">
+                        <small class="text-muted" style="font-size: 11px;">
+                            {{ template.criado_em|date:"H:i" }}
+                            <i class="fas fa-check-double text-primary ms-1"></i>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h6><i class="fas fa-code text-primary me-2"></i>Código do Template</h6>
+            
+            <!-- Template raw -->
+            <div class="bg-dark text-light p-3 rounded small" style="font-family: 'Courier New', monospace;">
+                {% if template.header_text %}
+                <div class="text-info">// Header</div>
+                <div class="mb-2">{{ template.header_text }}</div>
+                {% endif %}
+                
+                <div class="text-info">// Body</div>
+                <div class="mb-2">{{ template.body_text }}</div>
+                
+                {% if template.footer_text %}
+                <div class="text-info">// Footer</div>
+                <div>{{ template.footer_text }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Variáveis de exemplo -->
+            {% if template.variables_count > 0 %}
+            <div class="mt-3">
+                <h6 class="small">Variáveis de exemplo:</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Variável</th>
+                                <th>Valor de exemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for variable in sample_variables %}
+                                {% if variable.number <= template.variables_count %}
+                                <tr>
+                                    <td><code>{{ variable.display }}</code></td>
+                                    <td>{{ variable.value }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Informações técnicas -->
+    <div class="row mt-4 pt-3 border-top">
+        <div class="col-md-6">
+            <small class="text-muted">
+                <strong>Criado em:</strong> {{ template.criado_em|date:"d/m/Y H:i" }}<br>
+                <strong>Por:</strong> {{ template.criado_por.username }}<br>
+                {% if template.template_id %}
+                <strong>ID da API:</strong> <code>{{ template.template_id }}</code>
+                {% endif %}
+            </small>
+        </div>
+        <div class="col-md-6">
+            <small class="text-muted">
+                <strong>Última atualização:</strong> {{ template.atualizado_em|date:"d/m/Y H:i" }}<br>
+                <strong>Status:</strong> {{ template.get_status_display }}<br>
+                <strong>Ativo:</strong> {% if template.is_active %}Sim{% else %}Não{% endif %}
+            </small>
+        </div>
+    </div>
+    
+    {% if template.rejection_reason %}
+    <div class="alert alert-danger mt-3">
+        <h6 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Motivo da Rejeição
+        </h6>
+        <p class="mb-0">{{ template.rejection_reason }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Fechar
+    </button>
+    {% if template.can_be_used %}
+    <button type="button" class="btn btn-success" onclick="alert('Funcionalidade de envio em desenvolvimento')">
+        <i class="fas fa-paper-plane me-2"></i>Usar Template
+    </button>
+    {% endif %}
+</div>

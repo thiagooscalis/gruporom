@@ -1,0 +1,349 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contas WhatsApp{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fab fa-whatsapp text-success me-2"></i>
+            Contas WhatsApp
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-success" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#accountModal"
+                    data-url="{% url 'administracao:whatsapp:account_create_modal' %}">
+                <i class="fas fa-plus me-2"></i>Nova Conta
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <label for="search" class="form-label">Buscar</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="{{ search }}" placeholder="Nome, telefone ou responsável...">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Buscar
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-grid">
+                        <a href="{% url 'administracao:whatsapp:accounts_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>Limpar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de Contas -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-2"></i>
+            Contas ({{ page_obj.paginator.count }} encontrada{{ page_obj.paginator.count|pluralize }})
+        </div>
+        <div class="card-body p-0">
+            {% if page_obj %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Conta</th>
+                                <th>Telefone</th>
+                                <th>Status</th>
+                                <th>Responsável</th>
+                                <th>Estatísticas</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for account in page_obj %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if account.is_active %}
+                                                <i class="fab fa-whatsapp fa-2x text-success"></i>
+                                            {% else %}
+                                                <i class="fab fa-whatsapp fa-2x text-muted"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">{{ account.name }}</h6>
+                                            <small class="text-muted">Criada em {{ account.criado_em|date:"d/m/Y" }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">{{ account.display_phone }}</span><br>
+                                    <small class="text-muted">ID: {{ account.phone_number_id|truncatechars:15 }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{% if account.status == 'active' %}success{% elif account.status == 'pending' %}warning{% else %}danger{% endif %} rounded-pill">
+                                        {{ account.get_status_display }}
+                                    </span><br>
+                                    <small class="text-{% if account.is_active %}success{% else %}danger{% endif %}">
+                                        <i class="fas fa-circle fa-xs me-1"></i>
+                                        {% if account.is_active %}Ativa{% else %}Inativa{% endif %}
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                            <i class="fas fa-user text-white fa-sm"></i>
+                                        </div>
+                                        <div>
+                                            <span class="fw-bold">{{ account.responsavel.username }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <small class="text-primary fw-bold d-block">{{ account.contacts.count }}</small>
+                                            <small class="text-muted">Contatos</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-info fw-bold d-block">{{ account.messages.count }}</small>
+                                            <small class="text-muted">Mensagens</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-success fw-bold d-block">{{ account.messages.filter:status='read'|length }}</small>
+                                            <small class="text-muted">Lidas</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        {% if account.is_active %}
+                                            <a href="{% url 'administracao:whatsapp:chat_interface' account.id %}" 
+                                               class="btn btn-sm btn-outline-success" title="Abrir Chat">
+                                                <i class="fas fa-comments"></i>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#accountModal"
+                                                data-url="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+                                                title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        
+                                        {% if account.is_active %}
+                                            <button type="button" class="btn btn-sm btn-outline-warning" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#testModal"
+                                                    data-url="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
+                                                    title="Testar">
+                                                <i class="fas fa-vial"></i>
+                                            </button>
+                                        {% endif %}
+                                        
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal"
+                                                data-url="{% url 'administracao:whatsapp:account_delete_modal' account.id %}"
+                                                title="Excluir">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Paginação -->
+                {% if page_obj.has_other_pages %}
+                    <div class="card-footer">
+                        <nav aria-label="Navegação das contas">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if search %}&search={{ search }}{% endif %}">
+                                            <i class="fas fa-angle-double-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                            <i class="fas fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                            <i class="fas fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">
+                                            <i class="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                Mostrando {{ page_obj.start_index }} a {{ page_obj.end_index }} de {{ page_obj.paginator.count }} conta{{ page_obj.paginator.count|pluralize }}
+                            </small>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fab fa-whatsapp fa-5x text-muted mb-3"></i>
+                    <h4 class="text-muted">Nenhuma conta encontrada</h4>
+                    <p class="text-muted">{% if search %}Tente alterar os filtros de busca{% else %}Clique em "Nova Conta" para adicionar sua primeira conta WhatsApp{% endif %}</p>
+                    {% if not search %}
+                        <button type="button" class="btn btn-success" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#accountModal"
+                                data-url="{% url 'administracao:whatsapp:account_create_modal' %}">
+                            <i class="fas fa-plus me-2"></i>Nova Conta
+                        </button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal Geral para CRUD -->
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Teste -->
+<div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Carrega conteúdo dos modais dinamicamente
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal de conta (criar/editar)
+    const accountModal = document.getElementById('accountModal');
+    accountModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const url = button.getAttribute('data-url');
+        
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                accountModal.querySelector('.modal-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar modal:', error);
+                accountModal.querySelector('.modal-content').innerHTML = '<div class="alert alert-danger m-3">Erro ao carregar formulário</div>';
+            });
+    });
+    
+    // Modal de teste
+    const testModal = document.getElementById('testModal');
+    testModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const url = button.getAttribute('data-url');
+        
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                testModal.querySelector('.modal-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar modal de teste:', error);
+                testModal.querySelector('.modal-content').innerHTML = '<div class="alert alert-danger m-3">Erro ao carregar teste</div>';
+            });
+    });
+    
+    // Modal de exclusão
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const url = button.getAttribute('data-url');
+        
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                deleteModal.querySelector('.modal-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar modal de exclusão:', error);
+                deleteModal.querySelector('.modal-content').innerHTML = '<div class="alert alert-danger m-3">Erro ao carregar confirmação</div>';
+            });
+    });
+    
+    // Limpa conteúdo dos modais ao fechar
+    [accountModal, testModal, deleteModal].forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', function() {
+            this.querySelector('.modal-content').innerHTML = `
+                <div class="d-flex justify-content-center align-items-center p-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
+            `;
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Templates - {{ account.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fas fa-file-alt text-primary me-2"></i>
+            Templates - {{ account.name }}
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-success" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalWhatsAppTemplate"
+                    hx-get="{% url 'administracao:whatsapp:template_create_modal' %}"
+                    hx-target="#modalWhatsAppTemplate .modal-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-plus me-2"></i>Novo Template
+            </button>
+        </div>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Templates</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ stats.total }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Aprovados</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ stats.approved }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Pendentes</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ stats.pending }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Rejeitados</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ stats.rejected }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-times-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Buscar</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="{{ search }}" placeholder="Nome ou conte&uacute;do...">
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Todos os status</option>
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="category" class="form-label">Categoria</label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">Todas as categorias</option>
+                        {% for value, label in category_choices %}
+                        <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-search me-1"></i>Filtrar
+                    </button>
+                    <a href="{% url 'administracao:whatsapp:templates_list' account.id %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de Templates -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-1"></i>
+            Templates ({{ page_obj.paginator.count }})
+        </div>
+        <div class="card-body">
+            {% if page_obj %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Template</th>
+                                <th>Categoria</th>
+                                <th>Idioma</th>
+                                <th>Status</th>
+                                <th>Variáveis</th>
+                                <th>Atualizado</th>
+                                <th width="200">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for template in page_obj %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>{{ template.display_name }}</strong>
+                                        <br><small class="text-muted">{{ template.name }}</small>
+                                    </div>
+                                    {% if template.body_text %}
+                                    <div class="mt-1">
+                                        <small class="text-muted">{{ template.body_text|truncatechars:80 }}</small>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ template.get_category_display }}</span>
+                                </td>
+                                <td>{{ template.get_language_display }}</td>
+                                <td>
+                                    <span class="badge {{ template.get_status_badge_class }}">
+                                        {{ template.get_status_display }}
+                                    </span>
+                                    {% if not template.is_active %}
+                                    <br><small class="text-danger">Inativo</small>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if template.variables_count > 0 %}
+                                        <span class="badge bg-info">{{ template.variables_count }}</span>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small>{{ template.atualizado_em|date:"d/m/Y H:i" }}</small>
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <!-- Visualizar -->
+                                        <button type="button" class="btn btn-sm btn-outline-info" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalTemplatePreview"
+                                                hx-get="{% url 'administracao:whatsapp:template_preview_modal' template.id %}"
+                                                hx-target="#modalTemplatePreview .modal-content"
+                                                hx-swap="innerHTML"
+                                                title="Visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        
+                                        <!-- Editar -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalWhatsAppTemplate"
+                                                hx-get="{% url 'administracao:whatsapp:template_edit_modal' template.id %}"
+                                                hx-target="#modalWhatsAppTemplate .modal-content"
+                                                hx-swap="innerHTML"
+                                                title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        
+                                        <!-- Excluir -->
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalDeleteTemplate"
+                                                hx-get="{% url 'administracao:whatsapp:template_delete_modal' template.id %}"
+                                                hx-target="#modalDeleteTemplate .modal-content"
+                                                hx-swap="innerHTML"
+                                                title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginação -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Paginação de templates">
+                    <ul class="pagination justify-content-center mt-4">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">Primeira</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">Anterior</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">Próxima</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">Última</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h5>Nenhum template encontrado</h5>
+                    <p class="text-muted">
+                        {% if search or status_filter or category_filter %}
+                            Nenhum template corresponde aos filtros selecionados.
+                        {% else %}
+                            Comece criando seu primeiro template de mensagem.
+                        {% endif %}
+                    </p>
+                    {% if not search and not status_filter and not category_filter %}
+                    <button type="button" class="btn btn-success" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalWhatsAppTemplate"
+                            hx-get="{% url 'administracao:whatsapp:template_create_modal' %}"
+                            hx-target="#modalWhatsAppTemplate .modal-content"
+                            hx-swap="innerHTML">
+                        <i class="fas fa-plus me-2"></i>Criar Primeiro Template
+                    </button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Modal para template -->
+<div class="modal fade" id="modalWhatsAppTemplate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para prévia de template -->
+<div class="modal fade" id="modalTemplatePreview" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-info" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para excluir template -->
+<div class="modal fade" id="modalDeleteTemplate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

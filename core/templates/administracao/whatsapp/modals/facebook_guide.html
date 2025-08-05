@@ -1,0 +1,157 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fab fa-facebook text-primary me-2"></i>
+        Guia: Como Obter Credenciais do Facebook
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Importante:</strong> Você precisa ter uma conta Facebook Business e um aplicativo configurado para WhatsApp Business API.
+    </div>
+    
+    <div class="accordion" id="facebookGuideAccordion">
+        <!-- Passo 1 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="step1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true">
+                    <i class="fas fa-step-forward me-2"></i>
+                    Passo 1: Acessar Facebook for Developers
+                </button>
+            </h2>
+            <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#facebookGuideAccordion">
+                <div class="accordion-body">
+                    <ol>
+                        <li>Acesse: <a href="https://developers.facebook.com/" target="_blank" class="text-primary">https://developers.facebook.com/</a></li>
+                        <li>Faça login com sua conta Facebook Business</li>
+                        <li>Clique em <strong>"Meus Apps"</strong> no canto superior direito</li>
+                        <li>Selecione seu app ou clique em <strong>"Criar App"</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Passo 2 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="step2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                    <i class="fab fa-whatsapp me-2"></i>
+                    Passo 2: Configurar WhatsApp Business
+                </button>
+            </h2>
+            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#facebookGuideAccordion">
+                <div class="accordion-body">
+                    <ol>
+                        <li>No painel do seu app, clique em <strong>"WhatsApp"</strong> no menu lateral</li>
+                        <li>Vá para <strong>"API Setup"</strong></li>
+                        <li>Aqui você encontrará todas as credenciais necessárias</li>
+                        <li>Configure seu número de telefone</li>
+                        <li>Gere o Access Token permanente</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Passo 3 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="step3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                    <i class="fas fa-key me-2"></i>
+                    Passo 3: Copiar as Credenciais
+                </button>
+            </h2>
+            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#facebookGuideAccordion">
+                <div class="accordion-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Onde Encontrar</th>
+                                    <th>Campo no Sistema</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>App Dashboard → ID do App</strong></td>
+                                    <td>ID do Aplicativo</td>
+                                    <td>Número longo visível no topo da página</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>App Dashboard → Configurações Básicas</strong></td>
+                                    <td>Chave Secreta do Aplicativo</td>
+                                    <td>Clique em "Mostrar" ao lado de "Chave Secreta do App"</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>WhatsApp → API Setup</strong></td>
+                                    <td>Phone Number ID</td>
+                                    <td>ID do número de telefone configurado</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>WhatsApp → API Setup</strong></td>
+                                    <td>Business Account ID</td>
+                                    <td>ID da conta de negócios</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>WhatsApp → API Setup</strong></td>
+                                    <td>Token de Acesso</td>
+                                    <td>Gere um token permanente (não temporário)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Passo 4 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="step4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                    <i class="fas fa-link me-2"></i>
+                    Passo 4: Configurar Webhook
+                </button>
+            </h2>
+            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#facebookGuideAccordion">
+                <div class="accordion-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        O webhook é essencial para receber mensagens!
+                    </div>
+                    <ol>
+                        <li>Vá para <strong>WhatsApp → Configuration</strong></li>
+                        <li>Em "Webhook", clique em <strong>"Edit"</strong></li>
+                        <li>Configure:
+                            <ul class="mt-2">
+                                <li><strong>Callback URL:</strong> https://seudominio.com/webhook/whatsapp/ID_DA_CONTA/</li>
+                                <li><strong>Verify Token:</strong> Um token personalizado (mesmo do campo "Token de Verificação Webhook")</li>
+                            </ul>
+                        </li>
+                        <li>Marque os eventos: <code>messages</code>, <code>message_deliveries</code>, <code>message_reads</code></li>
+                        <li>Clique em <strong>"Verify and Save"</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-success mt-4">
+        <h6 class="alert-heading">
+            <i class="fas fa-lightbulb me-2"></i>
+            Dica Importantássima!
+        </h6>
+        <p class="mb-2">Mantenha suas credenciais seguras e nunca as compartilhe. Use apenas em ambiente seguro (HTTPS).</p>
+        <p class="mb-0">O Access Token deve ser <strong>permanente</strong>, não o token temporário de 24 horas.</p>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Fechar
+    </button>
+    <a href="https://developers.facebook.com/" target="_blank" class="btn btn-primary">
+        <i class="fab fa-facebook me-2"></i>Abrir Facebook for Developers
+    </a>
+</div>

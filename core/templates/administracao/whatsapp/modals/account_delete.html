@@ -1,0 +1,183 @@
+<!-- Modal para excluir conta WhatsApp -->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Excluir Conta WhatsApp
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <form id="deleteAccountForm" method="post" action="{{ action_url }}">
+            <div class="modal-body">
+                {% csrf_token %}
+                
+                <div class="alert alert-warning" role="alert">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Atenção!
+                    </h6>
+                    <p class="mb-0">Você está prestes a excluir permanentemente a conta <strong>{{ account.name }}</strong>.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fab fa-whatsapp text-success me-2"></i>
+                            {{ account.name }}
+                        </h6>
+                        <p class="card-text">
+                            <small class="text-muted">{{ account.display_phone }}</small><br>
+                            <small class="text-muted">Responsável: {{ account.responsavel.username }}</small>
+                        </p>
+                        
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h4 class="text-primary mb-0">{{ messages_count }}</h4>
+                                    <small class="text-muted">Mensagens</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h4 class="text-info mb-0">{{ contacts_count }}</h4>
+                                    <small class="text-muted">Contatos</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="{% if account.is_active %}text-success{% else %}text-danger{% endif %} mb-0">
+                                    <i class="fas fa-{% if account.is_active %}check-circle{% else %}times-circle{% endif %}"></i>
+                                </h4>
+                                <small class="text-muted">{% if account.is_active %}Ativa{% else %}Inativa{% endif %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if messages_count > 0 %}
+                <div class="alert alert-danger mt-3" role="alert">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-ban me-2"></i>
+                        Não é possível excluir
+                    </h6>
+                    <p class="mb-2">Esta conta possui <strong>{{ messages_count }} mensagens</strong> e <strong>{{ contacts_count }} contatos</strong> relacionados.</p>
+                    <p class="mb-0"><strong>Recomendação:</strong> Desative a conta em vez de excluí-la para preservar o histórico.</p>
+                </div>
+                {% else %}
+                <div class="alert alert-info mt-3" role="alert">
+                    <p class="mb-2"><strong>Esta ação é irreversível!</strong></p>
+                    <p class="mb-0">A conta será removida permanentemente do sistema.</p>
+                </div>
+                
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                    <label class="form-check-label" for="confirmDelete">
+                        Confirmo que desejo excluir permanentemente esta conta
+                    </label>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                
+                {% if messages_count > 0 %}
+                    <button type="button" class="btn btn-warning" onclick="toggleAccountStatus({{ account.id }}, {{ account.is_active|yesno:'false,true' }})">
+                        <i class="fas fa-{% if account.is_active %}pause{% else %}play{% endif %} me-2"></i>
+                        {% if account.is_active %}Desativar{% else %}Ativar{% endif %} Conta
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                        <i class="fas fa-trash-alt me-2"></i>Excluir Definitivamente
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Habilita botão de exclusão apenas se checkbox marcado
+document.getElementById('confirmDelete')?.addEventListener('change', function() {
+    document.getElementById('deleteBtn').disabled = !this.checked;
+});
+
+// Manipula envio do formulário de exclusão
+document.getElementById('deleteAccountForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const deleteBtn = document.getElementById('deleteBtn');
+    
+    if (deleteBtn) {
+        const originalText = deleteBtn.innerHTML;
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
+        
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.querySelector('.modal')).hide();
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    location.reload();
+                }
+            } else {
+                alert(data.message || 'Erro ao excluir conta');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro interno. Tente novamente.');
+        })
+        .finally(() => {
+            deleteBtn.disabled = false;
+            deleteBtn.innerHTML = originalText;
+        });
+    }
+});
+
+// Função para alternar status da conta
+function toggleAccountStatus(accountId, newStatus) {
+    const action = newStatus ? 'ativar' : 'desativar';
+    
+    if (confirm(`Tem certeza que deseja ${action} esta conta?`)) {
+        // Implementação para alterar status via AJAX
+        fetch(`/administracao/whatsapp/account/${accountId}/toggle-status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ is_active: newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.querySelector('.modal')).hide();
+                location.reload();
+            } else {
+                alert(data.message || 'Erro ao alterar status da conta');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro interno. Tente novamente.');
+        });
+    }
+}
+</script>

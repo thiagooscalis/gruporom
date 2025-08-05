@@ -1,0 +1,175 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="fas fa-vial text-warning me-2"></i>
+        Testar Conectividade - {{ account.name }}
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form hx-post="{{ action_url }}" hx-target="#modalTestAccount .modal-content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="modal-body">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="alert alert-info">
+            <h6 class="alert-heading">
+                <i class="fas fa-info-circle me-2"></i>
+                Informações da Conta
+            </h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Nome:</strong> {{ account.name }}<br>
+                    <strong>Telefone:</strong> {{ account.display_phone }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Status:</strong> <span class="badge bg-{% if account.status == 'active' %}success{% else %}warning{% endif %}">{{ account.get_status_display }}</span><br>
+                    <strong>Ativo:</strong> {% if account.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}
+                </div>
+            </div>
+        </div>
+        
+        {{ form.test_phone_number|as_crispy_field }}
+        {{ form.template|as_crispy_field }}
+        
+        <!-- Prévia do template selecionado -->
+        <div id="template-preview" class="alert alert-light" style="display: none;">
+            <h6 class="alert-heading">
+                <i class="fas fa-eye me-2"></i>
+                Prévia do Template
+            </h6>
+            <div id="preview-content" class="border rounded p-3 bg-white">
+                <div id="preview-header" class="fw-bold text-primary mb-2" style="display: none;"></div>
+                <div id="preview-body" class="mb-2">Selecione um template para ver a prévia...</div>
+                <div id="preview-footer" class="text-muted small" style="display: none;"></div>
+            </div>
+            <div id="preview-variables" class="mt-2" style="display: none;">
+                <small class="text-muted"><strong>Variáveis de exemplo:</strong></small>
+                <div id="variables-list" class="small"></div>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Atenção:</strong> Este é um teste simulado. Em produção, seria enviado um template real via WhatsApp Business API.
+        </div>
+        
+        {% if not form.template.queryset %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Nenhum template disponível:</strong> Esta conta não possui templates aprovados para teste.
+            <a href="{% url 'administracao:whatsapp:templates_list' account.id %}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">
+                <i class="fas fa-plus me-1"></i>Criar Template
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-warning">
+            <i class="fas fa-paper-plane me-2"></i>Enviar Teste
+        </button>
+    </div>
+</form>
+
+<script>
+// Dados dos templates para JavaScript (será preenchido pelo Django)
+const templateData = {
+    {% for template in form.template.queryset %}
+    {{ template.id }}: {
+        display_name: "{{ template.display_name|escapejs }}",
+        header_text: "{{ template.header_text|escapejs }}",
+        body_text: "{{ template.body_text|escapejs }}",
+        footer_text: "{{ template.footer_text|escapejs }}",
+        variables_count: {{ template.variables_count }}
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+};
+
+// Função para atualizar prévia do template
+function updateTemplatePreview() {
+    const templateSelect = document.getElementById('id_template');
+    const templateId = templateSelect.value;
+    const previewDiv = document.getElementById('template-preview');
+    
+    if (!templateId || !templateData[templateId]) {
+        previewDiv.style.display = 'none';
+        return;
+    }
+    
+    const template = templateData[templateId];
+    
+    // Mostra a prévia
+    previewDiv.style.display = 'block';
+    
+    // Atualiza header
+    const headerDiv = document.getElementById('preview-header');
+    if (template.header_text) {
+        headerDiv.textContent = template.header_text;
+        headerDiv.style.display = 'block';
+    } else {
+        headerDiv.style.display = 'none';
+    }
+    
+    // Atualiza body com variáveis de exemplo
+    const bodyDiv = document.getElementById('preview-body');
+    let bodyText = template.body_text;
+    const sampleValues = [
+        'Cliente Teste', 'Produto Demo', '50%', 'hoje', 
+        'www.exemplo.com', 'Código123', '15:30', 'valor',
+        'desconto', 'promoção'
+    ];
+    
+    // Substitui variáveis por valores de exemplo
+    for (let i = 1; i <= template.variables_count; i++) {
+        const regex = new RegExp(`\\{\\{${i}\\}\\}`, 'g');
+        bodyText = bodyText.replace(regex, sampleValues[i-1] || `Valor ${i}`);
+    }
+    bodyDiv.textContent = bodyText;
+    
+    // Atualiza footer
+    const footerDiv = document.getElementById('preview-footer');
+    if (template.footer_text) {
+        footerDiv.textContent = template.footer_text;
+        footerDiv.style.display = 'block';
+    } else {
+        footerDiv.style.display = 'none';
+    }
+    
+    // Mostra variáveis se existirem
+    const variablesDiv = document.getElementById('preview-variables');
+    const variablesList = document.getElementById('variables-list');
+    
+    if (template.variables_count > 0) {
+        let variablesHtml = '';
+        for (let i = 1; i <= template.variables_count; i++) {
+            const value = sampleValues[i-1] || `Valor ${i}`;
+            variablesHtml += `<span class="badge bg-light text-dark me-1">{{${i}}} = ${value}</span>`;
+        }
+        variablesList.innerHTML = variablesHtml;
+        variablesDiv.style.display = 'block';
+    } else {
+        variablesDiv.style.display = 'none';
+    }
+}
+
+// Event listener para mudança no select
+document.addEventListener('DOMContentLoaded', function() {
+    const templateSelect = document.getElementById('id_template');
+    if (templateSelect) {
+        templateSelect.addEventListener('change', updateTemplatePreview);
+        // Atualiza prévia inicial se já há algo selecionado
+        updateTemplatePreview();
+    }
+});
+</script>
