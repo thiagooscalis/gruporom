@@ -346,12 +346,6 @@ else:
 # AUTHENTICATION & PASSWORD SETTINGS
 # ==========================================
 
-# Account lockout protection (requires django-axes or similar)
-AXES_FAILURE_LIMIT = 5  # Lock after 5 failed attempts
-AXES_COOLOFF_TIME = 1  # 1 hour cooldown
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
-
-
 # Authentication backend with rate limiting
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
