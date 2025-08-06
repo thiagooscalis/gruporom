@@ -198,7 +198,9 @@ LOGGING = {
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": "/home/thiago/logs/django.log" if not DEBUG else "django.log",
+            "filename": (
+                "/home/thiago/logs/django.log" if not DEBUG else "django.log"
+            ),
             "maxBytes": 1024 * 1024 * 10,  # 10MB
             "backupCount": 5,
             "formatter": "production" if not DEBUG else "verbose",
@@ -349,17 +351,6 @@ AXES_FAILURE_LIMIT = 5  # Lock after 5 failed attempts
 AXES_COOLOFF_TIME = 1  # 1 hour cooldown
 AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
 
-# Password validation strengthening
-AUTH_PASSWORD_VALIDATORS.extend(
-    [
-        {
-            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-            "OPTIONS": {
-                "min_length": 12,  # Increased from default 8
-            },
-        },
-    ]
-)
 
 # Authentication backend with rate limiting
 AUTHENTICATION_BACKENDS = [
