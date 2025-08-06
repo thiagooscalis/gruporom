@@ -35,180 +35,144 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">
-                <i class="fas fa-tachometer-alt me-2 text-primary"></i>
-                Painel de Administracao
-            </h1>
-            <div class="text-muted">
-                <i class="fas fa-calendar me-1"></i>
-                {% now "d/m/Y H:i" %}
-            </div>
-        </div>
+        {% include 'includes/breadcrumbs.html' with cur_page='Administração' %}
     </div>
 </div>
 
-<div class="row g-4">
-    <!-- Card de Usuarios -->
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+<!-- Resumo Executivo -->
+<div class="row g-4 mb-4">
+    <!-- Estatísticas Principais -->
+    <div class="col-lg-8">
+        <div class="row g-4">
+            <!-- Usuários -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                             <i class="fas fa-users text-primary fa-2x"></i>
                         </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <div class="fw-bold text-dark">Usuarios</div>
-                        <div class="text-muted small">Total de usuarios cadastrados</div>
-                        <div class="h4 mb-0 text-primary">{{ total_usuarios|default:0 }}</div>
+                        <h3 class="text-primary mb-1">{{ total_usuarios|default:0 }}</h3>
+                        <p class="text-muted mb-0">Usuários Ativos</p>
+                        <a href="{% url 'administracao:usuarios_lista' %}" class="btn btn-outline-primary btn-sm mt-2">
+                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Card de Pessoas -->
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-success bg-opacity-10 p-3 rounded">
+            <!-- Pessoas -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                             <i class="fas fa-address-book text-success fa-2x"></i>
                         </div>
+                        <h3 class="text-success mb-1">{{ total_pessoas|default:0 }}</h3>
+                        <p class="text-muted mb-0">Pessoas Cadastradas</p>
+                        <a href="{% url 'administracao:pessoas_lista' %}" class="btn btn-outline-success btn-sm mt-2">
+                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
+                        </a>
                     </div>
-                    <div class="flex-grow-1 ms-3">
-                        <div class="fw-bold text-dark">Pessoas</div>
-                        <div class="text-muted small">Total de pessoas cadastradas</div>
-                        <div class="h4 mb-0 text-success">{{ total_pessoas|default:0 }}</div>
+                </div>
+            </div>
+
+            <!-- Fornecedores -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-truck text-warning fa-2x"></i>
+                        </div>
+                        <h3 class="text-warning mb-1">{{ total_fornecedores|default:0 }}</h3>
+                        <p class="text-muted mb-0">Fornecedores</p>
+                        <a href="{% url 'administracao:fornecedores_lista' %}" class="btn btn-outline-warning btn-sm mt-2">
+                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colaboradores -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-tie text-info fa-2x"></i>
+                        </div>
+                        <h3 class="text-info mb-1">{{ total_colaboradores|default:0 }}</h3>
+                        <p class="text-muted mb-0">Colaboradores</p>
+                        <a href="{% url 'administracao:colaboradores_lista' %}" class="btn btn-outline-info btn-sm mt-2">
+                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Card de Grupos -->
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-warning bg-opacity-10 p-3 rounded">
-                            <i class="fas fa-layer-group text-warning fa-2x"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <div class="fw-bold text-dark">Grupos</div>
-                        <div class="text-muted small">Total de grupos de acesso</div>
-                        <div class="h4 mb-0 text-warning">{{ total_grupos|default:0 }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card de Sistema -->
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-info bg-opacity-10 p-3 rounded">
-                            <i class="fas fa-server text-info fa-2x"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <div class="fw-bold text-dark">Sistema</div>
-                        <div class="text-muted small">Status do sistema</div>
-                        <div class="text-success">
-                            <i class="fas fa-check-circle me-1"></i>Online
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-transparent border-0 pb-0">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-line me-2"></i>Acoes Rapidas
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <a href="" class="btn btn-outline-primary w-100 py-3">
-                            <i class="fas fa-user-plus fa-2x d-block mb-2"></i>
-                            <div class="fw-bold">Novo Usuario</div>
-                            <small class="text-muted">Cadastrar novo usuario</small>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="" class="btn btn-outline-success w-100 py-3">
-                            <i class="fas fa-address-card fa-2x d-block mb-2"></i>
-                            <div class="fw-bold">Nova Pessoa</div>
-                            <small class="text-muted">Cadastrar nova pessoa</small>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="" class="btn btn-outline-warning w-100 py-3">
-                            <i class="fas fa-users-cog fa-2x d-block mb-2"></i>
-                            <div class="fw-bold">Gerenciar Grupos</div>
-                            <small class="text-muted">Configurar grupos de acesso</small>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="" class="btn btn-outline-info w-100 py-3">
-                            <i class="fas fa-cog fa-2x d-block mb-2"></i>
-                            <div class="fw-bold">Configuracoes</div>
-                            <small class="text-muted">Configuracoes do sistema</small>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+    <!-- Informações do Sistema -->
     <div class="col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-transparent border-0 pb-0">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-info-circle me-2"></i>Informacoes
-                </h5>
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2 text-muted"></i>
+                    Informações do Sistema
+                </h6>
             </div>
             <div class="card-body">
-                <div class="mb-3">
-                    <div class="small text-muted">Bem-vindo de volta!</div>
-                    <div class="fw-bold">{{ user.pessoa.nome|default:user.username }}</div>
-                </div>
-                
-                <div class="mb-3">
-                    <div class="small text-muted">Ultimo acesso</div>
-                    <div>{{ user.last_login|date:"d/m/Y H:i"|default:"Primeiro acesso" }}</div>
-                </div>
-                
-                <div class="mb-3">
-                    <div class="small text-muted">Grupo de acesso</div>
+                <!-- Usuário Logado -->
+                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
                     <div>
-                        {% for group in user.groups.all %}
-                            <span class="badge bg-primary">{{ group.name }}</span>
-                        {% empty %}
-                            <span class="text-muted">Nenhum grupo</span>
-                        {% endfor %}
+                        <div class="fw-bold">{{ user.pessoa.nome|default:user.username }}</div>
+                        <small class="text-muted">
+                            {% for group in user.groups.all %}{{ group.name }}{% empty %}Usuário{% endfor %}
+                        </small>
                     </div>
                 </div>
-                
-                <hr>
-                
-                <div class="text-center">
-                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-sign-out-alt me-1"></i>Sair do Sistema
+
+                <!-- Câmbio do Dia -->
+                {% if dolar_hoje %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fas fa-dollar-sign me-1"></i>Dólar Hoje
+                        </span>
+                        <span class="fw-bold text-success">R$ {{ dolar_hoje|floatformat:4 }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Status Sistema -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fas fa-server me-1"></i>Sistema
+                        </span>
+                        <span class="text-success">
+                            <i class="fas fa-check-circle me-1"></i>Online
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Último Acesso -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fas fa-clock me-1"></i>Último Acesso
+                        </span>
+                        <small class="text-muted">{{ user.last_login|date:"d/m/Y H:i"|default:"Primeiro acesso" }}</small>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Acesso Rápido WhatsApp -->
+                <div class="d-grid">
+                    <a href="{% url 'administracao:whatsapp:dashboard' %}" class="btn btn-success">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp Business
                     </a>
                 </div>
             </div>

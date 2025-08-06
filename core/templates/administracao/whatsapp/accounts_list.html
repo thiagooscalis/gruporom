@@ -5,18 +5,24 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i class="fab fa-whatsapp text-success me-2"></i>
-            Contas WhatsApp
-        </h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/breadcrumbs.html' with prev_page='WhatsApp' prev_url='/administracao/whatsapp/' cur_page='Contas' %}
+            
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">
+                    <i class="fab fa-whatsapp text-success me-2"></i>
+                    Contas WhatsApp
+                </h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
             <button type="button" class="btn btn-success" 
                     data-bs-toggle="modal" 
                     data-bs-target="#accountModal"
                     data-url="{% url 'administracao:whatsapp:account_create_modal' %}">
                 <i class="fas fa-plus me-2"></i>Nova Conta
-            </button>
+                </button>
+            </div>
+            </div>
         </div>
     </div>
 

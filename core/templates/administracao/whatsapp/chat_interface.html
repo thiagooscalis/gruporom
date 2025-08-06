@@ -4,6 +4,14 @@
 {% block title %}Chat WhatsApp - {{ account.name }}{% endblock %}
 
 {% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/breadcrumbs.html' with prev_page='WhatsApp' prev_url='/administracao/whatsapp/' cur_page='Chat' %}
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid h-100">
     <div class="row h-100">
         <!-- Lista de Contatos -->

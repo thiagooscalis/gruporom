@@ -61,8 +61,8 @@ def dashboard(request):
         'account', 'contact', 'sent_by'
     ).order_by('-timestamp')[:10]
     
-    # Templates recentes (últimos 10)
-    templates = WhatsAppTemplate.objects.select_related('account').order_by('-criado_em')[:10]
+    # Templates recentes (últimos 5)
+    templates = WhatsAppTemplate.objects.select_related('account').order_by('-criado_em')[:5]
     
     context = {
         'area': request.area,

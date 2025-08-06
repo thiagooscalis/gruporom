@@ -1299,3 +1299,353 @@ INFO 2025-08-06 09:17:21,262 runserver [mHTTP GET /administracao/whatsapp/accou
 INFO 2025-08-06 09:17:24,196 runserver [mHTTP GET /administracao/whatsapp/template/3/preview/ 200 [0.02, 127.0.0.1:38992][0m
 INFO 2025-08-06 09:17:29,662 runserver [mHTTP GET /administracao/whatsapp/account/create/ 200 [0.04, 127.0.0.1:38992][0m
 INFO 2025-08-06 09:17:37,330 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:38992][0m
+INFO 2025-08-06 12:12:28,899 autoreload Watching for file changes with StatReloader
+WARNING 2025-08-06 12:12:30,604 base Session data corrupted
+INFO 2025-08-06 12:12:30,618 runserver [32mHTTP GET /administracao/whatsapp/ 302 [0.04, 127.0.0.1:46684][0m
+WARNING 2025-08-06 12:12:30,627 base Session data corrupted
+INFO 2025-08-06 12:12:30,632 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:12:30,645 runserver [mHTTP GET /login/?next=/administracao/whatsapp/ 200 [0.02, 127.0.0.1:46684][0m
+INFO 2025-08-06 12:12:30,667 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:30,669 runserver [36mHTTP GET /static/style.css 304 [0.01, 127.0.0.1:46698][0m
+INFO 2025-08-06 12:12:30,670 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.01, 127.0.0.1:46684][0m
+INFO 2025-08-06 12:12:30,683 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:46704][0m
+WARNING 2025-08-06 12:12:38,996 base Session data corrupted
+INFO 2025-08-06 12:12:39,171 runserver [32mHTTP POST /login/?next=/administracao/whatsapp/ 302 [0.19, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:39,184 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:12:39,197 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.02, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:39,208 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:53,833 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:12:53,840 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:59,156 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:12:59,199 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:12:59,219 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:13:06,493 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:13:06,500 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.04, 127.0.0.1:46704][0m
+INFO 2025-08-06 12:17:33,584 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:17:33,594 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.04, 127.0.0.1:47458][0m
+INFO 2025-08-06 12:19:12,313 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:19:12,329 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:59250][0m
+INFO 2025-08-06 12:19:12,363 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:59258][0m
+INFO 2025-08-06 12:19:12,363 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:59250][0m
+INFO 2025-08-06 12:19:12,366 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:59272][0m
+INFO 2025-08-06 12:19:12,371 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59258][0m
+INFO 2025-08-06 12:19:12,386 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59272][0m
+INFO 2025-08-06 12:19:12,390 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59272][0m
+INFO 2025-08-06 12:19:12,390 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59258][0m
+INFO 2025-08-06 12:19:33,488 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:19:33,496 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:59250][0m
+INFO 2025-08-06 12:19:39,523 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:19:39,540 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:59250][0m
+INFO 2025-08-06 12:19:41,692 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:19:41,721 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:59250][0m
+INFO 2025-08-06 12:21:56,728 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:21:56,740 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.04, 127.0.0.1:33104][0m
+ERROR 2025-08-06 12:22:05,371 log Internal Server Error: /administracao/whatsapp/account/1/templates/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 434, in templates_list
+    return render(request, 'administracao/whatsapp/templates_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 339, in do_include
+    value = token_kwargs(remaining_bits, parser, support_legacy=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1127, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ''{%' from ''{%'
+ERROR 2025-08-06 12:22:05,374 runserver [35;1mHTTP GET /administracao/whatsapp/account/1/templates/ 500 [0.05, 127.0.0.1:33104][0m
+ERROR 2025-08-06 12:22:11,243 log Internal Server Error: /administracao/whatsapp/account/1/templates/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 434, in templates_list
+    return render(request, 'administracao/whatsapp/templates_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 339, in do_include
+    value = token_kwargs(remaining_bits, parser, support_legacy=False)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1127, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ''{%' from ''{%'
+ERROR 2025-08-06 12:22:11,245 runserver [35;1mHTTP GET /administracao/whatsapp/account/1/templates/ 500 [0.08, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:22:50,963 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:22:50,973 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:22:56,477 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:22:56,495 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:22:59,919 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:22:59,935 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:23:11,601 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:23:11,617 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:23:15,486 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:23:15,497 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:33104][0m
+INFO 2025-08-06 12:24:36,457 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:24:36,464 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.02, 127.0.0.1:59286][0m
+INFO 2025-08-06 12:26:12,685 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:26:12,696 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:56800][0m
+INFO 2025-08-06 12:26:12,713 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:56800][0m
+INFO 2025-08-06 12:26:12,714 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:56826][0m
+INFO 2025-08-06 12:26:12,715 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:56816][0m
+INFO 2025-08-06 12:26:12,719 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:56826][0m
+INFO 2025-08-06 12:26:12,741 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:56816][0m
+INFO 2025-08-06 12:26:12,741 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:56826][0m
+INFO 2025-08-06 12:26:12,743 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:56826][0m
+INFO 2025-08-06 12:26:19,333 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:26:19,338 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.04, 127.0.0.1:56800][0m
+INFO 2025-08-06 12:28:34,332 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:34,348 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:34,369 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:55776][0m
+INFO 2025-08-06 12:28:34,369 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:34,370 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:55780][0m
+INFO 2025-08-06 12:28:34,372 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:55776][0m
+INFO 2025-08-06 12:28:34,384 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:55780][0m
+INFO 2025-08-06 12:28:34,388 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:55776][0m
+INFO 2025-08-06 12:28:34,389 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:55780][0m
+INFO 2025-08-06 12:28:37,735 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:37,744 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:39,273 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:39,283 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:40,488 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:40,504 runserver [mHTTP GET /administracao/fornecedores/ 200 [0.04, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:41,916 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:41,932 runserver [mHTTP GET /administracao/cargos/ 200 [0.04, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:43,198 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:43,211 runserver [mHTTP GET /administracao/turnos/ 200 [0.04, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:45,031 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:45,052 runserver [mHTTP GET /administracao/colaboradores/ 200 [0.05, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:47,584 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:47,596 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:28:54,593 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:28:54,602 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.04, 127.0.0.1:55772][0m
+INFO 2025-08-06 12:30:39,939 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:39,954 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:39,964 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:59066][0m
+INFO 2025-08-06 12:30:39,965 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:59076][0m
+INFO 2025-08-06 12:30:39,965 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:39,967 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59076][0m
+INFO 2025-08-06 12:30:39,981 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59076][0m
+INFO 2025-08-06 12:30:39,985 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59066][0m
+INFO 2025-08-06 12:30:39,985 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59076][0m
+INFO 2025-08-06 12:30:42,461 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:42,474 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:43,178 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:43,190 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:45,579 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:45,593 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:48,221 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:48,235 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:49,325 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:49,347 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:50,129 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:50,145 runserver [mHTTP GET /administracao/fornecedores/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:51,298 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:51,311 runserver [mHTTP GET /administracao/cargos/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:52,106 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:52,123 runserver [mHTTP GET /administracao/turnos/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:53,585 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:53,602 runserver [mHTTP GET /administracao/colaboradores/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:54,561 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:54,576 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:55,869 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:55,884 runserver [mHTTP GET /administracao/colaboradores/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:56,516 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:56,532 runserver [mHTTP GET /administracao/turnos/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:57,283 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:57,305 runserver [mHTTP GET /administracao/cargos/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:58,116 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:58,128 runserver [mHTTP GET /administracao/fornecedores/ 200 [0.03, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:58,739 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:58,763 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:30:59,305 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:30:59,319 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:31:00,040 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:31:00,051 runserver [mHTTP GET /administracao/ 200 [0.04, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:31:14,723 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:31:14,735 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:31:15,893 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:31:15,909 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:59056][0m
+INFO 2025-08-06 12:32:42,061 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:32:42,080 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:56276][0m
+INFO 2025-08-06 12:32:42,106 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:56282][0m
+INFO 2025-08-06 12:32:42,106 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:56290][0m
+INFO 2025-08-06 12:32:42,107 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:56276][0m
+INFO 2025-08-06 12:32:42,110 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:56290][0m
+INFO 2025-08-06 12:32:42,128 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:56290][0m
+INFO 2025-08-06 12:32:42,132 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:56290][0m
+INFO 2025-08-06 12:32:42,132 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:56282][0m
+INFO 2025-08-06 12:33:39,000 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:33:39,013 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:56276][0m
+INFO 2025-08-06 12:34:47,135 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:34:47,156 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:42838][0m
+INFO 2025-08-06 12:34:47,175 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:42846][0m
+INFO 2025-08-06 12:34:47,176 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:42838][0m
+INFO 2025-08-06 12:34:47,177 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:42860][0m
+INFO 2025-08-06 12:34:47,181 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:42846][0m
+INFO 2025-08-06 12:34:47,201 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42846][0m
+INFO 2025-08-06 12:34:47,201 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42860][0m
+INFO 2025-08-06 12:34:47,205 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42860][0m

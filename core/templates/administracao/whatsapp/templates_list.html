@@ -5,20 +5,10 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i class="fas fa-file-alt text-primary me-2"></i>
-            Templates - {{ account.name }}
-        </h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <button type="button" class="btn btn-success" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#modalWhatsAppTemplate"
-                    hx-get="{% url 'administracao:whatsapp:template_create_modal' %}"
-                    hx-target="#modalWhatsAppTemplate .modal-content"
-                    hx-swap="innerHTML">
-                <i class="fas fa-plus me-2"></i>Novo Template
-            </button>
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/breadcrumbs.html' with prev_page='WhatsApp' prev_url='/administracao/whatsapp/' cur_page='Templates' %}
+            
         </div>
     </div>
 
@@ -351,4 +341,16 @@
         </div>
     </div>
 </div>
+
+<!-- Floating Action Button -->
+<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
+   style="width: 56px; height: 56px;"
+   data-bs-toggle="modal" 
+   data-bs-target="#modalWhatsAppTemplate"
+   hx-get="{% url 'administracao:whatsapp:template_create_modal' %}"
+   hx-target="#modalWhatsAppTemplate .modal-content"
+   hx-swap="innerHTML"
+   title="Novo Template">
+    <i class="fas fa-plus text-white"></i>
+</a>
 {% endblock %}

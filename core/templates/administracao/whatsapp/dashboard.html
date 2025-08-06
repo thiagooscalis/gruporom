@@ -5,117 +5,157 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
-        <h1 class="h2">
-            <i class="fab fa-whatsapp text-success me-2"></i>
-            WhatsApp Business
-        </h1>
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='WhatsApp' %}
+        </div>
     </div>
 
-    <div class="row">
-        <!-- Contas WhatsApp -->
-        <div class="col-lg-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <span>
-                        <i class="fas fa-phone me-2"></i>
-                        Contas WhatsApp
-                    </span>
-                    <button type="button" class="btn btn-sm btn-light" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#modalWhatsAppAccount"
-                            hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
-                            hx-target="#modalWhatsAppAccount .modal-content"
-                            hx-swap="innerHTML">
-                        <i class="fas fa-plus"></i> Nova
-                    </button>
-                </div>
-                <div class="card-body p-0">
-                    {% if active_accounts %}
-                        <div class="list-group list-group-flush">
-                            {% for account in active_accounts %}
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">{{ account.name }}</h6>
-                                        <small class="text-muted">{{ account.display_phone }}</small>
-                                    </div>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{% url 'administracao:whatsapp:chat_interface' account.id %}" 
-                                           class="btn btn-outline-primary" title="Chat">
-                                            <i class="fas fa-comments"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-outline-secondary" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalWhatsAppAccount"
-                                                hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
-                                                hx-target="#modalWhatsAppAccount .modal-content"
-                                                hx-swap="innerHTML"
-                                                title="Editar">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-warning" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalTestAccount"
-                                                hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
-                                                hx-target="#modalTestAccount .modal-content"
-                                                hx-swap="innerHTML"
-                                                title="Testar">
-                                            <i class="fas fa-vial"></i>
-                                        </button>
-                                    </div>
+    <!-- Contas WhatsApp - Cards Quadrados -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">
+                <i class="fas fa-phone me-2"></i>
+                Contas WhatsApp
+            </h4>
+            <button type="button" class="btn btn-success" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalWhatsAppAccount"
+                    hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
+                    hx-target="#modalWhatsAppAccount .modal-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-plus me-2"></i>Nova Conta
+            </button>
+        </div>
+        
+        {% if active_accounts %}
+            <div class="row g-3">
+                {% for account in active_accounts %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body d-flex flex-column text-center p-4">
+                            <!-- Ícone -->
+                            <div class="mb-3">
+                                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 60px; height: 60px;">
+                                    <i class="fab fa-whatsapp text-white fa-2x"></i>
                                 </div>
                             </div>
-                            {% endfor %}
+                            
+                            <!-- Informações -->
+                            <h6 class="card-title mb-2">{{ account.name }}</h6>
+                            <p class="card-text text-muted small mb-3">{{ account.display_phone }}</p>
+                            
+                            <!-- Status -->
+                            <div class="mb-3">
+                                <span class="badge bg-{% if account.status == 'active' %}success{% else %}warning{% endif %} rounded-pill">
+                                    {{ account.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <!-- Ações -->
+                            <div class="mt-auto">
+                                <div class="btn-group w-100" role="group">
+                                    <a href="{% url 'administracao:whatsapp:chat_interface' account.id %}" 
+                                       class="btn btn-sm btn-outline-primary" title="Chat">
+                                        <i class="fas fa-comments"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalWhatsAppAccount"
+                                            hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+                                            hx-target="#modalWhatsAppAccount .modal-content"
+                                            hx-swap="innerHTML"
+                                            title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalTestAccount"
+                                            hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
+                                            hx-target="#modalTestAccount .modal-content"
+                                            hx-swap="innerHTML"
+                                            title="Testar">
+                                        <i class="fas fa-vial"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    {% else %}
-                        <div class="p-4 text-center text-muted">
-                            <i class="fas fa-phone fa-3x mb-3 opacity-25"></i>
-                            <p>Nenhuma conta configurada</p>
-                            <button type="button" class="btn btn-success" 
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-2 border-dashed border-secondary">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-phone fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted mb-3">Nenhuma conta configurada</h5>
+                            <p class="text-muted mb-4">Configure sua primeira conta WhatsApp Business para começar.</p>
+                            <button type="button" class="btn btn-success btn-lg" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#modalWhatsAppAccount"
                                     hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
                                     hx-target="#modalWhatsAppAccount .modal-content"
                                     hx-swap="innerHTML">
-                                <i class="fas fa-plus me-2"></i>Adicionar Conta
+                                <i class="fas fa-plus me-2"></i>Adicionar Primeira Conta
                             </button>
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Templates -->
-        <div class="col-lg-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>
-                        <i class="fas fa-file-alt me-2"></i>
-                        Templates de Mensagem
-                    </span>
-                    {% if active_accounts %}
-                    <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
-                       class="btn btn-sm btn-light">
-                        <i class="fas fa-eye"></i> Ver Todos
-                    </a>
-                    {% endif %}
-                </div>
-                <div class="card-body p-0">
-                    {% if templates %}
-                        <div class="list-group list-group-flush">
-                            {% for template in templates %}
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">{{ template.display_name }}</h6>
-                                        <div class="d-flex gap-2 align-items-center">
-                                            <small class="text-muted">{{ template.account.name }}</small>
-                                            <span class="badge {{ template.get_status_badge_class }} small">
-                                                {{ template.get_status_display }}
-                                            </span>
+        {% endif %}
+    </div>
+
+    <!-- Templates de Mensagem - Card Grande -->
+    <div class="mb-4">
+        <div class="card border-0 shadow-sm card-templates">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Templates de Mensagem
+                </h5>
+                {% if active_accounts %}
+                <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
+                   class="btn btn-light btn-sm">
+                    <i class="fas fa-eye me-1"></i>Ver Todos
+                </a>
+                {% endif %}
+            </div>
+            <div class="card-body p-0">
+                {% if templates %}
+                    <div class="list-group list-group-flush">
+                        {% for template in templates %}
+                        <div class="list-group-item list-group-item-action border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                             style="width: 40px; height: 40px; min-width: 40px;">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">{{ template.display_name }}</h6>
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <small class="text-muted">{{ template.account.name }}</small>
+                                                <span class="badge {{ template.get_status_badge_class }} badge-sm">
+                                                    {{ template.get_status_display }}
+                                                </span>
+                                                {% if template.variables_count > 0 %}
+                                                <small class="text-muted">
+                                                    <i class="fas fa-code fa-xs"></i> 
+                                                    {{ template.variables_count }} var{{ template.variables_count|pluralize:"iável,iáveis" }}
+                                                </small>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
+                                    {% if template.body_text %}
+                                    <p class="mb-0 text-muted small">{{ template.body_text|truncatechars:120 }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="ms-3">
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-outline-info"
                                                 data-bs-toggle="modal"
@@ -136,27 +176,50 @@
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
-                    {% else %}
-                        <div class="p-4 text-center text-muted">
-                            <i class="fas fa-file-alt fa-3x mb-3 opacity-25"></i>
-                            <p>Nenhum template criado</p>
-                            {% if active_accounts %}
-                            <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
-                               class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i>Criar Template
-                            </a>
-                            {% else %}
-                            <p class="small">Configure uma conta primeiro</p>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-5 text-center">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted mb-3">Nenhum template criado</h5>
+                        {% if active_accounts %}
+                        <p class="text-muted mb-4">Crie templates de mensagem para envios automáticos.</p>
+                        <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
+                           class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Criar Primeiro Template
+                        </a>
+                        {% else %}
+                        <p class="text-muted">Configure uma conta WhatsApp primeiro para criar templates.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Cards quadrados para contas - apenas cards de conta terão animação */
+.card:not(.card-templates) {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:not(.card-templates):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Badge pequeno */
+.badge-sm {
+    font-size: 0.7em;
+}
+
+/* Lista de templates - remover hover se não quiser */
+.list-group-item-action:hover {
+    background-color: transparent;
+}
+</style>
 {% endblock %}
 
 {% block modals %}

@@ -1,56 +1,56 @@
 <li class="nav-item">
-    <a href="{% url 'administracao:home' %}" class="nav-link">
-        <i class="fas fa-fw fa-home"></i> Início
+    <a href="{% url 'administracao:home' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-home text-light"></i> Início
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:pessoas_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-users"></i> Pessoas
+    <a href="{% url 'administracao:pessoas_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-users text-light"></i> Pessoas
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:usuarios_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-user-cog"></i> Usuários
+    <a href="{% url 'administracao:usuarios_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-user-cog text-light"></i> Usuários
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:fornecedores_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-truck"></i> Fornecedores
+    <a href="{% url 'administracao:fornecedores_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-truck text-light"></i> Fornecedores
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:cargos_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-briefcase"></i> Cargos
+    <a href="{% url 'administracao:cargos_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-briefcase text-light"></i> Cargos
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:turnos_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-clock"></i> Turnos
+    <a href="{% url 'administracao:turnos_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-clock text-light"></i> Turnos
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:colaboradores_lista' %}" class="nav-link">
-        <i class="fas fa-fw fa-user-tie"></i> Colaboradores
+    <a href="{% url 'administracao:colaboradores_lista' %}" class="nav-link text-light">
+        <i class="fas fa-fw fa-user-tie text-light"></i> Colaboradores
     </a>
 </li>
 <li class="nav-item">
-    <a href="{% url 'administracao:whatsapp:dashboard' %}" class="nav-link">
+    <a href="{% url 'administracao:whatsapp:dashboard' %}" class="nav-link text-light">
         <i class="fab fa-fw fa-whatsapp text-success"></i> WhatsApp
     </a>
 </li>
-<hr class="my-3">
+<hr class="my-3 border-secondary">
 <li class="nav-item">
-    <a href="#" class="nav-link" 
+    <a href="#" class="nav-link text-light" 
        data-bs-toggle="modal" 
        data-bs-target="#modalAlterarSenha"
        hx-get="{% url 'alterar_senha_form' %}"
        hx-target="#modalAlterarSenhaBody"
        hx-swap="innerHTML">
-        <i class="fas fa-fw fa-key"></i> Alterar Senha
+        <i class="fas fa-fw fa-key text-light"></i> Alterar Senha
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalLogout">
-        <i class="fas fa-fw fa-sign-out-alt"></i> Sair
+    <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#modalLogout">
+        <i class="fas fa-fw fa-sign-out-alt text-light"></i> Sair
     </a>
 </li>
