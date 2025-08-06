@@ -132,8 +132,8 @@ function updateTemplatePreview() {
     
     // Substitui variáveis por valores de exemplo
     for (let i = 1; i <= template.variables_count; i++) {
-        const regex = new RegExp(`\\{\\{${i}\\}\\}`, 'g');
-        bodyText = bodyText.replace(regex, sampleValues[i-1] || `Valor ${i}`);
+        const regex = new RegExp('\\{\\{' + i + '\\}\\}', 'g');
+        bodyText = bodyText.replace(regex, sampleValues[i-1] || 'Valor ' + i);
     }
     bodyDiv.textContent = bodyText;
     
@@ -153,8 +153,8 @@ function updateTemplatePreview() {
     if (template.variables_count > 0) {
         let variablesHtml = '';
         for (let i = 1; i <= template.variables_count; i++) {
-            const value = sampleValues[i-1] || `Valor ${i}`;
-            variablesHtml += `<span class="badge bg-light text-dark me-1">{{${i}}} = ${value}</span>`;
+            const value = sampleValues[i-1] || 'Valor ' + i;
+            variablesHtml += '<span class="badge bg-light text-dark me-1">{{' + i + '}} = ' + value + '</span>';
         }
         variablesList.innerHTML = variablesHtml;
         variablesDiv.style.display = 'block';

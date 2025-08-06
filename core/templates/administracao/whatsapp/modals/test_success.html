@@ -40,7 +40,7 @@
             <div>
                 <small class="text-muted"><strong>Valores usados no teste:</strong></small><br>
                 {% for variable in template_variables %}
-                    <span class="badge bg-light text-dark me-1 mt-1">{{ "{{" }}{{ forloop.counter }}{{ "}}" }} = {{ variable }}</span>
+                    <span class="badge bg-light text-dark me-1 mt-1">{% verbatim %}{{{% endverbatim %}{{ forloop.counter }}{% verbatim %}}}{% endverbatim %} = {{ variable }}</span>
                 {% endfor %}
             </div>
             {% endif %}

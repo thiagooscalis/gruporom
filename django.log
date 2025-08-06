@@ -985,3 +985,317 @@ INFO 2025-08-05 20:14:29,837 autoreload /home/thiago/Projetos/gruporom/core/serv
 INFO 2025-08-05 20:14:30,174 autoreload Watching for file changes with StatReloader
 INFO 2025-08-05 20:14:44,452 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
 INFO 2025-08-05 20:14:44,804 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 08:16:20,605 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 08:16:26,169 runserver [32mHTTP GET / 302 [0.03, 127.0.0.1:50880][0m
+INFO 2025-08-06 08:16:26,309 runserver [mHTTP GET /administracao/ 200 [0.13, 127.0.0.1:50880][0m
+INFO 2025-08-06 08:16:26,338 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:50906][0m
+INFO 2025-08-06 08:16:26,339 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50880][0m
+INFO 2025-08-06 08:16:26,340 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:50894][0m
+INFO 2025-08-06 08:16:26,342 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50906][0m
+INFO 2025-08-06 08:16:26,380 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50880][0m
+INFO 2025-08-06 08:16:26,381 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50906][0m
+INFO 2025-08-06 08:16:33,673 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:50880][0m
+ERROR 2025-08-06 08:16:36,674 log Internal Server Error: /administracao/whatsapp/account/1/test/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 1013, in account_test_modal
+    return render(request, 'administracao/whatsapp/modals/account_test.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '${i' from '${i'
+ERROR 2025-08-06 08:16:36,678 runserver [35;1mHTTP GET /administracao/whatsapp/account/1/test/ 500 [0.03, 127.0.0.1:50880][0m
+INFO 2025-08-06 08:17:44,721 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:17:44,763 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:55754][0m
+INFO 2025-08-06 08:17:44,765 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:17:44,769 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:55768][0m
+INFO 2025-08-06 08:17:44,775 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.01, 127.0.0.1:55754][0m
+INFO 2025-08-06 08:17:44,808 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.01, 127.0.0.1:55754][0m
+INFO 2025-08-06 08:17:44,808 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.01, 127.0.0.1:55752][0m
+WARNING 2025-08-06 08:17:44,809 log Not Found: /favicon.ico
+WARNING 2025-08-06 08:17:44,810 runserver [33mHTTP GET /favicon.ico 404 [0.01, 127.0.0.1:55768][0m
+INFO 2025-08-06 08:17:46,272 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.04, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:18:00,252 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:18:14,116 runserver [32mHTTP POST /administracao/whatsapp/template/3/check-status/ 302 [0.29, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:18:14,187 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.07, 127.0.0.1:55752][0m
+INFO 2025-08-06 08:19:25,607 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:27,889 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:33,728 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:33,795 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.04, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:36,457 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:38,636 runserver [32mHTTP POST /administracao/whatsapp/template/3/check-status/ 302 [0.65, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:38,693 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:47,919 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:19:49,951 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:39934][0m
+ERROR 2025-08-06 08:19:58,778 whatsapp Erro no teste da conta 1: Could not parse the remainder: '"' from '"'
+INFO 2025-08-06 08:19:58,797 runserver [mHTTP POST /administracao/whatsapp/account/1/test/ 200 [0.99, 127.0.0.1:39934][0m
+INFO 2025-08-06 08:21:37,106 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:50840][0m
+INFO 2025-08-06 08:21:37,146 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:50856][0m
+INFO 2025-08-06 08:21:37,147 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:50864][0m
+INFO 2025-08-06 08:21:37,148 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50840][0m
+INFO 2025-08-06 08:21:37,152 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50864][0m
+INFO 2025-08-06 08:21:37,169 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50856][0m
+INFO 2025-08-06 08:21:37,169 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50864][0m
+WARNING 2025-08-06 08:21:37,175 log Not Found: /favicon.ico
+WARNING 2025-08-06 08:21:37,175 runserver [33mHTTP GET /favicon.ico 404 [0.00, 127.0.0.1:50864][0m
+INFO 2025-08-06 08:21:43,913 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:50840][0m
+INFO 2025-08-06 08:21:51,083 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:50840][0m
+INFO 2025-08-06 08:21:59,923 runserver [mHTTP POST /administracao/whatsapp/account/1/test/ 200 [0.66, 127.0.0.1:50840][0m
+INFO 2025-08-06 08:23:39,818 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:56270][0m
+INFO 2025-08-06 08:23:56,457 runserver [mHTTP POST /administracao/whatsapp/account/1/test/ 200 [0.82, 127.0.0.1:56270][0m
+INFO 2025-08-06 08:43:37,893 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 08:43:39,197 runserver [mHTTP GET /administracao/colaboradores/ 200 [0.08, 127.0.0.1:37032][0m
+INFO 2025-08-06 08:44:39,013 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:42416][0m
+INFO 2025-08-06 08:50:04,503 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 08:50:04,845 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 09:04:02,388 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 09:05:22,971 autoreload Watching for file changes with StatReloader
+ERROR 2025-08-06 09:05:25,114 log Internal Server Error: /administracao/whatsapp/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 65, in dashboard
+    templates = WhatsAppTemplate.objects.select_related('account').order_by('-created_at')[:10]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'created_at' into field. Choices are: account, account_id, atualizado_em, body_text, buttons_config, category, criado_em, criado_por, criado_por_id, display_name, footer_text, has_buttons, header_text, id, is_active, language, name, rejection_reason, status, template_id, variables_examples
+ERROR 2025-08-06 09:05:25,117 runserver [35;1mHTTP GET /administracao/whatsapp/ 500 [0.11, 127.0.0.1:43912][0m
+INFO 2025-08-06 09:05:42,136 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 09:06:12,612 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 09:06:12,948 autoreload Watching for file changes with StatReloader
+ERROR 2025-08-06 09:06:48,890 log Internal Server Error: /administracao/whatsapp/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 79, in dashboard
+    return render(request, 'administracao/whatsapp/dashboard.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'template_preview' not found. 'template_preview' is not a valid view function or pattern name.
+ERROR 2025-08-06 09:06:48,893 runserver [35;1mHTTP GET /administracao/whatsapp/ 500 [0.21, 127.0.0.1:55934][0m
+INFO 2025-08-06 09:07:42,668 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:55934][0m
+INFO 2025-08-06 09:07:53,532 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:37712][0m
+INFO 2025-08-06 09:14:23,475 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:14:23,504 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:51306][0m
+INFO 2025-08-06 09:14:23,505 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:14:23,506 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:51310][0m
+INFO 2025-08-06 09:14:23,507 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:51306][0m
+INFO 2025-08-06 09:14:23,531 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:51306][0m
+INFO 2025-08-06 09:14:23,531 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:51296][0m
+WARNING 2025-08-06 09:14:23,532 log Not Found: /favicon.ico
+WARNING 2025-08-06 09:14:23,532 runserver [33mHTTP GET /favicon.ico 404 [0.01, 127.0.0.1:51310][0m
+INFO 2025-08-06 09:14:26,485 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:14:30,654 runserver [mHTTP GET /administracao/whatsapp/template/3/preview/ 200 [0.03, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:14:52,808 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:14:55,793 runserver [mHTTP GET /administracao/whatsapp/template/3/preview/ 200 [0.02, 127.0.0.1:51296][0m
+INFO 2025-08-06 09:15:58,317 runserver [mHTTP GET /administracao/whatsapp/chat/1/ 200 [0.05, 127.0.0.1:46804][0m
+INFO 2025-08-06 09:15:58,361 runserver WebSocket HANDSHAKING /ws/whatsapp/1/ [127.0.0.1:46812]
+INFO 2025-08-06 09:15:58,408 runserver WebSocket CONNECT /ws/whatsapp/1/ [127.0.0.1:46812]
+INFO 2025-08-06 09:16:01,089 runserver WebSocket DISCONNECT /ws/whatsapp/1/ [127.0.0.1:46812]
+INFO 2025-08-06 09:16:07,210 runserver [mHTTP GET /administracao/whatsapp/chat/1/ 200 [0.05, 127.0.0.1:46804][0m
+INFO 2025-08-06 09:16:07,244 runserver WebSocket HANDSHAKING /ws/whatsapp/1/ [127.0.0.1:46824]
+INFO 2025-08-06 09:16:07,253 runserver WebSocket CONNECT /ws/whatsapp/1/ [127.0.0.1:46824]
+INFO 2025-08-06 09:17:15,139 runserver WebSocket DISCONNECT /ws/whatsapp/1/ [127.0.0.1:46824]
+INFO 2025-08-06 09:17:15,198 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:38992][0m
+INFO 2025-08-06 09:17:21,262 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:38992][0m
+INFO 2025-08-06 09:17:24,196 runserver [mHTTP GET /administracao/whatsapp/template/3/preview/ 200 [0.02, 127.0.0.1:38992][0m
+INFO 2025-08-06 09:17:29,662 runserver [mHTTP GET /administracao/whatsapp/account/create/ 200 [0.04, 127.0.0.1:38992][0m
+INFO 2025-08-06 09:17:37,330 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:38992][0m
