@@ -21,7 +21,18 @@
                             <!-- Campo hidden para ID do usuário (usado na busca de pessoas) -->
                             <input type="hidden" id="usuario-id-{{ usuario.pk }}" name="usuario_id" value="{{ usuario.pk }}">
                             
-                            {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_edicao_url selected_label="Pessoa selecionada:" include_params=usuario_id_param %}
+                            <div class="d-flex gap-2 align-items-start">
+                                <div class="flex-grow-1">
+                                    {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_edicao_url selected_label="Pessoa selecionada:" include_params=usuario_id_param %}
+                                </div>
+                                <div style="margin-top: 2rem;">
+                                    <button type="button" class="btn btn-outline-success" 
+                                            onclick="abrirModalPessoaEdicao()"
+                                            title="Criar Nova Pessoa">
+                                        <i class="fas fa-user-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -62,31 +73,18 @@
                             {% endif %}
                         </div>
                         <div class="card-body pt-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-check form-switch">
-                                        {{ form.is_active }}
-                                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
-                                            <strong>{{ form.is_active.label }}</strong>
-                                            <small class="d-block text-muted">
-                                                {% if e_proprio_usuario %}
-                                                    {{ form.is_active.help_text }}
-                                                {% else %}
-                                                    Usuário pode fazer login no sistema
-                                                {% endif %}
-                                            </small>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check form-switch">
-                                        {{ form.is_staff }}
-                                        <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
-                                            <strong>{{ form.is_staff.label }}</strong>
-                                            <small class="d-block text-muted">Acesso ao painel administrativo Django</small>
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="form-check form-switch">
+                                {{ form.is_active }}
+                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                    <strong>{{ form.is_active.label }}</strong>
+                                    <small class="d-block text-muted">
+                                        {% if e_proprio_usuario %}
+                                            {{ form.is_active.help_text }}
+                                        {% else %}
+                                            Usuário pode fazer login no sistema
+                                        {% endif %}
+                                    </small>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -152,4 +150,27 @@
             modal.show();
         }
     })();
+    
+    // Função simples para abrir modal de pessoa no contexto de edição
+    function abrirModalPessoaEdicao() {
+        // Marcar que veio do modal de edição
+        sessionStorage.setItem('origemModalPessoa', 'editar');
+        
+        // Fechar modal de edição de usuário
+        const usuarioModal = document.getElementById('usuarioEditModal');
+        if (usuarioModal) {
+            const modalInstance = bootstrap.Modal.getInstance(usuarioModal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+        
+        // Aguardar fechamento e abrir modal de pessoa
+        setTimeout(() => {
+            htmx.ajax('GET', '{% url "administracao:pessoas_nova_modal_simples" %}', {
+                target: 'body',
+                swap: 'beforeend'
+            });
+        }, 300);
+    }
 </script>

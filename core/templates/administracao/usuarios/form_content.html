@@ -10,13 +10,13 @@
             </h6>
         </div>
         <div class="card-body pt-2">
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 align-items-start">
                 <div class="flex-grow-1">
                     {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_url selected_label="Pessoa selecionada:" %}
                 </div>
-                <div class="d-flex align-items-end">
+                <div style="margin-top: 2rem;">
                     <button type="button" class="btn btn-outline-success" 
-                            id="btnCriarPessoa"
+                            onclick="abrirModalPessoa()"
                             title="Criar Nova Pessoa">
                         <i class="fas fa-user-plus"></i>
                     </button>
@@ -56,25 +56,12 @@
             </h6>
         </div>
         <div class="card-body pt-2">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        {{ form.is_active }}
-                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
-                            <strong>{{ form.is_active.label }}</strong>
-                            <small class="d-block text-muted">Usuário pode fazer login no sistema</small>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        {{ form.is_staff }}
-                        <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
-                            <strong>{{ form.is_staff.label }}</strong>
-                            <small class="d-block text-muted">Acesso ao painel administrativo Django</small>
-                        </label>
-                    </div>
-                </div>
+            <div class="form-check form-switch">
+                {{ form.is_active }}
+                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                    <strong>{{ form.is_active.label }}</strong>
+                    <small class="d-block text-muted">Usuário pode fazer login no sistema</small>
+                </label>
             </div>
         </div>
     </div>
@@ -126,186 +113,26 @@
 </div>
 
 <script>
-// Gerenciamento do fluxo de modais para criação de pessoa
-(function() {
-    const btnCriarPessoa = document.getElementById('btnCriarPessoa');
+// Função simples para abrir modal de pessoa
+function abrirModalPessoa() {
+    // Marcar que veio do modal de criação
+    sessionStorage.setItem('origemModalPessoa', 'criar');
+    
+    // Fechar modal de usuário
     const usuarioModal = document.getElementById('usuarioModal');
-    
-    if (btnCriarPessoa && usuarioModal) {
-        btnCriarPessoa.addEventListener('click', function() {
-            // Salvar dados do formulário atual
-            const formData = new FormData();
-            const form = usuarioModal.querySelector('form');
-            const formElements = form.elements;
-            
-            // Salvar valores dos campos
-            const savedData = {};
-            for (let element of formElements) {
-                if (element.name && element.type !== 'submit' && element.name !== 'csrfmiddlewaretoken') {
-                    if (element.type === 'checkbox') {
-                        savedData[element.name] = element.checked;
-                    } else if (element.type === 'radio') {
-                        if (element.checked) {
-                            savedData[element.name] = element.value;
-                        }
-                    } else {
-                        savedData[element.name] = element.value;
-                    }
-                }
-            }
-            
-            // Armazenar dados no localStorage temporariamente
-            localStorage.setItem('usuarioFormData', JSON.stringify(savedData));
-            
-            // Fechar modal atual
-            const modalInstance = bootstrap.Modal.getInstance(usuarioModal);
-            if (modalInstance) {
-                modalInstance.hide();
-            }
-            
-            // Aguardar fechamento e abrir modal de pessoa
-            usuarioModal.addEventListener('hidden.bs.modal', function openPessoaModal() {
-                usuarioModal.removeEventListener('hidden.bs.modal', openPessoaModal);
-                
-                // Criar elemento do modal de pessoa
-                const pessoaModalHtml = `
-                    <div class="modal fade" id="pessoaModalFromUsuario" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-body text-center">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Carregando...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.insertAdjacentHTML('beforeend', pessoaModalHtml);
-                
-                const pessoaModal = document.getElementById('pessoaModalFromUsuario');
-                
-                // Carregar conteúdo via HTMX
-                htmx.ajax('GET', '{% url "administracao:pessoas_novo_modal" %}', {
-                    target: '#pessoaModalFromUsuario .modal-content',
-                    swap: 'innerHTML'
-                }).then(function() {
-                    // Modificar o ID do modal carregado para evitar conflitos
-                    const loadedModal = pessoaModal.querySelector('#pessoaModal');
-                    if (loadedModal) {
-                        loadedModal.id = 'pessoaModalFromUsuario';
-                        
-                        // Modificar o form para incluir callback
-                        const form = loadedModal.querySelector('form');
-                        if (form) {
-                            const originalAction = form.getAttribute('hx-post');
-                            form.setAttribute('hx-post', originalAction + '?callback=usuario_modal');
-                        }
-                    }
-                    
-                    // Mostrar modal
-                    const modal = new bootstrap.Modal(pessoaModal);
-                    modal.show();
-                    
-                    // Escutar fechamento do modal de pessoa
-                    pessoaModal.addEventListener('hidden.bs.modal', function() {
-                        // Verificar se pessoa foi criada (se há dados salvos específicos)
-                        const novaPessoa = localStorage.getItem('novaPessoaCriada');
-                        
-                        // Limpar modal de pessoa
-                        pessoaModal.remove();
-                        
-                        // Reabrir modal de usuário
-                        reopenUsuarioModal(novaPessoa);
-                    });
-                });
-            });
-        });
+    if (usuarioModal) {
+        const modalInstance = bootstrap.Modal.getInstance(usuarioModal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
     }
     
-    function reopenUsuarioModal(novaPessoa) {
-        // Recriar modal de usuário
-        const usuarioModalHtml = `
-            <div class="modal fade" id="usuarioModalReopen" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-body text-center">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Carregando...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', usuarioModalHtml);
-        
-        const newUsuarioModal = document.getElementById('usuarioModalReopen');
-        
-        // Carregar conteúdo do modal de usuário
-        htmx.ajax('GET', '{% url "administracao:usuarios_novo_modal" %}', {
-            target: '#usuarioModalReopen .modal-content',
-            swap: 'innerHTML'
-        }).then(function() {
-            // Restaurar dados salvos
-            const savedData = JSON.parse(localStorage.getItem('usuarioFormData') || '{}');
-            const form = newUsuarioModal.querySelector('form');
-            
-            if (form) {
-                // Restaurar valores dos campos
-                for (let [name, value] of Object.entries(savedData)) {
-                    const element = form.querySelector(`[name="${name}"]`);
-                    if (element) {
-                        if (element.type === 'checkbox') {
-                            element.checked = value;
-                        } else if (element.type === 'radio') {
-                            if (element.value === value) {
-                                element.checked = true;
-                            }
-                        } else {
-                            element.value = value;
-                        }
-                    }
-                }
-                
-                // Se nova pessoa foi criada, selecionar automaticamente
-                if (novaPessoa) {
-                    const pessoaData = JSON.parse(novaPessoa);
-                    const searchInput = form.querySelector('input[name*="pessoa_search"]');
-                    const hiddenInput = form.querySelector('input[name="pessoa"]');
-                    
-                    if (searchInput && hiddenInput && pessoaData.id) {
-                        hiddenInput.value = pessoaData.id;
-                        searchInput.value = pessoaData.nome;
-                        
-                        // Mostrar como selecionado
-                        const selectedDisplay = searchInput.closest('.position-relative').querySelector('[id$="-selecionada"]');
-                        const selectedText = searchInput.closest('.position-relative').querySelector('[id$="-nome-selecionado"]');
-                        
-                        if (selectedDisplay && selectedText) {
-                            selectedText.textContent = pessoaData.nome + (pessoaData.doc ? ' - ' + pessoaData.doc : '');
-                            selectedDisplay.style.display = 'block';
-                            searchInput.style.display = 'none';
-                        }
-                    }
-                }
-            }
-            
-            // Limpar dados salvos
-            localStorage.removeItem('usuarioFormData');
-            localStorage.removeItem('novaPessoaCriada');
-            
-            // Mostrar modal
-            const modal = new bootstrap.Modal(newUsuarioModal);
-            modal.show();
-            
-            // Limpar quando fechar
-            newUsuarioModal.addEventListener('hidden.bs.modal', function() {
-                newUsuarioModal.remove();
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) backdrop.remove();
-            });
+    // Aguardar fechamento e abrir modal de pessoa
+    setTimeout(() => {
+        htmx.ajax('GET', '{% url "administracao:pessoas_nova_modal_simples" %}', {
+            target: 'body',
+            swap: 'beforeend'
         });
-    }
-})();
+    }, 300);
+}
 </script>

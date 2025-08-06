@@ -5,6 +5,7 @@ from core.views.administracao import pessoas
 urlpatterns = [
     path('', pessoas.lista, name='pessoas_lista'),
     path('nova/modal/', pessoas.nova_modal, name='pessoas_nova_modal'),
+    path('nova/modal/simples/', pessoas.nova_modal_simples, name='pessoas_nova_modal_simples'),
     path('criar/', pessoas.criar, name='pessoas_criar'),
     path('<int:pk>/editar/modal/', pessoas.editar_modal, name='pessoas_editar_modal'),
     path('<int:pk>/atualizar/', pessoas.atualizar, name='pessoas_atualizar'),

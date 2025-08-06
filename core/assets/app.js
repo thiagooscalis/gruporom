@@ -3,6 +3,7 @@ import '@popperjs/core';
 import htmx from 'htmx.org';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './autocomplete.js';
+import './masks.js';
 
 // Make libraries available globally
 window.bootstrap = bootstrap;

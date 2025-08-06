@@ -64,12 +64,29 @@ def nova_modal(request):
 
 @login_required
 @group_area_required
+def nova_modal_simples(request):
+    """
+    View para retornar o modal simplificado de criação de pessoa
+    Usado quando chamado de outro modal (ex: usuários)
+    """
+    form = PessoaForm()
+    context = {
+        'form': form,
+        'area': request.area,
+    }
+    return render(request, 'administracao/pessoas/modal_form_simples.html', context)
+
+
+
+@login_required
+@group_area_required
 def criar(request):
     """
     View para processar o formulário de criação de pessoa
     """
     if request.method == 'POST':
         form = PessoaForm(request.POST)
+        
         if form.is_valid():
             pessoa = form.save()
             messages.success(request, f'Pessoa {pessoa.nome} criada com sucesso!')

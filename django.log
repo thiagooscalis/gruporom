@@ -1649,3 +1649,981 @@ INFO 2025-08-06 12:34:47,181 runserver [mHTTP GET /static/logo_gruporom.svg 200
 INFO 2025-08-06 12:34:47,201 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42846][0m
 INFO 2025-08-06 12:34:47,201 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42860][0m
 INFO 2025-08-06 12:34:47,205 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42860][0m
+INFO 2025-08-06 12:42:12,612 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 12:42:13,528 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:42:13,542 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:21,321 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:21,356 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:21,358 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.07, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:23,085 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:23,114 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:23,115 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.05, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:24,006 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:24,037 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:24,039 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.06, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:24,250 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:24,277 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:24,278 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.06, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:24,476 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:24,510 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:24,513 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.06, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:26,360 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:26,389 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:26,390 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.06, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:42:27,859 runserver [mHTTP GET /static/app.css.map 200 [0.01, 127.0.0.1:43744][0m
+INFO 2025-08-06 12:42:27,860 runserver [mHTTP GET /static/style.css.map 200 [0.01, 127.0.0.1:43736][0m
+INFO 2025-08-06 12:42:29,650 runserver [mHTTP GET /static/app.js.map 200 [0.00, 127.0.0.1:43736][0m
+INFO 2025-08-06 12:42:35,802 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 12:42:35,819 log Internal Server Error: /administracao/usuarios/novo/modal/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 64, in novo_modal
+    return render(request, 'administracao/usuarios/modal_form.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'pessoas_novo_modal' not found. 'pessoas_novo_modal' is not a valid view function or pattern name.
+ERROR 2025-08-06 12:42:35,821 runserver [35;1mHTTP GET /administracao/usuarios/novo/modal/ 500 [0.04, 127.0.0.1:36364][0m
+INFO 2025-08-06 12:43:18,794 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:43:18,800 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:48792][0m
+INFO 2025-08-06 12:43:18,821 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:48792][0m
+INFO 2025-08-06 12:43:18,822 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:48810][0m
+INFO 2025-08-06 12:43:18,822 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:48796][0m
+INFO 2025-08-06 12:43:18,824 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:48792][0m
+INFO 2025-08-06 12:43:18,843 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:48810][0m
+INFO 2025-08-06 12:43:18,843 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:48796][0m
+INFO 2025-08-06 12:43:18,848 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:48810][0m
+INFO 2025-08-06 12:43:20,611 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:43:20,631 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:48792][0m
+INFO 2025-08-06 12:43:25,812 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:43:25,827 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.05, 127.0.0.1:48810][0m
+INFO 2025-08-06 12:56:21,649 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:42732][0m
+INFO 2025-08-06 12:58:03,508 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 12:58:03,854 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 12:58:15,079 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 12:58:15,419 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 12:58:28,648 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 12:58:28,978 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 12:58:40,232 autoreload /home/thiago/Projetos/gruporom/core/urls/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 12:58:40,565 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 12:59:10,450 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:59:10,465 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:59470][0m
+INFO 2025-08-06 12:59:10,489 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:59484][0m
+INFO 2025-08-06 12:59:10,490 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:59470][0m
+INFO 2025-08-06 12:59:10,491 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:59488][0m
+INFO 2025-08-06 12:59:10,492 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59484][0m
+INFO 2025-08-06 12:59:10,510 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59488][0m
+INFO 2025-08-06 12:59:10,514 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59488][0m
+INFO 2025-08-06 12:59:10,514 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59484][0m
+INFO 2025-08-06 12:59:12,871 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:59:12,894 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:59470][0m
+INFO 2025-08-06 12:59:15,306 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 12:59:15,315 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:59488][0m
+INFO 2025-08-06 13:00:40,563 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:00:40,579 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:47728][0m
+INFO 2025-08-06 13:00:43,337 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:00:43,364 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.06, 127.0.0.1:47728][0m
+INFO 2025-08-06 13:00:45,048 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:00:45,058 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:47728][0m
+INFO 2025-08-06 13:01:04,039 runserver [mHTTP POST /administracao/pessoas/criar/ 200 [0.05, 127.0.0.1:47728][0m
+INFO 2025-08-06 13:01:04,237 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:01:04,247 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:47728][0m
+INFO 2025-08-06 13:19:09,420 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:19:09,426 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:57442][0m
+INFO 2025-08-06 13:19:09,447 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:57444][0m
+INFO 2025-08-06 13:19:09,448 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:57456][0m
+INFO 2025-08-06 13:19:09,448 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:57442][0m
+INFO 2025-08-06 13:19:09,449 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:57456][0m
+INFO 2025-08-06 13:19:09,466 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:57456][0m
+INFO 2025-08-06 13:19:09,470 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:57456][0m
+INFO 2025-08-06 13:19:09,471 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:57444][0m
+INFO 2025-08-06 13:19:14,646 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:19:14,670 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:57442][0m
+INFO 2025-08-06 13:19:20,248 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:19:20,259 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.04, 127.0.0.1:57456][0m
+INFO 2025-08-06 13:21:43,425 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:21:43,437 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.05, 127.0.0.1:58010][0m
+INFO 2025-08-06 13:23:52,798 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:23:52,804 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:35606][0m
+INFO 2025-08-06 13:23:52,848 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:35612][0m
+INFO 2025-08-06 13:23:52,848 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:35606][0m
+INFO 2025-08-06 13:23:52,850 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:35624][0m
+INFO 2025-08-06 13:23:52,852 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:35612][0m
+INFO 2025-08-06 13:23:52,869 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:35624][0m
+INFO 2025-08-06 13:23:52,869 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:35612][0m
+INFO 2025-08-06 13:23:52,876 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:35624][0m
+INFO 2025-08-06 13:23:54,667 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:23:54,676 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:35606][0m
+INFO 2025-08-06 13:23:58,915 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:23:58,923 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.04, 127.0.0.1:35624][0m
+INFO 2025-08-06 13:25:52,659 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:25:52,669 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.04, 127.0.0.1:50900][0m
+INFO 2025-08-06 13:27:28,532 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:27:28,541 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:34972][0m
+INFO 2025-08-06 13:27:28,559 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:34972][0m
+INFO 2025-08-06 13:27:28,560 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:34988][0m
+INFO 2025-08-06 13:27:28,561 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:35002][0m
+INFO 2025-08-06 13:27:28,562 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:34972][0m
+INFO 2025-08-06 13:27:28,575 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34988][0m
+INFO 2025-08-06 13:27:28,576 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:35002][0m
+INFO 2025-08-06 13:27:28,584 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:35002][0m
+INFO 2025-08-06 13:27:30,409 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:27:30,420 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.02, 127.0.0.1:34972][0m
+INFO 2025-08-06 13:27:33,893 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:27:33,903 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.04, 127.0.0.1:35002][0m
+INFO 2025-08-06 13:27:50,815 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:27:50,827 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.05, 127.0.0.1:34972][0m
+INFO 2025-08-06 13:29:01,575 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:29:01,921 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:29:22,917 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:29:22,936 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:50320][0m
+INFO 2025-08-06 13:29:22,956 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50320][0m
+INFO 2025-08-06 13:29:22,957 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:50324][0m
+INFO 2025-08-06 13:29:22,958 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:50332][0m
+INFO 2025-08-06 13:29:22,959 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50320][0m
+INFO 2025-08-06 13:29:22,973 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50324][0m
+INFO 2025-08-06 13:29:22,973 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50332][0m
+INFO 2025-08-06 13:29:22,978 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:50332][0m
+INFO 2025-08-06 13:29:25,512 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:29:25,543 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.06, 127.0.0.1:50320][0m
+INFO 2025-08-06 13:29:30,152 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:29:30,164 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.05, 127.0.0.1:50332][0m
+INFO 2025-08-06 13:29:43,244 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:29:43,252 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.04, 127.0.0.1:50320][0m
+INFO 2025-08-06 13:31:40,845 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:31:41,184 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:31:56,662 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:31:56,682 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:52094][0m
+INFO 2025-08-06 13:31:56,701 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:52110][0m
+INFO 2025-08-06 13:31:56,702 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:52094][0m
+INFO 2025-08-06 13:31:56,703 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:52126][0m
+INFO 2025-08-06 13:31:56,705 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:52110][0m
+INFO 2025-08-06 13:31:56,720 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:52126][0m
+INFO 2025-08-06 13:31:56,724 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:52126][0m
+INFO 2025-08-06 13:31:56,725 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:52110][0m
+INFO 2025-08-06 13:31:58,444 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:31:58,461 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:52094][0m
+INFO 2025-08-06 13:32:01,467 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:32:01,476 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo%20 200 [0.04, 127.0.0.1:52126][0m
+INFO 2025-08-06 13:32:15,755 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:32:15,763 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.04, 127.0.0.1:52094][0m
+INFO 2025-08-06 13:35:14,573 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:35:14,916 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:35:23,058 autoreload /home/thiago/Projetos/gruporom/core/urls/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:35:23,398 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:35:36,659 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:35:36,997 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:35:43,180 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:35:43,518 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:36:02,913 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:36:02,929 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:42394][0m
+INFO 2025-08-06 13:36:02,948 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:42398][0m
+INFO 2025-08-06 13:36:02,949 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:42394][0m
+INFO 2025-08-06 13:36:02,950 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:42408][0m
+INFO 2025-08-06 13:36:02,952 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:42398][0m
+INFO 2025-08-06 13:36:02,965 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42398][0m
+INFO 2025-08-06 13:36:02,965 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42408][0m
+INFO 2025-08-06 13:36:02,972 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42408][0m
+INFO 2025-08-06 13:36:04,728 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:36:04,739 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.03, 127.0.0.1:42394][0m
+INFO 2025-08-06 13:36:07,678 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:36:07,685 runserver [mHTTP GET /administracao/pessoas/ 200 [0.02, 127.0.0.1:42394][0m
+INFO 2025-08-06 13:38:42,429 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:38:42,771 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:38:51,982 autoreload /home/thiago/Projetos/gruporom/core/urls/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 13:38:52,320 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:39:31,111 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:39:31,134 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:38622][0m
+INFO 2025-08-06 13:39:31,157 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:38622][0m
+INFO 2025-08-06 13:39:31,158 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:38638][0m
+INFO 2025-08-06 13:39:31,158 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:38628][0m
+INFO 2025-08-06 13:39:31,164 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:38628][0m
+INFO 2025-08-06 13:39:31,187 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:38638][0m
+INFO 2025-08-06 13:39:31,188 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:38628][0m
+INFO 2025-08-06 13:39:31,195 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:38638][0m
+INFO 2025-08-06 13:39:33,356 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:39:33,370 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:38622][0m
+INFO 2025-08-06 13:39:36,489 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:39:36,497 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.04, 127.0.0.1:38638][0m
+INFO 2025-08-06 13:39:47,916 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:39:47,921 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.03, 127.0.0.1:38622][0m
+INFO 2025-08-06 13:41:44,267 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-06 13:41:44,606 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:41:51,786 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-06 13:41:52,107 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:42:49,715 autoreload /home/thiago/Projetos/gruporom/core/forms/usuario.py changed, reloading.
+INFO 2025-08-06 13:42:50,041 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:43:05,275 autoreload /home/thiago/Projetos/gruporom/core/forms/usuario.py changed, reloading.
+INFO 2025-08-06 13:43:05,603 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:44:32,577 autoreload /home/thiago/Projetos/gruporom/core/forms/usuario.py changed, reloading.
+INFO 2025-08-06 13:44:32,919 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:44:43,461 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:44:43,478 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:47842][0m
+INFO 2025-08-06 13:44:43,504 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:47856][0m
+INFO 2025-08-06 13:44:43,506 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:47842][0m
+INFO 2025-08-06 13:44:43,506 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:47858][0m
+INFO 2025-08-06 13:44:43,508 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:47856][0m
+INFO 2025-08-06 13:44:43,524 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:47858][0m
+INFO 2025-08-06 13:44:43,525 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:47856][0m
+INFO 2025-08-06 13:44:43,529 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:47858][0m
+INFO 2025-08-06 13:44:46,974 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:44:46,991 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:47842][0m
+INFO 2025-08-06 13:44:49,705 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:44:49,710 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo 200 [0.04, 127.0.0.1:47858][0m
+ERROR 2025-08-06 13:45:01,032 log Internal Server Error: /administracao/usuarios/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 75, in criar
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/forms.py", line 206, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/forms.py", line 201, in errors
+    self.full_clean()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/forms.py", line 337, in full_clean
+    self._clean_fields()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/forms.py", line 347, in _clean_fields
+    value = getattr(self, "clean_%s" % name)()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/usuario.py", line 119, in clean_pessoa
+    if pessoa.usuario and (
+       ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/fields/related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+core.models.pessoa.Pessoa.usuario.RelatedObjectDoesNotExist: Pessoa has no usuario.
+ERROR 2025-08-06 13:45:01,034 runserver [35;1mHTTP POST /administracao/usuarios/criar/ 500 [0.05, 127.0.0.1:47842][0m
+INFO 2025-08-06 13:45:52,970 autoreload /home/thiago/Projetos/gruporom/core/forms/usuario.py changed, reloading.
+INFO 2025-08-06 13:45:53,320 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:46:04,841 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:46:04,856 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:46:04,880 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:38948][0m
+INFO 2025-08-06 13:46:04,881 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:46:04,882 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:38944][0m
+INFO 2025-08-06 13:46:04,884 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:38948][0m
+INFO 2025-08-06 13:46:04,901 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:38948][0m
+INFO 2025-08-06 13:46:04,901 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:38944][0m
+INFO 2025-08-06 13:46:04,909 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:38948][0m
+INFO 2025-08-06 13:46:06,966 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:46:06,985 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:46:10,438 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:46:10,446 runserver [mHTTP GET /administracao/buscar-pessoas/?q=danilo%20osc 200 [0.04, 127.0.0.1:38948][0m
+INFO 2025-08-06 13:46:21,756 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.21, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:46:21,780 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:46:21,792 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:46:34,178 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:46:34,186 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.05, 127.0.0.1:38938][0m
+INFO 2025-08-06 13:48:22,034 autoreload /home/thiago/Projetos/gruporom/core/forms/usuario.py changed, reloading.
+INFO 2025-08-06 13:48:22,390 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:48:33,831 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:48:33,870 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:50260][0m
+INFO 2025-08-06 13:48:33,897 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50260][0m
+INFO 2025-08-06 13:48:33,898 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:50274][0m
+INFO 2025-08-06 13:48:33,898 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:50264][0m
+INFO 2025-08-06 13:48:33,901 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50274][0m
+INFO 2025-08-06 13:48:33,920 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50274][0m
+INFO 2025-08-06 13:48:33,920 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50264][0m
+INFO 2025-08-06 13:48:33,926 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:50274][0m
+INFO 2025-08-06 13:48:37,703 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:48:37,737 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.08, 127.0.0.1:50260][0m
+INFO 2025-08-06 13:50:35,566 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:50:35,587 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:43844][0m
+INFO 2025-08-06 13:50:35,605 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:43854][0m
+INFO 2025-08-06 13:50:35,606 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:43868][0m
+INFO 2025-08-06 13:50:35,606 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:43844][0m
+INFO 2025-08-06 13:50:35,609 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:43868][0m
+INFO 2025-08-06 13:50:35,629 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:43854][0m
+INFO 2025-08-06 13:50:35,629 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:43868][0m
+INFO 2025-08-06 13:50:35,633 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:43868][0m
+INFO 2025-08-06 13:50:38,622 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:50:38,643 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:43844][0m
+INFO 2025-08-06 13:50:43,115 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:50:43,122 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.04, 127.0.0.1:43844][0m
+INFO 2025-08-06 13:50:45,029 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:50:45,039 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:43868][0m
+INFO 2025-08-06 13:52:39,416 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:52:39,424 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:45816][0m
+INFO 2025-08-06 13:52:39,444 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:45822][0m
+INFO 2025-08-06 13:52:39,444 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:45816][0m
+INFO 2025-08-06 13:52:39,445 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:45818][0m
+INFO 2025-08-06 13:52:39,447 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:45822][0m
+INFO 2025-08-06 13:52:39,464 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:45822][0m
+INFO 2025-08-06 13:52:39,468 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:45818][0m
+INFO 2025-08-06 13:52:39,469 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:45822][0m
+INFO 2025-08-06 13:52:42,378 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:52:42,386 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:45836][0m
+INFO 2025-08-06 13:52:42,413 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:45866][0m
+INFO 2025-08-06 13:52:42,413 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:45836][0m
+INFO 2025-08-06 13:52:42,414 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:45850][0m
+INFO 2025-08-06 13:52:42,416 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:45866][0m
+INFO 2025-08-06 13:52:42,435 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:45866][0m
+INFO 2025-08-06 13:52:42,436 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:45850][0m
+INFO 2025-08-06 13:52:42,441 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:45866][0m
+INFO 2025-08-06 13:52:43,980 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:52:43,996 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.05, 127.0.0.1:45836][0m
+INFO 2025-08-06 13:52:49,877 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:52:49,886 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:45866][0m
+INFO 2025-08-06 13:54:52,267 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:54:52,274 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:45394][0m
+INFO 2025-08-06 13:54:52,294 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:45406][0m
+INFO 2025-08-06 13:54:52,294 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:45394][0m
+INFO 2025-08-06 13:54:52,295 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:45412][0m
+INFO 2025-08-06 13:54:52,297 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:45406][0m
+INFO 2025-08-06 13:54:52,309 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:45412][0m
+INFO 2025-08-06 13:54:52,310 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:45406][0m
+INFO 2025-08-06 13:54:52,315 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:45412][0m
+INFO 2025-08-06 13:54:54,661 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:54:54,679 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.06, 127.0.0.1:45394][0m
+INFO 2025-08-06 13:54:56,176 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:54:56,187 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:45412][0m
+INFO 2025-08-06 13:55:44,863 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 13:57:49,686 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:57:49,703 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:41508][0m
+INFO 2025-08-06 13:57:49,732 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:41520][0m
+INFO 2025-08-06 13:57:49,733 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:41508][0m
+INFO 2025-08-06 13:57:49,734 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:41536][0m
+INFO 2025-08-06 13:57:49,736 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:41520][0m
+INFO 2025-08-06 13:57:49,753 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:41520][0m
+INFO 2025-08-06 13:57:49,754 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:41536][0m
+INFO 2025-08-06 13:57:49,759 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:41536][0m
+INFO 2025-08-06 13:57:52,203 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:57:52,229 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.07, 127.0.0.1:41536][0m
+INFO 2025-08-06 13:57:54,155 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:57:54,168 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.05, 127.0.0.1:41536][0m
+INFO 2025-08-06 13:59:24,299 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:59:24,304 runserver [mHTTP GET /administracao/usuarios/ 200 [0.01, 127.0.0.1:49192][0m
+INFO 2025-08-06 13:59:24,325 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:49202][0m
+INFO 2025-08-06 13:59:24,326 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:49216][0m
+INFO 2025-08-06 13:59:24,327 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:49192][0m
+INFO 2025-08-06 13:59:24,329 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:49216][0m
+INFO 2025-08-06 13:59:24,351 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:49216][0m
+INFO 2025-08-06 13:59:24,354 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:49216][0m
+INFO 2025-08-06 13:59:24,355 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:49202][0m
+INFO 2025-08-06 13:59:26,156 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:59:26,169 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.05, 127.0.0.1:49216][0m
+INFO 2025-08-06 13:59:28,248 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 13:59:28,260 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.04, 127.0.0.1:49216][0m
+INFO 2025-08-06 14:01:58,966 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:01:58,976 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:59208][0m
+INFO 2025-08-06 14:01:59,014 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:59212][0m
+INFO 2025-08-06 14:01:59,015 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:59208][0m
+INFO 2025-08-06 14:01:59,016 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:59218][0m
+INFO 2025-08-06 14:01:59,018 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59212][0m
+INFO 2025-08-06 14:01:59,042 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59212][0m
+INFO 2025-08-06 14:01:59,042 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59218][0m
+INFO 2025-08-06 14:01:59,047 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59218][0m
+INFO 2025-08-06 14:02:02,335 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:02:02,349 runserver [mHTTP GET /administracao/usuarios/2/editar/modal/ 200 [0.05, 127.0.0.1:59218][0m
+INFO 2025-08-06 14:02:05,110 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:02:05,120 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:59218][0m
+INFO 2025-08-06 14:06:51,075 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:06:51,079 runserver [mHTTP GET /administracao/usuarios/ 200 [0.01, 127.0.0.1:52164][0m
+INFO 2025-08-06 14:06:51,102 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:52172][0m
+INFO 2025-08-06 14:06:51,102 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:52184][0m
+INFO 2025-08-06 14:06:51,102 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:52164][0m
+INFO 2025-08-06 14:06:51,104 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:52172][0m
+INFO 2025-08-06 14:06:51,125 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:52184][0m
+INFO 2025-08-06 14:06:51,130 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:52184][0m
+INFO 2025-08-06 14:06:51,130 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:52172][0m
+INFO 2025-08-06 14:07:35,683 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:07:35,690 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:52184][0m

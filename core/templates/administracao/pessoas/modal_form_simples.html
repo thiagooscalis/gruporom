@@ -1,0 +1,96 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="pessoaModalSimples" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastro Rápido de Pessoa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#pessoaModalSimples" hx-swap="outerHTML">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            {{ form.nome|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.tipo_doc|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.doc|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.telefone|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="voltarParaUsuario()">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Inicializar e mostrar modal
+(function() {
+    const modalElement = document.getElementById('pessoaModalSimples');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        
+        // Limpar ao fechar
+        modalElement.addEventListener('hidden.bs.modal', function() {
+            modalElement.remove();
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        });
+    }
+})();
+
+// Função para voltar ao modal anterior
+function voltarParaUsuario() {
+    // Fechar modal de pessoa
+    const pessoaModal = bootstrap.Modal.getInstance(document.getElementById('pessoaModalSimples'));
+    if (pessoaModal) {
+        pessoaModal.hide();
+    }
+    
+    // Verificar origem
+    const origem = sessionStorage.getItem('origemModalPessoa');
+    sessionStorage.removeItem('origemModalPessoa');
+    
+    // Se veio da criação, reabrir modal de criação
+    if (origem === 'criar') {
+        setTimeout(() => {
+            htmx.ajax('GET', '{% url "administracao:usuarios_novo_modal" %}', {
+                target: 'body',
+                swap: 'beforeend'
+            });
+        }, 300);
+    }
+    // Se veio da edição, apenas fechar (não reabrir)
+    // O usuário precisará clicar novamente no botão de editar
+}
+
+// Interceptar sucesso do formulário
+document.getElementById('pessoaModalSimples').addEventListener('htmx:afterRequest', function(evt) {
+    if (evt.detail.xhr.status === 200 && evt.detail.xhr.getResponseHeader('HX-Redirect')) {
+        // Ao invés de redirecionar, fechar este modal e verificar se deve reabrir anterior
+        evt.preventDefault();
+        voltarParaUsuario();
+    }
+});
+</script>

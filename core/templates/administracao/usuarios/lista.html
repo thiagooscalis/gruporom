@@ -48,9 +48,6 @@
                                 <tr>
                                     <td>
                                         <strong>{{ usuario.username }}</strong>
-                                        {% if usuario.is_staff %}
-                                            <span class="badge bg-warning ms-1">Admin</span>
-                                        {% endif %}
                                     </td>
                                     <td>{{ usuario.pessoa.nome }}</td>
                                     <td>{{ usuario.pessoa.email|default:"-" }}</td>
