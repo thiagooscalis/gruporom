@@ -7,7 +7,7 @@
                 <h5 class="modal-title">Nova Pessoa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#pessoaModal" hx-swap="outerHTML">
+            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#pessoaModal" hx-swap="outerHTML" id="formPessoa">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="row">
@@ -105,6 +105,41 @@
                 const backdrop = document.querySelector('.modal-backdrop');
                 if (backdrop) backdrop.remove();
             });
+            
+            // Escutar submissão bem-sucedida do formulário
+            const form = modalElement.querySelector('#formPessoa');
+            if (form) {
+                // Interceptar submissão via HTMX
+                modalElement.addEventListener('htmx:beforeRequest', function(evt) {
+                    // Verificar se é callback do usuário
+                    const url = evt.detail.xhr.responseURL || form.getAttribute('hx-post');
+                    if (url && url.includes('callback=usuario_modal')) {
+                        evt.detail.isCallbackRequest = true;
+                    }
+                });
+                
+                modalElement.addEventListener('htmx:afterRequest', function(evt) {
+                    if (evt.detail.xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(evt.detail.xhr.responseText);
+                            if (response.success && response.pessoa) {
+                                // Salvar dados da pessoa criada para o callback
+                                localStorage.setItem('novaPessoaCriada', JSON.stringify({
+                                    id: response.pessoa.id,
+                                    nome: response.pessoa.nome,
+                                    doc: response.pessoa.doc
+                                }));
+                                
+                                // Fechar modal
+                                modal.hide();
+                                return;
+                            }
+                        } catch (e) {
+                            // Se não for JSON, continuar com o comportamento padrão
+                        }
+                    }
+                });
+            }
             
             // Mostra o modal imediatamente
             modal.show();
