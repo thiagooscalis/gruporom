@@ -56,10 +56,6 @@
                             <!-- Ações -->
                             <div class="mt-auto">
                                 <div class="btn-group w-100" role="group">
-                                    <a href="{% url 'administracao:whatsapp:chat_interface' account.id %}" 
-                                       class="btn btn-sm btn-outline-primary" title="Chat">
-                                        <i class="fas fa-comments"></i>
-                                    </a>
                                     <button type="button" class="btn btn-sm btn-outline-secondary" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalWhatsAppAccount"
@@ -257,6 +253,163 @@
                 <div class="spinner-border text-info" role="status">
                     <span class="visually-hidden">Carregando...</span>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal com guia do Facebook -->
+<div class="modal fade" id="modalFacebookGuide" tabindex="-1" aria-labelledby="modalFacebookGuideLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFacebookGuideLabel">
+                    <i class="fab fa-facebook text-primary me-2"></i>
+                    Como obter credenciais da API WhatsApp Business
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Você precisará de uma conta Meta for Developers e um aplicativo configurado para usar a API do WhatsApp Business.
+                </div>
+                
+                <div class="accordion" id="guideAccordion">
+                    <!-- Passo 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                <strong>1. Criar conta Meta for Developers</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Acesse <a href="https://developers.facebook.com/" target="_blank" class="text-primary">developers.facebook.com</a></li>
+                                    <li>Clique em "Começar" ou "Get Started"</li>
+                                    <li>Faça login com sua conta Facebook/Meta</li>
+                                    <li>Complete o registro como desenvolvedor</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passo 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                <strong>2. Criar aplicativo</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>No painel do desenvolvedor, clique em "Criar App"</li>
+                                    <li>Escolha "Business" como tipo de aplicativo</li>
+                                    <li>Preencha os dados do aplicativo</li>
+                                    <li>Após criar, anote o <code>App ID</code> e <code>App Secret</code></li>
+                                </ol>
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    O <strong>App Secret</strong> é sensível - mantenha-o seguro!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passo 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                <strong>3. Configurar WhatsApp Business</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>No seu app, vá para "Adicionar Produto"</li>
+                                    <li>Encontre e adicione "WhatsApp"</li>
+                                    <li>Clique em "Configurar" no WhatsApp</li>
+                                    <li>Crie ou vincule uma conta do WhatsApp Business</li>
+                                    <li>Anote o <code>Business Account ID</code></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passo 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                <strong>4. Obter Phone Number ID</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Na configuração do WhatsApp, vá para "API Setup"</li>
+                                    <li>Você verá uma lista de números de telefone</li>
+                                    <li>Copie o <code>Phone Number ID</code> do número que deseja usar</li>
+                                    <li>Este ID é diferente do número de telefone real</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passo 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                                <strong>5. Gerar Access Token</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>No "API Setup", clique em "Generate Access Token"</li>
+                                    <li>Copie o token gerado</li>
+                                    <li>Para produção, você precisará gerar um token permanente</li>
+                                </ol>
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Importante:</strong> Tokens temporários expiram em 24 horas. Para uso em produção, configure um token permanente.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Passo 6 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="step6">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
+                                <strong>6. Configurar Webhook</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Defina um <code>Webhook Verify Token</code> (pode ser qualquer string segura)</li>
+                                    <li>Use esse token no campo correspondente do formulário</li>
+                                    <li>Após salvar a conta, copie a URL do webhook gerada</li>
+                                    <li>No Facebook, configure essa URL e o verify token</li>
+                                </ol>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    A URL do webhook será exibida após criar a conta.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Fechar
+                </button>
+                <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt me-2"></i>Documentação Oficial
+                </a>
             </div>
         </div>
     </div>

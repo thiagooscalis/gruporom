@@ -11,12 +11,7 @@ urlpatterns = [
     # Contas
     path('accounts/', views.accounts_list, name='accounts_list'),
     
-    # Chat
-    path('chat/<int:account_id>/', views.chat_interface, name='chat_interface'),
-    path('contact/<int:contact_id>/', views.contact_chat, name='contact_chat'),
-    
     # API
-    path('api/send-message/', views.send_message, name='send_message'),
     
     
     # Listas

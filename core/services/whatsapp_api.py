@@ -1144,14 +1144,7 @@ class WhatsAppWebhookProcessor:
                 }
             )
             
-            # Notifica sala do chat específico
-            await channel_layer.group_send(
-                f'chat_contact_{message.contact.id}',
-                {
-                    'type': 'new_message',
-                    'message': message_data
-                }
-            )
+            # Chat functionality removed - keeping only account-level notifications
     
     async def _notify_status_update(self, message):
         """

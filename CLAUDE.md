@@ -139,11 +139,15 @@ gruporom/
 - [x] Modal de criação rápida de pessoa no cadastro de usuários
 
 ### 5. WhatsApp Business Integrado
-- [x] **Contas WhatsApp**: Gestão de contas Business com cards quadrados
-- [x] **Templates**: Sistema de templates de mensagem com preview
-- [x] **Dashboard WhatsApp**: Interface limpa com contas e últimos templates
-- [x] **Validação de sintaxe**: Templates com verificação de variáveis
-- [x] **Interface responsiva**: Cards organizados e navegação intuitiva
+- [x] **Contas WhatsApp**: Gestão completa de contas Business com cards quadrados
+- [x] **Templates**: Sistema de templates de mensagem com preview e validação
+- [x] **Dashboard WhatsApp**: Interface limpa com contas ativas e últimos templates
+- [x] **API Integration**: Configuração completa com Meta/Facebook API
+- [x] **Guia Integrado**: Modal "Como obter?" com tutorial passo-a-passo para credenciais
+- [x] **Webhook Support**: URLs automáticas e configuração de verify tokens
+- [x] **Teste de Conexão**: Validação de credenciais e conectividade da API
+- [x] **Interface Responsiva**: Cards organizados, modais HTMX e navegação intuitiva
+- [x] **Gestão Focada**: Administração concentrada em contas e templates (chat removido)
 
 ### 6. Máscaras de Entrada Inteligentes
 - [x] **CPF**: Formatação automática `000.000.000-00`
@@ -233,14 +237,17 @@ npm run dev  # modo watch
 ### URLs Principais
 - `/` - Redirecionamento automático por grupo
 - `/login/` - Página de login responsiva
-- `/administracao/` - Dashboard administrativo
-- `/administracao/pessoas/` - Gestão de pessoas
-- `/administracao/usuarios/` - Gestão de usuários
+- `/administracao/` - Dashboard administrativo simplificado
+- `/administracao/pessoas/` - Gestão de pessoas com autocomplete
+- `/administracao/usuarios/` - Gestão de usuários com criação rápida de pessoas
 - `/administracao/fornecedores/` - Gestão de fornecedores
 - `/administracao/colaboradores/` - Gestão de colaboradores
 - `/administracao/cargos/` - Gestão de cargos
 - `/administracao/turnos/` - Gestão de turnos
-- `/admin/` - Django Admin nativo
+- `/administracao/whatsapp/` - Dashboard WhatsApp Business
+- `/administracao/whatsapp/accounts/` - Listagem de contas WhatsApp
+- `/administracao/whatsapp/account/{id}/templates/` - Templates por conta
+- `/admin/` - Django Admin nativo (acesso restrito)
 
 ## 📝 Observações Técnicas
 
@@ -251,9 +258,11 @@ npm run dev  # modo watch
 - **Autocomplete Ajax**: Busca dinâmica de pessoas e relacionamentos
 
 ### Sistema de Integrações
-- **AwesomeAPI**: Cotação automática de câmbio com cache no banco
+- **AwesomeAPI**: Cotação automática de câmbio USD/BRL com cache no banco
+- **WhatsApp Business API**: Integração completa com Meta/Facebook API
 - **Factories**: Geração de dados de teste com Faker
 - **Seeds**: População automática de dados iniciais
+- **IMask**: Biblioteca para máscaras de entrada inteligentes
 
 ### Segurança Implementada
 - **CSRF Protection**: Ativo em todos os formulários
@@ -275,5 +284,16 @@ npm run dev  # modo watch
 ---
 
 **Última atualização**: 06/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business, máscaras inteligentes e UX otimizada  
-**Módulos**: 8+ modelos de dados, 7+ CRUDs funcionais, WhatsApp integrado, sistema de câmbio automático
+**Status**: Sistema empresarial completo com WhatsApp Business integrado, máscaras inteligentes, guia de configuração e UX otimizada  
+**Módulos**: 8+ modelos de dados, 7+ CRUDs funcionais, WhatsApp Business com API Meta/Facebook, sistema de câmbio automático
+
+## 🆕 Últimas Atualizações
+
+### Agosto 2025
+- **WhatsApp Business Aprimorado**: Removido chat/conversas, foco em gestão de contas e templates
+- **Guia Integrado**: Modal "Como obter?" com tutorial completo para credenciais da API Meta/Facebook
+- **Modal de Criação Rápida**: Pessoas podem ser criadas diretamente no cadastro de usuários
+- **Máscaras Inteligentes**: Sistema completo de máscaras com detecção automática de tipo de documento
+- **Interface Otimizada**: Dashboard simplificado, sidebar escura (#333333), floating buttons consistentes
+- **Validações Robustas**: Correções na validação de formulários e relacionamentos
+- **Segurança Aprimorada**: Controle de acesso Django Admin restrito a superusuários

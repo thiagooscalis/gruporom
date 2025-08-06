@@ -2627,3 +2627,59 @@ INFO 2025-08-06 14:06:51,130 runserver [mHTTP GET /static/fa-solid-900.5b60a450
 INFO 2025-08-06 14:06:51,130 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:52172][0m
 INFO 2025-08-06 14:07:35,683 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
 INFO 2025-08-06 14:07:35,690 runserver [mHTTP GET /administracao/usuarios/ 200 [0.02, 127.0.0.1:52184][0m
+INFO 2025-08-06 14:09:26,237 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:09:27,070 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:09:27,092 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:42806][0m
+INFO 2025-08-06 14:09:27,122 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:42814][0m
+INFO 2025-08-06 14:09:27,123 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:27,123 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:42806][0m
+INFO 2025-08-06 14:09:27,126 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:27,144 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42814][0m
+INFO 2025-08-06 14:09:27,144 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:27,150 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:32,193 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:09:32,206 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.03, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:42,164 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:09:42,180 runserver [mHTTP GET /administracao/whatsapp/chat/1/ 200 [0.03, 127.0.0.1:42826][0m
+INFO 2025-08-06 14:09:42,226 runserver WebSocket HANDSHAKING /ws/whatsapp/1/ [127.0.0.1:45466]
+INFO 2025-08-06 14:09:42,265 runserver WebSocket CONNECT /ws/whatsapp/1/ [127.0.0.1:45466]
+INFO 2025-08-06 14:09:42,274 consumers WebSocket conectado para conta 1 pelo usuário thiago
+INFO 2025-08-06 14:09:44,919 runserver WebSocket DISCONNECT /ws/whatsapp/1/ [127.0.0.1:45466]
+INFO 2025-08-06 14:09:44,920 consumers WebSocket desconectado da conta 1
+INFO 2025-08-06 14:17:45,200 autoreload /home/thiago/Projetos/gruporom/core/urls/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 14:17:45,543 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:18:56,424 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 14:18:56,781 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:19:20,164 autoreload /home/thiago/Projetos/gruporom/core/routing.py changed, reloading.
+INFO 2025-08-06 14:19:20,506 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:19:31,731 autoreload /home/thiago/Projetos/gruporom/core/consumers.py changed, reloading.
+INFO 2025-08-06 14:19:32,075 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:20:03,491 autoreload /home/thiago/Projetos/gruporom/core/services/whatsapp_api.py changed, reloading.
+INFO 2025-08-06 14:20:03,828 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 14:20:18,702 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:20:18,724 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.04, 127.0.0.1:44938][0m
+INFO 2025-08-06 14:20:18,752 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:44942][0m
+INFO 2025-08-06 14:20:18,753 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:18,753 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:44938][0m
+INFO 2025-08-06 14:20:18,755 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:18,776 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:18,781 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:44942][0m
+INFO 2025-08-06 14:20:18,782 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:20,344 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:20:20,355 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:29,857 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:20:29,879 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:20:37,438 runserver [mHTTP GET /static/app.js.map 200 [0.00, 127.0.0.1:41750][0m
+INFO 2025-08-06 14:20:47,797 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:20:47,806 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:44948][0m
+INFO 2025-08-06 14:23:28,681 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:23:28,696 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.03, 127.0.0.1:52748][0m
+INFO 2025-08-06 14:23:28,719 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:52760][0m
+INFO 2025-08-06 14:23:28,720 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:52748][0m
+INFO 2025-08-06 14:23:28,720 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:52776][0m
+INFO 2025-08-06 14:23:28,722 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:52760][0m
+INFO 2025-08-06 14:23:28,745 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:52776][0m
+INFO 2025-08-06 14:23:28,746 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:52760][0m
+INFO 2025-08-06 14:23:28,751 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:52776][0m
+INFO 2025-08-06 14:23:32,117 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 14:23:32,126 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:52776][0m
