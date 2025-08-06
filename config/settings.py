@@ -198,7 +198,7 @@ LOGGING = {
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": "logs/django.log" if not DEBUG else "django.log",
+            "filename": "/home/thiago/logs/django.log" if not DEBUG else "django.log",
             "maxBytes": 1024 * 1024 * 10,  # 10MB
             "backupCount": 5,
             "formatter": "production" if not DEBUG else "verbose",
