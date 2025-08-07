@@ -987,11 +987,15 @@ class WhatsAppWebhookProcessor:
         # Extrai conteúdo baseado no tipo
         message_type, content, media_data = self._extract_message_content(message_data)
         
+        # Busca ou cria conversa ANTES de criar a mensagem
+        conversation = await self._get_or_create_conversation(contact, timestamp)
+        
         # Salva mensagem no banco
         message = await sync_to_async(WhatsAppMessage.objects.create)(
             wamid=wamid,
             account=self.account,
             contact=contact,
+            conversation=conversation,  # Vincula à conversa
             direction='inbound',
             message_type=message_type,
             content=content,
@@ -1003,10 +1007,45 @@ class WhatsAppWebhookProcessor:
             context_data=message_data.get('context', {})
         )
         
+        # Atualiza última atividade da conversa
+        await sync_to_async(lambda: setattr(conversation, 'last_activity', timestamp) or conversation.save(update_fields=['last_activity']))()
+        
         # Notifica via WebSocket
         await self._notify_new_message(message)
         
-        logger.info(f"Mensagem inbound processada: {wamid}")
+        logger.info(f"Mensagem inbound processada: {wamid} - Conversa: {conversation.id}")
+    
+    async def _get_or_create_conversation(self, contact, timestamp):
+        """
+        Busca ou cria uma conversa para o contato
+        """
+        from django.db import sync_to_async
+        from core.models import WhatsAppConversation
+        
+        # Verifica se já existe conversa ativa para este contato
+        existing_conversation = await sync_to_async(
+            WhatsAppConversation.objects.filter(
+                account=self.account,
+                contact=contact,
+                status__in=['pending', 'assigned', 'in_progress']  # Conversas ativas
+            ).first
+        )()
+        
+        if existing_conversation:
+            logger.info(f"Usando conversa existente {existing_conversation.id} para contato {contact.display_name}")
+            return existing_conversation
+        
+        # Cria nova conversa em status 'pending' (aguardando atendimento)
+        new_conversation = await sync_to_async(WhatsAppConversation.objects.create)(
+            account=self.account,
+            contact=contact,
+            status='pending',  # Nova conversa sempre em pendente
+            first_message_at=timestamp,
+            priority='medium'  # Prioridade padrão
+        )
+        
+        logger.info(f"Nova conversa criada {new_conversation.id} para contato {contact.display_name}")
+        return new_conversation
     
     async def _process_status_update(self, status_data: Dict):
         """

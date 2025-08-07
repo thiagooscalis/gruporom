@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.contrib.auth.models import Group
-from django.db import models
 from core.models import Usuario, Pessoa
 
 
@@ -93,13 +92,15 @@ class UsuarioForm(forms.ModelForm):
             # Senha é obrigatória na criação
             self.fields["password"].required = True
             self.fields["password_confirm"].required = True
-        
+
         # Se estiver recebendo dados via POST, atualiza o queryset para validar o ID da pessoa
         if self.data:
             try:
-                pessoa_id = self.data.get('pessoa')
+                pessoa_id = self.data.get("pessoa")
                 if pessoa_id:
-                    self.fields['pessoa'].queryset = Pessoa.objects.filter(pk=pessoa_id)
+                    self.fields["pessoa"].queryset = Pessoa.objects.filter(
+                        pk=pessoa_id
+                    )
             except (ValueError, TypeError):
                 pass  # ID inválido, mantém queryset vazio
             self.fields["password"].help_text = "Mínimo 8 caracteres"
@@ -111,7 +112,7 @@ class UsuarioForm(forms.ModelForm):
             try:
                 pessoa = Pessoa.objects.get(pk=pessoa_id)
                 # Verifica se a pessoa já tem usuário (exceto no caso de edição)
-                if hasattr(pessoa, 'usuario') and (
+                if hasattr(pessoa, "usuario") and (
                     not self.instance.pk
                     or pessoa.usuario.pk != self.instance.pk
                 ):

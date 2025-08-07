@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -8,12 +8,11 @@ from django.http import HttpResponse
 from django.db.models.deletion import ProtectedError
 from django.urls import reverse
 from core.models import Usuario, Pessoa
-from core.decorators import group_area_required
 from core.forms.usuario import UsuarioForm
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def lista(request):
     """
     View para listagem de usuários
@@ -41,7 +40,6 @@ def lista(request):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        'area': request.area,
         'page_obj': page_obj,
         'search': search,
     }
@@ -50,7 +48,7 @@ def lista(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def novo_modal(request):
     """
     View para retornar o modal de criação de usuário via HTMX
@@ -58,14 +56,13 @@ def novo_modal(request):
     form = UsuarioForm()
     context = {
         'form': form,
-        'area': request.area,
-        'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': request.area}),
+        'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}),
     }
     return render(request, 'administracao/usuarios/modal_form.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def criar(request):
     """
     View para processar o formulário de criação de usuário
@@ -78,22 +75,21 @@ def criar(request):
             
             # Retorna um redirect HTMX para recarregar a página
             response = HttpResponse()
-            response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/usuarios/')
+            response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/usuarios/')
             return response
         else:
             # Retorna apenas o conteúdo do formulário com erros
             context = {
                 'form': form,
-                'area': request.area,
-                'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': request.area}),
+                'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}),
             }
             return render(request, 'administracao/usuarios/form_content.html', context)
     
-    return redirect(f'/{request.area}/usuarios/')
+    return redirect('/administracao/usuarios/')
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def editar_modal(request, pk):
     """
     View para retornar o modal de edição de usuário via HTMX
@@ -110,15 +106,14 @@ def editar_modal(request, pk):
         'form': form,
         'usuario': usuario,
         'e_proprio_usuario': request.user.pk == usuario.pk,
-        'area': request.area,
-        'buscar_pessoas_edicao_url': reverse('buscar_pessoas_edicao', kwargs={'area': request.area}),
+        'buscar_pessoas_edicao_url': reverse('buscar_pessoas_edicao', kwargs={'area': 'administracao'}),
         'usuario_id_param': f'#usuario-id-{usuario.pk}',
     }
     return render(request, 'administracao/usuarios/modal_edit.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def atualizar(request, pk):
     """
     View para processar o formulário de edição de usuário
@@ -138,7 +133,7 @@ def atualizar(request, pk):
             
             # Retorna um redirect HTMX para recarregar a página
             response = HttpResponse()
-            response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/usuarios/')
+            response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/usuarios/')
             return response
         elif form.is_valid():
             usuario_atualizado = form.save()
@@ -146,7 +141,7 @@ def atualizar(request, pk):
             
             # Retorna um redirect HTMX para recarregar a página
             response = HttpResponse()
-            response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/usuarios/')
+            response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/usuarios/')
             return response
         else:
             # Se for o próprio usuário, desabilita o campo is_active novamente
@@ -159,17 +154,16 @@ def atualizar(request, pk):
                 'form': form,
                 'usuario': usuario,
                 'e_proprio_usuario': request.user.pk == usuario.pk,
-                'area': request.area,
-                'buscar_pessoas_edicao_url': reverse('buscar_pessoas_edicao', kwargs={'area': request.area}),
+                'buscar_pessoas_edicao_url': reverse('buscar_pessoas_edicao', kwargs={'area': 'administracao'}),
                 'usuario_id_param': f'#usuario-id-{usuario.pk}',
             }
             return render(request, 'administracao/usuarios/modal_edit.html', context)
     
-    return redirect(f'/{request.area}/usuarios/')
+    return redirect('/administracao/usuarios/')
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def excluir_modal(request, pk):
     """
     View para retornar o modal de confirmação de exclusão via HTMX
@@ -182,13 +176,12 @@ def excluir_modal(request, pk):
     context = {
         'usuario': usuario,
         'e_proprio_usuario': e_proprio_usuario,
-        'area': request.area,
     }
     return render(request, 'administracao/usuarios/modal_delete.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def excluir(request, pk):
     """
     View para processar a exclusão de usuário
@@ -209,7 +202,7 @@ def excluir(request, pk):
         
         # Retorna um redirect HTMX para recarregar a página
         response = HttpResponse()
-        response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/usuarios/')
+        response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/usuarios/')
         return response
     
-    return redirect(f'/{request.area}/usuarios/')
+    return redirect('/administracao/usuarios/')

@@ -1,0 +1,42 @@
+{% load core_tags %}
+<!-- Modal de Áreas de Acesso -->
+{% if user.groups.count > 1 %}
+<div class="modal fade" id="modalAreas" tabindex="-1" aria-labelledby="modalAreasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalAreasLabel">
+                    <i class="fas fa-th-large me-2"></i>
+                    Áreas de Acesso
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    {% for group in user.groups.all %}
+                    <div class="col-6">
+                        <a href="{% url group.name|area_url %}" class="text-decoration-none">
+                            <div class="card h-100 border-0 shadow-sm {% if group.name|slugify in request.path %}border-primary border-2{% endif %}">
+                                <div class="card-body text-center py-4">
+                                    <div class="mb-3">
+                                        <i class="fas {{ group.name|area_icon }} fa-3x {% if group.name|slugify in request.path %}text-primary{% else %}text-secondary{% endif %}"></i>
+                                    </div>
+                                    <h6 class="card-title mb-0 {% if group.name|slugify in request.path %}text-primary fw-bold{% else %}text-dark{% endif %}">
+                                        {{ group.name }}
+                                    </h6>
+                                    {% if group.name|slugify in request.path %}
+                                    <small class="text-primary">
+                                        <i class="fas fa-check-circle me-1"></i>Área atual
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

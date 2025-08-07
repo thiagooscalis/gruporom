@@ -5,7 +5,7 @@ from .cambio import Cambio
 from .cargo import Cargo
 from .turno import Turno
 from .colaborador import Colaborador
-from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate
+from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate, WhatsAppConversation
 
 __all__ = [
     "Pessoa",
@@ -19,4 +19,5 @@ __all__ = [
     "WhatsAppContact",
     "WhatsAppMessage",
     "WhatsAppTemplate",
+    "WhatsAppConversation",
 ]

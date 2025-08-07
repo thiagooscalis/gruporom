@@ -1,6 +1,7 @@
 import locale
 
 from django import template
+from django.utils.text import slugify
 
 
 register = template.Library()
@@ -30,3 +31,24 @@ def doc(val):
     if len(val) == 14:
         return f'{val[0:2]}.{val[2:5]}.{val[5:8]}-{val[8:]}'
     return doc
+
+
+@register.filter
+def area_icon(group_name):
+    """Retorna o ícone FontAwesome para cada área/grupo"""
+    icons = {
+        'Administração': 'fa-cog',
+        'Comercial': 'fa-chart-line',
+        'Financeiro': 'fa-dollar-sign',
+        'RH': 'fa-users',
+        'Operacional': 'fa-tools',
+        'Logística': 'fa-truck',
+    }
+    return icons.get(group_name, 'fa-th-large')
+
+
+@register.filter  
+def area_url(group_name):
+    """Retorna a URL base para cada área/grupo"""
+    area_slug = slugify(group_name)
+    return f'{area_slug}:home'

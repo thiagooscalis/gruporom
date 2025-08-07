@@ -266,6 +266,16 @@ class WhatsAppMessage(models.Model):
         verbose_name="Contato"
     )
     
+    # Relacionamento com conversa
+    conversation = models.ForeignKey(
+        'WhatsAppConversation',
+        on_delete=models.CASCADE,
+        related_name="messages",
+        verbose_name="Conversa",
+        null=True,
+        blank=True
+    )
+    
     # Direção e tipo da mensagem
     direction = models.CharField(
         max_length=10,
@@ -617,3 +627,148 @@ class WhatsAppTemplate(models.Model):
     def can_be_used(self):
         """Verifica se o template pode ser usado para envio"""
         return self.status == 'approved' and self.is_active
+
+
+class WhatsAppConversation(models.Model):
+    """
+    Model para conversas do WhatsApp - representa uma conversa entre a empresa e um contato
+    """
+    
+    STATUS_CHOICES = [
+        ('pending', 'Aguardando Atendimento'),
+        ('assigned', 'Atribuída'),
+        ('in_progress', 'Em Atendimento'),
+        ('resolved', 'Resolvida'),
+        ('closed', 'Encerrada'),
+    ]
+    
+    account = models.ForeignKey(
+        WhatsAppAccount,
+        on_delete=models.CASCADE,
+        related_name="conversations",
+        verbose_name="Conta WhatsApp"
+    )
+    
+    contact = models.ForeignKey(
+        WhatsAppContact,
+        on_delete=models.CASCADE,
+        related_name="conversations",
+        verbose_name="Contato"
+    )
+    
+    # Atribuição de atendente
+    assigned_to = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="whatsapp_conversations",
+        verbose_name="Atendente"
+    )
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name="Status"
+    )
+    
+    # Timestamps importantes
+    first_message_at = models.DateTimeField(
+        verbose_name="Primeira mensagem em"
+    )
+    
+    assigned_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Atribuída em"
+    )
+    
+    last_activity = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Última atividade"
+    )
+    
+    resolved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Resolvida em"
+    )
+    
+    # Metadados
+    priority = models.CharField(
+        max_length=10,
+        choices=[
+            ('low', 'Baixa'),
+            ('medium', 'Média'),
+            ('high', 'Alta'),
+            ('urgent', 'Urgente'),
+        ],
+        default='medium',
+        verbose_name="Prioridade"
+    )
+    
+    tags = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Tags",
+        help_text="Tags para categorização"
+    )
+    
+    notes = models.TextField(
+        blank=True,
+        verbose_name="Notas",
+        help_text="Notas internas sobre a conversa"
+    )
+    
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Conversa WhatsApp"
+        verbose_name_plural = "Conversas WhatsApp"
+        ordering = ['-last_activity']
+        indexes = [
+            models.Index(fields=['status', '-last_activity']),
+            models.Index(fields=['assigned_to', '-last_activity']),
+        ]
+    
+    def __str__(self):
+        return f"Conversa com {self.contact.display_name} - {self.get_status_display()}"
+    
+    def assign_to_user(self, user):
+        """Atribui a conversa a um usuário"""
+        self.assigned_to = user
+        self.status = 'assigned'
+        self.assigned_at = timezone.now()
+        self.save(update_fields=['assigned_to', 'status', 'assigned_at', 'atualizado_em'])
+    
+    def start_attendance(self):
+        """Inicia o atendimento"""
+        self.status = 'in_progress'
+        self.save(update_fields=['status', 'atualizado_em'])
+    
+    def resolve(self):
+        """Resolve a conversa"""
+        self.status = 'resolved'
+        self.resolved_at = timezone.now()
+        self.save(update_fields=['status', 'resolved_at', 'atualizado_em'])
+    
+    @property
+    def unread_messages_count(self):
+        """Conta mensagens não lidas do contato"""
+        return self.messages.filter(
+            direction='inbound',
+            status__in=['sent', 'delivered']
+        ).count()
+    
+    @property
+    def last_message(self):
+        """Retorna a última mensagem da conversa"""
+        return self.messages.first()  # ordering é por -timestamp
+    
+    @property
+    def response_time(self):
+        """Calcula tempo de resposta médio"""
+        # TODO: Implementar cálculo de tempo de resposta
+        return None

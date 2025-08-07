@@ -1,6 +1,6 @@
 from django.urls import path
-from core.views.base import RedirectToGroupView
+from core.views.base import redirect_to_group
 
 urlpatterns = [
-    path('', RedirectToGroupView.as_view(), name='redirect_to_group'),
+    path('', redirect_to_group, name='redirect_to_group'),
 ]

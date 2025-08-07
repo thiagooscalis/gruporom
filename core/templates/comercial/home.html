@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Área Comercial{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Área Comercial</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-chart-line me-2"></i>
+                Área Comercial
+            </h1>
+            <p class="text-muted">Gestão de vendas, clientes e oportunidades comerciais</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Card de Clientes -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded p-3">
+                                <i class="fas fa-users text-primary fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title mb-0">Clientes</h5>
+                            <small class="text-muted">Gestão de clientes</small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Acessar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card de Vendas -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded p-3">
+                                <i class="fas fa-shopping-cart text-success fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title mb-0">Vendas</h5>
+                            <small class="text-muted">Pedidos e vendas</small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Acessar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card de Orçamentos -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-opacity-10 rounded p-3">
+                                <i class="fas fa-file-invoice-dollar text-info fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title mb-0">Orçamentos</h5>
+                            <small class="text-muted">Propostas comerciais</small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Acessar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card de Relatórios -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-opacity-10 rounded p-3">
+                                <i class="fas fa-chart-bar text-warning fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title mb-0">Relatórios</h5>
+                            <small class="text-muted">Análises e métricas</small>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-warning btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Acessar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estatísticas Rápidas -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="h5 mb-3">
+                <i class="fas fa-chart-pie me-2"></i>
+                Estatísticas Rápidas
+            </h3>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h4 class="text-primary mb-1">0</h4>
+                    <small class="text-muted">Clientes Ativos</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h4 class="text-success mb-1">0</h4>
+                    <small class="text-muted">Vendas este mês</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h4 class="text-info mb-1">0</h4>
+                    <small class="text-muted">Orçamentos pendentes</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h4 class="text-warning mb-1">R$ 0,00</h4>
+                    <small class="text-muted">Faturamento mensal</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

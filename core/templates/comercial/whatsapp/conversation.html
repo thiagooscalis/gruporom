@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'comercial:home' %}">Comercial</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'comercial:whatsapp' %}">WhatsApp</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ conversation.contact.display_name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-20 p-2 rounded-circle me-3">
+                        <i class="fab fa-whatsapp text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 mb-0">{{ conversation.contact.display_name }}</h2>
+                        <small class="text-muted">{{ conversation.contact.display_phone }} • {{ conversation.account.name }}</small>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge bg-primary">{{ conversation.get_status_display }}</span>
+                    {% if conversation.priority != 'medium' %}
+                        <span class="badge bg-warning ms-1">{{ conversation.get_priority_display }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-comments me-2"></i>
+                        Conversa
+                    </h5>
+                </div>
+                <div class="card-body" style="max-height: 600px; overflow-y: auto;" id="chat-messages">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="mb-3 {% if message.direction == 'outbound' %}text-end{% endif %}">
+                            <div class="d-inline-block {% if message.direction == 'outbound' %}bg-primary text-white{% else %}bg-light{% endif %} rounded p-3" style="max-width: 70%;">
+                                {% if message.direction == 'inbound' %}
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-success bg-opacity-20 p-1 rounded-circle me-2">
+                                            <i class="fab fa-whatsapp text-success"></i>
+                                        </div>
+                                        <strong>{{ conversation.contact.display_name }}</strong>
+                                    </div>
+                                {% else %}
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-primary bg-opacity-20 p-1 rounded-circle me-2">
+                                            <i class="fas fa-user text-primary"></i>
+                                        </div>
+                                        <strong>{{ message.sent_by.pessoa.nome|default:message.sent_by.username }}</strong>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="message-content">
+                                    {{ message.get_display_content }}
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <small class="{% if message.direction == 'outbound' %}text-white-50{% else %}text-muted{% endif %}">
+                                        {{ message.timestamp|date:"d/m/Y H:i" }}
+                                        {% if message.direction == 'outbound' %}
+                                            {% if message.status == 'read' %}
+                                                <i class="fas fa-check-double text-info ms-1"></i>
+                                            {% elif message.status == 'delivered' %}
+                                                <i class="fas fa-check-double ms-1"></i>
+                                            {% elif message.status == 'sent' %}
+                                                <i class="fas fa-check ms-1"></i>
+                                            {% endif %}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-comments text-muted fa-4x"></i>
+                            </div>
+                            <h5 class="text-muted">Nenhuma mensagem ainda</h5>
+                            <p class="text-muted">Esta conversa ainda não possui mensagens.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <form class="d-flex">
+                        <input type="text" class="form-control me-2" placeholder="Digite sua mensagem..." disabled>
+                        <button type="button" class="btn btn-primary" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <small class="text-muted d-block mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Funcionalidade de envio será implementada em breve.
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar com informações -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Informações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge bg-primary ms-1">{{ conversation.get_status_display }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Prioridade:</strong>
+                        <span class="badge bg-warning ms-1">{{ conversation.get_priority_display }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Atendente:</strong>
+                        <div class="mt-1">{{ conversation.assigned_to.pessoa.nome|default:conversation.assigned_to.username }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Primeira mensagem:</strong>
+                        <div class="mt-1">{{ conversation.first_message_at|date:"d/m/Y H:i" }}</div>
+                    </div>
+                    
+                    {% if conversation.assigned_at %}
+                    <div class="mb-3">
+                        <strong>Atribuída em:</strong>
+                        <div class="mt-1">{{ conversation.assigned_at|date:"d/m/Y H:i" }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <strong>Última atividade:</strong>
+                        <div class="mt-1">{{ conversation.last_activity|timesince }} atrás</div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-grid gap-2">
+                        {% if conversation.status == 'in_progress' %}
+                            <button class="btn btn-success btn-sm" onclick="resolveConversation()">
+                                <i class="fas fa-check me-1"></i>
+                                Resolver Conversa
+                            </button>
+                        {% endif %}
+                        <a href="{% url 'comercial:whatsapp' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Voltar à Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            {% if conversation.notes %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-sticky-note me-2"></i>
+                        Notas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{ conversation.notes|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto scroll para última mensagem
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+function resolveConversation() {
+    if (confirm('Tem certeza que deseja resolver esta conversa?')) {
+        // TODO: Implementar AJAX para resolver conversa
+        alert('Funcionalidade será implementada em breve.');
+    }
+}
+</script>
+{% endblock %}

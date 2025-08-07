@@ -16,6 +16,7 @@ urlpatterns = [
     path('webhook/whatsapp/<int:account_id>/', webhook, name='whatsapp_webhook'),
     
     path('administracao/', include('core.urls.administracao')),
+    path('comercial/', include('core.urls.comercial')),
     path('admin/', admin.site.urls),
 ]
 

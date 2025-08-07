@@ -1,0 +1,86 @@
+<!-- Menu da Área Comercial -->
+<li class="nav-item">
+    <a href="{% url 'comercial:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}text-warning{% else %}text-light{% endif %}">
+        <i class="fa-solid fa-house"></i>
+        <span class="ms-2">Início</span>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <small class="text-white-50 ms-3">VENDAS</small>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-users"></i>
+        <span class="ms-2">Clientes</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-shopping-cart"></i>
+        <span class="ms-2">Vendas</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <span class="ms-2">Orçamentos</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-box"></i>
+        <span class="ms-2">Produtos</span>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <small class="text-white-50 ms-3">RELATÓRIOS</small>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-chart-bar"></i>
+        <span class="ms-2">Vendas</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-chart-line"></i>
+        <span class="ms-2">Performance</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span class="ms-2">Análises</span>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <small class="text-white-50 ms-3">COMUNICAÇÃO</small>
+</li>
+
+<li class="nav-item">
+    <a href="{% url 'comercial:whatsapp' %}" class="nav-link {% if 'whatsapp' in request.path %}text-warning{% else %}text-light{% endif %}">
+        <i class="fab fa-whatsapp"></i>
+        <span class="ms-2">WhatsApp</span>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <small class="text-white-50 ms-3">CONFIGURAÇÕES</small>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link text-light">
+        <i class="fa-solid fa-cogs"></i>
+        <span class="ms-2">Preferências</span>
+    </a>
+</li>

@@ -2683,3 +2683,428 @@ INFO 2025-08-06 14:23:28,746 runserver [mHTTP GET /static/fa-brands-400.32a863c
 INFO 2025-08-06 14:23:28,751 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:52776][0m
 INFO 2025-08-06 14:23:32,117 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
 INFO 2025-08-06 14:23:32,126 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:52776][0m
+INFO 2025-08-06 18:58:27,632 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 18:58:32,534 runserver [32mHTTP GET / 302 [0.03, 127.0.0.1:50710][0m
+INFO 2025-08-06 18:58:32,596 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 18:58:32,618 runserver [mHTTP GET /administracao/ 200 [0.08, 127.0.0.1:50710][0m
+INFO 2025-08-06 18:58:32,640 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:50718][0m
+INFO 2025-08-06 18:58:32,640 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:50714][0m
+INFO 2025-08-06 18:58:32,640 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50710][0m
+INFO 2025-08-06 18:58:32,642 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50714][0m
+INFO 2025-08-06 18:58:32,657 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:50714][0m
+INFO 2025-08-06 18:58:32,673 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50718][0m
+INFO 2025-08-06 18:58:32,673 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50714][0m
+INFO 2025-08-06 18:58:41,425 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 18:58:41,507 log Internal Server Error: /comercial/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 891, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 88, in __getitem__
+    raise KeyError(key)
+KeyError: 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 897, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 907, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 284, in _get_response_async
+    response = await sync_to_async(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 182, in render
+    template = self.template.resolve(context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 743, in resolve
+    arg_vals.append(arg.resolve(context))
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 854, in resolve
+    value = self._resolve_lookup(context)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 914, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [area] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <core.views.comercial.base.HomeView object at 0x7fa3644b24d0>, 'title': 'Área Comercial'}]
+ERROR 2025-08-06 18:58:41,511 runserver [35;1mHTTP GET /comercial/ 500 [0.10, 127.0.0.1:50710][0m
+INFO 2025-08-06 19:02:54,492 autoreload /home/thiago/Projetos/gruporom/core/templatetags/core_tags.py changed, reloading.
+INFO 2025-08-06 19:02:54,835 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:03:36,356 autoreload /home/thiago/Projetos/gruporom/core/templatetags/core_tags.py changed, reloading.
+INFO 2025-08-06 19:03:36,708 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:08:20,950 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 19:08:20,969 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:59118][0m
+INFO 2025-08-06 19:11:39,305 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 19:11:39,333 runserver [mHTTP GET /administracao/ 200 [0.07, 127.0.0.1:55046][0m
+INFO 2025-08-06 19:11:39,376 runserver [mHTTP GET /static/app.css 200 [0.02, 127.0.0.1:55052][0m
+INFO 2025-08-06 19:11:39,379 runserver [mHTTP GET /static/app.js 200 [0.02, 127.0.0.1:55058][0m
+INFO 2025-08-06 19:11:39,380 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:55046][0m
+INFO 2025-08-06 19:11:39,387 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:55052][0m
+INFO 2025-08-06 19:11:39,409 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:55058][0m
+INFO 2025-08-06 19:11:39,409 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:55052][0m
+INFO 2025-08-06 19:11:39,413 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:55058][0m
+INFO 2025-08-06 19:11:46,914 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+ERROR 2025-08-06 19:11:46,960 log Internal Server Error: /comercial/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 891, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 88, in __getitem__
+    raise KeyError(key)
+KeyError: 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 897, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 907, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'area'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 284, in _get_response_async
+    response = await sync_to_async(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 182, in render
+    template = self.template.resolve(context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 743, in resolve
+    arg_vals.append(arg.resolve(context))
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 854, in resolve
+    value = self._resolve_lookup(context)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 914, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [area] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <core.views.comercial.base.HomeView object at 0x7fbf981c9f50>, 'title': 'Área Comercial'}]
+ERROR 2025-08-06 19:11:46,962 runserver [35;1mHTTP GET /comercial/ 500 [0.08, 127.0.0.1:55058][0m
+INFO 2025-08-06 19:12:27,118 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:12:27,479 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:14:49,920 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:14:50,268 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:16:00,115 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:16:00,461 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:16:19,726 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:16:20,089 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:16:57,624 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-06 19:16:57,980 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:17:12,166 autoreload /home/thiago/Projetos/gruporom/core/urls/base.py changed, reloading.
+INFO 2025-08-06 19:17:12,513 autoreload Watching for file changes with StatReloader
+WARNING 2025-08-06 19:17:33,249 runserver [31;1mHTTP GET /comercial/ 403 [0.04, 127.0.0.1:34084][0m
+INFO 2025-08-06 19:17:39,446 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 19:17:39,474 runserver [mHTTP GET /administracao/usuarios/ 200 [0.07, 127.0.0.1:34084][0m
+WARNING 2025-08-06 19:17:47,485 runserver [31;1mHTTP GET /comercial/ 403 [0.03, 127.0.0.1:34084][0m
+INFO 2025-08-06 19:19:19,029 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:19:19,389 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:19:39,738 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/base.py changed, reloading.
+INFO 2025-08-06 19:19:40,085 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:20:42,812 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/base.py changed, reloading.
+INFO 2025-08-06 19:20:43,173 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:20:52,372 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/base.py changed, reloading.
+INFO 2025-08-06 19:20:52,734 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:21:14,075 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 19:21:14,440 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:21:21,540 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 19:21:21,876 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:21:35,134 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:21:35,475 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:21:54,789 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 19:21:55,138 autoreload Watching for file changes with StatReloader
+ERROR 2025-08-06 19:22:25,214 log Internal Server Error: /administracao/usuarios/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py", line 43, in lista
+    'area': request.area,
+            ^^^^^^^^^^^^
+AttributeError: 'ASGIRequest' object has no attribute 'area'
+ERROR 2025-08-06 19:22:25,218 runserver [35;1mHTTP GET /administracao/usuarios/ 500 [0.07, 127.0.0.1:50648][0m
+INFO 2025-08-06 19:23:15,127 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:23:15,491 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:23:39,891 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:23:40,239 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:25:17,217 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:25:17,574 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:25:28,808 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:25:29,159 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:25:35,324 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:25:35,678 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:25:43,873 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:25:44,212 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:25:51,397 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:25:51,762 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:26:13,120 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-06 19:26:13,476 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:26:23,685 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-06 19:26:24,034 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:26:46,357 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-06 19:26:46,706 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 19:29:52,809 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 19:29:52,829 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:56250][0m
+INFO 2025-08-06 19:29:58,236 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 19:29:58,256 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:56250][0m
+INFO 2025-08-06 20:42:28,244 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/base.py changed, reloading.
+INFO 2025-08-06 20:42:28,598 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:42:43,851 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/base.py changed, reloading.
+INFO 2025-08-06 20:42:44,193 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:43:50,955 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-06 20:43:51,304 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:44:22,708 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 20:44:22,728 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:59806][0m
+INFO 2025-08-06 20:44:22,740 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:59806][0m
+ERROR 2025-08-06 20:44:25,962 log Internal Server Error: /comercial/whatsapp/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 18, in dashboard
+    recent_templates = WhatsAppTemplate.objects.select_related('account').order_by('-created_at')[:5]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'created_at' into field. Choices are: account, account_id, atualizado_em, body_text, buttons_config, category, criado_em, criado_por, criado_por_id, display_name, footer_text, has_buttons, header_text, id, is_active, language, name, rejection_reason, status, template_id, variables_examples
+ERROR 2025-08-06 20:44:25,966 runserver [35;1mHTTP GET /comercial/whatsapp/ 500 [0.10, 127.0.0.1:59806][0m
+INFO 2025-08-06 20:46:50,229 autoreload /home/thiago/Projetos/gruporom/core/models/whatsapp.py changed, reloading.
+INFO 2025-08-06 20:46:50,596 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:47:02,836 autoreload /home/thiago/Projetos/gruporom/core/models/whatsapp.py changed, reloading.
+INFO 2025-08-06 20:47:03,192 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:47:41,673 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-06 20:47:42,016 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:49:49,121 autoreload /home/thiago/Projetos/gruporom/core/models/__init__.py changed, reloading.
+INFO 2025-08-06 20:49:49,453 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:58:26,124 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 20:58:26,165 runserver [mHTTP GET /administracao/ 200 [0.09, 127.0.0.1:37044][0m
+INFO 2025-08-06 20:58:29,764 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 20:58:29,778 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:37046][0m
+INFO 2025-08-06 20:58:36,429 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 20:58:36,444 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:37046][0m
+INFO 2025-08-06 20:58:41,922 autoreload /home/thiago/Projetos/gruporom/core/services/whatsapp_api.py changed, reloading.
+INFO 2025-08-06 20:58:42,280 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 20:59:03,623 autoreload /home/thiago/Projetos/gruporom/core/services/whatsapp_api.py changed, reloading.
+INFO 2025-08-06 20:59:03,989 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 21:00:56,551 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:00:56,570 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:33750][0m
+INFO 2025-08-06 21:01:04,191 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:01:04,201 runserver [mHTTP GET /administracao/whatsapp/account/2/edit/ 200 [0.03, 127.0.0.1:33750][0m

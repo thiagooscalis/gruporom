@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models.deletion import ProtectedError
 from core.models import Pessoa
-from core.decorators import group_area_required
 from core.forms.pessoa import PessoaForm
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def lista(request):
     """
     View para listagem de pessoas
@@ -40,7 +39,6 @@ def lista(request):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        'area': request.area,
         'page_obj': page_obj,
         'search': search,
     }
@@ -49,7 +47,7 @@ def lista(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def nova_modal(request):
     """
     View para retornar o modal de criação de pessoa via HTMX
@@ -57,13 +55,12 @@ def nova_modal(request):
     form = PessoaForm()
     context = {
         'form': form,
-        'area': request.area,
     }
     return render(request, 'administracao/pessoas/modal_form.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def nova_modal_simples(request):
     """
     View para retornar o modal simplificado de criação de pessoa
@@ -72,14 +69,13 @@ def nova_modal_simples(request):
     form = PessoaForm()
     context = {
         'form': form,
-        'area': request.area,
     }
     return render(request, 'administracao/pessoas/modal_form_simples.html', context)
 
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def criar(request):
     """
     View para processar o formulário de criação de pessoa
@@ -93,21 +89,20 @@ def criar(request):
             
             # Retorna um redirect HTMX para recarregar a página
             response = HttpResponse()
-            response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/pessoas/')
+            response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/pessoas/')
             return response
         else:
             # Retorna o formulário com erros
             context = {
                 'form': form,
-                'area': request.area,
-            }
+                    }
             return render(request, 'administracao/pessoas/modal_form.html', context)
     
-    return redirect(f'/{request.area}/pessoas/')
+    return redirect('/administracao/pessoas/')
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def editar_modal(request, pk):
     """
     View para retornar o modal de edição de pessoa via HTMX
@@ -117,13 +112,12 @@ def editar_modal(request, pk):
     context = {
         'form': form,
         'pessoa': pessoa,
-        'area': request.area,
     }
     return render(request, 'administracao/pessoas/modal_edit.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def atualizar(request, pk):
     """
     View para processar o formulário de edição de pessoa
@@ -138,22 +132,21 @@ def atualizar(request, pk):
             
             # Retorna um redirect HTMX para recarregar a página
             response = HttpResponse()
-            response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/pessoas/')
+            response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/pessoas/')
             return response
         else:
             # Retorna o formulário com erros
             context = {
                 'form': form,
                 'pessoa': pessoa,
-                'area': request.area,
-            }
+                    }
             return render(request, 'administracao/pessoas/modal_edit.html', context)
     
-    return redirect(f'/{request.area}/pessoas/')
+    return redirect('/administracao/pessoas/')
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def excluir_modal(request, pk):
     """
     View para retornar o modal de confirmação de exclusão via HTMX
@@ -166,13 +159,12 @@ def excluir_modal(request, pk):
     context = {
         'pessoa': pessoa,
         'tem_usuario': tem_usuario,
-        'area': request.area,
     }
     return render(request, 'administracao/pessoas/modal_delete.html', context)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def excluir(request, pk):
     """
     View para processar a exclusão de pessoa
@@ -189,7 +181,7 @@ def excluir(request, pk):
         
         # Retorna um redirect HTMX para recarregar a página
         response = HttpResponse()
-        response['HX-Redirect'] = request.META.get('HTTP_REFERER', f'/{request.area}/pessoas/')
+        response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/pessoas/')
         return response
     
-    return redirect(f'/{request.area}/pessoas/')
+    return redirect('/administracao/pessoas/')

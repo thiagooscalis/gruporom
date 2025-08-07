@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Max
 from django.db import models
@@ -15,7 +15,6 @@ import json
 import logging
 
 from core.models import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate
-from core.decorators import group_area_required
 from core.services.whatsapp_api import WhatsAppAPIService, WhatsAppWebhookProcessor
 from core.forms.whatsapp import WhatsAppAccountForm, WhatsAppAccountTestForm, WhatsAppTemplateForm
 
@@ -24,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def dashboard(request):
     """
     Dashboard principal do WhatsApp
@@ -65,7 +64,6 @@ def dashboard(request):
     templates = WhatsAppTemplate.objects.select_related('account').order_by('-criado_em')[:5]
     
     context = {
-        'area': request.area,
         'total_accounts': total_accounts,
         'total_contacts': total_contacts,
         'messages_24h': messages_24h,
@@ -80,7 +78,7 @@ def dashboard(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def accounts_list(request):
     """
     Lista de contas WhatsApp
@@ -108,7 +106,6 @@ def accounts_list(request):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        'area': request.area,
         'page_obj': page_obj,
         'search': search,
     }
@@ -178,7 +175,7 @@ def webhook(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def webhook_debug(request, account_id):
     """
     View para debug do webhook - mostra informações da conta e testa conectividade
@@ -220,7 +217,7 @@ def webhook_debug(request, account_id):
 # ==================== VIEWS DE TEMPLATES ====================
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def templates_list(request, account_id):
     """
     Lista de templates de uma conta
@@ -278,7 +275,7 @@ def templates_list(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def template_create_modal(request):
     """
     Modal para criar template
@@ -311,7 +308,7 @@ def template_create_modal(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def template_edit_modal(request, template_id):
     """
     Modal para editar template
@@ -348,7 +345,7 @@ def template_edit_modal(request, template_id):
 
 
 @login_required
-@group_area_required  
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())  
 def template_delete_modal(request, template_id):
     """
     Modal para excluir template
@@ -372,7 +369,7 @@ def template_delete_modal(request, template_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def template_preview_modal(request, template_id):
     """
     Modal para prévia do template
@@ -417,7 +414,7 @@ def template_preview_modal(request, template_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 @require_http_methods(["POST"])
 def template_submit_approval(request, template_id):
     """
@@ -487,7 +484,7 @@ def template_submit_approval(request, template_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def api_permissions_test(request, account_id):
     """
     Testa as permissões da API do WhatsApp para uma conta
@@ -502,8 +499,7 @@ def api_permissions_test(request, account_id):
         result = api_service.test_api_permissions()
         
         context = {
-            'area': request.area,
-            'account': account,
+                'account': account,
             'test_result': result,
             'tests': result.get('tests', [])
         }
@@ -518,7 +514,7 @@ def api_permissions_test(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 @require_http_methods(["POST"])
 def template_check_status(request, template_id):
     """
@@ -579,7 +575,7 @@ def template_check_status(request, template_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def contacts_list(request, account_id):
     """
     Lista de contatos de uma conta
@@ -612,7 +608,6 @@ def contacts_list(request, account_id):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        'area': request.area,
         'account': account,
         'page_obj': page_obj,
         'search': search,
@@ -622,7 +617,7 @@ def contacts_list(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def messages_list(request):
     """
     Lista de todas as mensagens
@@ -671,7 +666,6 @@ def messages_list(request):
     accounts = WhatsAppAccount.objects.filter(is_active=True)
     
     context = {
-        'area': request.area,
         'page_obj': page_obj,
         'accounts': accounts,
         'filters': {
@@ -690,7 +684,7 @@ def messages_list(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def account_create_modal(request):
     """
     Modal para criar nova conta WhatsApp
@@ -714,7 +708,7 @@ def account_create_modal(request):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def account_edit_modal(request, account_id):
     """
     Modal para editar conta WhatsApp
@@ -741,7 +735,7 @@ def account_edit_modal(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def account_delete_modal(request, account_id):
     """
     Modal para excluir conta WhatsApp
@@ -794,7 +788,7 @@ def account_delete_modal(request, account_id):
 
 
 @login_required
-@group_area_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
 def account_test_modal(request, account_id):
     """
     Modal para testar conectividade da conta WhatsApp

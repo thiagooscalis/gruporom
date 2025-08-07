@@ -1,4 +1,5 @@
 {% load static %}
+{% load core_tags %}
 <aside id="aside" class='d-none d-lg-block shadow h-100' style="background-color: #333333;">
     <div class="text-center">
         <img src="{% static 'logo_gruporom.svg' %}" alt="logo" class='img-fluid p-4' style="max-width: 150px">
@@ -33,5 +34,14 @@
     
     <ul class="nav flex-column">
         {% include 'menu/'|add:area|add:'.html' %}
+        
+        {% if user.groups.count > 1 %}
+        <hr class="my-3 border-secondary">
+        <li class="nav-item">
+            <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#modalAreas">
+                <i class="fas fa-fw fa-th-large text-light"></i> Áreas de Acesso
+            </a>
+        </li>
+        {% endif %}
     </ul>
 </aside>
