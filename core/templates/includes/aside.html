@@ -1,6 +1,6 @@
 {% load static %}
 {% load core_tags %}
-<aside id="aside" class='d-none d-lg-block shadow h-100' style="background-color: #333333;">
+<aside id="aside" class='d-none d-lg-block shadow h-100' style="background-color: #333333; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
     <div class="text-center">
         <img src="{% static 'logo_gruporom.svg' %}" alt="logo" class='img-fluid p-4' style="max-width: 150px">
     </div>
@@ -37,7 +37,7 @@
         
         {% if user.groups.count > 1 %}
         <hr class="my-3 border-secondary">
-        <li class="nav-item">
+        <li class="nav-item" style="padding-bottom: 1rem;">
             <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#modalAreas">
                 <i class="fas fa-fw fa-th-large text-light"></i> Áreas de Acesso
             </a>

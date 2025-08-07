@@ -23,6 +23,11 @@ aside#aside {
     width: 250px;
     height: 100%;
     z-index: 1050;
+    
+    // Esconder barra de rolagem
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 main#main {

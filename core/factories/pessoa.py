@@ -22,7 +22,6 @@ class PessoaFactory(DjangoModelFactory):
     cep = factory.Faker("postcode", locale="pt_BR")
     endereco = factory.Faker("street_name", locale="pt_BR")
     numero = factory.Faker("building_number", locale="pt_BR")
-    complemento = factory.Faker("secondary_address", locale="pt_BR")
     bairro = factory.Faker("bairro", locale="pt_BR")
     cidade = factory.Faker("city", locale="pt_BR")
     estado = factory.Faker("estado_sigla", locale="pt_BR")

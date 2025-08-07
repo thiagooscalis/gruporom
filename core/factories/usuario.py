@@ -8,6 +8,7 @@ from core.factories.pessoa import PessoaFactory
 class UsuarioFactory(DjangoModelFactory):
     class Meta:
         model = Usuario
+        skip_postgeneration_save = True
 
     username = factory.Sequence(lambda n: f"usuario{n}")
     pessoa = factory.SubFactory(PessoaFactory)
@@ -25,6 +26,7 @@ class UsuarioFactory(DjangoModelFactory):
             obj.set_password(extracted)
         else:
             obj.set_password("senha123")
+        obj.save()
 
     @factory.post_generation
     def groups(obj, create, extracted, **kwargs):

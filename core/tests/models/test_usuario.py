@@ -183,7 +183,8 @@ class TestUsuarioModel:
         
         # Senha não deve ser armazenada em texto plano
         assert usuario.password != "senhaSegura123"
-        assert usuario.password.startswith("pbkdf2_sha256$")
+        # Em testes usa MD5 hasher para performance
+        assert usuario.password.startswith(("pbkdf2_sha256$", "md5$"))
         
         # check_password deve funcionar
         assert usuario.check_password("senhaSegura123") is True

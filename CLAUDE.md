@@ -78,17 +78,34 @@ gruporom/
   - `Cargo`: Cargos organizacionais com salário base
   - `Turno`: Turnos de trabalho (manhã, tarde, noite)
   - `Cambio`: Sistema automático de cotação USD/BRL via AwesomeAPI
+  - **Sistema de Turismo Completo**:
+    - `CiaArea`: Companhias aéreas com código IATA único
+    - `Pais`: Países com código ISO de 2 dígitos único
+    - `Cidade`: Cidades vinculadas a países
+    - `Aeroporto`: Aeroportos com código IATA e timezone
+    - `Caravana`: Caravanas com empresa, promotor, líderes e configurações
+    - `Incluso`: Itens inclusos/não inclusos nos pacotes
+    - `Hotel`: Hotéis com endereço e cidade
+    - `Bloqueio`: Bloqueios de passagens com países, hotéis e inclusos
+    - `Passageiro`: Passageiros vinculados a bloqueios (Guia, VIP, Free)
+    - `Voo`: Voos com companhia, aeroportos e horários
+    - `DiaRoteiro`: Roteiro dia-a-dia dos bloqueios
+    - `Extra`: Extras opcionais com valores
+    - `Tarefa`: Tarefas operacionais (Aéreo, Terrestre, Passageiro)
+    - `Nota`: Sistema de notas com threads de resposta
   - **WhatsApp Business**: Contas, templates, mensagens e integração API
 - **Configuração**: PostgreSQL (prod) / SQLite (dev)
 - **Localização**: PT-BR, timezone America/Sao_Paulo
+- **Padrão ForeignKey**: Todos os relacionamentos ForeignKey usam `on_delete=models.PROTECT` por padrão para evitar exclusões acidentais
 
 ### 🛠️ Comandos e Ferramentas
 - **Seeder**: `python manage.py seed` - Cria usuário admin padrão
 - **Build**: `npm run build` - Compila assets
+- **Testes**: `./test.sh` - Executa 135 testes com InMemoryStorage (sem warnings)
 - **Usuário Admin**: 
   - Username: `thiago`
   - Password: `admin123`
-  - Grupo: `Administração`
+  - Grupos: `Administração`, `Comercial`, `Operacional`
 
 ## ✅ Funcionalidades Implementadas
 
@@ -175,24 +192,45 @@ gruporom/
 - [x] **Estatísticas em Tempo Real**: Conversas pendentes, minhas conversas
 
 ### 8. Sistema Multi-Área
-- [x] **Grupos de Acesso**: Administração, Comercial (expansível)
+- [x] **Grupos de Acesso**: Administração, Comercial, Operacional (expansível)
 - [x] **Menu de Alternância**: Modal para trocar entre áreas rapidamente
 - [x] **Context Processor**: Detecção automática da área atual
 - [x] **Autorização Granular**: `user_passes_test` para cada área
 - [x] **URLs Organizadas**: Estrutura modular por área/funcionalidade
 
-### 9. Administração Avançada
+### 9. Sistema de Turismo Empresarial
+- [x] **Modelos Relacionais Completos**: 14 models interconectados para gestão de turismo
+- [x] **Caravanas e Líderes**: Sistema de caravanas com múltiplos líderes e controle de tipos
+- [x] **Bloqueios Inteligentes**: Gestão de bloqueios com países, hotéis, inclusos e extras
+- [x] **Controle de Passageiros**: Sistema de passageiros com tipos especiais (Guia, VIP, Free)
+- [x] **Gestão de Voos**: Voos completos com companhias, aeroportos e horários timezone-aware
+- [x] **Roteiros Detalhados**: Sistema de dias de roteiro organizados por bloqueio
+- [x] **Tarefas Operacionais**: Controle de tarefas por categoria (Aéreo, Terrestre, Passageiro)
+- [x] **Sistema de Notas**: Comunicação interna com threads de resposta
+
+### 10. Sistema de Testes Completo
+- [x] **135 Testes Implementados**: Cobertura completa de todos os models e factories
+- [x] **InMemoryStorage**: Testes não salvam arquivos no disco
+- [x] **Timezone-Aware**: Todos os DateTimeFields com timezone correto
+- [x] **Factory-Boy Otimizado**: 14 factories com relacionamentos ManyToMany
+- [x] **Zero Warnings**: Configuração limpa sem deprecation warnings
+- [x] **Performance Otimizada**: MD5 hasher, cache desabilitado, migrações aceleradas
+- [x] **Script Personalizado**: `./test.sh` para execução com configurações corretas
+
+### 11. Administração Avançada
 - [x] Dashboard simplificado com estatísticas essenciais
 - [x] Controle de acesso granular por grupos
 - [x] Configurações de segurança robustas (CSRF, HSTS, CSP)
 - [x] Interface administrativa Django restrita
 
-## 🚀 Status Atual: Sistema Produtivo Completo Multi-Área
+## 🚀 Status Atual: Sistema Empresarial Completo com Módulo de Turismo
 
 **O projeto está em estado PRODUTIVO COMPLETO** com:
-- **2 áreas operacionais**: Administração (gestão) + Comercial (atendimento)
-- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial)
+- **3 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo)
+- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial)  
+- **Sistema de turismo empresarial**: 14 models interconectados para gestão completa
 - **Sistema de conversas**: Webhook → Fila → Atribuição → Chat individual
+- **135 testes implementados**: Sistema de testes robusto com InMemoryStorage
 - **Máscaras inteligentes** e **interface otimizada**
 - **Segurança robusta** e **arquitetura escalável**
 
@@ -265,6 +303,33 @@ npm run dev  # modo watch
 uv run python test_whatsapp_flow.py
 ```
 
+### Comandos de Testes
+```bash
+# Executar todos os 135 testes (recomendado)
+./test.sh
+
+# Parar no primeiro erro
+./test.sh -x
+
+# Executar testes específicos
+./test.sh core/tests/test_models.py::CiaAreaModelTest
+
+# Modo verbose
+./test.sh -v
+
+# Com cobertura de código
+./test.sh --cov=core
+
+# Executar apenas factories
+./test.sh core/tests/test_factories.py
+
+# Executar apenas models
+./test.sh core/tests/test_models.py
+
+# Método alternativo (manual)
+DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
+```
+
 ### URLs Principais
 - `/` - Redirecionamento automático por grupo
 - `/login/` - Página de login responsiva
@@ -326,8 +391,8 @@ uv run python test_whatsapp_flow.py
 ---
 
 **Última atualização**: 07/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, área comercial de atendimento, multi-área e máscaras inteligentes  
-**Módulos**: 9+ modelos de dados, 8+ CRUDs funcionais, WhatsApp Business com atendimento comercial completo, sistema de câmbio automático, área comercial funcional
+**Status**: Sistema empresarial completo com módulo de turismo, WhatsApp Business, 3 áreas operacionais e 135 testes implementados  
+**Módulos**: 23+ modelos de dados (14 novos do sistema de turismo), CRUDs funcionais, WhatsApp Business com atendimento comercial, sistema de câmbio automático, área operacional completa, sistema de testes robusto
 
 ## 🆕 Últimas Atualizações
 
