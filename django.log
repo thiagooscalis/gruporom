@@ -3209,3 +3209,99 @@ INFO 2025-08-07 10:16:55,598 runserver [mHTTP GET /static/logo_inclusive.png 20
 INFO 2025-08-07 10:16:55,617 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34962][0m
 INFO 2025-08-07 10:16:55,621 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:34962][0m
 INFO 2025-08-07 10:16:55,621 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34958][0m
+INFO 2025-08-07 10:34:07,184 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 10:34:35,898 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:34:35,916 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.04, 127.0.0.1:53684][0m
+INFO 2025-08-07 10:34:35,960 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:53706][0m
+INFO 2025-08-07 10:34:35,961 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:53694][0m
+INFO 2025-08-07 10:34:35,962 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:53684][0m
+INFO 2025-08-07 10:34:35,967 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:53706][0m
+INFO 2025-08-07 10:34:35,989 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:53706][0m
+INFO 2025-08-07 10:34:35,997 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:53706][0m
+INFO 2025-08-07 10:34:35,998 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:53694][0m
+ERROR 2025-08-07 10:34:45,291 log Internal Server Error: /inclusive/termos/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/base.py", line 46, in termos_inclusive
+    return render(request, 'inclusive/termos.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: inclusive/termos.html
+ERROR 2025-08-07 10:34:45,293 runserver [35;1mHTTP GET /inclusive/termos/ 500 [0.03, 127.0.0.1:53706][0m
+WARNING 2025-08-07 10:34:45,311 runserver [33mHTTP GET /favicon.ico 404 [0.01, 127.0.0.1:53706][0m
+INFO 2025-08-07 10:35:02,017 autoreload /home/thiago/Projetos/gruporom/config/urls.py changed, reloading.
+INFO 2025-08-07 10:35:02,358 autoreload Watching for file changes with StatReloader
+ERROR 2025-08-07 10:35:55,499 log Internal Server Error: /inclusive/termos/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/base.py", line 46, in termos_inclusive
+    return render(request, 'inclusive/termos.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: inclusive/termos.html
+ERROR 2025-08-07 10:35:55,501 runserver [35;1mHTTP GET /inclusive/termos/ 500 [0.05, 127.0.0.1:42386][0m
+INFO 2025-08-07 10:39:05,170 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:39:05,187 runserver [mHTTP GET /inclusive/termos/ 200 [0.04, 127.0.0.1:57562][0m
+INFO 2025-08-07 10:39:05,222 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:57574][0m
+INFO 2025-08-07 10:39:05,223 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:57562][0m
+INFO 2025-08-07 10:39:05,224 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:57578][0m
+INFO 2025-08-07 10:39:05,227 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:57574][0m
+INFO 2025-08-07 10:39:05,258 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:57574][0m
+INFO 2025-08-07 10:39:05,258 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:57578][0m
+INFO 2025-08-07 10:39:05,263 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:57578][0m

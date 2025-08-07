@@ -37,3 +37,10 @@ def privacidade_inclusive(request):
     View pública para exibir a política de privacidade da Inclusive Travel.
     """
     return render(request, 'inclusive/privacidade.html')
+
+
+def termos_inclusive(request):
+    """
+    View pública para exibir os termos de serviço da Inclusive Travel.
+    """
+    return render(request, 'inclusive/termos.html')

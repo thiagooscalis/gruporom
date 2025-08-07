@@ -146,6 +146,7 @@ LOGIN_EXEMPT_URLS = [
     r"^/webhook/",  # Todos os webhooks
     r"^/api/public/",  # APIs públicas futuras
     r"^/inclusive/privacidade/",  # Página de privacidade da Inclusive Travel
+    r"^/inclusive/termos/",  # Página de termos de serviço da Inclusive Travel
 ]
 
 # Crispy Forms
