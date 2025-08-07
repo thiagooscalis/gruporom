@@ -24,8 +24,12 @@ gruporom/
 │   ├── models/
 │   │   ├── pessoa.py        # Model Pessoa (dados pessoais)
 │   │   └── usuario.py       # Model Usuario (AbstractBaseUser)
+│   ├── data/
+│   │   └── paises.json      # Base de dados com 193 países (nome + ISO-2)
 │   ├── seeds/
-│   │   └── usuario.py       # Seeder para criar usuário admin
+│   │   ├── usuario.py       # Seeder para criar usuário admin
+│   │   ├── whatsapp.py      # Seeder para dados de teste WhatsApp
+│   │   └── pais.py          # Seeder otimizado para popular países
 │   ├── management/commands/
 │   │   └── seed.py          # Command para executar seeders
 │   ├── templates/
@@ -100,7 +104,8 @@ gruporom/
 - **Padrão ForeignKey**: Todos os relacionamentos ForeignKey usam `on_delete=models.PROTECT` por padrão para evitar exclusões acidentais
 
 ### 🛠️ Comandos e Ferramentas
-- **Seeder**: `python manage.py seed` - Cria usuário admin padrão
+- **Seeder**: `python manage.py seed` - Popula dados iniciais (usuário admin, países, whatsapp)
+- **Seeder Específico**: `python manage.py seed --seeder paises` - Popula apenas países (193 países)
 - **Build**: `npm run build` - Compila assets
 - **Testes**: `./test.sh` - Executa 135 testes com InMemoryStorage (sem warnings)
 - **Usuário Admin**: 
@@ -140,6 +145,7 @@ gruporom/
 - [x] **Cargo**: Estrutura organizacional com salários base
 - [x] **Turno**: Gestão de horários de trabalho
 - [x] **Cambio**: Cotação automática USD/BRL via API externa
+- [x] **Pais**: Sistema de países com códigos ISO-2 (193 países)
 - [x] **WhatsAppConversation**: Gestão de conversas comerciais com atendentes
 - [x] Choices centralizados e validações robustas
 - [x] Relacionamentos otimizados com ForeignKey/ManyToMany
@@ -445,10 +451,23 @@ if request.headers.get('HX-Request'):
 ---
 
 **Última atualização**: 07/08/2025  
-**Status**: Sistema empresarial completo com paginação HTMX moderna, WhatsApp Business integrado, multi-área operacional e padrões de UX avançados  
-**Módulos**: 9+ modelos de dados empresariais, CRUDs com "Carregar mais", WhatsApp Business completo, sistema de câmbio automático, área comercial de atendimento, testes automatizados robustos
+**Status**: Sistema empresarial completo com base de dados internacional, paginação HTMX moderna, WhatsApp Business integrado e multi-área operacional  
+**Módulos**: 10+ modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Cambio, Pais, WhatsApp), seeds otimizados, CRUDs com "Carregar mais", área comercial completa
 
 ## 🆕 Últimas Atualizações
+
+### Agosto 2025 - Sistema de Países e Seeds Otimizados
+- **🌍 Base de Dados Completa**: 193 países com nomes em português e códigos ISO-2
+- **📁 Arquivo JSON Estruturado**: `/core/data/paises.json` com formato padronizado
+- **⚡ Seeder Otimizado**: 
+  - Verificação eficiente com 1 consulta vs 193 individuais
+  - Bulk insert para máxima performance
+  - Zero duplicatas com verificação por conjunto de ISOs
+- **🔧 Integração Command Seed**: 
+  - `python manage.py seed --seeder paises` - Seeder específico
+  - `python manage.py seed` - Inclui países no seeder geral
+- **📊 Feedback Visual**: Emojis e contadores informativos
+- **🚀 Pronto para Uso**: Model Pais disponível para formulários Django
 
 ### Agosto 2025 - Paginação Moderna "Carregar Mais"
 - **📱 UX Moderna**: Substituição da paginação tradicional por botão "Carregar mais" com HTMX

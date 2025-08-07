@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from core.seeds.usuario import UsuarioSeeder
 from core.seeds.whatsapp import seed_whatsapp
+from core.seeds.pais import seed as seed_paises
 
 
 class Command(BaseCommand):
@@ -33,6 +34,11 @@ class Command(BaseCommand):
                 self.style.SUCCESS('Executando WhatsApp Seeder...')
             )
             seed_whatsapp()
+        elif seeder_name.lower() == 'paises':
+            self.stdout.write(
+                self.style.SUCCESS('Executando Países Seeder...')
+            )
+            seed_paises()
         else:
             self.stdout.write(
                 self.style.ERROR(f'Seeder "{seeder_name}" não encontrado.')
@@ -52,6 +58,7 @@ class Command(BaseCommand):
         # Função seeders
         function_seeders = [
             ('WhatsApp Seeder', seed_whatsapp),
+            ('Países Seeder', seed_paises),
         ]
         
         for seeder_name, seeder_class in seeders:
