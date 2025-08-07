@@ -92,6 +92,31 @@ class WhatsAppAccountForm(forms.ModelForm):
         # Filtra apenas usuários ativos para responsavel
         self.fields['responsavel'].queryset = Usuario.objects.filter(is_active=True)
         
+        # Se estiver editando, oculta os valores sensíveis para segurança
+        if self.instance and self.instance.pk:
+            # Não mostra o app_secret atual (PasswordInput já oculta)
+            self.fields['app_secret'].widget.attrs['placeholder'] = 'Digite apenas para alterar'
+            self.fields['app_secret'].required = False
+            self.initial['app_secret'] = ''  # Limpa o valor inicial
+            
+            # Mascara parcialmente o access_token
+            if self.instance.access_token:
+                # Mostra apenas os primeiros e últimos caracteres
+                token = self.instance.access_token
+                if len(token) > 20:
+                    masked = f"{token[:10]}...{token[-10:]}"
+                else:
+                    masked = "***"
+                self.fields['access_token'].widget.attrs['placeholder'] = f'Token atual: {masked} (Digite apenas para alterar)'
+                self.fields['access_token'].required = False
+                self.initial['access_token'] = ''  # Limpa o valor inicial
+            
+            # Oculta o webhook_verify_token
+            if self.instance.webhook_verify_token:
+                self.fields['webhook_verify_token'].widget.attrs['placeholder'] = 'Token configurado (Digite apenas para alterar)'
+                self.fields['webhook_verify_token'].required = False
+                self.initial['webhook_verify_token'] = ''  # Limpa o valor inicial
+        
         # Configuração do Crispy Forms
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -110,6 +135,10 @@ class WhatsAppAccountForm(forms.ModelForm):
             Row(
                 Column('phone_number_id', css_class='col-md-6'),
                 Column('business_account_id', css_class='col-md-6'),
+            ),
+            Row(
+                Column('app_id', css_class='col-md-6'),
+                Column('app_secret', css_class='col-md-6'),
             ),
             'access_token',
             Row(
@@ -170,6 +199,31 @@ class WhatsAppAccountForm(forms.ModelForm):
                 })
         
         return cleaned_data
+    
+    def save(self, commit=True):
+        """
+        Sobrescreve o save para não atualizar campos sensíveis se estiverem vazios
+        """
+        instance = super().save(commit=False)
+        
+        # Se estiver editando e os campos sensíveis estiverem vazios, mantém os valores atuais
+        if self.instance.pk:
+            if not self.cleaned_data.get('app_secret'):
+                # Mantém o valor atual do banco
+                instance.app_secret = WhatsAppAccount.objects.get(pk=self.instance.pk).app_secret
+            
+            if not self.cleaned_data.get('access_token'):
+                # Mantém o valor atual do banco
+                instance.access_token = WhatsAppAccount.objects.get(pk=self.instance.pk).access_token
+            
+            if not self.cleaned_data.get('webhook_verify_token'):
+                # Mantém o valor atual do banco
+                instance.webhook_verify_token = WhatsAppAccount.objects.get(pk=self.instance.pk).webhook_verify_token
+        
+        if commit:
+            instance.save()
+        
+        return instance
 
 
 class WhatsAppAccountTestForm(forms.Form):

@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from .pessoa import Pessoa
 from .usuario import Usuario
+from ..fields import EncryptedCharField, EncryptedTextField
 
 
 class WhatsAppAccount(models.Model):
@@ -50,22 +51,23 @@ class WhatsAppAccount(models.Model):
         help_text="App ID obtido no Facebook for Developers"
     )
     
-    app_secret = models.CharField(
-        max_length=255,
+    app_secret = EncryptedTextField(  # Mudado para TextField sem limite
         blank=True,
         verbose_name="Chave Secreta do Aplicativo", 
-        help_text="App Secret obtido no Facebook for Developers"
+        help_text="App Secret obtido no Facebook for Developers",
+        show_encrypted_in_admin=False
     )
     
-    access_token = models.TextField(
+    access_token = EncryptedTextField(
         verbose_name="Token de Acesso",
-        help_text="Token de acesso permanente para a API"
+        help_text="Token de acesso permanente para a API",
+        show_encrypted_in_admin=False
     )
     
-    webhook_verify_token = models.CharField(
-        max_length=255,
+    webhook_verify_token = EncryptedTextField(  # Mudado para TextField sem limite
         verbose_name="Token de Verificação Webhook",
-        help_text="Token para verificação do webhook"
+        help_text="Token para verificação do webhook",
+        show_encrypted_in_admin=False
     )
     
     business_account_id = models.CharField(

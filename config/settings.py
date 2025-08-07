@@ -24,6 +24,10 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
+# Chave para criptografia de campos sensíveis
+# IMPORTANTE: Configure esta variável em produção!
+ENCRYPTION_KEY = os.getenv("DJANGO_ENCRYPTION_KEY")
+
 # Application definition
 
 INSTALLED_APPS = [

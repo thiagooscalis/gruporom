@@ -3712,3 +3712,407 @@ INFO 2025-08-07 14:29:57,339 runserver [mHTTP GET /static/logo_gruporom.svg 200
 INFO 2025-08-07 14:29:57,360 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:34926][0m
 INFO 2025-08-07 14:29:57,361 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34920][0m
 INFO 2025-08-07 14:29:57,364 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34926][0m
+INFO 2025-08-07 17:41:45,039 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 17:42:00,966 runserver [32mHTTP GET / 302 [0.06, 127.0.0.1:42574][0m
+INFO 2025-08-07 17:42:01,014 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 17:42:01,040 runserver [mHTTP GET /administracao/ 200 [0.07, 127.0.0.1:42574][0m
+INFO 2025-08-07 17:42:01,066 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:42574][0m
+INFO 2025-08-07 17:42:01,068 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:42584][0m
+INFO 2025-08-07 17:42:03,334 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 17:42:03,347 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.04, 127.0.0.1:42602][0m
+INFO 2025-08-07 17:44:50,926 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 17:44:50,942 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:60988][0m
+INFO 2025-08-07 17:44:52,880 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 17:44:52,895 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:60988][0m
+ERROR 2025-08-07 17:54:15,114 log Internal Server Error: /administracao/whatsapp/account/1/edit/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.StringDataRightTruncation: valor é muito longo para tipo character varying(500)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 721, in account_edit_modal
+    account = form.save()
+              ^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1138, in _save_table
+    updated = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.DataError: valor é muito longo para tipo character varying(500)
+ERROR 2025-08-07 17:54:15,117 runserver [35;1mHTTP POST /administracao/whatsapp/account/1/edit/ 500 [0.06, 127.0.0.1:51708][0m
+ERROR 2025-08-07 17:54:17,190 log Internal Server Error: /administracao/whatsapp/account/1/edit/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.StringDataRightTruncation: valor é muito longo para tipo character varying(500)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 721, in account_edit_modal
+    account = form.save()
+              ^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1138, in _save_table
+    updated = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.DataError: valor é muito longo para tipo character varying(500)
+ERROR 2025-08-07 17:54:17,192 runserver [35;1mHTTP POST /administracao/whatsapp/account/1/edit/ 500 [0.04, 127.0.0.1:51708][0m
+INFO 2025-08-07 19:05:59,638 autoreload /home/thiago/Projetos/gruporom/core/models/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:06:00,015 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:06:39,659 autoreload /home/thiago/Projetos/gruporom/core/models/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:06:40,013 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:08:39,152 runserver [32mHTTP GET / 302 [0.02, 127.0.0.1:32850][0m
+INFO 2025-08-07 19:08:39,169 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:08:39,184 runserver [mHTTP GET /administracao/ 200 [0.03, 127.0.0.1:32850][0m
+INFO 2025-08-07 19:08:39,205 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:32850][0m
+INFO 2025-08-07 19:08:40,929 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:08:40,960 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:32878][0m
+INFO 2025-08-07 19:08:42,192 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:08:42,208 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:32878][0m
+INFO 2025-08-07 19:08:44,332 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:32878][0m
+INFO 2025-08-07 19:08:44,391 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:08:44,425 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:32878][0m
+INFO 2025-08-07 19:08:51,274 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:08:51,289 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:32878][0m
+INFO 2025-08-07 19:10:29,818 autoreload /home/thiago/Projetos/gruporom/core/forms/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:10:30,193 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:11:37,999 autoreload /home/thiago/Projetos/gruporom/core/forms/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:11:38,345 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:12:12,847 autoreload /home/thiago/Projetos/gruporom/core/forms/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:12:13,190 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:14:25,128 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:14:25,149 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:41170][0m
+INFO 2025-08-07 19:14:26,596 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:14:26,608 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:41170][0m
+ERROR 2025-08-07 19:19:42,923 log Internal Server Error: /administracao/whatsapp/account/1/edit/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.StringDataRightTruncation: valor é muito longo para tipo character varying(1000)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 721, in account_edit_modal
+    account = form.save()
+              ^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/whatsapp.py", line 224, in save
+    instance.save()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1138, in _save_table
+    updated = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.DataError: valor é muito longo para tipo character varying(1000)
+ERROR 2025-08-07 19:19:42,926 runserver [35;1mHTTP POST /administracao/whatsapp/account/1/edit/ 500 [0.07, 127.0.0.1:48362][0m
+ERROR 2025-08-07 19:19:44,086 log Internal Server Error: /administracao/whatsapp/account/1/edit/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.StringDataRightTruncation: valor é muito longo para tipo character varying(1000)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py", line 721, in account_edit_modal
+    account = form.save()
+              ^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/whatsapp.py", line 224, in save
+    instance.save()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1138, in _save_table
+    updated = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.DataError: valor é muito longo para tipo character varying(1000)
+ERROR 2025-08-07 19:19:44,087 runserver [35;1mHTTP POST /administracao/whatsapp/account/1/edit/ 500 [0.09, 127.0.0.1:48362][0m
+INFO 2025-08-07 19:21:27,265 autoreload /home/thiago/Projetos/gruporom/core/models/whatsapp.py changed, reloading.
+INFO 2025-08-07 19:21:27,617 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:22:51,720 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:22:51,745 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.09, 127.0.0.1:48046][0m
+INFO 2025-08-07 19:22:55,327 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:22:55,340 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:48046][0m
+INFO 2025-08-07 19:22:57,523 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:48046][0m
+INFO 2025-08-07 19:22:57,577 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:22:57,601 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:48046][0m
+INFO 2025-08-07 19:22:59,882 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:22:59,904 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:48046][0m
+INFO 2025-08-07 19:30:54,152 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.06, 127.0.0.1:38058][0m
+INFO 2025-08-07 19:30:54,212 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:30:54,228 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.05, 127.0.0.1:38058][0m
+INFO 2025-08-07 19:30:54,242 runserver [36mHTTP GET /static/app.css 304 [0.00, 127.0.0.1:38058][0m
+INFO 2025-08-07 19:30:55,873 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:30:55,892 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:53826][0m
+INFO 2025-08-07 19:30:55,916 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:53828][0m
+INFO 2025-08-07 19:30:55,917 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:53826][0m
+INFO 2025-08-07 19:30:55,920 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:30:55,925 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.01, 127.0.0.1:53828][0m
+INFO 2025-08-07 19:30:55,950 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:53828][0m
+INFO 2025-08-07 19:30:55,951 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:30:55,955 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:30:57,423 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:30:57,430 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:30:59,642 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:30:59,689 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:30:59,726 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:53832][0m

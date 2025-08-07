@@ -57,7 +57,6 @@ class Command(BaseCommand):
         
         # Função seeders
         function_seeders = [
-            ('WhatsApp Seeder', seed_whatsapp),
             ('Países Seeder', seed_paises),
         ]
         
