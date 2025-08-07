@@ -4116,3 +4116,675 @@ INFO 2025-08-07 19:30:57,430 runserver [mHTTP GET /administracao/whatsapp/accou
 INFO 2025-08-07 19:30:59,642 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:53832][0m
 INFO 2025-08-07 19:30:59,689 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
 INFO 2025-08-07 19:30:59,726 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:53832][0m
+INFO 2025-08-07 19:49:06,634 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:51:02,069 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:51:02,096 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.08, 127.0.0.1:52316][0m
+INFO 2025-08-07 19:51:04,907 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+ERROR 2025-08-07 19:51:04,962 log Internal Server Error: /operacional/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/base.py", line 22, in home
+    return render(request, 'operacional/home.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'caravanas_lista' not found. 'caravanas_lista' is not a valid view function or pattern name.
+ERROR 2025-08-07 19:51:04,964 runserver [35;1mHTTP GET /operacional/ 500 [0.08, 127.0.0.1:52316][0m
+INFO 2025-08-07 19:51:30,350 autoreload /home/thiago/Projetos/gruporom/core/urls/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:51:30,686 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:53:02,714 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:53:02,735 runserver [mHTTP GET /operacional/ 200 [0.06, 127.0.0.1:49518][0m
+ERROR 2025-08-07 19:53:05,164 log Internal Server Error: /operacional/caravanas/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 44, in caravanas_lista
+    caravanas = caravanas.annotate(
+                ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1649, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1701, in _annotate
+    clone.query.add_annotation(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1218, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/aggregates.py", line 176, in resolve_expression
+    result = super().resolve_expression(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/aggregates.py", line 63, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/expressions.py", line 298, in resolve_expression
+    source_expressions = [
+                         ^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/expressions.py", line 300, in <listcomp>
+    expr.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/expressions.py", line 902, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 2049, in resolve_ref
+    join_info = self.setup_joins(
+                ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1900, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'bloqueios' into field. Choices are: banner_mobile, banner_site, bloqueio, data_contrato, destaque_site, empresa, empresa_id, free_economica, free_executiva, id, lideres, link, nome, promotor, promotor_id, quantidade, repasse_tipo, repasse_valor, tipo
+ERROR 2025-08-07 19:53:05,167 runserver [35;1mHTTP GET /operacional/caravanas/ 500 [0.08, 127.0.0.1:49518][0m
+INFO 2025-08-07 19:53:31,220 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:53:31,570 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:53:40,794 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:53:41,156 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:53:58,437 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:53:58,788 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:55:33,861 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:55:34,206 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:55:46,442 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:55:46,794 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:55:52,968 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:55:53,307 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:56:01,502 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:56:01,840 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 19:56:28,953 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 19:56:28,975 runserver [mHTTP GET /operacional/caravanas/ 200 [0.07, 127.0.0.1:56706][0m
+INFO 2025-08-07 19:58:31,517 autoreload /home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py changed, reloading.
+INFO 2025-08-07 19:58:31,879 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:02:36,709 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:02:36,734 runserver [mHTTP GET /operacional/caravanas/ 200 [0.07, 127.0.0.1:39002][0m
+ERROR 2025-08-07 20:02:38,463 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:02:38,466 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.07, 127.0.0.1:39002][0m
+ERROR 2025-08-07 20:02:39,566 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:02:39,568 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.05, 127.0.0.1:39002][0m
+ERROR 2025-08-07 20:02:39,851 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:02:39,853 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.06, 127.0.0.1:39002][0m
+ERROR 2025-08-07 20:02:40,060 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:02:40,062 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.06, 127.0.0.1:39002][0m
+INFO 2025-08-07 20:04:17,597 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:04:17,609 runserver [mHTTP GET /operacional/ 200 [0.03, 127.0.0.1:39852][0m
+INFO 2025-08-07 20:04:18,977 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:04:19,000 runserver [mHTTP GET /operacional/caravanas/ 200 [0.06, 127.0.0.1:39852][0m
+ERROR 2025-08-07 20:04:33,711 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:04:33,713 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.06, 127.0.0.1:39852][0m
+ERROR 2025-08-07 20:04:36,997 log Internal Server Error: /operacional/caravanas/criar/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/operacional/caravanas.py", line 94, in caravana_criar_modal
+    form = CaravanaForm(user=request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/forms/caravana.py", line 45, in __init__
+    pessoas_ativas = Pessoa.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'usuarios' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, cargos, cep, cidade, colaborador, complemento, doc, email, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, id, nascimento, nome, numero, pais, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-07 20:04:36,999 runserver [35;1mHTTP GET /operacional/caravanas/criar/ 500 [0.05, 127.0.0.1:39852][0m
+INFO 2025-08-07 20:05:18,104 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:05:18,466 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:05:23,724 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:05:23,743 runserver [mHTTP GET /operacional/caravanas/ 200 [0.03, 127.0.0.1:39520][0m
+INFO 2025-08-07 20:05:24,663 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:05:24,677 runserver [mHTTP GET /operacional/caravanas/ 200 [0.02, 127.0.0.1:39520][0m
+INFO 2025-08-07 20:05:26,009 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:05:26,042 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:39520][0m
+INFO 2025-08-07 20:08:37,331 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:37,364 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.07, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:38,340 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:38,379 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.07, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:39,573 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:39,592 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.05, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:40,074 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:40,094 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.05, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:44,530 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:44,550 runserver [mHTTP GET /operacional/ 200 [0.04, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:46,638 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:46,660 runserver [mHTTP GET /operacional/caravanas/ 200 [0.05, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:08:47,521 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:08:47,548 runserver [mHTTP GET /operacional/ 200 [0.06, 127.0.0.1:58644][0m
+INFO 2025-08-07 20:10:08,604 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:10:11,081 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:10:11,114 runserver [mHTTP GET /operacional/caravanas/ 200 [0.09, 127.0.0.1:54794][0m
+INFO 2025-08-07 20:10:11,966 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:10:11,993 runserver [mHTTP GET /operacional/caravanas/ 200 [0.07, 127.0.0.1:54804][0m
+INFO 2025-08-07 20:10:12,012 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:54818][0m
+INFO 2025-08-07 20:10:12,015 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:54832][0m
+INFO 2025-08-07 20:10:12,016 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:54804][0m
+INFO 2025-08-07 20:10:12,023 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:54832][0m
+INFO 2025-08-07 20:10:12,047 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:54832][0m
+INFO 2025-08-07 20:10:12,053 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:54832][0m
+INFO 2025-08-07 20:10:28,417 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:10:28,443 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:54832][0m
+INFO 2025-08-07 20:11:58,840 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:11:59,211 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:12:25,618 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:12:25,971 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:12:52,332 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:12:52,680 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:13:16,027 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:13:16,381 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:13:35,684 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:13:36,044 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:14:08,528 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana.py changed, reloading.
+INFO 2025-08-07 20:14:08,884 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:22:16,719 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 20:22:17,879 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:22:17,902 runserver [mHTTP GET /operacional/caravanas/ 200 [0.04, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:22:20,207 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:22:20,229 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.05, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:23:07,277 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:23:07,310 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.07, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:23:07,909 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:23:07,949 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.07, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:23:08,201 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:23:08,225 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:23:08,445 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:23:08,473 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:23:08,635 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:23:08,665 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:37248][0m
+INFO 2025-08-07 20:24:39,910 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:24:39,932 runserver [mHTTP GET /operacional/caravanas/ 200 [0.05, 127.0.0.1:41106][0m
+INFO 2025-08-07 20:24:40,476 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:24:40,502 runserver [mHTTP GET /operacional/caravanas/ 200 [0.05, 127.0.0.1:41106][0m
+INFO 2025-08-07 20:24:42,527 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:24:42,554 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:41106][0m
+INFO 2025-08-07 20:24:48,208 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:24:48,237 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:41106][0m
+INFO 2025-08-07 20:24:50,566 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:24:50,608 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.08, 127.0.0.1:41106][0m
+INFO 2025-08-07 20:28:05,014 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:28:05,057 runserver [mHTTP GET /operacional/caravanas/ 200 [0.07, 127.0.0.1:39194][0m
+INFO 2025-08-07 20:28:05,086 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:39200][0m
+INFO 2025-08-07 20:28:05,087 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:39194][0m
+INFO 2025-08-07 20:28:05,088 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:05,092 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:39200][0m
+INFO 2025-08-07 20:28:05,103 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:05,112 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:06,672 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:28:06,714 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.08, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:07,767 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:28:07,790 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.05, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:10,749 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:28:10,783 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.07, 127.0.0.1:39206][0m
+INFO 2025-08-07 20:28:12,959 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 20:28:12,986 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.06, 127.0.0.1:39206][0m

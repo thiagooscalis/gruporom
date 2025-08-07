@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_tags %}
+
+{% block title %}Caravanas - Operacional{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Breadcrumb e Título -->
+    {% include 'includes/breadcrumbs.html' with current_page="Caravanas" %}
+    
+    <div class="mb-4">
+        <h2><i class="fas fa-bus me-2"></i>Caravanas</h2>
+    </div>
+
+    <!-- Card de Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" 
+                  hx-get="{% url 'operacional:caravanas_lista' %}"
+                  hx-target="#lista-container"
+                  hx-swap="outerHTML"
+                  hx-push-url="true"
+                  hx-trigger="submit">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" 
+                               name="search" 
+                               class="form-control" 
+                               placeholder="Buscar por nome, promotor, líder ou empresa..."
+                               value="{{ search }}">
+                    </div>
+                    <div class="col-md-2">
+                        <select name="status" class="form-select">
+                            <option value="">Todos os Status</option>
+                            <option value="ativo" {% if status_filter == 'ativo' %}selected{% endif %}>Ativas</option>
+                            <option value="inativo" {% if status_filter == 'inativo' %}selected{% endif %}>Inativas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="tipo" class="form-select">
+                            <option value="">Todos os Tipos</option>
+                            {% for value, label in tipos_caravana %}
+                                <option value="{{ value }}" {% if tipo_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-secondary w-100">
+                            <i class="fas fa-search me-2"></i>Filtrar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Container da Lista -->
+    <div id="lista-container">
+        {% include 'operacional/caravanas/partial_lista.html' %}
+    </div>
+</div>
+
+<!-- Floating Action Button -->
+<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
+   style="width: 56px; height: 56px;"
+   data-bs-toggle="modal"
+   data-bs-target="#caravanaModal"
+   hx-get="{% url 'operacional:caravana_criar' %}"
+   hx-target="#caravanaModalContainer"
+   hx-swap="innerHTML"
+   title="Nova Caravana">
+    <i class="fas fa-plus text-white"></i>
+</a>
+
+<!-- Container para Modais -->
+<div id="caravanaModalContainer"></div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% for caravana in page_obj %}
+    <tr>
+        <td>
+            <a href="{% url 'operacional:caravana_detalhes' caravana.pk %}" 
+               class="text-decoration-none">
+                <strong>{{ caravana.nome_caravana }}</strong>
+            </a>
+        </td>
+        <td>{{ caravana.empresa.razao_social|default:"-" }}</td>
+        <td>
+            <span class="badge bg-info">
+                {{ caravana.get_tipo_display }}
+            </span>
+        </td>
+        <td>{{ caravana.promotor.nome|default:"-" }}</td>
+        <td>{{ caravana.lider_caravana.nome|default:"-" }}</td>
+        <td>
+            {% if caravana.data_inicio %}
+                {{ caravana.data_inicio|date:"d/m/Y" }}
+                {% if caravana.data_fim %}
+                    - {{ caravana.data_fim|date:"d/m/Y" }}
+                {% endif %}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+            <span class="badge bg-success">
+                R$ {{ caravana.repasse_valor|floatformat:2 }}
+            </span>
+        </td>
+        <td>
+            <span class="badge bg-primary">
+                {{ caravana.quantidade }} pax
+            </span>
+        </td>
+        <td>
+            <button type="button" 
+                    class="btn btn-sm btn-outline-primary"
+                    hx-get="{% url 'operacional:caravana_editar' caravana.pk %}"
+                    hx-target="#modalContainer"
+                    hx-trigger="click"
+                    title="Editar">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" 
+                    class="btn btn-sm btn-outline-danger"
+                    hx-get="{% url 'operacional:caravana_excluir' caravana.pk %}"
+                    hx-target="#modalContainer"
+                    hx-trigger="click"
+                    title="Excluir">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    </tr>
+{% endfor %}
+
+{% if page_obj.has_next %}
+    <tr id="load-more-row">
+        <td colspan="9" class="text-center py-3">
+            <button class="btn btn-outline-primary"
+                    hx-get="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status_filter }}&tipo={{ tipo_filter }}&load_more=1"
+                    hx-target="#load-more-row"
+                    hx-swap="outerHTML">
+                <i class="fas fa-plus-circle me-2"></i>
+                Carregar mais ({{ restantes }} restantes)
+            </button>
+        </td>
+    </tr>
+{% endif %}

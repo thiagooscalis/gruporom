@@ -1,0 +1,108 @@
+<div id="lista-container">
+    <div class="card">
+        <div class="card-body">
+            {% if page_obj %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Empresa</th>
+                                <th>Tipo</th>
+                                <th>Promotor</th>
+                                <th>Líderes</th>
+                                <th>Data Contrato</th>
+                                <th>Repasse</th>
+                                <th>Quantidade</th>
+                                <th width="120">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="caravanas-tbody">
+                            {% for caravana in page_obj %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'operacional:caravana_detalhes' caravana.pk %}" 
+                                           class="text-decoration-none">
+                                            <strong>{{ caravana.nome }}</strong>
+                                        </a>
+                                    </td>
+                                    <td>{{ caravana.empresa.nome|default:"-" }}</td>
+                                    <td>
+                                        <span class="badge bg-info">
+                                            {{ caravana.get_tipo_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ caravana.promotor.nome|default:"-" }}</td>
+                                    <td>
+                                        {% for lider in caravana.lideres.all|slice:":2" %}
+                                            {{ lider.nome }}{% if not forloop.last %}, {% endif %}
+                                        {% empty %}
+                                            -
+                                        {% endfor %}
+                                        {% if caravana.total_lideres > 2 %}
+                                            <small class="text-muted">+{{ caravana.total_lideres|add:"-2" }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ caravana.data_contrato|date:"d/m/Y"|default:"-" }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            R$ {{ caravana.repasse_valor|floatformat:2 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            {{ caravana.quantidade }} pax
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-primary"
+                                                hx-get="{% url 'operacional:caravana_editar' caravana.pk %}"
+                                                hx-target="#modalContainer"
+                                                hx-trigger="click"
+                                                title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger"
+                                                hx-get="{% url 'operacional:caravana_excluir' caravana.pk %}"
+                                                hx-target="#modalContainer"
+                                                hx-trigger="click"
+                                                title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="9" class="text-center py-4">
+                                        <i class="fas fa-bus fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Nenhuma caravana encontrada.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botão Carregar Mais -->
+                {% if page_obj.has_next %}
+                    <div class="text-center mt-3">
+                        <button class="btn btn-outline-primary"
+                                hx-get="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status_filter }}&tipo={{ tipo_filter }}&load_more=1"
+                                hx-target="#caravanas-tbody"
+                                hx-swap="beforeend"
+                                hx-indicator="#loading-indicator">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Carregar mais ({{ restantes }} restantes)
+                        </button>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="text-center">Nenhuma caravana encontrada.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
