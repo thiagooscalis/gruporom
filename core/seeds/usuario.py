@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 from core.models import Usuario, Pessoa
-from core.choices import TIPO_DOC_CHOICES
+from core.choices import TIPO_DOC_CHOICES, TIPO_EMPRESA_CHOICES
 
 
 class UsuarioSeeder:
@@ -40,7 +40,36 @@ class UsuarioSeeder:
             admin_user.groups.add(
                 admin_group, comercial_group, operacional_group
             )
-            print("Grupos atualizados para o usuário thiago.")
+            
+            # Verifica se já tem empresas associadas
+            if not admin_user.empresas.exists():
+                # Cria empresas do Grupo ROM se não existirem
+                empresas = []
+                for tipo_empresa, _ in TIPO_EMPRESA_CHOICES:
+                    # Verifica se empresa já existe
+                    empresa = Pessoa.objects.filter(
+                        nome=f"ROM {tipo_empresa}",
+                        empresa_gruporom=True
+                    ).first()
+                    
+                    if not empresa:
+                        empresa = Pessoa.objects.create(
+                            nome=f"ROM {tipo_empresa}",
+                            doc=f"12345678{len(empresas):03d}001",
+                            tipo_doc="CNPJ",
+                            email=f"contato@rom{tipo_empresa.lower().replace(' ', '')}.com.br",
+                            telefone="11888888888",
+                            empresa_gruporom=True,
+                            tipo_empresa=tipo_empresa
+                        )
+                        print(f"Empresa criada: {empresa.nome}")
+                    
+                    empresas.append(empresa)
+                    admin_user.empresas.add(empresa)
+                
+                print(f"Empresas associadas: {', '.join([e.nome for e in empresas])}")
+            
+            print("Grupos e empresas atualizados para o usuário thiago.")
             return admin_user
 
         # Cria a pessoa do administrador
@@ -59,12 +88,29 @@ class UsuarioSeeder:
 
         # Adiciona aos grupos
         admin_user.groups.add(admin_group, comercial_group, operacional_group)
+        
+        # Cria empresas do Grupo ROM para cada tipo
+        empresas = []
+        for tipo_empresa, _ in TIPO_EMPRESA_CHOICES:
+            empresa = Pessoa.objects.create(
+                nome=f"ROM {tipo_empresa}",
+                doc=f"12345678{len(empresas):03d}001",  # CNPJ sequencial
+                tipo_doc="CNPJ",
+                email=f"contato@rom{tipo_empresa.lower().replace(' ', '')}.com.br",
+                telefone="11888888888",
+                empresa_gruporom=True,
+                tipo_empresa=tipo_empresa
+            )
+            empresas.append(empresa)
+            admin_user.empresas.add(empresa)
+            print(f"Empresa criada: {empresa.nome}")
 
         print(f"Usuário administrador criado:")
         print(f"Username: thiago")
         print(f"Password: admin123")
         print(f"Email: {admin_pessoa.email}")
         print(f"Grupos: Administração, Comercial, Operacional")
+        print(f"Empresas: {', '.join([e.nome for e in empresas])}")
 
         return admin_user
 

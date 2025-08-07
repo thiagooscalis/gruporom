@@ -3415,3 +3415,21 @@ INFO 2025-08-07 12:42:16,975 cambio Câmbio salvo no banco para 2025-07-28: R$ 5
 INFO 2025-08-07 12:42:16,977 cambio Câmbio não encontrado no banco para 2025-07-28, buscando na AwesomeAPI...
 WARNING 2025-08-07 12:42:16,977 cambio Não foi possível obter câmbio para 2025-07-28
 INFO 2025-08-07 12:42:16,978 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.5555
+INFO 2025-08-07 13:18:38,935 whatsapp Criando dados de teste para WhatsApp...
+INFO 2025-08-07 13:18:38,936 whatsapp Conta WhatsApp já existe: Grupo ROM - Teste
+INFO 2025-08-07 13:18:38,937 whatsapp Contato já existe: Cliente Teste 1
+INFO 2025-08-07 13:18:38,937 whatsapp Contato já existe: Fornecedor ABC
+INFO 2025-08-07 13:18:38,938 whatsapp Contato já existe: Maria Santos
+INFO 2025-08-07 13:18:38,938 whatsapp Dados de teste do WhatsApp criados com sucesso!
+INFO 2025-08-07 13:18:38,938 whatsapp Conta criada: Grupo ROM - Teste ((11) 99999-9999)
+INFO 2025-08-07 13:18:38,938 whatsapp Contatos: 3
+INFO 2025-08-07 13:18:38,939 whatsapp Mensagens: 12
+INFO 2025-08-07 13:18:49,379 whatsapp Criando dados de teste para WhatsApp...
+INFO 2025-08-07 13:18:49,380 whatsapp Conta WhatsApp já existe: Grupo ROM - Teste
+INFO 2025-08-07 13:18:49,380 whatsapp Contato já existe: Cliente Teste 1
+INFO 2025-08-07 13:18:49,381 whatsapp Contato já existe: Fornecedor ABC
+INFO 2025-08-07 13:18:49,381 whatsapp Contato já existe: Maria Santos
+INFO 2025-08-07 13:18:49,381 whatsapp Dados de teste do WhatsApp criados com sucesso!
+INFO 2025-08-07 13:18:49,381 whatsapp Conta criada: Grupo ROM - Teste ((11) 99999-9999)
+INFO 2025-08-07 13:18:49,382 whatsapp Contatos: 3
+INFO 2025-08-07 13:18:49,383 whatsapp Mensagens: 12

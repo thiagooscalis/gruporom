@@ -1,7 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 from core.models import Pessoa
-from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES
+from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES, TIPO_EMPRESA_CHOICES
 
 
 class PessoaFactory(DjangoModelFactory):
@@ -39,6 +39,13 @@ class PessoaJuridicaFactory(PessoaFactory):
     sexo = None
     nascimento = None
     email = factory.LazyAttribute(lambda obj: f"contato@{obj.nome.lower().replace(' ', '').replace('.', '')}.com.br")
+
+
+class EmpresaGrupoROMFactory(PessoaJuridicaFactory):
+    """Factory para Empresa do Grupo ROM"""
+    
+    empresa_gruporom = True
+    tipo_empresa = factory.Iterator([choice[0] for choice in TIPO_EMPRESA_CHOICES])
     
 
 class PessoaComPassaporteFactory(PessoaFactory):

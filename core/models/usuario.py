@@ -16,6 +16,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(
         auto_now_add=True, verbose_name="Data de cadastro"
     )
+    empresas = models.ManyToManyField(
+        Pessoa,
+        limit_choices_to={'empresa_gruporom': True},
+        blank=True,
+        verbose_name="Empresas do Grupo ROM",
+        related_name="usuarios_empresa"
+    )
 
     objects = UsuarioManager()
 

@@ -6,6 +6,7 @@
     </a>
 </li>
 
+{% if "Alimentação" in tipos_empresa_usuario %}
 <li class="nav-item mt-3">
     <small class="text-white-50 ms-3">ALIMENTAÇÃO</small>
 </li>
@@ -44,7 +45,9 @@
         <span class="ms-2">Refrigeração</span>
     </a>
 </li>
+{% endif %}
 
+{% if "Turismo" in tipos_empresa_usuario %}
 <li class="nav-item mt-3">
     <small class="text-white-50 ms-3">TURISMO</small>
 </li>
@@ -83,7 +86,9 @@
         <span class="ms-2">Agenda de Viagens</span>
     </a>
 </li>
+{% endif %}
 
+{% if "Administração de Bens" in tipos_empresa_usuario %}
 <li class="nav-item mt-3">
     <small class="text-white-50 ms-3">ADMINISTRAÇÃO DE BENS</small>
 </li>
@@ -122,6 +127,7 @@
         <span class="ms-2">Contratos Imobiliários</span>
     </a>
 </li>
+{% endif %}
 
 <li class="nav-item mt-3">
     <small class="text-white-50 ms-3">RELATÓRIOS</small>

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES
+from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES, TIPO_EMPRESA_CHOICES
 
 
 class Pessoa(models.Model):
@@ -78,6 +78,13 @@ class Pessoa(models.Model):
     empresa_gruporom = models.BooleanField(
         default=False,
         verbose_name="Empresa do Grupo ROM"
+    )
+    tipo_empresa = models.CharField(
+        max_length=50,
+        choices=TIPO_EMPRESA_CHOICES,
+        blank=True,
+        null=True,
+        verbose_name="Tipo de Empresa"
     )
 
     class Meta:

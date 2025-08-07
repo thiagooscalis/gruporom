@@ -40,16 +40,27 @@ def dados_globais(request):
     """
     # Detecta a área atual baseada nos grupos do usuário e URL
     area = None
+    tipos_empresa_usuario = []
+    
     if request.user.is_authenticated:
         for group in request.user.groups.all():
             group_slug = slugify(group.name)
             if f"/{group_slug}/" in request.path:
                 area = group_slug
                 break
+        
+        # Obtém os tipos de empresa do usuário
+        if hasattr(request.user, 'empresas'):
+            tipos_set = set(
+                request.user.empresas.filter(empresa_gruporom=True)
+                .values_list('tipo_empresa', flat=True)
+            )
+            tipos_empresa_usuario = list(tipos_set)
 
     return {
         "sistema_nome": "Grupo ROM",
         "sistema_versao": "1.0.0",
         "data_atual": date.today(),
         "area": area,
+        "tipos_empresa_usuario": tipos_empresa_usuario,
     }
