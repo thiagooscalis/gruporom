@@ -18,6 +18,7 @@ def lista(request):
     """
     # Busca
     search = request.GET.get('search', '')
+    tipo_filter = request.GET.get('tipo', '')
     
     # Query base
     pessoas = Pessoa.objects.all()
@@ -30,6 +31,16 @@ def lista(request):
             Q(email__icontains=search)
         )
     
+    # Aplica filtro de tipo se houver
+    if tipo_filter:
+        if tipo_filter == 'pf':
+            pessoas = pessoas.filter(tipo_doc='CPF')
+        elif tipo_filter == 'pj':
+            # PJ mas não empresa do Grupo ROM
+            pessoas = pessoas.filter(tipo_doc='CNPJ', empresa_gruporom=False)
+        elif tipo_filter == 'gruporom':
+            pessoas = pessoas.filter(empresa_gruporom=True)
+    
     # Ordenação
     pessoas = pessoas.order_by('nome')
     
@@ -41,7 +52,18 @@ def lista(request):
     context = {
         'page_obj': page_obj,
         'search': search,
+        'tipo_filter': tipo_filter,
+        'restantes': page_obj.paginator.count - page_obj.end_index() if page_obj else 0,
     }
+    
+    # Se for requisição HTMX, verificar se é carregamento incremental
+    if request.headers.get('HX-Request'):
+        if request.GET.get('load_more'):
+            # Carregamento incremental - retorna apenas as linhas
+            return render(request, 'administracao/pessoas/partial_linhas.html', context)
+        else:
+            # Primeira carga ou filtro - retorna tabela completa
+            return render(request, 'administracao/pessoas/partial_lista.html', context)
     
     return render(request, 'administracao/pessoas/lista.html', context)
 

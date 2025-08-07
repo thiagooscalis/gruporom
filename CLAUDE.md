@@ -56,6 +56,7 @@ gruporom/
 - **Build**: Parcel.js para compilação de assets
 - **Máscaras**: IMask para CPF, CNPJ, Passaporte (multi-formato), Telefone e CEP
 - **Autocomplete**: Sistema AJAX reutilizável para busca de pessoas
+- **Paginação Moderna**: Sistema "Carregar mais" com HTMX (20 itens/página)
 - **Responsividade**: 
   - Desktop: Sidebar fixa (#333333) + conteúdo principal
   - Mobile: Offcanvas sidebar + botão hamburger
@@ -150,7 +151,7 @@ gruporom/
 - [x] **Colaboradores**: Gestão RH completa
 - [x] **Cargos**: Estrutura organizacional
 - [x] **Turnos**: Controle de horários
-- [x] Paginação em todas as listagens (20 itens/página)
+- [x] **Paginação Moderna**: Sistema "Carregar mais" com HTMX (20 itens/página)
 - [x] Sistema de busca integrado com autocomplete AJAX
 - [x] Validações frontend (máscaras) e backend
 - [x] Proteção contra exclusão de registros relacionados
@@ -378,10 +379,63 @@ DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
 - **Protected Deletion**: Proteção contra exclusão de registros relacionados
 
 ### Performance e UX
-- **Paginação**: 20 registros por página em todas as listagens
+- **Paginação Moderna**: Sistema "Carregar mais" com HTMX em todas as listagens
 - **Busca Otimizada**: Índices Q() para múltiplos campos
 - **Asset Bundling**: CSS/JS otimizados via Parcel
 - **Cache de Templates**: Rendering otimizado
+
+### 📋 Padrão de Paginação "Carregar Mais"
+**Implementação HTMX para todas as listagens do sistema:**
+
+#### Estrutura de Templates:
+- **Template Principal**: `lista.html` com formulário de busca e include do partial
+- **Template Partial**: `partial_lista.html` com tabela completa + botão "Carregar mais"
+- **Template Linhas**: `partial_linhas.html` com apenas `<tr>` para append incremental
+
+#### View Pattern:
+```python
+# Paginação padrão: 20 itens/página
+paginator = Paginator(objetos, 20)
+page_obj = paginator.get_page(page_number)
+
+context = {
+    'page_obj': page_obj,
+    'search': search,
+    'filtros': filtros,
+    'restantes': page_obj.paginator.count - page_obj.end_index() if page_obj else 0,
+}
+
+# HTMX Detection
+if request.headers.get('HX-Request'):
+    if request.GET.get('load_more'):
+        return render(request, 'app/partial_linhas.html', context)  # Append
+    else:
+        return render(request, 'app/partial_lista.html', context)   # Replace
+```
+
+#### Template HTMX:
+```html
+<!-- Formulário com HTMX -->
+<form hx-get="{% url 'lista' %}" hx-target="#lista-container" 
+      hx-swap="outerHTML" hx-push-url="true" hx-trigger="submit">
+
+<!-- Tabela com ID para append -->
+<tbody id="objetos-tbody">
+
+<!-- Botão Carregar Mais -->
+<button hx-get="?page={{ page_obj.next_page_number }}&load_more=1"
+        hx-target="#objetos-tbody" hx-swap="beforeend">
+    Carregar mais ({{ restantes }} restantes)
+</button>
+```
+
+#### Funcionalidades:
+- ✅ **HTMX Incremental**: Adiciona linhas sem reload
+- ✅ **URL Atualizada**: `hx-push-url="true"` para bookmarks
+- ✅ **Filtros Preservados**: Mantém busca e filtros na paginação
+- ✅ **Contador Dinâmico**: Mostra quantos itens restam
+- ✅ **Auto-hide**: Botão desaparece na última página
+- ✅ **Mobile UX**: Experiência otimizada para dispositivos móveis
 
 ### Estrutura de URLs Escalável
 - URLs organizadas por módulo com namespaces
@@ -391,10 +445,25 @@ DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
 ---
 
 **Última atualização**: 07/08/2025  
-**Status**: Sistema empresarial completo com módulo de turismo, WhatsApp Business, 3 áreas operacionais e 135 testes implementados  
-**Módulos**: 23+ modelos de dados (14 novos do sistema de turismo), CRUDs funcionais, WhatsApp Business com atendimento comercial, sistema de câmbio automático, área operacional completa, sistema de testes robusto
+**Status**: Sistema empresarial completo com paginação HTMX moderna, WhatsApp Business integrado, multi-área operacional e padrões de UX avançados  
+**Módulos**: 9+ modelos de dados empresariais, CRUDs com "Carregar mais", WhatsApp Business completo, sistema de câmbio automático, área comercial de atendimento, testes automatizados robustos
 
 ## 🆕 Últimas Atualizações
+
+### Agosto 2025 - Paginação Moderna "Carregar Mais"
+- **📱 UX Moderna**: Substituição da paginação tradicional por botão "Carregar mais" com HTMX
+- **⚡ Performance HTMX**: 
+  - Filtros via botão (sem auto-trigger)
+  - Carregamento incremental sem reload de página
+  - URL atualizada com `hx-push-url="true"`
+- **🔧 Padrão Reutilizável**: Estrutura padronizada para todas as listagens
+  - `partial_lista.html` → Tabela completa + botão carregar mais
+  - `partial_linhas.html` → Apenas `<tr>` para append incremental
+  - Context com `restantes` calculado na view
+- **📊 Contador Dinâmico**: Mostra quantos registros restam para carregar
+- **🎯 Auto-hide**: Botão desaparece automaticamente na última página
+- **🧪 Testes Completos**: 7 testes automatizados para validar funcionalidade
+- **📋 Padronização**: Aplicado inicialmente em Pessoas, pronto para expansão
 
 ### Agosto 2025 - Área Comercial e WhatsApp Atendimento
 - **🏢 Área Comercial Completa**: Nova área de acesso com grupo "Comercial" e interface dedicada

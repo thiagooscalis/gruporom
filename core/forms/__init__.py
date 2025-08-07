@@ -3,5 +3,6 @@ from .fornecedor import FornecedorForm
 from .cargo import CargoForm
 from .turno import TurnoForm
 from .colaborador import ColaboradorForm
+from .usuario import UsuarioForm
 
-__all__ = ['AlterarSenhaForm', 'FornecedorForm', 'CargoForm', 'TurnoForm', 'ColaboradorForm']
+__all__ = ['AlterarSenhaForm', 'FornecedorForm', 'CargoForm', 'TurnoForm', 'ColaboradorForm', 'UsuarioForm']

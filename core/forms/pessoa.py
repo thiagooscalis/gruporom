@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from core.models import Pessoa
+from core.choices import TIPO_EMPRESA_CHOICES
 
 
 class PessoaForm(forms.ModelForm):
@@ -23,6 +24,7 @@ class PessoaForm(forms.ModelForm):
             "pais",
             "cep",
             "empresa_gruporom",
+            "tipo_empresa",
         ]
         widgets = {
             "nome": forms.TextInput(attrs={"class": "form-control"}),
@@ -48,6 +50,7 @@ class PessoaForm(forms.ModelForm):
             "empresa_gruporom": forms.CheckboxInput(
                 attrs={"class": "form-check-input"}
             ),
+            "tipo_empresa": forms.Select(attrs={"class": "form-select"}),
         }
         labels = {
             "tipo_doc": "Tipo de Documento",
@@ -57,4 +60,5 @@ class PessoaForm(forms.ModelForm):
             "numero": "Número",
             "pais": "País",
             "empresa_gruporom": "Empresa do Grupo ROM",
+            "tipo_empresa": "Tipo de Empresa",
         }

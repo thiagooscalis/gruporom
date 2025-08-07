@@ -1,0 +1,76 @@
+{% load core_tags %}
+
+<!-- Listagem -->
+<div class="card" id="pessoas-lista">
+    <div class="card-body">
+        {% if page_obj %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th class="text-center">Tipo</th>
+                        <th width="120">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="pessoas-tbody">
+                    {% for pessoa in page_obj %}
+                    <tr>
+                        <td>{{ pessoa.nome }}</td>
+                        <td>{{ pessoa.doc|doc|default:"-" }}</td>
+                        <td>{{ pessoa.email|default:"-" }}</td>
+                        <td>{{ pessoa.telefone|fone|default:"-" }}</td>
+                        <td class="text-center">
+                            {% if pessoa.empresa_gruporom %}
+                                <span class="badge bg-warning text-dark">Grupo ROM</span>
+                            {% elif pessoa.tipo_pessoa == 'FISICA' %}
+                                <span class="badge bg-info">PF</span>
+                            {% else %}
+                                <span class="badge bg-success">PJ</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
+                                    hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
+                                    hx-target="body"
+                                    hx-swap="beforeend">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
+                                    hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"
+                                    hx-target="body"
+                                    hx-swap="beforeend">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            Nenhuma pessoa encontrada
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Botão Carregar Mais -->
+        {% if page_obj.has_next %}
+        <div class="text-center mt-4" id="carregar-mais-container">
+            <button type="button" class="btn btn-outline-primary"
+                    hx-get="{% url 'administracao:pessoas_lista' %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_filter %}&tipo={{ tipo_filter }}{% endif %}&load_more=1"
+                    hx-target="#pessoas-tbody"
+                    hx-swap="beforeend">
+                <i class="fas fa-plus me-2"></i>Carregar mais ({{ restantes }} restantes)
+            </button>
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="text-center text-muted">Nenhuma pessoa cadastrada.</p>
+        {% endif %}
+    </div>
+</div>

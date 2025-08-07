@@ -3433,3 +3433,282 @@ INFO 2025-08-07 13:18:49,381 whatsapp Dados de teste do WhatsApp criados com suc
 INFO 2025-08-07 13:18:49,381 whatsapp Conta criada: Grupo ROM - Teste ((11) 99999-9999)
 INFO 2025-08-07 13:18:49,382 whatsapp Contatos: 3
 INFO 2025-08-07 13:18:49,383 whatsapp Mensagens: 12
+INFO 2025-08-07 13:29:42,605 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:29:44,666 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:29:44,689 runserver [mHTTP GET /operacional/ 200 [0.05, 127.0.0.1:34020][0m
+INFO 2025-08-07 13:29:44,701 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:34020][0m
+INFO 2025-08-07 13:30:07,385 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:07,410 runserver [mHTTP GET /operacional/ 200 [0.06, 127.0.0.1:55250][0m
+INFO 2025-08-07 13:30:27,603 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:27,609 runserver [mHTTP GET /operacional/ 200 [0.02, 127.0.0.1:55250][0m
+INFO 2025-08-07 13:30:29,465 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:29,481 runserver [mHTTP GET /operacional/ 200 [0.03, 127.0.0.1:55250][0m
+INFO 2025-08-07 13:30:43,289 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:43,314 runserver [mHTTP GET /administracao/ 200 [0.05, 127.0.0.1:55250][0m
+INFO 2025-08-07 13:30:45,394 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:45,415 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:56508][0m
+INFO 2025-08-07 13:30:47,670 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:30:47,686 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.06, 127.0.0.1:56508][0m
+INFO 2025-08-07 13:33:18,297 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:33:18,316 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:53584][0m
+INFO 2025-08-07 13:33:19,810 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:33:19,832 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:53584][0m
+INFO 2025-08-07 13:35:57,869 whatsapp === WEBHOOK RECEBIDO ===
+INFO 2025-08-07 13:35:57,870 whatsapp Conta ID: 1
+INFO 2025-08-07 13:35:57,870 whatsapp Headers: {'Host': 'localhost:8000', 'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '497'}
+INFO 2025-08-07 13:35:57,870 whatsapp Body bruto: {"object": "whatsapp_business_account", "entry": [{"id": "1234567890", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "5511999999999", "phone_number_id": "123456789"}, "contacts": [{"profile": {"name": "Usu\u00e1rio Teste"}, "wa_id": "5511988887777"}], "messages": [{"from": "5511988887777", "id": "wamid.test123", "timestamp": "1640995200", "text": {"body": "Ol\u00e1! Esta \u00e9 uma mensagem de teste."}, "type": "text"}]}, "field": "messages"}]}]}
+INFO 2025-08-07 13:35:57,870 whatsapp Payload JSON: {'object': 'whatsapp_business_account', 'entry': [{'id': '1234567890', 'changes': [{'value': {'messaging_product': 'whatsapp', 'metadata': {'display_phone_number': '5511999999999', 'phone_number_id': '123456789'}, 'contacts': [{'profile': {'name': 'Usuário Teste'}, 'wa_id': '5511988887777'}], 'messages': [{'from': '5511988887777', 'id': 'wamid.test123', 'timestamp': '1640995200', 'text': {'body': 'Olá! Esta é uma mensagem de teste.'}, 'type': 'text'}]}, 'field': 'messages'}]}]}
+ERROR 2025-08-07 13:35:57,870 whatsapp_api Erro ao processar webhook: cannot import name 'sync_to_async' from 'django.db' (/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/__init__.py)
+INFO 2025-08-07 13:35:57,871 whatsapp Webhook processado com sucesso: False
+INFO 2025-08-07 13:35:57,872 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.01, 127.0.0.1:53436][0m
+INFO 2025-08-07 13:39:09,011 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:39:09,055 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.09, 127.0.0.1:36488][0m
+INFO 2025-08-07 13:39:09,077 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:36488][0m
+INFO 2025-08-07 13:39:18,217 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:39:18,229 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.03, 127.0.0.1:38798][0m
+INFO 2025-08-07 13:39:24,672 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:39:24,678 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.03, 127.0.0.1:38798][0m
+INFO 2025-08-07 13:39:28,824 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:39:28,853 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.06, 127.0.0.1:38798][0m
+INFO 2025-08-07 13:44:09,250 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:44:09,272 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:54468][0m
+INFO 2025-08-07 13:44:09,299 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:54468][0m
+INFO 2025-08-07 13:44:11,855 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:44:11,888 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.07, 127.0.0.1:54468][0m
+INFO 2025-08-07 13:44:30,343 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:44:30,369 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:54468][0m
+INFO 2025-08-07 13:50:07,831 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:50:07,853 runserver [mHTTP GET /administracao/ 200 [0.04, 127.0.0.1:41244][0m
+INFO 2025-08-07 13:50:09,560 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:50:09,572 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:41244][0m
+INFO 2025-08-07 13:50:11,117 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:50:11,129 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.05, 127.0.0.1:41244][0m
+INFO 2025-08-07 13:51:22,123 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-07 13:51:22,472 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:52:38,634 whatsapp === WEBHOOK RECEBIDO ===
+INFO 2025-08-07 13:52:38,634 whatsapp Conta ID: 1
+INFO 2025-08-07 13:52:38,635 whatsapp Headers: {'Host': 'localhost:8000', 'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '497'}
+INFO 2025-08-07 13:52:38,635 whatsapp Body bruto: {"object": "whatsapp_business_account", "entry": [{"id": "1234567890", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "5511999999999", "phone_number_id": "123456789"}, "contacts": [{"profile": {"name": "Usu\u00e1rio Teste"}, "wa_id": "5511988887777"}], "messages": [{"from": "5511988887777", "id": "wamid.test123", "timestamp": "1640995200", "text": {"body": "Ol\u00e1! Esta \u00e9 uma mensagem de teste."}, "type": "text"}]}, "field": "messages"}]}]}
+INFO 2025-08-07 13:52:38,636 whatsapp Payload JSON: {'object': 'whatsapp_business_account', 'entry': [{'id': '1234567890', 'changes': [{'value': {'messaging_product': 'whatsapp', 'metadata': {'display_phone_number': '5511999999999', 'phone_number_id': '123456789'}, 'contacts': [{'profile': {'name': 'Usuário Teste'}, 'wa_id': '5511988887777'}], 'messages': [{'from': '5511988887777', 'id': 'wamid.test123', 'timestamp': '1640995200', 'text': {'body': 'Olá! Esta é uma mensagem de teste.'}, 'type': 'text'}]}, 'field': 'messages'}]}]}
+ERROR 2025-08-07 13:52:38,637 whatsapp_api Erro ao processar webhook: cannot import name 'sync_to_async' from 'django.db' (/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/__init__.py)
+INFO 2025-08-07 13:52:38,638 whatsapp Webhook processado com sucesso: False
+INFO 2025-08-07 13:52:38,644 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.03, 127.0.0.1:45414][0m
+INFO 2025-08-07 13:53:09,069 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:53:09,095 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:53:46,991 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:53:47,011 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.06, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:05,745 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:05,768 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:08,821 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:08,849 runserver [mHTTP GET /administracao/pessoas/5/editar/modal/ 200 [0.06, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:20,627 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:20,650 runserver [mHTTP GET /administracao/pessoas/4/editar/modal/ 200 [0.05, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:29,674 runserver [mHTTP POST /administracao/pessoas/4/atualizar/ 200 [0.05, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:29,692 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:29,711 runserver [mHTTP GET /administracao/pessoas/ 200 [0.03, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:33,968 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:33,985 runserver [mHTTP GET /administracao/pessoas/4/editar/modal/ 200 [0.05, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:39,188 runserver [mHTTP POST /administracao/pessoas/4/atualizar/ 200 [0.03, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:54:39,230 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:54:39,249 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:48174][0m
+INFO 2025-08-07 13:56:34,380 autoreload /home/thiago/Projetos/gruporom/core/templatetags/core_tags.py changed, reloading.
+INFO 2025-08-07 13:56:34,730 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:57:05,692 whatsapp === WEBHOOK RECEBIDO ===
+INFO 2025-08-07 13:57:05,693 whatsapp Conta ID: 1
+INFO 2025-08-07 13:57:05,693 whatsapp Headers: {'Host': 'localhost:8000', 'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '497'}
+INFO 2025-08-07 13:57:05,693 whatsapp Body bruto: {"object": "whatsapp_business_account", "entry": [{"id": "1234567890", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "5511999999999", "phone_number_id": "123456789"}, "contacts": [{"profile": {"name": "Usu\u00e1rio Teste"}, "wa_id": "5511988887777"}], "messages": [{"from": "5511988887777", "id": "wamid.test123", "timestamp": "1640995200", "text": {"body": "Ol\u00e1! Esta \u00e9 uma mensagem de teste."}, "type": "text"}]}, "field": "messages"}]}]}
+INFO 2025-08-07 13:57:05,693 whatsapp Payload JSON: {'object': 'whatsapp_business_account', 'entry': [{'id': '1234567890', 'changes': [{'value': {'messaging_product': 'whatsapp', 'metadata': {'display_phone_number': '5511999999999', 'phone_number_id': '123456789'}, 'contacts': [{'profile': {'name': 'Usuário Teste'}, 'wa_id': '5511988887777'}], 'messages': [{'from': '5511988887777', 'id': 'wamid.test123', 'timestamp': '1640995200', 'text': {'body': 'Olá! Esta é uma mensagem de teste.'}, 'type': 'text'}]}, 'field': 'messages'}]}]}
+ERROR 2025-08-07 13:57:05,694 whatsapp_api Erro ao processar webhook: cannot import name 'sync_to_async' from 'django.db' (/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/__init__.py)
+INFO 2025-08-07 13:57:05,695 whatsapp Webhook processado com sucesso: False
+INFO 2025-08-07 13:57:05,699 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.03, 127.0.0.1:41106][0m
+INFO 2025-08-07 13:57:31,566 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:57:31,586 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:34382][0m
+INFO 2025-08-07 13:57:41,303 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:57:41,320 runserver [mHTTP GET /administracao/pessoas/3/editar/modal/ 200 [0.05, 127.0.0.1:34382][0m
+INFO 2025-08-07 13:57:48,418 runserver [mHTTP POST /administracao/pessoas/3/atualizar/ 200 [0.05, 127.0.0.1:34382][0m
+INFO 2025-08-07 13:57:48,439 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:57:48,457 runserver [mHTTP GET /administracao/pessoas/ 200 [0.03, 127.0.0.1:34382][0m
+INFO 2025-08-07 13:57:58,161 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 13:57:58,183 runserver [mHTTP GET /administracao/pessoas/4/editar/modal/ 200 [0.05, 127.0.0.1:34382][0m
+INFO 2025-08-07 13:59:08,748 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-07 13:59:09,100 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:59:15,262 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-07 13:59:15,607 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:59:30,926 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-07 13:59:31,273 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 13:59:37,472 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-07 13:59:37,819 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:02:14,134 whatsapp === WEBHOOK RECEBIDO ===
+INFO 2025-08-07 14:02:14,134 whatsapp Conta ID: 1
+INFO 2025-08-07 14:02:14,135 whatsapp Headers: {'Host': 'localhost:8000', 'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '497'}
+INFO 2025-08-07 14:02:14,135 whatsapp Body bruto: {"object": "whatsapp_business_account", "entry": [{"id": "1234567890", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "5511999999999", "phone_number_id": "123456789"}, "contacts": [{"profile": {"name": "Usu\u00e1rio Teste"}, "wa_id": "5511988887777"}], "messages": [{"from": "5511988887777", "id": "wamid.test123", "timestamp": "1640995200", "text": {"body": "Ol\u00e1! Esta \u00e9 uma mensagem de teste."}, "type": "text"}]}, "field": "messages"}]}]}
+INFO 2025-08-07 14:02:14,135 whatsapp Payload JSON: {'object': 'whatsapp_business_account', 'entry': [{'id': '1234567890', 'changes': [{'value': {'messaging_product': 'whatsapp', 'metadata': {'display_phone_number': '5511999999999', 'phone_number_id': '123456789'}, 'contacts': [{'profile': {'name': 'Usuário Teste'}, 'wa_id': '5511988887777'}], 'messages': [{'from': '5511988887777', 'id': 'wamid.test123', 'timestamp': '1640995200', 'text': {'body': 'Olá! Esta é uma mensagem de teste.'}, 'type': 'text'}]}, 'field': 'messages'}]}]}
+ERROR 2025-08-07 14:02:14,136 whatsapp_api Erro ao processar webhook: cannot import name 'sync_to_async' from 'django.db' (/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/__init__.py)
+INFO 2025-08-07 14:02:14,136 whatsapp Webhook processado com sucesso: False
+INFO 2025-08-07 14:02:14,140 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.02, 127.0.0.1:60426][0m
+INFO 2025-08-07 14:02:49,986 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:02:52,597 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:02:52,620 runserver [mHTTP GET /administracao/pessoas/ 200 [0.08, 127.0.0.1:58616][0m
+INFO 2025-08-07 14:02:52,629 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:58616][0m
+INFO 2025-08-07 14:02:55,254 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:02:55,275 runserver [mHTTP GET /administracao/pessoas/4/editar/modal/ 200 [0.06, 127.0.0.1:58616][0m
+INFO 2025-08-07 14:03:00,137 runserver [mHTTP POST /administracao/pessoas/4/atualizar/ 200 [0.06, 127.0.0.1:58616][0m
+INFO 2025-08-07 14:03:00,150 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:03:00,169 runserver [mHTTP GET /administracao/pessoas/ 200 [0.03, 127.0.0.1:58616][0m
+INFO 2025-08-07 14:08:22,036 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:08:22,383 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:09:39,423 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:09:39,749 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:11:32,951 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:11:32,992 runserver [mHTTP GET /administracao/pessoas/ 200 [0.09, 127.0.0.1:34376][0m
+INFO 2025-08-07 14:11:33,008 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:34390][0m
+INFO 2025-08-07 14:11:33,009 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:34376][0m
+INFO 2025-08-07 14:11:33,009 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:11:33,014 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:34390][0m
+INFO 2025-08-07 14:11:33,034 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:11:33,035 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34390][0m
+INFO 2025-08-07 14:11:33,043 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:11:52,757 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:11:52,785 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pf 200 [0.06, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:11:55,363 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:11:55,379 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pj 200 [0.05, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:11:58,459 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:11:58,474 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.04, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:12:06,383 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:12:06,394 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.03, 127.0.0.1:34398][0m
+INFO 2025-08-07 14:13:13,609 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:13:13,962 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:14:09,906 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:09,929 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.07, 127.0.0.1:49766][0m
+INFO 2025-08-07 14:14:09,944 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:49766][0m
+INFO 2025-08-07 14:14:09,945 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:49768][0m
+INFO 2025-08-07 14:14:09,946 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:09,948 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:49768][0m
+INFO 2025-08-07 14:14:09,972 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:09,976 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:09,977 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:49768][0m
+INFO 2025-08-07 14:14:12,294 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:12,304 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pf 200 [0.04, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:14,184 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:14,195 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pj 200 [0.03, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:15,704 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:15,717 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.04, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:18,385 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:18,399 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pf 200 [0.04, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:14:20,283 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:14:20,295 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.04, 127.0.0.1:49780][0m
+INFO 2025-08-07 14:15:26,172 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:26,210 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.07, 127.0.0.1:41942][0m
+INFO 2025-08-07 14:15:26,239 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:41958][0m
+INFO 2025-08-07 14:15:26,240 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:26,242 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:41942][0m
+INFO 2025-08-07 14:15:26,248 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:26,284 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:41958][0m
+INFO 2025-08-07 14:15:26,285 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:26,291 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:28,926 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:28,936 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pf 200 [0.04, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:34,361 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:34,371 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=pj 200 [0.04, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:36,197 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:36,209 runserver [mHTTP GET /administracao/pessoas/?search=&tipo=gruporom 200 [0.04, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:37,547 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:37,558 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.04, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:38,766 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:38,782 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.05, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:42,469 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:42,484 runserver [mHTTP GET /administracao/pessoas/?search=cabana&tipo= 200 [0.06, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:15:47,287 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:15:47,300 runserver [mHTTP GET /administracao/pessoas/?search=cabana&tipo= 200 [0.04, 127.0.0.1:41972][0m
+INFO 2025-08-07 14:16:53,720 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:16:53,764 runserver [mHTTP GET /administracao/pessoas/?search=cabana&tipo= 200 [0.07, 127.0.0.1:39246][0m
+INFO 2025-08-07 14:16:53,788 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:39258][0m
+INFO 2025-08-07 14:16:53,789 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:39246][0m
+INFO 2025-08-07 14:16:53,789 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:16:53,791 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:39258][0m
+INFO 2025-08-07 14:16:53,809 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:16:53,813 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:16:53,813 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:39258][0m
+INFO 2025-08-07 14:17:01,853 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:01,866 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.04, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:13,538 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:13,550 runserver [mHTTP GET /administracao/pessoas/?search=caba&tipo= 200 [0.04, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:16,008 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:16,040 runserver [mHTTP GET /administracao/pessoas/?search=caba&tipo= 200 [0.06, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:16,543 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:16,563 runserver [mHTTP GET /administracao/pessoas/?search=caba&tipo= 200 [0.05, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:17,008 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:17,028 runserver [mHTTP GET /administracao/pessoas/?search=caba&tipo= 200 [0.05, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:17,377 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:17,404 runserver [mHTTP GET /administracao/pessoas/?search=caba&tipo= 200 [0.06, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:17:23,516 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:17:23,529 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.04, 127.0.0.1:39268][0m
+INFO 2025-08-07 14:18:43,759 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:18:43,796 runserver [mHTTP GET /administracao/pessoas/?search=&tipo= 200 [0.07, 127.0.0.1:60840][0m
+INFO 2025-08-07 14:18:43,814 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:60846][0m
+INFO 2025-08-07 14:18:43,815 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:60840][0m
+INFO 2025-08-07 14:18:43,815 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:43,818 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:60846][0m
+INFO 2025-08-07 14:18:43,841 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:60846][0m
+INFO 2025-08-07 14:18:43,842 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:43,845 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:48,793 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:18:48,809 runserver [mHTTP GET /administracao/pessoas/?page=2 200 [0.05, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:50,319 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:18:50,337 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.05, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:53,421 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:18:53,435 runserver [mHTTP GET /administracao/pessoas/?page=2 200 [0.05, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:18:54,873 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:18:54,892 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.05, 127.0.0.1:60858][0m
+INFO 2025-08-07 14:19:59,001 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:19:59,365 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:21:27,552 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:21:27,907 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:21:54,349 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-07 14:21:54,700 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:22:55,949 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:22:55,989 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.09, 127.0.0.1:59126][0m
+INFO 2025-08-07 14:22:56,016 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:59126][0m
+INFO 2025-08-07 14:22:56,019 runserver [mHTTP GET /static/app.css 200 [0.02, 127.0.0.1:59138][0m
+INFO 2025-08-07 14:22:56,021 runserver [mHTTP GET /static/app.js 200 [0.02, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:22:56,028 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59126][0m
+INFO 2025-08-07 14:22:56,043 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:22:56,051 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59138][0m
+INFO 2025-08-07 14:22:56,051 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:22:59,356 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:22:59,367 runserver [mHTTP GET /administracao/pessoas/?page=2&load_more=1 200 [0.05, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:23:03,185 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:23:03,211 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.06, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:23:06,227 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:23:06,239 runserver [mHTTP GET /administracao/pessoas/?page=2&load_more=1 200 [0.05, 127.0.0.1:59154][0m
+INFO 2025-08-07 14:27:03,865 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:27:03,892 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.05, 127.0.0.1:37232][0m
+INFO 2025-08-07 14:27:31,759 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/usuarios.py changed, reloading.
+INFO 2025-08-07 14:27:32,134 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:28:10,432 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 14:28:11,781 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:28:11,810 runserver [mHTTP GET /administracao/pessoas/?page=1 200 [0.06, 127.0.0.1:46838][0m
+INFO 2025-08-07 14:28:11,827 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:46840][0m
+INFO 2025-08-07 14:28:11,828 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:46838][0m
+INFO 2025-08-07 14:28:11,830 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:11,834 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:46840][0m
+INFO 2025-08-07 14:28:11,858 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:11,864 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:11,864 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:46840][0m
+INFO 2025-08-07 14:28:17,309 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:28:17,320 runserver [mHTTP GET /administracao/pessoas/?page=2&load_more=1 200 [0.05, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:38,554 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:28:38,576 runserver [mHTTP GET /administracao/usuarios/ 200 [0.07, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:42,009 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:28:42,022 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:28:43,804 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:28:43,815 runserver [mHTTP GET /administracao/usuarios/ 200 [0.04, 127.0.0.1:46848][0m
+INFO 2025-08-07 14:29:57,305 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 14:29:57,318 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:34916][0m
+INFO 2025-08-07 14:29:57,333 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:34916][0m
+INFO 2025-08-07 14:29:57,334 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:34920][0m
+INFO 2025-08-07 14:29:57,335 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:34926][0m
+INFO 2025-08-07 14:29:57,339 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:34916][0m
+INFO 2025-08-07 14:29:57,360 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:34926][0m
+INFO 2025-08-07 14:29:57,361 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34920][0m
+INFO 2025-08-07 14:29:57,364 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34926][0m

@@ -21,7 +21,7 @@ def lista(request):
     search = request.GET.get('search', '')
     
     # Query base
-    usuarios = Usuario.objects.select_related('pessoa').all()
+    usuarios = Usuario.objects.select_related('pessoa').prefetch_related('groups', 'empresas').all()
     
     # Aplica filtro de busca se houver
     if search:
@@ -42,7 +42,17 @@ def lista(request):
     context = {
         'page_obj': page_obj,
         'search': search,
+        'restantes': page_obj.paginator.count - page_obj.end_index() if page_obj else 0,
     }
+    
+    # Se for requisição HTMX, verificar se é carregamento incremental
+    if request.headers.get('HX-Request'):
+        if request.GET.get('load_more'):
+            # Carregamento incremental - retorna apenas as linhas
+            return render(request, 'administracao/usuarios/partial_linhas.html', context)
+        else:
+            # Primeira carga ou filtro - retorna tabela completa
+            return render(request, 'administracao/usuarios/partial_lista.html', context)
     
     return render(request, 'administracao/usuarios/lista.html', context)
 

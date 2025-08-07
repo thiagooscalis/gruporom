@@ -26,11 +26,13 @@ def fone(val):
 
 @register.filter
 def doc(val):
+    if not val:
+        return val
     if len(val) == 11:
         return f'{val[0:3]}.{val[3:6]}.{val[6:9]}-{val[9:]}'
     if len(val) == 14:
-        return f'{val[0:2]}.{val[2:5]}.{val[5:8]}-{val[8:]}'
-    return doc
+        return f'{val[0:2]}.{val[2:5]}.{val[5:8]}/{val[8:12]}-{val[12:]}'
+    return val
 
 
 @register.filter

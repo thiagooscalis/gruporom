@@ -67,7 +67,7 @@
     </div>
 
     <!-- Seção: Grupos de Acesso -->
-    <div class="card border-0 bg-light">
+    <div class="card border-0 bg-light mb-4">
         <div class="card-header bg-transparent border-0 pb-0">
             <h6 class="text-primary mb-0">
                 <i class="fas fa-users me-2"></i>Grupos de Acesso
@@ -100,6 +100,45 @@
             <div class="alert alert-info">
                 <i class="fas fa-info-circle me-2"></i>
                 Nenhum grupo disponível. Crie grupos no Django Admin primeiro.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Seção: Empresas do Grupo ROM -->
+    <div class="card border-0 bg-light">
+        <div class="card-header bg-transparent border-0 pb-0">
+            <h6 class="text-warning mb-0">
+                <i class="fas fa-building me-2"></i>Empresas do Grupo ROM
+            </h6>
+            <small class="text-muted">Selecione as empresas que o usuário pode acessar no sistema operacional</small>
+        </div>
+        <div class="card-body pt-2">
+            {% if form.empresas.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.empresas.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if form.empresas %}
+            <div class="row">
+                {% for choice in form.empresas %}
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-check-lg p-3 border rounded bg-white">
+                        {{ choice.tag }}
+                        <label class="form-check-label w-100" for="{{ choice.id_for_label }}">
+                            <strong class="d-block">{{ choice.choice_label }}</strong>
+                            <small class="text-muted">Tipo: {{ choice.choice_label|cut:"ROM " }}</small>
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Nenhuma empresa do Grupo ROM cadastrada. Configure primeiro as empresas.
             </div>
             {% endif %}
         </div>

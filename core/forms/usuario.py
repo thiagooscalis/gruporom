@@ -39,6 +39,17 @@ class UsuarioForm(forms.ModelForm):
         },
     )
 
+    # Campo para empresas do Grupo ROM
+    empresas = forms.ModelMultipleChoiceField(
+        queryset=Pessoa.objects.filter(empresa_gruporom=True).order_by('nome'),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "form-check-input"}
+        ),
+        required=False,
+        label="Empresas do Grupo ROM",
+        help_text="Selecione as empresas que o usuário pode acessar",
+    )
+
     # Campos de senha
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
@@ -61,6 +72,7 @@ class UsuarioForm(forms.ModelForm):
             "username",
             "is_active",
             "groups",
+            "empresas",
         ]
         widgets = {
             "username": forms.TextInput(attrs={"class": "form-control"}),
@@ -165,6 +177,6 @@ class UsuarioForm(forms.ModelForm):
 
         if commit:
             usuario.save()
-            self.save_m2m()  # Salva relacionamentos many-to-many (grupos)
+            self.save_m2m()  # Salva relacionamentos many-to-many (grupos e empresas)
 
         return usuario

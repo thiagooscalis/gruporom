@@ -39,6 +39,7 @@
                                     <th>Nome da Pessoa</th>
                                     <th>Email</th>
                                     <th>Grupos</th>
+                                    <th>Empresas</th>
                                     <th class="text-center">Status</th>
                                     <th width="120">Ações</th>
                                 </tr>
@@ -56,6 +57,13 @@
                                             <span class="badge bg-secondary me-1">{{ group.name }}</span>
                                         {% empty %}
                                             <span class="text-muted">Nenhum grupo</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for empresa in usuario.empresas.all %}
+                                            <div class="small">{{ empresa.nome }}</div>
+                                        {% empty %}
+                                            <span class="text-muted">Nenhuma empresa</span>
                                         {% endfor %}
                                     </td>
                                     <td class="text-center">
@@ -82,7 +90,7 @@
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
+                                    <td colspan="7" class="text-center text-muted py-4">
                                         Nenhum usuário encontrado
                                     </td>
                                 </tr>

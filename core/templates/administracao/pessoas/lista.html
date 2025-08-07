@@ -10,14 +10,27 @@
         <div class="col-12">
             {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Pessoas' %}
             
-            <!-- Busca -->
+            <!-- Busca e Filtros -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <form method="get" class="row g-3">
-                        <div class="col-md-10">
+                    <form method="get" class="row g-3" 
+                          hx-get="{% url 'administracao:pessoas_lista' %}"
+                          hx-target="#pessoas-lista"
+                          hx-swap="outerHTML"
+                          hx-push-url="true"
+                          hx-trigger="submit">
+                        <div class="col-md-7">
                             <input type="text" name="search" class="form-control" 
                                    placeholder="Buscar por nome, CPF/CNPJ ou email..." 
                                    value="{{ search }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="tipo" class="form-select">
+                                <option value="">Todos os Tipos</option>
+                                <option value="pf" {% if tipo_filter == 'pf' %}selected{% endif %}>Pessoa Física</option>
+                                <option value="pj" {% if tipo_filter == 'pj' %}selected{% endif %}>Pessoa Jurídica</option>
+                                <option value="gruporom" {% if tipo_filter == 'gruporom' %}selected{% endif %}>Empresa Grupo ROM</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-secondary w-100">
@@ -28,109 +41,8 @@
                 </div>
             </div>
             
-            <!-- Listagem -->
-            <div class="card">
-                <div class="card-body">
-                    {% if page_obj %}
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>CPF/CNPJ</th>
-                                    <th>Email</th>
-                                    <th>Telefone</th>
-                                    <th class="text-center">Tipo</th>
-                                    <th width="120">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for pessoa in page_obj %}
-                                <tr>
-                                    <td>{{ pessoa.nome }}</td>
-                                    <td>{{ pessoa.doc|doc|default:"-" }}</td>
-                                    <td>{{ pessoa.email|default:"-" }}</td>
-                                    <td>{{ pessoa.telefone|fone|default:"-" }}</td>
-                                    <td class="text-center">
-                                        {% if pessoa.tipo_pessoa == 'FISICA' %}
-                                            <span class="badge bg-info">{{ pessoa.get_tipo_pessoa_display }}</span>
-                                        {% else %}
-                                            <span class="badge bg-success">{{ pessoa.get_tipo_pessoa_display }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
-                                                hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
-                                                hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
-                                        Nenhuma pessoa encontrada
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Paginação -->
-                    {% if page_obj.has_other_pages %}
-                    <nav aria-label="Paginação" class="mt-4">
-                        <ul class="pagination justify-content-center">
-                            {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
-                            </li>
-                            {% endif %}
-                            
-                            {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                <li class="page-item active">
-                                    <span class="page-link">{{ num }}</span>
-                                </li>
-                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    {% endif %}
-                    {% else %}
-                    <p class="text-center text-muted">Nenhuma pessoa cadastrada.</p>
-                    {% endif %}
-                </div>
-            </div>
+            <!-- Listagem (via partial com HTMX) -->
+            {% include 'administracao/pessoas/partial_lista.html' %}
         </div>
     </div>
 </div>
