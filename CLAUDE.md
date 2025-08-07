@@ -122,6 +122,7 @@ gruporom/
 - [x] **Cargo**: Estrutura organizacional com salários base
 - [x] **Turno**: Gestão de horários de trabalho
 - [x] **Cambio**: Cotação automática USD/BRL via API externa
+- [x] **WhatsAppConversation**: Gestão de conversas comerciais com atendentes
 - [x] Choices centralizados e validações robustas
 - [x] Relacionamentos otimizados com ForeignKey/ManyToMany
 
@@ -147,7 +148,12 @@ gruporom/
 - [x] **Webhook Support**: URLs automáticas e configuração de verify tokens
 - [x] **Teste de Conexão**: Validação de credenciais e conectividade da API
 - [x] **Interface Responsiva**: Cards organizados, modais HTMX e navegação intuitiva
-- [x] **Gestão Focada**: Administração concentrada em contas e templates (chat removido)
+- [x] **Atendimento Comercial**: Sistema completo de atendimento ao cliente
+  - [x] Dashboard com fila de conversas aguardando
+  - [x] Sistema de atribuição de atendente
+  - [x] Interface de chat para atendimento
+  - [x] Espelhamento automático via webhook
+  - [x] Controle de status de conversas
 
 ### 6. Máscaras de Entrada Inteligentes
 - [x] **CPF**: Formatação automática `000.000.000-00`
@@ -158,15 +164,37 @@ gruporom/
 - [x] **Detecção automática**: Máscara muda conforme tipo de documento selecionado
 - [x] **Compatibilidade HTMX**: Reinicialização automática em conteúdo dinâmico
 
-### 7. Administração Avançada
+### 7. Área Comercial Completa
+- [x] **Dashboard Comercial**: Interface dedicada para equipe de vendas
+- [x] **WhatsApp Atendimento**: Fila de conversas aguardando atendimento
+- [x] **Sistema de Atribuição**: Atendente assume conversa com um clique
+- [x] **Interface de Chat**: Atendimento individual com histórico completo
+- [x] **Controle de Status**: pending → assigned → in_progress → resolved
+- [x] **Espelhamento Automático**: Webhook cria conversas automaticamente
+- [x] **Menu Lateral Específico**: Navegação otimizada para área comercial
+- [x] **Estatísticas em Tempo Real**: Conversas pendentes, minhas conversas
+
+### 8. Sistema Multi-Área
+- [x] **Grupos de Acesso**: Administração, Comercial (expansível)
+- [x] **Menu de Alternância**: Modal para trocar entre áreas rapidamente
+- [x] **Context Processor**: Detecção automática da área atual
+- [x] **Autorização Granular**: `user_passes_test` para cada área
+- [x] **URLs Organizadas**: Estrutura modular por área/funcionalidade
+
+### 9. Administração Avançada
 - [x] Dashboard simplificado com estatísticas essenciais
 - [x] Controle de acesso granular por grupos
 - [x] Configurações de segurança robustas (CSRF, HSTS, CSP)
 - [x] Interface administrativa Django restrita
 
-## 🚀 Status Atual: Sistema Produtivo Completo
+## 🚀 Status Atual: Sistema Produtivo Completo Multi-Área
 
-**O projeto está em estado PRODUTIVO COMPLETO** com todos os módulos empresariais implementados, WhatsApp Business integrado, máscaras inteligentes, interface otimizada e segurança robusta.
+**O projeto está em estado PRODUTIVO COMPLETO** com:
+- **2 áreas operacionais**: Administração (gestão) + Comercial (atendimento)
+- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial)
+- **Sistema de conversas**: Webhook → Fila → Atribuição → Chat individual
+- **Máscaras inteligentes** e **interface otimizada**
+- **Segurança robusta** e **arquitetura escalável**
 
 ## 🔮 Próximas Expansões Sugeridas
 
@@ -232,11 +260,16 @@ uv run manage.py showmigrations
 
 # Recompilar assets durante desenvolvimento
 npm run dev  # modo watch
+
+# Criar dados de teste WhatsApp (opcional)
+uv run python test_whatsapp_flow.py
 ```
 
 ### URLs Principais
 - `/` - Redirecionamento automático por grupo
 - `/login/` - Página de login responsiva
+
+#### Área Administração
 - `/administracao/` - Dashboard administrativo simplificado
 - `/administracao/pessoas/` - Gestão de pessoas com autocomplete
 - `/administracao/usuarios/` - Gestão de usuários com criação rápida de pessoas
@@ -244,10 +277,19 @@ npm run dev  # modo watch
 - `/administracao/colaboradores/` - Gestão de colaboradores
 - `/administracao/cargos/` - Gestão de cargos
 - `/administracao/turnos/` - Gestão de turnos
-- `/administracao/whatsapp/` - Dashboard WhatsApp Business
+- `/administracao/whatsapp/` - Dashboard WhatsApp Business (configuração)
 - `/administracao/whatsapp/accounts/` - Listagem de contas WhatsApp
 - `/administracao/whatsapp/account/{id}/templates/` - Templates por conta
+
+#### Área Comercial
+- `/comercial/` - Dashboard comercial
+- `/comercial/whatsapp/` - Atendimento WhatsApp (fila de conversas)
+- `/comercial/whatsapp/assign/{id}/` - Atribuir conversa ao usuário
+- `/comercial/whatsapp/conversation/{id}/` - Interface de chat individual
+
+#### Sistema
 - `/admin/` - Django Admin nativo (acesso restrito)
+- `/webhook/whatsapp/{account_id}/` - Webhook para receber mensagens
 
 ## 📝 Observações Técnicas
 
@@ -283,17 +325,26 @@ npm run dev  # modo watch
 
 ---
 
-**Última atualização**: 06/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, máscaras inteligentes, guia de configuração e UX otimizada  
-**Módulos**: 8+ modelos de dados, 7+ CRUDs funcionais, WhatsApp Business com API Meta/Facebook, sistema de câmbio automático
+**Última atualização**: 07/08/2025  
+**Status**: Sistema empresarial completo com WhatsApp Business integrado, área comercial de atendimento, multi-área e máscaras inteligentes  
+**Módulos**: 9+ modelos de dados, 8+ CRUDs funcionais, WhatsApp Business com atendimento comercial completo, sistema de câmbio automático, área comercial funcional
 
 ## 🆕 Últimas Atualizações
 
-### Agosto 2025
-- **WhatsApp Business Aprimorado**: Removido chat/conversas, foco em gestão de contas e templates
-- **Guia Integrado**: Modal "Como obter?" com tutorial completo para credenciais da API Meta/Facebook
-- **Modal de Criação Rápida**: Pessoas podem ser criadas diretamente no cadastro de usuários
-- **Máscaras Inteligentes**: Sistema completo de máscaras com detecção automática de tipo de documento
-- **Interface Otimizada**: Dashboard simplificado, sidebar escura (#333333), floating buttons consistentes
-- **Validações Robustas**: Correções na validação de formulários e relacionamentos
-- **Segurança Aprimorada**: Controle de acesso Django Admin restrito a superusuários
+### Agosto 2025 - Área Comercial e WhatsApp Atendimento
+- **🏢 Área Comercial Completa**: Nova área de acesso com grupo "Comercial" e interface dedicada
+- **💬 WhatsApp Atendimento Comercial**: Sistema completo de atendimento ao cliente via WhatsApp
+  - Dashboard com conversas aguardando atendimento
+  - Sistema de atribuição de conversas aos atendentes
+  - Interface de chat para atendimento individual
+  - Espelhamento automático via webhook (mensagens → conversas)
+- **🔄 Modelo WhatsAppConversation**: Gestão de conversas com status, atendente e controle de fluxo
+- **🎯 Fluxo Comercial Otimizado**: 
+  - Mensagens chegam via webhook → Criam conversas pendentes
+  - Comercial visualiza fila de atendimento
+  - Clica "Atender" → Conversa é atribuída ao usuário
+  - Interface de chat individual para responder cliente
+- **🏗️ Arquitetura Padronizada**: Conversão para Function-Based Views (FBVs) com decorators `user_passes_test`
+- **🔀 Sistema Multi-Área**: Menu de alternância entre áreas (Administração ↔ Comercial)
+- **📊 Context Processor Inteligente**: Detecção automática da área atual baseada em grupos do usuário
+- **🧪 Dados de Teste**: Script automatizado para criar conversas de teste
