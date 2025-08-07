@@ -1,0 +1,126 @@
+{
+    "US Travel": {
+        "nome": "US Travel Operadora de Turismo Ltda.",
+        "cnpj": "06.314.936/0001-73",
+        "apelido": "US Travel",
+        "endereco": "Rua Hilda Del Nero Bisquolo, 102 - sala 1802 - Jd. Flórida - Jundiaí/SP - CEP: 13208-703",
+        "enderecos": [
+            "Rua Hilda Del Nero Bisquolo, 102 - sala 1802 - Jd. Flórida - Jundiaí/SP - CEP: 13208-703",
+            "Av. Alberto Bins, 789, sala 2, Centro, Porto Alegre/RS - CEP: 90030-143"
+        ],
+        "logradouro": "Rua Hilda Del Nero Bisquolo, 102",
+        "bairro": "Jd. Flórida",
+        "cidade": "Jundiaí",
+        "estado": "SP",
+        "cep": "13208703",
+        "telefones": [
+            "(11) 3053-1900",
+            "(51) 3085-1423",
+            "(13) 3394-8247"
+        ],
+        "telefone_whatsapp": "1130531900",
+        "emails": [
+            "contato@ustravel.com.br"
+        ],
+        "email_documentacao": "documentacao@ustravel.com.br",
+        "email_sistema": "naoresponda@ustravel.com.br",
+        "social": {
+            "site": "https://ustravel.com.br",
+            "facebook": "https://pt-br.facebook.com/pages/category/Tour-Guide/US-Travel-Operadora-de-Turismo-206167359475845/",
+            "instagram": "https: //www.instagram.com/ustravel_turismo/"
+        },
+        "logotipo": "logo_us_novo.svg",
+        "topo_email": "topo_email_us.svg"
+    },
+    "Viatore Travel": {
+        "nome": "Viatore Travel Experience Ltda.",
+        "cnpj": "45.549.269/0001-60",
+        "apelido": "Viatore Travel Experience",
+        "endereco": "Av. Paulista, 1842, cj 178 - Bela Vista - São Paulo/SP - CEP: 01310-923",
+        "enderecos": [
+            "Av. Paulista, 1842, cj 178 - Bela Vista - São Paulo/SP - CEP: 01310-923"
+        ],
+        "logradouro": "Av. Paulista, 1842, cj 178",
+        "bairro": "Bela Vista",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01310-923",
+        "telefones": [
+            "(11) 4118-4361",
+            "(11) 93313-7414"
+        ],
+        "telefone_whatsapp": "1130531900",
+        "emails": [
+            "contato@viatoretravel.com.br"
+        ],
+        "email_documentacao": "documentacao@viatoretravel.com.br",
+        "email_sistema": "naoresponda@viatoretravel.com.br",
+        "social": {
+            "site": "https://www.viatoretravel.com.br",
+            "facebook": "",
+            "instagram": "https://www.instagram.com/viatore.tur/"
+        },
+        "logotipo": "logo_viatore.svg",
+        "topo_email": "topo_email_viatore.jpg"
+    },
+    "Inclusive Travel": {
+        "nome": "DL Viagens e Turismo Ltda.",
+        "cnpj": "13.331.093/0001-89",
+        "apelido": "Inclusive Travel",
+        "endereco": "Av. Paulista, 1439, sala 14 - Bela Vista - São Paulo/SP - CEP: 01310923",
+        "enderecos": [
+            "Av. Paulista, 1439, sala 14 - Bela Vista - São Paulo/SP - CEP: 01310923"
+        ],
+        "logradouro": "Av. Paulista 1439, sala 14",
+        "bairro": "Bela Vista",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01310923",
+        "telefones": [
+            "(11) 5026-4723"
+        ],
+        "telefone_whatsapp": "1150264723",
+        "emails": [
+            "comercial@inclusivetravel.com.br"
+        ],
+        "email_documentacao": "documentacao@inclusivetravel.com.br",
+        "email_sistema": "naoresponda@inclusivetravel.com.br",
+        "social": {
+            "site": "https://www.inclusivetravel.com.br",
+            "facebook": "",
+            "instagram": "https://www.instagram.com/Inclusivetravel_/"
+        },
+        "logotipo": "logo_inclusive.png",
+        "topo_email": "topo_email_inclusive.jpg"
+    },
+    "US Cobranças": {
+        "nome": "US Cobranças e Consultoria de Negócios LTDA",
+        "cnpj": "19.999.463/0001-37",
+        "apelido": "DL Banco",
+        "endereco": "Av. Paulista, 1439, cj 51 - Bela Vista - São Paulo/SP - CEP: 01311-926",
+        "enderecos": [
+            "Av. Paulista, 1439, cj 51 - Bela Vista - São Paulo/SP - CEP: 01311-926"
+        ],
+        "logradouro": "Av. Paulista 1439, cj 51",
+        "bairro": "Bela Vista",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01311-926",
+        "telefones": [
+            "(11) 3053-1900"
+        ],
+        "telefone_whatsapp": "1130531900",
+        "emails": [
+            "rebecaresende@icloud.com"
+        ],
+        "email_documentacao": "rebecaresende@icloud.com",
+        "email_sistema": "rebecaresende@icloud.com",
+        "social": {
+            "site": "https://www.inclusivetravel.com.br",
+            "facebook": "",
+            "instagram": "https://www.instagram.com/Inclusivetravel_/"
+        },
+        "logotipo": "logo_dlbanco.svg",
+        "topo_email": "topo_email_inclusive.jpg"
+    }
+}

@@ -3108,3 +3108,104 @@ INFO 2025-08-06 21:00:56,551 cambio Câmbio encontrado no banco para 2025-08-06:
 INFO 2025-08-06 21:00:56,570 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:33750][0m
 INFO 2025-08-06 21:01:04,191 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
 INFO 2025-08-06 21:01:04,201 runserver [mHTTP GET /administracao/whatsapp/account/2/edit/ 200 [0.03, 127.0.0.1:33750][0m
+INFO 2025-08-06 21:13:30,499 autoreload Watching for file changes with StatReloader
+INFO 2025-08-06 21:13:33,207 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:13:33,228 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.06, 127.0.0.1:35626][0m
+INFO 2025-08-06 21:13:35,390 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:13:35,398 runserver [mHTTP GET /administracao/whatsapp/account/2/test/ 200 [0.03, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:13:42,989 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:13:43,005 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.05, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:13:45,983 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:13:45,993 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:13:59,706 runserver [mHTTP POST /administracao/whatsapp/account/1/edit/ 200 [0.05, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:13:59,765 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:13:59,795 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.07, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:14:01,971 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:14:01,980 runserver [mHTTP GET /administracao/whatsapp/account/1/test/ 200 [0.04, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:14:10,622 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:14:10,631 runserver [mHTTP POST /administracao/whatsapp/account/1/test/ 200 [0.91, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:14:22,498 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:14:22,519 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:35638][0m
+INFO 2025-08-06 21:14:24,631 cambio Câmbio encontrado no banco para 2025-08-06: R$ 5.5044
+INFO 2025-08-06 21:14:24,662 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.06, 127.0.0.1:35638][0m
+INFO 2025-08-07 08:03:46,422 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 08:03:53,120 runserver [32mHTTP GET / 302 [0.02, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:53,141 cambio Câmbio não encontrado no banco para 2025-08-07, buscando na AwesomeAPI...
+INFO 2025-08-07 08:03:53,141 cambio Buscando câmbio na AwesomeAPI: https://economia.awesomeapi.com.br/json/last/USD-BRL
+INFO 2025-08-07 08:03:53,189 cambio Câmbio salvo no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 08:03:53,209 runserver [mHTTP GET /login/?next=/ 200 [0.09, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:53,251 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:58108][0m
+INFO 2025-08-07 08:03:53,252 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:58114][0m
+INFO 2025-08-07 08:03:53,252 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.01, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:57,541 runserver [32mHTTP POST /login/?next=/ 302 [0.20, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:57,556 runserver [32mHTTP GET / 302 [0.01, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:57,578 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 08:03:57,617 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:58092][0m
+INFO 2025-08-07 08:03:57,629 runserver [36mHTTP GET /static/app.css 304 [0.00, 127.0.0.1:58114][0m
+INFO 2025-08-07 08:03:57,659 runserver [36mHTTP GET /static/fa-solid-900.5b60a450.woff2 304 [0.00, 127.0.0.1:58114][0m
+INFO 2025-08-07 08:03:57,659 runserver [36mHTTP GET /static/fa-brands-400.32a863c5.woff2 304 [0.00, 127.0.0.1:58092][0m
+INFO 2025-08-07 10:02:56,959 autoreload Watching for file changes with StatReloader
+INFO 2025-08-07 10:03:02,262 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:03:02,282 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:46688][0m
+INFO 2025-08-07 10:03:02,294 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:46688][0m
+INFO 2025-08-07 10:03:09,785 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:03:09,792 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.02, 127.0.0.1:46688][0m
+INFO 2025-08-07 10:07:06,659 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:07:06,666 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.03, 127.0.0.1:46658][0m
+INFO 2025-08-07 10:07:06,706 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:46658][0m
+INFO 2025-08-07 10:07:06,707 runserver [mHTTP GET /static/app.js 200 [0.02, 127.0.0.1:46674][0m
+INFO 2025-08-07 10:07:06,708 runserver [mHTTP GET /static/app.css 200 [0.02, 127.0.0.1:46662][0m
+INFO 2025-08-07 10:07:06,716 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:46662][0m
+INFO 2025-08-07 10:07:06,742 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:46674][0m
+INFO 2025-08-07 10:07:06,751 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:46662][0m
+INFO 2025-08-07 10:07:06,752 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:46674][0m
+INFO 2025-08-07 10:07:32,905 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:07:32,907 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:46674][0m
+INFO 2025-08-07 10:09:18,976 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:09:18,977 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:47298][0m
+INFO 2025-08-07 10:09:18,998 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:47298][0m
+INFO 2025-08-07 10:09:18,998 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:47306][0m
+INFO 2025-08-07 10:09:18,999 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:47318][0m
+INFO 2025-08-07 10:09:19,001 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:47298][0m
+INFO 2025-08-07 10:09:19,020 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:47318][0m
+INFO 2025-08-07 10:09:19,020 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:47306][0m
+INFO 2025-08-07 10:09:19,026 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:47318][0m
+INFO 2025-08-07 10:12:34,897 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:12:34,899 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:42378][0m
+INFO 2025-08-07 10:12:34,919 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:42390][0m
+INFO 2025-08-07 10:12:34,919 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:42378][0m
+INFO 2025-08-07 10:12:34,920 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:42392][0m
+INFO 2025-08-07 10:12:34,922 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:42390][0m
+INFO 2025-08-07 10:12:34,938 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42392][0m
+INFO 2025-08-07 10:12:34,938 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42390][0m
+INFO 2025-08-07 10:12:34,943 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42392][0m
+INFO 2025-08-07 10:13:28,374 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:13:28,375 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:42392][0m
+INFO 2025-08-07 10:14:14,585 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:14:14,592 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.02, 127.0.0.1:53000][0m
+INFO 2025-08-07 10:14:14,629 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:53010][0m
+INFO 2025-08-07 10:14:14,630 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:53000][0m
+INFO 2025-08-07 10:14:14,630 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:14:14,633 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:53010][0m
+INFO 2025-08-07 10:14:14,652 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:14:14,655 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:14:14,656 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:53010][0m
+INFO 2025-08-07 10:14:47,051 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:14:47,055 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:15:00,144 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:15:00,147 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:15:23,478 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:15:23,481 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:15:33,369 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:15:33,376 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.02, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:16:05,661 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:16:05,666 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.02, 127.0.0.1:53016][0m
+INFO 2025-08-07 10:16:55,569 cambio Câmbio encontrado no banco para 2025-08-07: R$ 5.4604
+INFO 2025-08-07 10:16:55,571 runserver [mHTTP GET /inclusive/privacidade/ 200 [0.01, 127.0.0.1:34944][0m
+INFO 2025-08-07 10:16:55,595 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:34958][0m
+INFO 2025-08-07 10:16:55,596 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:34962][0m
+INFO 2025-08-07 10:16:55,596 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:34944][0m
+INFO 2025-08-07 10:16:55,598 runserver [mHTTP GET /static/logo_inclusive.png 200 [0.00, 127.0.0.1:34958][0m
+INFO 2025-08-07 10:16:55,617 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34962][0m
+INFO 2025-08-07 10:16:55,621 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:34962][0m
+INFO 2025-08-07 10:16:55,621 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34958][0m

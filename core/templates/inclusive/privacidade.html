@@ -1,0 +1,361 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - Inclusive Travel</title>
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <link href="{% static 'app.css' %}" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e4d8b;
+            --secondary-color: #f39019;
+            --accent-green: #5cb85c;
+            --accent-blue: #3498db;
+            --text-color: #555555;
+            --dark-blue: #1e4d8b;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px 0;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .logo-section {
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        .logo-section img {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-section img {
+                max-width: 200px;
+            }
+        }
+        
+        .contact-info {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .contact-info .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info .contact-item i {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 25px;
+            text-align: center;
+        }
+        
+        .content-section h2 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .content-section h3 {
+            color: var(--dark-blue);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .content-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .content-section ul li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .content-section ul li:before {
+            content: "\2022";
+            position: absolute;
+            left: 10px;
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .card-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e57800;
+            border-color: #e57800;
+        }
+        
+        .text-primary {
+            color: var(--secondary-color) !important;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 0;
+            }
+            
+            
+            .content-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="logo-section">
+                <img src="{% static 'logo_inclusive.png' %}" alt="Inclusive Travel - Operadora de Turismo">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Telefone:</strong><br>
+                            (11) 5026-4723
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>E-mail:</strong><br>
+                            comercial@inclusivetravel.com.br
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <strong>WhatsApp:</strong><br>
+                            (11) 5026-4723
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Policy Content -->
+        <div class="content-section">
+            <h1 class="text-center mb-5" style="color: var(--primary-color);">Política de Privacidade</h1>
+            
+            <div class="card-section">
+                <p class="lead" style="color: var(--dark-blue);">A Inclusive Travel valoriza a privacidade e a proteção dos dados pessoais de nossos clientes. Esta Política de Privacidade descreve como coletamos, usamos, compartilhamos e protegemos suas informações pessoais.</p>
+            </div>
+
+            <h2>1. Informações que Coletamos</h2>
+            <p>A Inclusive Travel coleta as seguintes informações através de nossos canais de atendimento, incluindo WhatsApp Business API:</p>
+            <ul>
+                <li>Dados pessoais (nome, CPF/CNPJ, passaporte)</li>
+                <li>Informações de contato (telefone, e-mail, endereço)</li>
+                <li>Números de telefone dos usuários do WhatsApp</li>
+                <li>Mensagens enviadas e recebidas através de nossos canais</li>
+                <li>Dados de interação com nossos serviços de viagem</li>
+                <li>Preferências de viagem e histórico de reservas</li>
+                <li>Informações de pagamento (processadas de forma segura)</li>
+            </ul>
+
+            <h2>2. Como Usamos as Informações</h2>
+            <p>Utilizamos as informações coletadas para os seguintes propósitos:</p>
+            
+            <h3>2.1 Prestação de Serviços</h3>
+            <ul>
+                <li>Fornecer atendimento personalizado ao cliente</li>
+                <li>Processar reservas de viagens e hospedagens</li>
+                <li>Enviar confirmações e atualizações de viagem</li>
+                <li>Prestar suporte durante sua viagem</li>
+            </ul>
+
+            <h3>2.2 Comunicação</h3>
+            <ul>
+                <li>Enviar notificações importantes sobre seus serviços</li>
+                <li>Responder suas dúvidas e solicitações</li>
+                <li>Enviar ofertas e promoções (com seu consentimento)</li>
+                <li>Realizar pesquisas de satisfação</li>
+            </ul>
+
+            <h3>2.3 Melhorias e Análises</h3>
+            <ul>
+                <li>Melhorar nossos produtos e serviços</li>
+                <li>Desenvolver novos roteiros e experiências</li>
+                <li>Analisar tendências de viagem</li>
+                <li>Personalizar sua experiência em nossos canais</li>
+            </ul>
+
+            <h2>3. Compartilhamento de Dados</h2>
+            <p>A Inclusive Travel pode compartilhar suas informações pessoais nas seguintes situações:</p>
+            <ul>
+                <li><strong>Parceiros de viagem:</strong> Companhias aéreas, hotéis e operadores turísticos necessários para realizar suas reservas</li>
+                <li><strong>Prestadores de serviços:</strong> Empresas que nos auxiliam na operação (processamento de pagamentos, análise de dados)</li>
+                <li><strong>Autoridades legais:</strong> Quando exigido por lei ou ordem judicial</li>
+                <li><strong>Proteção de direitos:</strong> Para proteger os direitos e segurança da Inclusive Travel e de nossos clientes</li>
+            </ul>
+            <p><strong>Importante:</strong> Não vendemos, alugamos ou comercializamos suas informações pessoais com terceiros para fins de marketing.</p>
+
+            <h2>4. Segurança dos Dados</h2>
+            <p>Implementamos medidas de segurança técnicas, administrativas e físicas apropriadas para proteger suas informações:</p>
+            <ul>
+                <li>Criptografia de dados em trânsito e em repouso</li>
+                <li>Controle de acesso restrito às informações pessoais</li>
+                <li>Monitoramento contínuo de nossa infraestrutura</li>
+                <li>Treinamento regular de nossa equipe em proteção de dados</li>
+                <li>Auditorias periódicas de segurança</li>
+                <li>Conformidade com a Lei Geral de Proteção de Dados (LGPD)</li>
+            </ul>
+
+            <h2>5. Seus Direitos</h2>
+            <p>De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem os seguintes direitos:</p>
+            <ul>
+                <li><strong>Confirmação e Acesso:</strong> Confirmar se tratamos seus dados e acessá-los</li>
+                <li><strong>Correção:</strong> Solicitar a correção de dados incompletos ou desatualizados</li>
+                <li><strong>Anonimização ou Bloqueio:</strong> Solicitar anonimização ou bloqueio de dados desnecessários</li>
+                <li><strong>Portabilidade:</strong> Receber seus dados em formato estruturado</li>
+                <li><strong>Eliminação:</strong> Solicitar a exclusão de seus dados pessoais</li>
+                <li><strong>Informação sobre compartilhamento:</strong> Saber com quais entidades compartilhamos seus dados</li>
+                <li><strong>Revogação do consentimento:</strong> Retirar seu consentimento a qualquer momento</li>
+                <li><strong>Oposição:</strong> Opor-se a tratamento de dados em determinadas situações</li>
+            </ul>
+
+            <h2>6. Retenção de Dados</h2>
+            <p>Mantemos suas informações pessoais apenas pelo tempo necessário para:</p>
+            <ul>
+                <li>Cumprir as finalidades descritas nesta política</li>
+                <li>Atender requisitos legais e regulatórios</li>
+                <li>Resolver disputas e fazer cumprir nossos acordos</li>
+                <li>Manter registros comerciais adequados</li>
+            </ul>
+
+            <h2>7. Cookies e Tecnologias Similares</h2>
+            <p>Utilizamos cookies e tecnologias similares para:</p>
+            <ul>
+                <li>Melhorar a experiência de navegação em nosso site</li>
+                <li>Analisar o tráfego e uso de nossos serviços</li>
+                <li>Personalizar conteúdo e ofertas</li>
+                <li>Lembrar suas preferências</li>
+            </ul>
+            <p>Você pode configurar seu navegador para recusar cookies, mas isso pode afetar algumas funcionalidades.</p>
+
+            <h2>8. Menores de Idade</h2>
+            <p>Nossos serviços não são direcionados a menores de 18 anos. Dados de menores só são coletados com consentimento dos pais ou responsáveis legais, quando necessário para prestação de serviços de viagem.</p>
+
+            <h2>9. Alterações nesta Política</h2>
+            <p>Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos sobre mudanças significativas através de:</p>
+            <ul>
+                <li>Aviso em nosso site</li>
+                <li>E-mail para clientes cadastrados</li>
+                <li>Mensagem em nossos canais de atendimento</li>
+            </ul>
+
+            <h2>10. Contato e DPO</h2>
+            <p>Para exercer seus direitos, esclarecer dúvidas ou fazer sugestões sobre esta Política de Privacidade, entre em contato com nosso Encarregado de Proteção de Dados (DPO):</p>
+            
+            <div class="card-section">
+                <h4><i class="fas fa-user-shield"></i> Encarregado de Proteção de Dados</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li><i class="fas fa-envelope text-primary me-2"></i> <strong>E-mail:</strong> contato@inclusivetravel.com.br</li>
+                    <li><i class="fas fa-phone text-primary me-2"></i> <strong>Telefone:</strong> (11) 5026-4723</li>
+                    <li><i class="fas fa-map-marker-alt text-primary me-2"></i> <strong>Endereço:</strong> Av. Paulista, 1439, sala 14 - Bela Vista - São Paulo/SP - CEP: 01310-923</li>
+                    <li><i class="fas fa-clock text-primary me-2"></i> <strong>Horário de atendimento:</strong> Segunda a Sexta, das 9h às 18h</li>
+                </ul>
+            </div>
+
+            <h2>11. Autoridade Nacional de Proteção de Dados</h2>
+            <p>Você também pode entrar em contato com a Autoridade Nacional de Proteção de Dados (ANPD) para fazer reclamações sobre o tratamento de seus dados pessoais:</p>
+            <ul>
+                <li><strong>Site:</strong> <a href="https://www.gov.br/anpd" target="_blank">www.gov.br/anpd</a></li>
+                <li><strong>E-mail:</strong> ouvidoria@anpd.gov.br</li>
+            </ul>
+
+            <div class="alert mt-5" role="alert" style="background-color: #e8f4fd; border-left: 4px solid var(--accent-blue); color: var(--dark-blue);">
+                <h5><i class="fas fa-info-circle"></i> Informação Importante</h5>
+                <p class="mb-0">Esta política de privacidade é parte integrante dos Termos e Condições de Uso dos serviços da Inclusive Travel. Ao utilizar nossos serviços, você concorda com os termos desta política.</p>
+            </div>
+
+            <div class="text-center mt-5">
+                <p><strong>Última atualização:</strong> 07 de Agosto de 2025</p>
+                <p><strong>Versão:</strong> 1.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 Inclusive Travel - Todos os direitos reservados</p>
+        </div>
+    </div>
+
+    <script src="{% static 'app.js' %}"></script>
+</body>
+</html>

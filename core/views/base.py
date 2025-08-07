@@ -1,6 +1,6 @@
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 
@@ -30,3 +30,10 @@ def redirect_to_group(request):
     
     # Redireciona baseado no nome do grupo
     return redirect(f"/{group_name}/")
+
+
+def privacidade_inclusive(request):
+    """
+    View pública para exibir a política de privacidade da Inclusive Travel.
+    """
+    return render(request, 'inclusive/privacidade.html')
