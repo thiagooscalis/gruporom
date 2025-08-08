@@ -21,11 +21,32 @@ class FieldEncryption:
             # Gera uma chave temporária para desenvolvimento (INSEGURO em produção)
             key = Fernet.generate_key()
             print("⚠️  AVISO: Usando chave de criptografia temporária. Configure DJANGO_ENCRYPTION_KEY em produção!")
+        else:
+            # Se a chave foi fornecida, validar formato
+            if isinstance(key, str):
+                key = key.strip()  # Remove espaços em branco
+                try:
+                    # Tenta decodificar para verificar se é válida
+                    key_bytes = key.encode('utf-8')
+                    # Testa se consegue criar Fernet (isso valida o formato base64)
+                    test_fernet = Fernet(key_bytes)
+                    key = key_bytes
+                except Exception as e:
+                    print(f"❌ ERRO: Chave DJANGO_ENCRYPTION_KEY inválida: {str(e)}")
+                    print("💡 Gerando nova chave válida:")
+                    new_key = Fernet.generate_key().decode()
+                    print(f"   DJANGO_ENCRYPTION_KEY={new_key}")
+                    print("   ⚠️  Configure esta chave no seu arquivo .env!")
+                    key = Fernet.generate_key()
         
-        if isinstance(key, str):
-            key = key.encode()
-        
-        self.fernet = Fernet(key)
+        try:
+            self.fernet = Fernet(key)
+        except Exception as e:
+            print(f"❌ ERRO CRÍTICO: Não foi possível inicializar criptografia: {str(e)}")
+            # Fallback para chave temporária
+            key = Fernet.generate_key()
+            self.fernet = Fernet(key)
+            print("⚠️  USANDO CHAVE TEMPORÁRIA - DADOS NÃO SERÃO PERSISTENTES!")
     
     def encrypt(self, text):
         """
