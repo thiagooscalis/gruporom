@@ -10,8 +10,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'administracao:home' %}">Administração</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'administracao:whatsapp' %}">WhatsApp Business</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'administracao:whatsapp_accounts' %}">Contas</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'administracao:whatsapp:dashboard' %}">WhatsApp Business</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'administracao:whatsapp:accounts_list' %}">Contas</a></li>
                     <li class="breadcrumb-item active">Diagnóstico Webhook</li>
                 </ol>
             </nav>
@@ -129,7 +129,7 @@
                 <div class="card-body">
                     <p>Clique no botão abaixo para testar se o webhook está configurado corretamente:</p>
                     <button class="btn btn-success" 
-                            hx-post="{% url 'administracao:test_webhook' account.id %}"
+                            hx-post="{% url 'administracao:whatsapp:test_webhook' account.id %}"
                             hx-target="#test-result"
                             hx-indicator="#test-spinner">
                         <i class="fas fa-vial me-2"></i>

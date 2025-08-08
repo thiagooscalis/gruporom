@@ -20,7 +20,7 @@ from .dia_roteiro import DiaRoteiro
 from .extra import Extra
 from .tarefa import Tarefa
 from .nota import Nota
-from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate, WhatsAppConversation
+from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate, WhatsAppConversation, WhatsAppWebhookQueue
 
 __all__ = [
     "Pessoa",
@@ -50,4 +50,5 @@ __all__ = [
     "WhatsAppMessage",
     "WhatsAppTemplate",
     "WhatsAppConversation",
+    "WhatsAppWebhookQueue",
 ]
