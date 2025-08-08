@@ -1010,8 +1010,12 @@ class WhatsAppWebhookProcessor:
         # Atualiza última atividade da conversa
         await sync_to_async(lambda: setattr(conversation, 'last_activity', timestamp) or conversation.save(update_fields=['last_activity']))()
         
-        # Notifica via WebSocket
-        await self._notify_new_message(message)
+        # Notifica nova mensagem via WebSocket
+        await self._notify_new_message(message, conversation)
+        
+        # Se é uma nova conversa, notifica também
+        if conversation.messages.count() == 1:  # Primeira mensagem da conversa
+            await self._notify_new_conversation(conversation)
         
         logger.info(f"Mensagem inbound processada: {wamid} - Conversa: {conversation.id}")
     
@@ -1152,12 +1156,11 @@ class WhatsAppWebhookProcessor:
         
         return message_type, content, media_data
     
-    async def _notify_new_message(self, message):
+    async def _notify_new_message(self, message, conversation):
         """
         Notifica nova mensagem via WebSocket
         """
         from channels.layers import get_channel_layer
-        from django.db import sync_to_async
         
         channel_layer = get_channel_layer()
         if channel_layer:
@@ -1174,12 +1177,45 @@ class WhatsAppWebhookProcessor:
                 'timestamp': message.timestamp.isoformat()
             }
             
-            # Notifica sala da conta
+            # Notifica área comercial
             await channel_layer.group_send(
-                f'whatsapp_account_{message.account.id}',
+                'whatsapp_comercial',
                 {
                     'type': 'message_received',
-                    'message': message_data
+                    'message': message_data,
+                    'conversation_id': conversation.id
+                }
+            )
+    
+    async def _notify_new_conversation(self, conversation):
+        """
+        Notifica nova conversa aguardando atendimento via WebSocket
+        """
+        from channels.layers import get_channel_layer
+        from django.db import sync_to_async
+        
+        channel_layer = get_channel_layer()
+        if channel_layer:
+            # Serializa conversa
+            conversation_data = {
+                'id': conversation.id,
+                'contact_name': conversation.contact.display_name,
+                'contact_phone': conversation.contact.display_phone,
+                'account_name': conversation.account.name,
+                'status': conversation.status,
+                'priority': conversation.priority,
+                'first_message_at': conversation.first_message_at.isoformat(),
+                'last_activity': conversation.last_activity.isoformat(),
+                'messages_count': await sync_to_async(conversation.messages.count)(),
+                'unread_count': await sync_to_async(conversation.unread_messages_count)
+            }
+            
+            # Notifica área comercial sobre nova conversa aguardando
+            await channel_layer.group_send(
+                'whatsapp_comercial',
+                {
+                    'type': 'conversation_new',
+                    'conversation': conversation_data
                 }
             )
             

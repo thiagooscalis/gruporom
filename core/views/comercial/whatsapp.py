@@ -63,6 +63,27 @@ def assign_conversation(request, conversation_id):
     conversation.assign_to_user(request.user)
     conversation.start_attendance()
     
+    # Notifica via WebSocket sobre atribuição
+    from channels.layers import get_channel_layer
+    from asgiref.sync import async_to_sync
+    
+    channel_layer = get_channel_layer()
+    if channel_layer:
+        conversation_data = {
+            'id': conversation.id,
+            'contact_name': conversation.contact.display_name,
+            'assigned_to': request.user.username,
+            'status': conversation.status,
+        }
+        
+        async_to_sync(channel_layer.group_send)(
+            'whatsapp_comercial',
+            {
+                'type': 'conversation_assigned',
+                'conversation': conversation_data
+            }
+        )
+    
     messages.success(request, f'Conversa com {conversation.contact.display_name} atribuída a você.')
     return redirect('comercial:conversation_detail', conversation_id=conversation.id)
 

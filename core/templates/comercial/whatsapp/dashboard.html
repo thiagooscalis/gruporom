@@ -17,12 +17,15 @@
     </div>
 
     <div class="row mb-4">
-        <div class="col">
-            <h1 class="h2">
-                <i class="fab fa-whatsapp me-2 text-success"></i>
-                WhatsApp Business
-            </h1>
-            <p class="text-muted">Gestão comercial das suas contas WhatsApp Business</p>
+        <div class="col d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 mb-1">
+                    <i class="fab fa-whatsapp me-2 text-success"></i>
+                    WhatsApp Business
+                </h1>
+                <p class="text-muted mb-0">Gestão comercial das suas contas WhatsApp Business</p>
+            </div>
+            <span id="ws-status" class="badge bg-secondary fs-6">⏳ Conectando...</span>
         </div>
     </div>
 
@@ -36,7 +39,7 @@
                             <i class="fas fa-clock text-warning fa-2x"></i>
                         </div>
                     </div>
-                    <h3 class="text-warning">{{ total_pending }}</h3>
+                    <h3 class="text-warning" data-pending-count>{{ total_pending }}</h3>
                     <small class="text-muted">Aguardando Atendimento</small>
                 </div>
             </div>
@@ -91,7 +94,7 @@
                         </thead>
                         <tbody>
                             {% for conversation in pending_conversations %}
-                            <tr>
+                            <tr data-conversation-id="{{ conversation.id }}">
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="bg-success bg-opacity-20 p-2 rounded-circle me-2">
@@ -114,7 +117,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary">{{ conversation.messages_count }}</span>
+                                    <span class="badge bg-primary" data-message-count>{{ conversation.messages_count }}</span>
                                     {% if conversation.unread_count > 0 %}
                                         <span class="badge bg-warning ms-1">{{ conversation.unread_count }} não lidas</span>
                                     {% endif %}
@@ -148,4 +151,200 @@
 
 
 </div>
+
+<!-- WebSocket para atualizações em tempo real -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuração do WebSocket
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/ws/comercial/whatsapp/`;
+    
+    let socket = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    
+    function connectWebSocket() {
+        try {
+            socket = new WebSocket(wsUrl);
+            
+            socket.onopen = function(e) {
+                console.log('🟢 WebSocket conectado');
+                reconnectAttempts = 0;
+                
+                // Mostra indicador de conexão
+                updateConnectionStatus(true);
+            };
+            
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                console.log('📨 Mensagem recebida:', data);
+                
+                // Processa diferentes tipos de eventos
+                switch(data.type) {
+                    case 'conversation_new':
+                        handleNewConversation(data.conversation);
+                        break;
+                    case 'conversation_assigned':
+                        handleConversationAssigned(data.conversation);
+                        break;
+                    case 'conversation_updated':
+                        handleConversationUpdated(data.conversation);
+                        break;
+                    case 'message_received':
+                        handleMessageReceived(data.message, data.conversation_id);
+                        break;
+                }
+            };
+            
+            socket.onclose = function(event) {
+                console.log('🔴 WebSocket desconectado:', event.code);
+                updateConnectionStatus(false);
+                
+                // Tentativa de reconexão
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    console.log(`⏳ Tentando reconectar... (${reconnectAttempts}/${maxReconnectAttempts})`);
+                    setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+                }
+            };
+            
+            socket.onerror = function(error) {
+                console.error('❌ Erro no WebSocket:', error);
+                updateConnectionStatus(false);
+            };
+            
+        } catch (error) {
+            console.error('❌ Erro ao conectar WebSocket:', error);
+            updateConnectionStatus(false);
+        }
+    }
+    
+    function updateConnectionStatus(isConnected) {
+        // Atualiza indicador visual da conexão (se existir)
+        const statusIndicator = document.querySelector('#ws-status');
+        if (statusIndicator) {
+            if (isConnected) {
+                statusIndicator.className = 'badge bg-success';
+                statusIndicator.textContent = '🟢 Tempo Real';
+            } else {
+                statusIndicator.className = 'badge bg-danger';
+                statusIndicator.textContent = '🔴 Desconectado';
+            }
+        }
+    }
+    
+    function handleNewConversation(conversation) {
+        // Atualiza contador de conversas aguardando
+        const pendingCount = document.querySelector('[data-pending-count]');
+        if (pendingCount) {
+            const current = parseInt(pendingCount.textContent) || 0;
+            pendingCount.textContent = current + 1;
+        }
+        
+        // Recarrega a lista de conversas
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+        
+        // Mostra notificação
+        showNotification('Nova conversa aguardando atendimento!', 'success');
+    }
+    
+    function handleConversationAssigned(conversation) {
+        // Remove da lista se foi atribuída a outro atendente
+        const conversationRow = document.querySelector(`[data-conversation-id="${conversation.id}"]`);
+        if (conversationRow) {
+            conversationRow.style.transition = 'opacity 0.5s';
+            conversationRow.style.opacity = '0.5';
+            setTimeout(() => {
+                conversationRow.remove();
+                updateCounters();
+            }, 500);
+        }
+    }
+    
+    function handleConversationUpdated(conversation) {
+        // Atualiza informações da conversa na tela
+        const conversationRow = document.querySelector(`[data-conversation-id="${conversation.id}"]`);
+        if (conversationRow) {
+            // Atualiza última atividade, mensagens não lidas, etc.
+            window.location.reload();
+        }
+    }
+    
+    function handleMessageReceived(message, conversationId) {
+        // Atualiza contador de mensagens da conversa
+        const messageCount = document.querySelector(`[data-conversation-id="${conversationId}"] [data-message-count]`);
+        if (messageCount) {
+            const current = parseInt(messageCount.textContent) || 0;
+            messageCount.textContent = current + 1;
+        }
+        
+        // Destaca a conversa
+        const conversationRow = document.querySelector(`[data-conversation-id="${conversationId}"]`);
+        if (conversationRow) {
+            conversationRow.classList.add('table-warning');
+            setTimeout(() => {
+                conversationRow.classList.remove('table-warning');
+            }, 3000);
+        }
+        
+        // Mostra notificação
+        showNotification('Nova mensagem recebida!', 'info');
+    }
+    
+    function updateCounters() {
+        // Atualiza contadores baseado no que está visível na tela
+        const visibleRows = document.querySelectorAll('tbody tr[data-conversation-id]').length;
+        const pendingCount = document.querySelector('[data-pending-count]');
+        if (pendingCount) {
+            pendingCount.textContent = visibleRows;
+        }
+    }
+    
+    function showNotification(message, type = 'info') {
+        // Cria e mostra notificação toast
+        const toastHtml = `
+            <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'primary'} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        // Adiciona à área de toasts
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        // Ativa o toast
+        const toastEl = toastContainer.lastElementChild;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+        
+        // Remove após fechar
+        toastEl.addEventListener('hidden.bs.toast', () => {
+            toastEl.remove();
+        });
+    }
+    
+    // Inicia a conexão WebSocket
+    connectWebSocket();
+    
+    // Limpa conexão ao sair da página
+    window.addEventListener('beforeunload', function() {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+        }
+    });
+});
+</script>
 {% endblock %}

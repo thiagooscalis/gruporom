@@ -1,8 +1,92 @@
 # -*- coding: utf-8 -*-
 """
 WebSocket consumers for WhatsApp functionality.
-Chat functionality has been removed - keeping file for potential future use.
 """
+import json
+import logging
+from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
+from django.contrib.auth.models import AnonymousUser
 
-# Chat consumers removed as per user request
-# This file is kept for potential future non-chat WebSocket functionality
+logger = logging.getLogger(__name__)
+
+
+class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
+    """
+    Consumer para atualizações em tempo real da área comercial do WhatsApp
+    """
+    
+    async def connect(self):
+        """Conecta o WebSocket"""
+        # Verifica se o usuário está autenticado
+        if self.scope["user"] == AnonymousUser():
+            await self.close()
+            return
+        
+        # Verifica se o usuário é do grupo Comercial
+        is_comercial = await self.is_comercial_user()
+        if not is_comercial:
+            await self.close()
+            return
+        
+        # Adiciona à room group do comercial
+        self.room_group_name = 'whatsapp_comercial'
+        
+        # Adiciona à room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        
+        # Aceita a conexão
+        await self.accept()
+        logger.info(f"WebSocket conectado para usuário {self.scope['user'].username}")
+    
+    async def disconnect(self, close_code):
+        """Desconecta o WebSocket"""
+        if hasattr(self, 'room_group_name'):
+            # Remove da room group
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
+        logger.info(f"WebSocket desconectado para usuário {self.scope['user'].username}")
+    
+    async def receive(self, text_data):
+        """Recebe mensagens do WebSocket (não usado neste caso)"""
+        pass
+    
+    # Handlers para diferentes tipos de eventos
+    async def conversation_new(self, event):
+        """Nova conversa aguardando atendimento"""
+        await self.send(text_data=json.dumps({
+            'type': 'conversation_new',
+            'conversation': event['conversation']
+        }))
+    
+    async def conversation_assigned(self, event):
+        """Conversa foi atribuída a um atendente"""
+        await self.send(text_data=json.dumps({
+            'type': 'conversation_assigned', 
+            'conversation': event['conversation']
+        }))
+    
+    async def conversation_updated(self, event):
+        """Conversa foi atualizada (nova mensagem, status, etc.)"""
+        await self.send(text_data=json.dumps({
+            'type': 'conversation_updated',
+            'conversation': event['conversation']
+        }))
+    
+    async def message_received(self, event):
+        """Nova mensagem recebida em uma conversa"""
+        await self.send(text_data=json.dumps({
+            'type': 'message_received',
+            'message': event['message'],
+            'conversation_id': event['conversation_id']
+        }))
+    
+    @database_sync_to_async
+    def is_comercial_user(self):
+        """Verifica se o usuário pertence ao grupo Comercial"""
+        return self.scope["user"].groups.filter(name='Comercial').exists()
