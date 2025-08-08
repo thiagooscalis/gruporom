@@ -774,3 +774,68 @@ class WhatsAppConversation(models.Model):
         """Calcula tempo de resposta médio"""
         # TODO: Implementar cálculo de tempo de resposta
         return None
+
+
+class WhatsAppWebhookQueue(models.Model):
+    """
+    Model para armazenar webhooks recebidos para processamento assíncrono
+    """
+    
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('processing', 'Processando'),
+        ('processed', 'Processado'),
+        ('failed', 'Falhou'),
+    ]
+    
+    account = models.ForeignKey(
+        WhatsAppAccount,
+        on_delete=models.CASCADE,
+        related_name="webhook_queue",
+        verbose_name="Conta WhatsApp"
+    )
+    
+    payload = models.JSONField(
+        verbose_name="Payload do Webhook",
+        help_text="Dados completos recebidos do webhook"
+    )
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name="Status"
+    )
+    
+    attempts = models.IntegerField(
+        default=0,
+        verbose_name="Tentativas de Processamento"
+    )
+    
+    error_message = models.TextField(
+        blank=True,
+        verbose_name="Mensagem de Erro"
+    )
+    
+    received_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Recebido em"
+    )
+    
+    processed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Processado em"
+    )
+    
+    class Meta:
+        verbose_name = "Fila de Webhook"
+        verbose_name_plural = "Fila de Webhooks"
+        ordering = ['-received_at']
+        indexes = [
+            models.Index(fields=['status', 'received_at']),
+            models.Index(fields=['account', 'status']),
+        ]
+    
+    def __str__(self):
+        return f"Webhook {self.id} - {self.get_status_display()} - {self.account.name}"

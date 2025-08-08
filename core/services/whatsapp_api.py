@@ -877,6 +877,22 @@ class WhatsAppAPIService:
             'message': 'Todos os testes passaram' if all_passed else 'Alguns testes falharam'
         }
     
+    def get_recent_messages(self, limit: int = 20) -> Dict[str, Any]:
+        """
+        Busca mensagens recentes via API do WhatsApp (Cloud API)
+        Nota: A API do WhatsApp Business Cloud não tem endpoint direto para listar mensagens
+        Este método deve ser implementado com base no seu webhook/armazenamento local
+        """
+        # Por limitações da API, mensagens devem ser recebidas via webhook
+        # Esta função serve como placeholder para implementação futura
+        logger.warning("get_recent_messages: API do WhatsApp não fornece endpoint para buscar mensagens históricas")
+        return {
+            'success': False,
+            'error': 'API do WhatsApp Business Cloud API não suporta busca de mensagens históricas',
+            'messages': [],
+            'note': 'Mensagens devem ser recebidas via webhook e armazenadas localmente'
+        }
+    
     def _get_mime_type(self, media_type: str) -> str:
         """
         Retorna MIME type baseado no tipo de mídia

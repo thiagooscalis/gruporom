@@ -152,6 +152,12 @@
                                             </button>
                                         {% endif %}
                                         
+                                        <a href="{% url 'administracao:whatsapp:webhook_debug' account.id %}" 
+                                           class="btn btn-sm btn-outline-info"
+                                           title="Diagnóstico Webhook">
+                                            <i class="fas fa-stethoscope"></i>
+                                        </a>
+                                        
                                         <button type="button" class="btn btn-sm btn-outline-danger" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#deleteModal"

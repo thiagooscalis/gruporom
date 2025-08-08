@@ -79,73 +79,7 @@
                 <i class="fas fa-headset me-2"></i>
                 Conversas Aguardando Atendimento
             </h3>
-            {% if pending_conversations %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Conta</th>
-                                <th>Última Mensagem</th>
-                                <th>Mensagens</th>
-                                <th>Última Atividade</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for conversation in pending_conversations %}
-                            <tr data-conversation-id="{{ conversation.id }}">
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-success bg-opacity-20 p-2 rounded-circle me-2">
-                                            <i class="fab fa-whatsapp text-success"></i>
-                                        </div>
-                                        <div>
-                                            <strong>{{ conversation.contact.display_name }}</strong>
-                                            <br><small class="text-muted">{{ conversation.contact.display_phone }}</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{{ conversation.account.name }}</td>
-                                <td>
-                                    {% if conversation.last_message %}
-                                        <div class="text-truncate" style="max-width: 200px;">
-                                            {{ conversation.last_message.get_display_content }}
-                                        </div>
-                                    {% else %}
-                                        <small class="text-muted">Sem mensagens</small>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary" data-message-count>{{ conversation.messages_count }}</span>
-                                    {% if conversation.unread_count > 0 %}
-                                        <span class="badge bg-warning ms-1">{{ conversation.unread_count }} não lidas</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <small class="text-muted">{{ conversation.last_activity|timesince }} atrás</small>
-                                </td>
-                                <td>
-                                    <a href="{% url 'comercial:assign_conversation' conversation.id %}" 
-                                       class="btn btn-success btn-sm">
-                                        <i class="fas fa-user-plus me-1"></i>
-                                        Atender
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div class="text-center py-5">
-                    <div class="mb-3">
-                        <i class="fas fa-comments text-muted fa-4x"></i>
-                    </div>
-                    <h5 class="text-muted">Nenhuma conversa aguardando</h5>
-                    <p class="text-muted">Todas as conversas foram atendidas ou não há mensagens pendentes.</p>
-                </div>
-            {% endif %}
+            {% include 'comercial/whatsapp/partials/conversation_table.html' %}
         </div>
     </div>
 
@@ -378,6 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
             socket.close();
         }
     });
+    
 });
 </script>
 {% endblock %}

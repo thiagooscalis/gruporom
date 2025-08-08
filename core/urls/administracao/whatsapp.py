@@ -26,6 +26,7 @@ urlpatterns = [
     
     # Debug
     path('account/<int:account_id>/debug/', views.webhook_debug, name='webhook_debug'),
+    path('account/<int:account_id>/test-webhook/', views.test_webhook, name='test_webhook'),
     
     # Templates
     path('account/<int:account_id>/templates/', views.templates_list, name='templates_list'),

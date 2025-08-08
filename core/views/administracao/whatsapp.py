@@ -151,14 +151,26 @@ def webhook(request, account_id):
             payload = json.loads(request.body)
             logger.info(f"Payload JSON: {payload}")
             
-            # Processa webhook de forma assíncrona
-            processor = WhatsAppWebhookProcessor(account)
-            # TODO: Processar de forma assíncrona usando Celery ou similar
-            # Por enquanto, processa síncronamente
-            import asyncio
-            result = asyncio.run(processor.process_webhook(payload))
+            # Adiciona o webhook à fila para processamento posterior
+            from core.models import WhatsAppWebhookQueue
+            WhatsAppWebhookQueue.objects.create(
+                account=account,
+                payload=payload,
+                status='pending'
+            )
+            logger.info(f"Webhook adicionado à fila para processamento posterior")
             
-            logger.info(f"Webhook processado com sucesso: {result}")
+            # Tenta processar imediatamente também (best effort)
+            try:
+                processor = WhatsAppWebhookProcessor(account)
+                import asyncio
+                result = asyncio.run(processor.process_webhook(payload))
+                logger.info(f"Webhook processado imediatamente com sucesso: {result}")
+            except Exception as proc_error:
+                # Se falhar o processamento imediato, não é problema
+                # pois está na fila para reprocessamento
+                logger.warning(f"Processamento imediato falhou, mas webhook está na fila: {proc_error}")
+            
             return HttpResponse(status=200)
             
         except json.JSONDecodeError as e:
@@ -180,38 +192,129 @@ def webhook_debug(request, account_id):
     """
     View para debug do webhook - mostra informações da conta e testa conectividade
     """
+    from core.models import WhatsAppWebhookQueue
+    from django.utils import timezone
+    from datetime import timedelta
+    
     account = get_object_or_404(WhatsAppAccount, id=account_id)
     
-    debug_info = {
-        'account_info': {
-            'id': account.id,
-            'name': account.name,
-            'phone_number': account.phone_number,
-            'phone_number_id': account.phone_number_id,
-            'business_account_id': account.business_account_id,
-            'access_token': account.access_token[:20] + '...' if account.access_token else None,
-            'webhook_verify_token': account.webhook_verify_token,
-            'is_active': account.is_active,
-            'status': account.get_status_display(),
-        },
-        'webhook_url': request.build_absolute_uri(f'/webhook/whatsapp/{account.id}/'),
-        'recent_messages': list(WhatsAppMessage.objects.filter(
-            account=account
-        ).order_by('-timestamp')[:5].values(
-            'direction', 'message_type', 'content', 'status', 'timestamp'
-        )),
-        'webhook_logs': []  # TODO: Implementar logs específicos do webhook
+    # Busca últimos webhooks recebidos
+    recent_webhooks = WhatsAppWebhookQueue.objects.filter(
+        account=account
+    ).order_by('-received_at')[:20]
+    
+    # Estatísticas dos webhooks
+    last_24h = timezone.now() - timedelta(hours=24)
+    webhook_stats = {
+        'total': WhatsAppWebhookQueue.objects.filter(account=account).count(),
+        'last_24h': WhatsAppWebhookQueue.objects.filter(
+            account=account,
+            received_at__gte=last_24h
+        ).count(),
+        'pending': WhatsAppWebhookQueue.objects.filter(
+            account=account,
+            status='pending'
+        ).count(),
+        'processed': WhatsAppWebhookQueue.objects.filter(
+            account=account,
+            status='processed'
+        ).count(),
+        'failed': WhatsAppWebhookQueue.objects.filter(
+            account=account,
+            status='failed'
+        ).count(),
     }
     
-    # Testa API do WhatsApp
-    try:
-        api_service = WhatsAppAPIService(account)
-        # TODO: Implementar teste de conectividade
-        debug_info['api_status'] = 'OK'
-    except Exception as e:
-        debug_info['api_status'] = f'Erro: {str(e)}'
+    # Busca últimas mensagens recebidas
+    recent_messages = WhatsAppMessage.objects.filter(
+        account=account,
+        direction='inbound'
+    ).order_by('-timestamp')[:10]
     
-    return JsonResponse(debug_info, json_dumps_params={'indent': 2})
+    context = {
+        'title': f'Diagnóstico Webhook - {account.name}',
+        'account': account,
+        'webhook_url': request.build_absolute_uri(f'/webhook/whatsapp/{account.id}/'),
+        'webhook_verify_token': account.webhook_verify_token,
+        'recent_webhooks': recent_webhooks,
+        'webhook_stats': webhook_stats,
+        'recent_messages': recent_messages,
+    }
+    
+    return render(request, 'administracao/whatsapp/webhook_debug.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def test_webhook(request, account_id):
+    """
+    Testa se o webhook está configurado corretamente
+    """
+    from django.http import HttpResponse
+    import requests
+    
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    # Testa se o webhook está respondendo
+    webhook_url = request.build_absolute_uri(f'/webhook/whatsapp/{account.id}/')
+    
+    try:
+        # Faz uma requisição GET para verificar o webhook (simula verificação do Meta)
+        response = requests.get(
+            webhook_url,
+            params={
+                'hub.mode': 'subscribe',
+                'hub.verify_token': account.webhook_verify_token,
+                'hub.challenge': 'test_challenge_123'
+            },
+            timeout=5
+        )
+        
+        if response.status_code == 200 and response.text == 'test_challenge_123':
+            # Webhook configurado corretamente
+            html = """
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Webhook funcionando!</strong><br>
+                O webhook está configurado corretamente e respondendo às verificações.
+            </div>
+            """
+        else:
+            # Webhook não está respondendo corretamente
+            html = f"""
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Problema no webhook!</strong><br>
+                Status: {response.status_code}<br>
+                Resposta: {response.text[:100]}
+            </div>
+            """
+    except requests.exceptions.Timeout:
+        html = """
+        <div class="alert alert-danger">
+            <i class="fas fa-times-circle me-2"></i>
+            <strong>Timeout!</strong><br>
+            O webhook não respondeu no tempo esperado (5 segundos).
+        </div>
+        """
+    except requests.exceptions.ConnectionError:
+        html = """
+        <div class="alert alert-danger">
+            <i class="fas fa-times-circle me-2"></i>
+            <strong>Erro de conexão!</strong><br>
+            Não foi possível conectar ao webhook. Verifique se a URL está acessível.
+        </div>
+        """
+    except Exception as e:
+        html = f"""
+        <div class="alert alert-danger">
+            <i class="fas fa-times-circle me-2"></i>
+            <strong>Erro!</strong><br>
+            {str(e)}
+        </div>
+        """
+    
+    return HttpResponse(html)
 
 
 # ==================== VIEWS DE TEMPLATES ====================

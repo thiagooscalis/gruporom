@@ -12435,3 +12435,38 @@ INFO 2025-08-08 11:17:23,427 autoreload Watching for file changes with StatReloa
 INFO 2025-08-08 11:19:55,721 autoreload Watching for file changes with StatReloader
 INFO 2025-08-08 11:28:12,991 autoreload /home/thiago/Projetos/gruporom/core/consumers.py changed, reloading.
 INFO 2025-08-08 11:28:13,342 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:23:15,439 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:23:23,664 runserver [32mHTTP GET / 302 [0.05, 127.0.0.1:46026][0m
+INFO 2025-08-08 14:23:23,701 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 14:23:23,736 runserver [mHTTP GET /administracao/ 200 [0.07, 127.0.0.1:46026][0m
+INFO 2025-08-08 14:23:23,753 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:46028][0m
+INFO 2025-08-08 14:23:23,754 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:46026][0m
+INFO 2025-08-08 14:23:26,995 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 14:23:27,008 runserver [mHTTP GET /operacional/ 200 [0.04, 127.0.0.1:46042][0m
+INFO 2025-08-08 14:23:29,948 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 14:23:29,971 runserver [mHTTP GET /operacional/caravanas/ 200 [0.06, 127.0.0.1:46042][0m
+INFO 2025-08-08 14:23:33,238 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 14:23:33,258 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:46042][0m
+INFO 2025-08-08 14:23:34,404 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 14:23:34,430 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.06, 127.0.0.1:46042][0m
+INFO 2025-08-08 14:23:34,465 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:52800]
+INFO 2025-08-08 14:23:34,498 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:52800]
+INFO 2025-08-08 14:23:34,498 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 14:25:18,323 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:25:18,676 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:25:21,423 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:50414]
+INFO 2025-08-08 14:25:21,472 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:50414]
+INFO 2025-08-08 14:25:21,472 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 14:25:41,137 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:25:41,517 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:25:44,258 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:43678]
+INFO 2025-08-08 14:25:44,307 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:43678]
+INFO 2025-08-08 14:25:44,308 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 14:26:17,120 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:26:17,482 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:37:15,421 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:37:15,765 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:38:25,586 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:38:25,924 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 14:38:41,121 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/whatsapp.py changed, reloading.
+INFO 2025-08-08 14:38:41,459 autoreload Watching for file changes with StatReloader
