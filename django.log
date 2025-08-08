@@ -12432,3 +12432,6 @@ INFO 2025-08-08 11:17:09,421 autoreload /home/thiago/Projetos/gruporom/core/cons
 INFO 2025-08-08 11:17:09,789 autoreload Watching for file changes with StatReloader
 INFO 2025-08-08 11:17:23,071 autoreload /home/thiago/Projetos/gruporom/config/asgi.py changed, reloading.
 INFO 2025-08-08 11:17:23,427 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 11:19:55,721 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 11:28:12,991 autoreload /home/thiago/Projetos/gruporom/core/consumers.py changed, reloading.
+INFO 2025-08-08 11:28:13,342 autoreload Watching for file changes with StatReloader
