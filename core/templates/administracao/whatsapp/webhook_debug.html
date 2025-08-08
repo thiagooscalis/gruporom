@@ -130,7 +130,6 @@
                     <p>Clique no botão abaixo para testar se o webhook está configurado corretamente:</p>
                     <button class="btn btn-success" 
                             hx-post="{% url 'administracao:whatsapp:test_webhook' account.id %}"
-                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
                             hx-target="#test-result"
                             hx-indicator="#test-spinner">
                         <i class="fas fa-vial me-2"></i>
