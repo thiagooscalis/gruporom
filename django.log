@@ -12370,3 +12370,26 @@ INFO 2025-08-08 10:07:01,479 autoreload /home/thiago/Projetos/gruporom/core/view
 INFO 2025-08-08 10:07:01,833 autoreload Watching for file changes with StatReloader
 INFO 2025-08-08 10:07:12,077 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
 INFO 2025-08-08 10:07:12,425 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:29:44,157 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:29:46,124 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:29:46,170 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.08, 127.0.0.1:41588][0m
+INFO 2025-08-08 10:29:46,193 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:41588][0m
+INFO 2025-08-08 10:29:46,193 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:29:46,221 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:29:46,434 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.22, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:29:53,623 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:29:53,652 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:29:56,555 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:29:56,597 runserver [mHTTP GET /administracao/whatsapp/ 200 [0.09, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:30:00,514 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:30:00,527 runserver [mHTTP GET /administracao/whatsapp/account/1/edit/ 200 [0.04, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:30:05,708 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:30:05,728 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.06, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:30:08,410 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:30:08,426 runserver [mHTTP GET /administracao/whatsapp/template/create/ 200 [0.05, 127.0.0.1:41596][0m
+INFO 2025-08-08 10:32:04,658 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:32:04,672 runserver [mHTTP GET /administracao/whatsapp/account/1/templates/ 200 [0.05, 127.0.0.1:54550][0m
+INFO 2025-08-08 10:32:09,151 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:32:09,174 runserver [mHTTP GET /administracao/whatsapp/template/3/edit/ 200 [0.05, 127.0.0.1:54550][0m
+INFO 2025-08-08 10:32:21,831 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:32:21,843 runserver [mHTTP POST /administracao/whatsapp/template/3/edit/ 200 [0.05, 127.0.0.1:54550][0m

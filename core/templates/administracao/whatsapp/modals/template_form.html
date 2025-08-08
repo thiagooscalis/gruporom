@@ -56,6 +56,50 @@
             <small class="text-muted">Use {{1}}, {{2}}, etc. para variáveis</small>
         </div>
         
+        <!-- Informações sobre Variáveis Especiais -->
+        <div class="alert alert-info mb-3">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-magic text-info me-2"></i>
+                </div>
+                <div>
+                    <h6 class="alert-heading mb-2">
+                        <strong>Variáveis Especiais Dinâmicas</strong>
+                    </h6>
+                    <p class="mb-2">
+                        Além das variáveis numeradas ({{1}}, {{2}}, etc.), você pode usar estas variáveis especiais que são substituídas automaticamente no momento do envio:
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="border-start border-primary ps-3 mb-2">
+                                <strong><code>@cliente</code></strong>
+                                <br>
+                                <small class="text-muted">
+                                    Nome do cliente vinculado à conversa ou, caso não tenha cliente vinculado, 
+                                    o nome da pessoa que iniciou a conversa no WhatsApp.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border-start border-success ps-3 mb-2">
+                                <strong><code>@atendente</code></strong>
+                                <br>
+                                <small class="text-muted">
+                                    Nome do usuário logado que está enviando a mensagem. 
+                                    Útil para personalizar o atendimento.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <strong>Exemplo:</strong> "Olá <code>@cliente</code>, sou <code>@atendente</code> e vou te ajudar hoje!"
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         {{ form.header_text|as_crispy_field }}
         {{ form.body_text|as_crispy_field }}
         {{ form.footer_text|as_crispy_field }}
@@ -232,6 +276,7 @@ function updateTemplatePreview() {
         const var4 = document.getElementById('id_variable_4')?.value || 'R$ 100,00';
         const var5 = document.getElementById('id_variable_5')?.value || 'www.exemplo.com';
         
+        // Substitui variáveis numeradas
         previewBodyText = previewBodyText
             .replace(/\{\{1\}\}/g, var1)
             .replace(/\{\{2\}\}/g, var2)
@@ -239,7 +284,12 @@ function updateTemplatePreview() {
             .replace(/\{\{4\}\}/g, var4)
             .replace(/\{\{5\}\}/g, var5);
         
-        previewBody.textContent = previewBodyText;
+        // Substitui variáveis especiais dinâmicas para preview
+        previewBodyText = previewBodyText
+            .replace(/@cliente/g, '<span class="text-primary fw-bold">Maria Santos</span>')
+            .replace(/@atendente/g, '<span class="text-success fw-bold">Ana Silva</span>');
+        
+        previewBody.innerHTML = previewBodyText;
     } else {
         previewBody.textContent = 'Digite o conteúdo do template...';
     }
