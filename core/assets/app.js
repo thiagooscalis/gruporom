@@ -1,21 +1,16 @@
 import * as bootstrap from 'bootstrap';
-import '@popperjs/core';
 import htmx from 'htmx.org';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './autocomplete.js';
+import './multiple-autocomplete.js';
 import './masks.js';
 
-// Make libraries available globally
-window.bootstrap = bootstrap;
+// Make htmx available globally
 window.htmx = htmx;
+window.bootstrap = bootstrap
 
 // Initialize Bootstrap components
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all tooltips
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    
-    // Initialize all popovers
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+    // Bootstrap should initialize automatically when imported as a complete package
+    // Manual initialization is only needed for dynamic content
 });

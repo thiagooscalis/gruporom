@@ -42,3 +42,55 @@ main#main {
         padding-left: 0;
     }
 }
+
+// Customização do offcanvas para ficar igual ao aside
+.offcanvas#sidebar {
+    background-color: #333333;
+    
+    .offcanvas-header {
+        border-bottom: 1px solid #6c757d;
+        
+        .offcanvas-title {
+            color: #ffffff;
+        }
+        
+        .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+    }
+    
+    .offcanvas-body {
+        color: #ffffff;
+        
+        .border-bottom, .border-secondary {
+            border-color: #6c757d !important;
+        }
+        
+        hr.border-secondary {
+            border-color: #6c757d !important;
+            opacity: 1;
+        }
+        
+        .text-muted {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        .nav-link {
+            color: #ffffff;
+            
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+            }
+            
+            &.active {
+                background-color: #d3a156;
+                color: #ffffff;
+            }
+            
+            i {
+                color: #ffffff;
+            }
+        }
+    }
+}

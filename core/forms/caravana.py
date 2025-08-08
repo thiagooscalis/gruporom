@@ -96,6 +96,9 @@ class CaravanaForm(forms.ModelForm):
         self.fields['promotor'].queryset = pessoas_ativas
         self.fields['lideres'].queryset = pessoas_ativas
         
+        # Remove o widget padrão do campo lideres - será substituído por autocomplete
+        self.fields['lideres'].widget = forms.MultipleHiddenInput()
+        
         # Se o usuário tem empresas associadas, filtra
         if user and hasattr(user, 'empresas'):
             empresas_usuario = user.empresas.all()
@@ -126,9 +129,7 @@ class CaravanaForm(forms.ModelForm):
                 Column('repasse_valor', css_class='col-md-6'),
                 Column('repasse_tipo', css_class='col-md-6'),
             ),
-            Row(
-                Column('lideres', css_class='col-md-12'),
-            ),
+            HTML('<div class="col-md-12" id="lideres-autocomplete-container"></div>'),
             Row(
                 Column('link', css_class='col-md-9'),
                 Column('destaque_site', css_class='col-md-3'),

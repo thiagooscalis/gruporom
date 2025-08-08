@@ -1,10 +1,13 @@
 {% load crispy_forms_tags %}
+{% load static %}
 
 <div class="modal fade" 
      id="caravanaModal" 
      tabindex="-1" 
      aria-labelledby="caravanaModalLabel"
-     aria-hidden="true">
+     aria-hidden="true"
+     data-bs-backdrop="true" 
+     data-bs-keyboard="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -24,6 +27,15 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     {% crispy form %}
+                    
+                    <!-- Autocomplete múltiplo para líderes -->
+                    <div id="lideres-autocomplete-container">
+                        {% if form.instance.pk %}
+                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/pessoas/autocomplete/' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
+                        {% else %}
+                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/pessoas/autocomplete/' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" 
@@ -41,26 +53,37 @@
 </div>
 
 <script>
-// Escuta eventos HTMX para fechar o modal e atualizar a página
-document.addEventListener('caravanaCreated', function() {
+// Inicializa o modal do Bootstrap quando carregado via HTMX
+(function() {
     const modalElement = document.getElementById('caravanaModal');
-    if (modalElement) {
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-            modal.hide();
-        }
+    if (modalElement && window.bootstrap) {
+        const modal = new window.bootstrap.Modal(modalElement);
+        
+        // Remove os elementos do DOM quando o modal for fechado
+        modalElement.addEventListener('hidden.bs.modal', function() {
+            modalElement.remove();
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        });
+        
+        // Escutar submissão bem-sucedida do formulário
+        modalElement.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.xhr.status === 200) {
+                try {
+                    const response = JSON.parse(evt.detail.xhr.responseText);
+                    if (response.success) {
+                        modal.hide();
+                        setTimeout(() => location.reload(), 300);
+                        return;
+                    }
+                } catch (e) {
+                    // Se não for JSON, continuar com o comportamento padrão
+                }
+            }
+        });
+        
+        // Mostra o modal imediatamente
+        modal.show();
     }
-    setTimeout(() => location.reload(), 300); // Aguarda o fade out
-});
-
-document.addEventListener('caravanaUpdated', function() {
-    const modalElement = document.getElementById('caravanaModal');
-    if (modalElement) {
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-            modal.hide();
-        }
-    }
-    setTimeout(() => location.reload(), 300); // Aguarda o fade out
-});
+})();
 </script>

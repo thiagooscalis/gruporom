@@ -26,5 +26,12 @@ class Caravana(models.Model):
         ordering = ['-data_contrato', 'nome']
     
     def __str__(self):
-        lideres_nomes = ", ".join([lider.nome for lider in self.lideres.all()])
-        return f"{self.nome} com {lideres_nomes}" if lideres_nomes else self.nome
+        return self.nome
+    
+    @property
+    def lideres_nomes(self):
+        """Retorna uma string com os nomes dos líderes separados por vírgula"""
+        try:
+            return ", ".join([lider.nome for lider in self.lideres.all()])
+        except:
+            return ""

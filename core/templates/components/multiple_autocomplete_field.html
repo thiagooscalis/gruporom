@@ -1,0 +1,90 @@
+{% load crispy_forms_tags %}
+
+<!-- Campo de autocomplete múltiplo reutilizável -->
+<div class="position-relative">
+    <div class="mb-3">
+        <label class="form-label">{{ label|default:"Selecionar itens" }}</label>
+        
+        <!-- Campo de busca -->
+        <input type="text" 
+               id="{{ field_id }}_search"
+               class="form-control"
+               placeholder="{{ placeholder|default:"Digite pelo menos 2 caracteres para buscar..." }}"
+               autocomplete="off">
+        
+        {% if help_text %}
+            <div class="form-text">{{ help_text }}</div>
+        {% endif %}
+    </div>
+    
+    <!-- Container para resultados do autocomplete -->
+    <div id="{{ field_id }}_results" 
+         class="autocomplete-results border rounded bg-white position-absolute w-100 shadow-sm"
+         style="display: none; z-index: 1000; max-height: 300px; overflow-y: auto;"
+         hx-get="{{ search_url }}"
+         hx-trigger="keyup changed delay:500ms from:#{{ field_id }}_search"
+         hx-include="#{{ field_id }}_search"
+         hx-target="#{{ field_id }}_results"
+         hx-swap="innerHTML">
+    </div>
+    
+    <!-- Container para itens selecionados -->
+    <div class="mb-3">
+        <label class="form-label">{{ selected_label|default:"Itens selecionados" }}</label>
+        <div id="{{ field_id }}_selected" 
+             class="p-3 border rounded bg-light min-height-60">
+            <p class="text-muted mb-0">
+                <i class="fas fa-info-circle me-2"></i>{{ empty_message|default:"Nenhum item selecionado" }}
+            </p>
+        </div>
+    </div>
+    
+    <!-- Container para inputs hidden -->
+    <div id="{{ field_id }}_hidden_container" style="display: none;">
+        {% if initial_values %}
+            {% for value in initial_values %}
+                <input type="hidden" 
+                       name="{{ field_name }}" 
+                       value="{{ value.id }}"
+                       data-nome="{{ value.nome|default:value }}"
+                       data-doc="{{ value.numero_doc|default:'' }}">
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.min-height-60 {
+    min-height: 60px;
+}
+</style>
+
+<script>
+    // Inicializa autocomplete múltiplo para este campo específico
+    (function() {
+        const searchInput = document.getElementById('{{ field_id }}_search');
+        const resultsContainer = document.getElementById('{{ field_id }}_results');
+        const selectedContainer = document.getElementById('{{ field_id }}_selected');
+        const hiddenContainer = document.getElementById('{{ field_id }}_hidden_container');
+        
+        // Configura HTMX para enviar o valor como 'q'
+        if (resultsContainer) {
+            resultsContainer.addEventListener('htmx:configRequest', function(evt) {
+                evt.detail.parameters['q'] = searchInput.value;
+                // Remove outros parâmetros desnecessários
+                delete evt.detail.parameters['{{ field_id }}_search'];
+            });
+        }
+        
+        if (searchInput && resultsContainer && selectedContainer && hiddenContainer && window.MultipleAutocompleteField) {
+            const autocomplete = new MultipleAutocompleteField({
+                searchInput: searchInput,
+                hiddenContainer: hiddenContainer,
+                resultsContainer: resultsContainer,
+                selectedContainer: selectedContainer,
+                searchUrl: '{{ search_url }}',
+                fieldName: '{{ field_name }}'
+            });
+        }
+    })();
+</script>
