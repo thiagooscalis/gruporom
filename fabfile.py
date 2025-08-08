@@ -37,7 +37,8 @@ def venv_tasks(conn):
 def restart_services(conn):
     with conn.cd(BASE_DIR):
         conn.run("sudo supervisorctl restart gruporom:gruporom-daphne")
-        conn.run("sudo supervisorctl restart gruporom:gruporom-workers")
+        conn.run("sudo supervisorctl restart gruporom:gruporom-workers_00")
+        conn.run("sudo supervisorctl restart gruporom:gruporom-workers_01")
         conn.run("sudo service nginx reload")
 
 
