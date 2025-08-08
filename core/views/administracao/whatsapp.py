@@ -7,7 +7,7 @@ from django.db import models
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -246,6 +246,7 @@ def webhook_debug(request, account_id):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
 def test_webhook(request, account_id):
     """
     Testa se o webhook está configurado corretamente
