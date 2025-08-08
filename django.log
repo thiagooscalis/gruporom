@@ -12115,3 +12115,258 @@ INFO 2025-08-07 21:48:19,901 runserver [mHTTP GET /administracao/ 200 [0.04, 12
 INFO 2025-08-07 21:48:19,922 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:52298][0m
 WARNING 2025-08-07 21:48:19,942 runserver [33mHTTP GET /.well-known/appspecific/com.chrome.devtools.json 404 [0.01, 127.0.0.1:52298][0m
 INFO 2025-08-07 21:48:20,015 runserver [36mHTTP GET /static/style.css.map 304 [0.00, 127.0.0.1:52298][0m
+INFO 2025-08-08 08:05:18,701 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:05:40,884 runserver [32mHTTP GET / 302 [0.04, 127.0.0.1:38308][0m
+INFO 2025-08-08 08:05:40,909 cambio Câmbio não encontrado no banco para 2025-08-08, buscando na AwesomeAPI...
+INFO 2025-08-08 08:05:40,909 cambio Buscando câmbio na AwesomeAPI: https://economia.awesomeapi.com.br/json/last/USD-BRL
+INFO 2025-08-08 08:05:40,978 cambio Câmbio salvo no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:05:41,012 runserver [mHTTP GET /administracao/ 200 [0.12, 127.0.0.1:38308][0m
+INFO 2025-08-08 08:05:41,038 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:44002][0m
+INFO 2025-08-08 08:05:41,039 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:38308][0m
+INFO 2025-08-08 08:05:41,040 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:05:41,042 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:44002][0m
+INFO 2025-08-08 08:05:41,079 runserver [36mHTTP GET /static/fa-solid-900.5b60a450.woff2 304 [0.00, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:05:41,079 runserver [36mHTTP GET /static/fa-brands-400.32a863c5.woff2 304 [0.00, 127.0.0.1:44002][0m
+INFO 2025-08-08 08:05:46,493 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:05:46,534 runserver [mHTTP GET /operacional/ 200 [0.08, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:05:46,564 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:05:46,564 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:44002][0m
+INFO 2025-08-08 08:05:48,419 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:05:48,469 runserver [mHTTP GET /operacional/caravanas/ 200 [0.10, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:05:50,492 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:05:50,548 runserver [mHTTP GET /operacional/caravanas/criar/ 200 [0.09, 127.0.0.1:44008][0m
+INFO 2025-08-08 08:10:38,243 autoreload /home/thiago/Projetos/gruporom/config/urls.py changed, reloading.
+INFO 2025-08-08 08:10:38,608 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:13:56,672 autoreload /home/thiago/Projetos/gruporom/core/templatetags/core_tags.py changed, reloading.
+INFO 2025-08-08 08:13:57,007 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:15:04,864 autoreload /home/thiago/Projetos/gruporom/core/templatetags/core_tags.py changed, reloading.
+INFO 2025-08-08 08:15:05,204 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:15:16,559 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:16,584 runserver [mHTTP GET /operacional/caravanas/ 200 [0.07, 127.0.0.1:38114][0m
+INFO 2025-08-08 08:15:16,598 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:38114][0m
+INFO 2025-08-08 08:15:16,600 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:38130][0m
+INFO 2025-08-08 08:15:16,600 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:38120][0m
+INFO 2025-08-08 08:15:16,603 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:38114][0m
+INFO 2025-08-08 08:15:16,623 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:38130][0m
+INFO 2025-08-08 08:15:16,625 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:38130][0m
+INFO 2025-08-08 08:15:20,110 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:20,130 runserver [mHTTP GET /operacional/caravanas/ 200 [0.05, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:20,144 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:20,144 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:38146][0m
+INFO 2025-08-08 08:15:20,144 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:20,149 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:38146][0m
+INFO 2025-08-08 08:15:20,170 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:20,172 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:26,350 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:26,388 runserver [mHTTP GET /admin/ 200 [0.07, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:26,419 runserver [mHTTP GET /static/admin/css/dashboard.css 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:26,424 runserver [mHTTP GET /static/admin/css/dark_mode.css 200 [0.00, 127.0.0.1:38146][0m
+INFO 2025-08-08 08:15:26,424 runserver [mHTTP GET /static/admin/css/responsive.css 200 [0.00, 127.0.0.1:57236][0m
+INFO 2025-08-08 08:15:26,425 runserver [mHTTP GET /static/admin/css/nav_sidebar.css 200 [0.00, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:26,425 runserver [mHTTP GET /static/admin/css/base.css 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:26,427 runserver [36mHTTP GET /static/admin/js/theme.js 304 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:26,428 runserver [36mHTTP GET /static/admin/js/nav_sidebar.js 304 [0.00, 127.0.0.1:38146][0m
+INFO 2025-08-08 08:15:26,438 runserver [mHTTP GET /static/admin/img/icon-changelink.svg 200 [0.00, 127.0.0.1:38146][0m
+INFO 2025-08-08 08:15:26,439 runserver [mHTTP GET /static/admin/img/icon-addlink.svg 200 [0.00, 127.0.0.1:38162][0m
+INFO 2025-08-08 08:15:30,864 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:30,894 runserver [mHTTP GET /administracao/ 200 [0.07, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:32,456 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:32,468 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:35,260 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:35,285 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.07, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:39,399 runserver [mHTTP POST /administracao/usuarios/1/atualizar/ 200 [0.06, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:39,444 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:39,469 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:15:43,867 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:15:43,895 runserver [mHTTP GET /promotor/ 200 [0.06, 127.0.0.1:38144][0m
+INFO 2025-08-08 08:17:04,784 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:17:04,807 runserver [mHTTP GET /promotor/ 200 [0.05, 127.0.0.1:36118][0m
+INFO 2025-08-08 08:17:04,827 runserver [36mHTTP GET /static/style.css 304 [0.01, 127.0.0.1:36118][0m
+INFO 2025-08-08 08:17:04,828 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:36130][0m
+INFO 2025-08-08 08:19:26,222 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:19:26,255 runserver [mHTTP GET /administracao/ 200 [0.07, 127.0.0.1:42506][0m
+INFO 2025-08-08 08:19:26,284 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:42508][0m
+INFO 2025-08-08 08:19:26,285 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:42506][0m
+INFO 2025-08-08 08:19:27,522 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:19:27,555 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:42506][0m
+INFO 2025-08-08 08:19:29,382 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:19:29,414 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.06, 127.0.0.1:42506][0m
+INFO 2025-08-08 08:22:17,713 autoreload /home/thiago/Projetos/gruporom/core/urls/promotor/base.py changed, reloading.
+INFO 2025-08-08 08:22:18,064 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:23:45,882 autoreload /home/thiago/Projetos/gruporom/core/models/caravana.py changed, reloading.
+INFO 2025-08-08 08:23:46,221 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:24:05,420 autoreload /home/thiago/Projetos/gruporom/core/models/caravana.py changed, reloading.
+INFO 2025-08-08 08:24:05,737 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:41:26,027 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:41:27,380 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:41:27,402 runserver [mHTTP GET /promotor/ 200 [0.07, 127.0.0.1:41154][0m
+INFO 2025-08-08 08:41:27,419 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:41154][0m
+INFO 2025-08-08 08:41:27,419 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:41164][0m
+INFO 2025-08-08 08:41:31,073 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:41:31,100 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.06, 127.0.0.1:41154][0m
+INFO 2025-08-08 08:41:31,145 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:41:31,154 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:41164][0m
+INFO 2025-08-08 08:42:37,914 autoreload /home/thiago/Projetos/gruporom/core/views/promotor/caravana.py changed, reloading.
+INFO 2025-08-08 08:42:38,260 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:42:54,565 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana_promotor.py changed, reloading.
+INFO 2025-08-08 08:42:54,912 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:43:01,607 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:43:01,641 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.07, 127.0.0.1:59702][0m
+INFO 2025-08-08 08:43:01,677 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:43:01,686 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:59702][0m
+INFO 2025-08-08 08:51:51,492 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana_promotor.py changed, reloading.
+INFO 2025-08-08 08:51:51,829 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:52:19,227 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana_promotor.py changed, reloading.
+INFO 2025-08-08 08:52:19,587 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 08:56:07,354 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:56:07,387 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:57852][0m
+INFO 2025-08-08 08:56:07,405 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:57852][0m
+INFO 2025-08-08 08:56:07,405 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:57858][0m
+INFO 2025-08-08 08:56:07,476 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 08:56:07,493 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.03, 127.0.0.1:57858][0m
+INFO 2025-08-08 09:06:00,840 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:06:00,863 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.04, 127.0.0.1:46010][0m
+INFO 2025-08-08 09:06:00,888 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:46010][0m
+INFO 2025-08-08 09:06:00,888 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:46014][0m
+INFO 2025-08-08 09:06:00,920 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:06:00,931 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:46014][0m
+INFO 2025-08-08 09:09:38,910 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:09:38,958 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.08, 127.0.0.1:42262][0m
+INFO 2025-08-08 09:09:38,988 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:42262][0m
+INFO 2025-08-08 09:09:38,990 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:42276][0m
+INFO 2025-08-08 09:09:38,990 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:42292][0m
+INFO 2025-08-08 09:09:39,016 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:42292][0m
+INFO 2025-08-08 09:09:39,027 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:42292][0m
+INFO 2025-08-08 09:09:39,027 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:42276][0m
+INFO 2025-08-08 09:09:39,033 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:42292][0m
+INFO 2025-08-08 09:09:39,043 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:09:39,054 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:42292][0m
+INFO 2025-08-08 09:11:07,539 autoreload /home/thiago/Projetos/gruporom/core/form_fields.py changed, reloading.
+INFO 2025-08-08 09:11:07,887 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:11:18,125 autoreload /home/thiago/Projetos/gruporom/core/form_fields.py changed, reloading.
+INFO 2025-08-08 09:11:18,471 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:11:28,693 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana_promotor.py changed, reloading.
+INFO 2025-08-08 09:11:29,046 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:11:49,370 autoreload /home/thiago/Projetos/gruporom/core/forms/caravana_promotor.py changed, reloading.
+INFO 2025-08-08 09:11:49,718 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:12:40,825 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:12:40,847 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:52880][0m
+INFO 2025-08-08 09:12:40,879 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:12:40,891 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:52880][0m
+INFO 2025-08-08 09:13:41,565 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:13:41,587 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.04, 127.0.0.1:47180][0m
+INFO 2025-08-08 09:13:41,639 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:13:41,648 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.02, 127.0.0.1:47180][0m
+INFO 2025-08-08 09:18:24,374 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:18:25,100 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:18:25,133 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.06, 127.0.0.1:58466][0m
+INFO 2025-08-08 09:18:25,158 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:58482][0m
+INFO 2025-08-08 09:18:25,159 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:58494][0m
+INFO 2025-08-08 09:18:25,160 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:58466][0m
+INFO 2025-08-08 09:18:25,175 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:58494][0m
+INFO 2025-08-08 09:18:25,187 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:58494][0m
+INFO 2025-08-08 09:18:25,187 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:58482][0m
+INFO 2025-08-08 09:18:25,193 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:58494][0m
+INFO 2025-08-08 09:18:25,203 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:18:25,408 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.21, 127.0.0.1:58482][0m
+INFO 2025-08-08 09:21:43,220 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:21:43,243 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.03, 127.0.0.1:38524][0m
+INFO 2025-08-08 09:21:43,254 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:38534][0m
+INFO 2025-08-08 09:21:43,254 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:38524][0m
+INFO 2025-08-08 09:21:43,255 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:38544][0m
+INFO 2025-08-08 09:21:43,282 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:38544][0m
+INFO 2025-08-08 09:21:43,295 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:38544][0m
+INFO 2025-08-08 09:21:43,304 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:21:43,492 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.14, 127.0.0.1:38524][0m
+INFO 2025-08-08 09:21:43,513 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.17, 127.0.0.1:38534][0m
+INFO 2025-08-08 09:21:43,528 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.23, 127.0.0.1:38544][0m
+INFO 2025-08-08 09:22:02,876 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:22:02,926 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.07, 127.0.0.1:60050][0m
+INFO 2025-08-08 09:22:02,953 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:60050][0m
+INFO 2025-08-08 09:22:02,954 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:60056][0m
+INFO 2025-08-08 09:22:02,954 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:60070][0m
+INFO 2025-08-08 09:22:02,974 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:60070][0m
+INFO 2025-08-08 09:22:02,985 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:60070][0m
+INFO 2025-08-08 09:22:02,990 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:60050][0m
+INFO 2025-08-08 09:22:02,990 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:60070][0m
+INFO 2025-08-08 09:22:02,994 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:22:03,214 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.23, 127.0.0.1:60056][0m
+INFO 2025-08-08 09:22:46,635 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:22:46,651 runserver [mHTTP POST /promotor/caravana/cadastrar/ 200 [0.04, 127.0.0.1:60056][0m
+INFO 2025-08-08 09:23:00,038 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:23:00,054 runserver [mHTTP POST /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:60056][0m
+INFO 2025-08-08 09:28:29,118 autoreload /home/thiago/Projetos/gruporom/core/urls/base.py changed, reloading.
+INFO 2025-08-08 09:28:29,469 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:28:47,683 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 09:28:48,012 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:29:22,359 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 09:29:22,695 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:32:02,414 autoreload /home/thiago/Projetos/gruporom/core/views/promotor/caravana.py changed, reloading.
+INFO 2025-08-08 09:32:02,789 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:33:53,247 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:33:53,281 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.06, 127.0.0.1:33268][0m
+INFO 2025-08-08 09:33:53,302 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:33268][0m
+INFO 2025-08-08 09:33:53,303 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:33278][0m
+INFO 2025-08-08 09:33:53,335 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:33:53,552 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:33:53,561 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.13, 127.0.0.1:33268][0m
+INFO 2025-08-08 09:33:53,607 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:33:53,826 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.23, 127.0.0.1:33268][0m
+INFO 2025-08-08 09:35:59,704 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:35:59,723 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.03, 127.0.0.1:42126][0m
+INFO 2025-08-08 09:35:59,768 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:35:59,977 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.22, 127.0.0.1:42126][0m
+INFO 2025-08-08 09:36:20,366 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:36:20,378 runserver [mHTTP POST /promotor/caravana/cadastrar/ 200 [0.04, 127.0.0.1:42126][0m
+INFO 2025-08-08 09:36:20,467 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:36:20,469 runserver [mHTTP GET /pessoa/cadastrar/ 200 [0.01, 127.0.0.1:42126][0m
+INFO 2025-08-08 09:42:28,687 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:28,711 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:28,745 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:28,955 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.22, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:40,816 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:40,844 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:40,898 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:41,122 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.23, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:53,072 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:53,105 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.06, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:53,125 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:42:53,126 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:60612][0m
+INFO 2025-08-08 09:42:53,152 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:42:53,369 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.22, 127.0.0.1:60612][0m
+INFO 2025-08-08 09:43:16,788 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:43:16,807 runserver [mHTTP POST /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:51644][0m
+INFO 2025-08-08 09:43:16,932 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 09:43:16,943 runserver [mHTTP GET /pessoa/cadastrar/ 200 [0.04, 127.0.0.1:60612][0m
+INFO 2025-08-08 09:48:39,875 autoreload /home/thiago/Projetos/gruporom/core/models/__init__.py changed, reloading.
+INFO 2025-08-08 09:48:40,232 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:48:45,406 autoreload /home/thiago/Projetos/gruporom/core/models/__init__.py changed, reloading.
+INFO 2025-08-08 09:48:45,762 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:49:45,614 autoreload /home/thiago/Projetos/gruporom/core/models/funcao.py changed, reloading.
+INFO 2025-08-08 09:49:45,961 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:54:52,834 autoreload /home/thiago/Projetos/gruporom/core/models/pessoa.py changed, reloading.
+INFO 2025-08-08 09:54:53,187 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:55:37,818 autoreload /home/thiago/Projetos/gruporom/core/models/pessoa.py changed, reloading.
+INFO 2025-08-08 09:55:38,167 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 09:56:46,094 autoreload /home/thiago/Projetos/gruporom/core/models/pessoa.py changed, reloading.
+INFO 2025-08-08 09:56:46,441 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:01:51,904 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:01:51,933 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:38742][0m
+INFO 2025-08-08 10:01:51,947 runserver [36mHTTP GET /static/style.css 304 [0.00, 127.0.0.1:38742][0m
+INFO 2025-08-08 10:01:51,948 runserver [36mHTTP GET /static/app.js 304 [0.00, 127.0.0.1:38752][0m
+INFO 2025-08-08 10:01:51,973 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:01:52,190 runserver [mHTTP GET /promotor/caravana/cadastrar/ 200 [0.23, 127.0.0.1:38752][0m
+INFO 2025-08-08 10:02:22,534 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:02:22,558 runserver [mHTTP POST /promotor/caravana/cadastrar/ 200 [0.05, 127.0.0.1:38752][0m
+INFO 2025-08-08 10:02:22,675 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 10:02:22,688 runserver [mHTTP GET /pessoa/cadastrar/ 200 [0.04, 127.0.0.1:38752][0m
+INFO 2025-08-08 10:03:29,492 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 10:03:29,861 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:03:40,119 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 10:03:40,495 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:03:57,822 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 10:03:58,179 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:07:01,479 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 10:07:01,833 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 10:07:12,077 autoreload /home/thiago/Projetos/gruporom/core/views/base.py changed, reloading.
+INFO 2025-08-08 10:07:12,425 autoreload Watching for file changes with StatReloader

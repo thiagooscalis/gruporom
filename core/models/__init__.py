@@ -5,6 +5,7 @@ from .cambio import Cambio
 from .cargo import Cargo
 from .turno import Turno
 from .colaborador import Colaborador
+from .funcao import Funcao
 from .cia_area import CiaArea
 from .pais import Pais
 from .cidade import Cidade
@@ -29,6 +30,7 @@ __all__ = [
     "Cargo",
     "Turno",
     "Colaborador",
+    "Funcao",
     "CiaArea",
     "Pais",
     "Cidade",

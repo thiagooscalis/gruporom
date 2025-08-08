@@ -1,0 +1,137 @@
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step completed" data-step="1">
+        <i class="fas fa-check-circle fa-2x mb-2"></i>
+        <div>Dados da Caravana</div>
+    </div>
+    <div class="step completed" data-step="2">
+        <i class="fas fa-check-circle fa-2x mb-2"></i>
+        <div>Líderes</div>
+    </div>
+    <div class="step completed" data-step="3">
+        <i class="fas fa-check-circle fa-2x mb-2"></i>
+        <div>Responsável</div>
+    </div>
+    <div class="step active" data-step="4">
+        <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+        <div>Valores e Configurações</div>
+    </div>
+</div>
+
+<form hx-post="{% url 'promotor:cadastrar_caravana' %}"
+      hx-target="#form-container"
+      hx-swap="innerHTML">
+    {% csrf_token %}
+    <input type="hidden" name="current_step" value="{{ current_step }}">
+    
+    <h4 class="mb-4">Valores e Configurações</h4>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="valor" class="form-label">Valor *</label>
+            <input type="number" class="form-control" id="valor" name="valor" 
+                   value="{{ data.valor }}" step="0.01" min="0" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="moeda" class="form-label">Moeda *</label>
+            <select class="form-select" id="moeda" name="moeda" required>
+                <option value="">Selecione a moeda</option>
+                {% for value, label in moedas %}
+                    <option value="{{ value }}" {% if value == data.moeda %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="taxas" class="form-label">Taxas</label>
+            <input type="number" class="form-control" id="taxas" name="taxas" 
+                   value="{{ data.taxas|default:0 }}" step="0.01" min="0">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="moeda_taxas" class="form-label">Moeda das Taxas</label>
+            <select class="form-select" id="moeda_taxas" name="moeda_taxas">
+                {% for value, label in moedas %}
+                    <option value="{{ value }}" {% if value == data.moeda_taxas %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="data_contrato" class="form-label">Data do Contrato *</label>
+            <input type="date" class="form-control" id="data_contrato" name="data_contrato" 
+                   value="{{ data.data_contrato }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="quantidade" class="form-label">Quantidade de Passageiros *</label>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" 
+                   value="{{ data.quantidade }}" min="1" required>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="free_economica" class="form-label">Número de Frees na Econômica</label>
+            <input type="number" class="form-control" id="free_economica" name="free_economica" 
+                   value="{{ data.free_economica|default:0 }}" min="0">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="free_executiva" class="form-label">Número de Frees na Executiva</label>
+            <input type="number" class="form-control" id="free_executiva" name="free_executiva" 
+                   value="{{ data.free_executiva|default:0 }}" min="0">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="repasse_valor" class="form-label">Valor do Repasse *</label>
+            <input type="number" class="form-control" id="repasse_valor" name="repasse_valor" 
+                   value="{{ data.repasse_valor }}" step="0.01" min="0" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="repasse_tipo" class="form-label">Tipo de Repasse *</label>
+            <select class="form-select" id="repasse_tipo" name="repasse_tipo" required>
+                <option value="">Selecione o tipo</option>
+                {% for value, label in repasse_tipos %}
+                    <option value="{{ value }}" {% if value == data.repasse_tipo %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label for="roteiro_pdf" class="form-label">Roteiro em PDF</label>
+            <input type="file" class="form-control" id="roteiro_pdf" name="roteiro_pdf" 
+                   accept=".pdf">
+            <small class="text-muted">Opcional - Arquivo PDF com o roteiro da caravana</small>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label for="link" class="form-label">Link</label>
+            <input type="url" class="form-control" id="link" name="link" 
+                   value="{{ data.link }}" placeholder="https://">
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" name="action" value="previous" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Anterior
+        </button>
+        <button type="submit" name="action" value="submit" class="btn btn-success">
+            <i class="fas fa-save me-2"></i> Cadastrar Caravana
+        </button>
+    </div>
+</form>

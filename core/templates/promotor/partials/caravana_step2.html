@@ -1,0 +1,99 @@
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step completed" data-step="1">
+        <i class="fas fa-check-circle fa-2x mb-2"></i>
+        <div>Dados da Caravana</div>
+    </div>
+    <div class="step active" data-step="2">
+        <i class="fas fa-users fa-2x mb-2"></i>
+        <div>Líderes</div>
+    </div>
+    <div class="step" data-step="3">
+        <i class="fas fa-user-tie fa-2x mb-2"></i>
+        <div>Responsável</div>
+    </div>
+    <div class="step" data-step="4">
+        <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+        <div>Valores e Configurações</div>
+    </div>
+</div>
+
+<form hx-post="{% url 'promotor:cadastrar_caravana' %}"
+      hx-target="#form-container"
+      hx-swap="innerHTML">
+    {% csrf_token %}
+    <input type="hidden" name="current_step" value="{{ current_step }}">
+    
+    <h4 class="mb-4">Líderes da Caravana</h4>
+    
+    <div class="row">
+        <div class="col-12 mb-3">
+            <label for="lideres" class="form-label">Selecionar Líderes Existentes</label>
+            <select class="form-select tom-select-field" id="lideres" name="lideres" multiple 
+                    data-placeholder="Selecione líderes..."
+                    data-search-placeholder="Digite nome ou documento..."
+                    data-no-results-text="Nenhum líder encontrado">
+                {% for pessoa in pessoas %}
+                    <option value="{{ pessoa.id }}" {% if pessoa.id|stringformat:"s" in data.lideres %}selected{% endif %}>
+                        {{ pessoa.nome }}{% if pessoa.doc %} - {{ pessoa.doc }}{% endif %}{% if pessoa.celular %} - {{ pessoa.celular }}{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Selecione líderes já cadastrados no sistema</small>
+        </div>
+    </div>
+    
+    <div class="text-center mb-3">
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#novoLiderModal">
+            <i class="fas fa-plus me-2"></i>Adicionar Novo Líder
+        </button>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" name="action" value="previous" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Anterior
+        </button>
+        <button type="submit" name="action" value="next" class="btn btn-primary">
+            Próximo <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
+
+<!-- Modal para Adicionar Novo Líder -->
+<div class="modal fade" id="novoLiderModal" tabindex="-1" aria-labelledby="novoLiderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="novoLiderModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Adicionar Novo Líder
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="novoLiderForm" hx-post="{% url 'cadastrar_pessoa' %}" 
+                  hx-target="#modal-response-area" hx-swap="innerHTML"
+                  hx-on::after-request="handleNovaPersonaResponse(event)">
+                {% csrf_token %}
+                <div class="modal-body" 
+                     hx-get="{% url 'cadastrar_pessoa' %}" 
+                     hx-trigger="revealed" 
+                     hx-target="this" 
+                     hx-swap="innerHTML">
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>Salvar Líder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -75,6 +75,13 @@ class Pessoa(models.Model):
         null=True,
         verbose_name="Sexo",
     )
+    funcao = models.ForeignKey(
+        'Funcao',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Função"
+    )
     empresa_gruporom = models.BooleanField(
         default=False,
         verbose_name="Empresa do Grupo ROM"
@@ -93,6 +100,9 @@ class Pessoa(models.Model):
         verbose_name_plural = "Pessoas"
 
     def __str__(self):
+        if self.funcao and self.sexo:
+            titulo = self.funcao.get_abreviacao_por_sexo(self.sexo)
+            return f"{titulo} {self.nome}"
         return self.nome
 
     @property
@@ -110,6 +120,24 @@ class Pessoa(models.Model):
         """Retorna o tipo de pessoa formatado para exibição"""
         tipo = self.tipo_pessoa
         return "Pessoa Física" if tipo == "FISICA" else "Pessoa Jurídica"
+    
+    @property
+    def titulo_formatado(self):
+        """Retorna o título da função formatado conforme o sexo da pessoa"""
+        if self.funcao and self.sexo:
+            return self.funcao.get_funcao_por_sexo(self.sexo)
+        elif self.funcao:
+            return self.funcao.masculino  # Default para masculino se sexo não informado
+        return None
+    
+    @property
+    def titulo_abreviado(self):
+        """Retorna a abreviação do título conforme o sexo da pessoa"""
+        if self.funcao and self.sexo:
+            return self.funcao.get_abreviacao_por_sexo(self.sexo)
+        elif self.funcao:
+            return self.funcao.abreviacao_masculino  # Default para masculino se sexo não informado
+        return None
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)

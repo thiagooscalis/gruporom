@@ -18,6 +18,7 @@ urlpatterns = [
     path("administracao/", include("core.urls.administracao")),
     path("comercial/", include("core.urls.comercial")),
     path("operacional/", include("core.urls.operacional")),
+    path("promotor/", include("core.urls.promotor")),
     path("admin/", admin.site.urls),
 ]
 

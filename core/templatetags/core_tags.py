@@ -41,10 +41,8 @@ def area_icon(group_name):
     icons = {
         'Administração': 'fa-cog',
         'Comercial': 'fa-chart-line',
-        'Financeiro': 'fa-dollar-sign',
-        'RH': 'fa-users',
         'Operacional': 'fa-tools',
-        'Logística': 'fa-truck',
+        'Promotor': 'fa-bullhorn',
     }
     return icons.get(group_name, 'fa-th-large')
 

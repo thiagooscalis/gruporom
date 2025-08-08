@@ -32,6 +32,12 @@ class UsuarioSeeder:
         if created:
             print("Grupo 'Operacional' criado.")
 
+        promotor_group, created = Group.objects.get_or_create(
+            name="Promotor"
+        )
+        if created:
+            print("Grupo 'Promotor' criado.")
+
         # Verifica se já existe um usuário thiago
         if Usuario.objects.filter(username="thiago").exists():
             print("Usuário thiago já existe.")

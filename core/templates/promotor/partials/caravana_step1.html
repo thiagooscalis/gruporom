@@ -1,0 +1,106 @@
+<!-- Step Indicator -->
+<div class="step-indicator">
+    <div class="step active" data-step="1">
+        <i class="fas fa-info-circle fa-2x mb-2"></i>
+        <div>Dados da Caravana</div>
+    </div>
+    <div class="step" data-step="2">
+        <i class="fas fa-users fa-2x mb-2"></i>
+        <div>Líderes</div>
+    </div>
+    <div class="step" data-step="3">
+        <i class="fas fa-user-tie fa-2x mb-2"></i>
+        <div>Responsável</div>
+    </div>
+    <div class="step" data-step="4">
+        <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+        <div>Valores e Configurações</div>
+    </div>
+</div>
+
+<form hx-post="{% url 'promotor:cadastrar_caravana' %}"
+      hx-target="#form-container"
+      hx-swap="innerHTML">
+    {% csrf_token %}
+    <input type="hidden" name="current_step" value="{{ current_step }}">
+    
+    <h4 class="mb-4">Dados da Caravana</h4>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="nome" class="form-label">Nome da Caravana *</label>
+            <input type="text" class="form-control" id="nome" name="nome" 
+                   value="{{ data.nome }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="data_saida" class="form-label">Data de Saída *</label>
+            <input type="date" class="form-control" id="data_saida" name="data_saida" 
+                   value="{{ data.data_saida }}" required>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="empresa" class="form-label">Empresa *</label>
+            <select class="form-select" id="empresa" name="empresa" required>
+                <option value="">Selecione a empresa</option>
+                {% for empresa in empresas %}
+                    <option value="{{ empresa.id }}" {% if empresa.id|stringformat:"s" == data.empresa %}selected{% endif %}>
+                        {{ empresa.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="tipo" class="form-label">Tipo *</label>
+            <select class="form-select" id="tipo" name="tipo" required>
+                <option value="">Selecione o tipo</option>
+                {% for value, label in tipos %}
+                    <option value="{{ value }}" {% if value == data.tipo %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="paises" class="form-label">Países *</label>
+            <select class="form-select tom-select-field" id="paises" name="paises" multiple 
+                    data-placeholder="Selecione países..."
+                    data-search-placeholder="Digite o nome do país..."
+                    data-no-results-text="Nenhum país encontrado"
+                    required>
+                {% for pais in paises %}
+                    <option value="{{ pais.id }}" {% if pais.id|stringformat:"s" in data.paises %}selected{% endif %}>
+                        {{ pais.nome }}{% if pais.iso %} ({{ pais.iso }}){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="aeroporto_embarque" class="form-label">Aeroporto de Embarque *</label>
+            <select class="form-select tom-select-field" id="aeroporto_embarque" name="aeroporto_embarque" 
+                    data-placeholder="Selecione um aeroporto..."
+                    data-search-placeholder="Digite o nome do aeroporto ou código IATA..."
+                    data-no-results-text="Nenhum aeroporto encontrado"
+                    data-single="true"
+                    required>
+                <option value="">Selecione um aeroporto...</option>
+                {% for aeroporto in aeroportos %}
+                    <option value="{{ aeroporto.id }}" {% if aeroporto.id|stringformat:"s" == data.aeroporto_embarque %}selected{% endif %}>
+                        {{ aeroporto.nome }} ({{ aeroporto.iata }}) - {{ aeroporto.cidade.nome }}/{{ aeroporto.cidade.pais.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-end mt-4">
+        <button type="submit" name="action" value="next" class="btn btn-primary">
+            Próximo <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>

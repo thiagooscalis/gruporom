@@ -1,0 +1,98 @@
+<!-- Modal Response Area -->
+<div id="modal-response-area"></div>
+
+<!-- Formulário de Cadastro -->
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="tipo_doc" class="form-label">Tipo de Documento *</label>
+        <select class="form-select" id="tipo_doc" name="tipo_doc" required onchange="updateDocumentMask()">
+            <option value="">Selecione o tipo</option>
+            {% for value, label in tipos_doc %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="doc" class="form-label">Documento *</label>
+        <input type="text" class="form-control" id="doc" name="doc" 
+               placeholder="Selecione o tipo primeiro" disabled required>
+        <small class="form-text text-muted" id="doc-hint">Selecione o tipo de documento acima</small>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label for="nome" class="form-label">Nome Completo *</label>
+    <input type="text" class="form-control" id="nome" name="nome" 
+           placeholder="Nome completo da pessoa" required>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="sexo" class="form-label">Sexo</label>
+        <select class="form-select" id="sexo" name="sexo">
+            <option value="">Não informado</option>
+            {% for value, label in sexo_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="funcao" class="form-label">Função/Título</label>
+        <select class="form-select" id="funcao" name="funcao">
+            <option value="">Não informado</option>
+            {% for func in funcoes %}
+                <option value="{{ func.id }}">{{ func }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="telefone" class="form-label">Celular *</label>
+        <input type="text" class="form-control" id="telefone" name="celular" 
+               placeholder="(00) 00000-0000" required>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">E-mail *</label>
+        <input type="email" class="form-control" id="email" name="email" 
+               placeholder="email@exemplo.com" required>
+    </div>
+</div>
+
+<script>
+// Função para habilitar/desabilitar campo de documento
+function updateDocumentMask() {
+    const tipoDocSelect = document.getElementById('tipo_doc');
+    const docInput = document.getElementById('doc');
+    const docHint = document.getElementById('doc-hint');
+    
+    if (!tipoDocSelect || !docInput || !docHint) return;
+    
+    const selectedType = tipoDocSelect.value;
+    
+    if (selectedType) {
+        // Habilitar campo e atualizar textos
+        docInput.disabled = false;
+        docInput.value = ''; // Limpar valor anterior
+        
+        if (selectedType === 'CPF') {
+            docInput.placeholder = '000.000.000-00';
+            docHint.textContent = 'Digite o CPF (apenas números)';
+        } else if (selectedType === 'CNPJ') {
+            docInput.placeholder = '00.000.000/0000-00';
+            docHint.textContent = 'Digite o CNPJ (apenas números)';
+        } else {
+            docInput.placeholder = 'Digite o documento';
+            docHint.textContent = 'Digite o documento conforme o tipo selecionado';
+        }
+        
+    } else {
+        // Desabilitar campo se nenhum tipo selecionado
+        docInput.disabled = true;
+        docInput.value = '';
+        docInput.placeholder = 'Selecione o tipo primeiro';
+        docHint.textContent = 'Selecione o tipo de documento acima';
+    }
+}
+</script>

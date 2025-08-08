@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand
 from core.seeds.usuario import UsuarioSeeder
 from core.seeds.whatsapp import seed_whatsapp
 from core.seeds.pais import seed as seed_paises
+from core.seeds.aeroporto import AeroportoSeeder
+from core.seeds.funcao import FuncaoSeeder
 
 
 class Command(BaseCommand):
@@ -39,6 +41,16 @@ class Command(BaseCommand):
                 self.style.SUCCESS('Executando Países Seeder...')
             )
             seed_paises()
+        elif seeder_name.lower() == 'aeroportos':
+            self.stdout.write(
+                self.style.SUCCESS('Executando Aeroportos Seeder...')
+            )
+            AeroportoSeeder.run()
+        elif seeder_name.lower() == 'funcoes':
+            self.stdout.write(
+                self.style.SUCCESS('Executando Funcoes Seeder...')
+            )
+            FuncaoSeeder.run()
         else:
             self.stdout.write(
                 self.style.ERROR(f'Seeder "{seeder_name}" não encontrado.')
@@ -55,12 +67,31 @@ class Command(BaseCommand):
             ('UsuarioSeeder', UsuarioSeeder),
         ]
         
+        # Classe seeders adicionais
+        class_seeders = [
+            ('Aeroportos Seeder', AeroportoSeeder),
+            ('Funcoes Seeder', FuncaoSeeder),
+        ]
+        
         # Função seeders
         function_seeders = [
             ('Países Seeder', seed_paises),
         ]
         
         for seeder_name, seeder_class in seeders:
+            self.stdout.write(f'Executando {seeder_name}...')
+            try:
+                seeder_class.run()
+                self.stdout.write(
+                    self.style.SUCCESS(f'✓ {seeder_name} executado com sucesso')
+                )
+            except Exception as e:
+                self.stdout.write(
+                    self.style.ERROR(f'✗ Erro ao executar {seeder_name}: {str(e)}')
+                )
+        
+        # Executa classe seeders adicionais
+        for seeder_name, seeder_class in class_seeders:
             self.stdout.write(f'Executando {seeder_name}...')
             try:
                 seeder_class.run()

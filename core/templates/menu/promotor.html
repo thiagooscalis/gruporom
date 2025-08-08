@@ -1,0 +1,14 @@
+<!-- Menu da Área Promotor -->
+<li class="nav-item">
+    <a href="{% url 'promotor:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}text-warning{% else %}text-light{% endif %}">
+        <i class="fa-solid fa-house"></i>
+        <span class="ms-2">Início</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{% url 'promotor:cadastrar_caravana' %}" class="nav-link {% if 'cadastrar' in request.path %}text-warning{% else %}text-light{% endif %}">
+        <i class="fa-solid fa-plus-circle"></i>
+        <span class="ms-2">Cadastrar Caravana</span>
+    </a>
+</li>

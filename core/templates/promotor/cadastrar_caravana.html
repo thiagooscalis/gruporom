@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cadastrar Caravana{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.css" rel="stylesheet">
+<style>
+    .step-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+    .step {
+        flex: 1;
+        text-align: center;
+        padding: 1rem;
+        border-bottom: 3px solid #dee2e6;
+        color: #6c757d;
+        transition: all 0.3s;
+    }
+    .step.active {
+        border-bottom-color: #d3a156;
+        color: #d3a156;
+        font-weight: bold;
+    }
+    .step.completed {
+        border-bottom-color: #28a745;
+        color: #28a745;
+    }
+    .lider-row {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+    }
+    
+    /* Tom-Select customizado */
+    .tom-select-bootstrap .ts-wrapper {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+    }
+    .tom-select-bootstrap .ts-wrapper.focus {
+        border-color: #d3a156;
+        box-shadow: 0 0 0 0.25rem rgba(211, 161, 86, 0.25);
+    }
+    .tom-select-bootstrap .ts-item {
+        background: #d3a156;
+        color: #fff;
+        border: 1px solid #d3a156;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'promotor:home' %}">Área Promotor</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cadastrar Caravana</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-bus me-2"></i>
+                Cadastrar Caravana
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <!-- Container para o formulário multistep com HTMX -->
+                    <div id="form-container"
+                         hx-get="{% url 'promotor:cadastrar_caravana' %}"
+                         hx-trigger="load"
+                         hx-target="#form-container"
+                         hx-swap="innerHTML">
+                        <!-- O conteúdo será carregado via HTMX -->
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+// Inicializar Tom-Select quando conteúdo HTMX for carregado
+document.addEventListener('htmx:afterSwap', function(e) {
+    initTomSelectFields(e.detail.target);
+});
+
+// Função para inicializar campos Tom-Select
+function initTomSelectFields(container = document) {
+    container.querySelectorAll('.tom-select-field:not([data-tom-initialized])').forEach(function(element) {
+        const isMultiple = element.multiple || element.dataset.multiple === 'true';
+        const isSingle = element.dataset.single === 'true' || !isMultiple;
+        
+        const config = {
+            plugins: isMultiple ? ['remove_button', 'clear_button'] : ['clear_button'],
+            persist: false,
+            createOnBlur: false,
+            placeholder: element.dataset.placeholder || 'Selecione...',
+            searchField: ['text', 'value'],
+            sortField: [{field: 'text', direction: 'asc'}],
+            render: {
+                no_results: function(data, escape) {
+                    return '<div class="no-results">' + escape(element.dataset.noResultsText || 'Nenhum resultado encontrado') + '</div>';
+                }
+            }
+        };
+        
+        // Para campos múltiplos, limpar busca após seleção
+        if (isMultiple) {
+            config.onItemAdd = function(value, item) {
+                this.setTextboxValue('');
+                this.refreshState();
+            };
+        }
+        
+        // Para campos singulares, fechar dropdown após seleção
+        if (isSingle) {
+            config.onItemAdd = function(value, item) {
+                this.close();
+            };
+        }
+        
+        const tomSelect = new TomSelect(element, config);
+        tomSelect.wrapper.classList.add('tom-select-bootstrap');
+        
+        element.setAttribute('data-tom-initialized', 'true');
+    });
+}
+
+// Inicializar na primeira carga
+document.addEventListener('DOMContentLoaded', function() {
+    initTomSelectFields();
+});
+
+// Função para lidar com resposta da criação de pessoa
+function handleNovaPersonaResponse(event) {
+    const xhr = event.detail.xhr;
+    const response = JSON.parse(xhr.responseText);
+    
+    if (response.success) {
+        // Adicionar nova pessoa ao Tom-Select de líderes
+        const lideresSelect = document.getElementById('lideres');
+        if (lideresSelect && lideresSelect.tomselect) {
+            // Adicionar nova opção
+            lideresSelect.tomselect.addOption({
+                value: response.pessoa.id,
+                text: response.pessoa.display_name
+            });
+            
+            // Selecionar a nova pessoa
+            lideresSelect.tomselect.addItem(response.pessoa.id);
+        }
+        
+        // Mostrar mensagem de sucesso
+        const modalResponseArea = document.getElementById('modal-response-area');
+        if (modalResponseArea) {
+            modalResponseArea.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>${response.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+        
+        // Limpar formulário do modal
+        const modalForm = document.getElementById('novoLiderForm');
+        if (modalForm) {
+            modalForm.reset();
+            // Re-executar a função para desabilitar o campo documento
+            if (typeof updateDocumentMask === 'function') {
+                updateDocumentMask();
+            }
+        }
+        
+        // Fechar modal após 2 segundos
+        setTimeout(function() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('novoLiderModal'));
+            if (modal) {
+                modal.hide();
+            }
+        }, 2000);
+        
+    } else {
+        // Mostrar erros
+        const modalResponseArea = document.getElementById('modal-response-area');
+        if (modalResponseArea) {
+            let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+            
+            if (response.errors) {
+                errorHtml += '<ul class="mb-0">';
+                response.errors.forEach(error => {
+                    errorHtml += `<li>${error}</li>`;
+                });
+                errorHtml += '</ul>';
+            } else if (response.error) {
+                errorHtml += response.error;
+            }
+            
+            errorHtml += '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>';
+            modalResponseArea.innerHTML = errorHtml;
+        }
+    }
+}
+</script>
+{% endblock %}
