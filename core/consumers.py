@@ -18,29 +18,36 @@ class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
         """Conecta o WebSocket"""
-        # Verifica se o usuário está autenticado
-        if self.scope["user"] == AnonymousUser():
-            await self.close()
-            return
-        
-        # Verifica se o usuário é do grupo Comercial
-        is_comercial = await self.is_comercial_user()
-        if not is_comercial:
-            await self.close()
-            return
-        
-        # Adiciona à room group do comercial
-        self.room_group_name = 'whatsapp_comercial'
-        
-        # Adiciona à room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-        
-        # Aceita a conexão
-        await self.accept()
-        logger.info(f"WebSocket conectado para usuário {self.scope['user'].username}")
+        try:
+            # Verifica se o usuário está autenticado
+            if self.scope["user"].is_anonymous:
+                logger.warning("WebSocket: Usuário não autenticado")
+                await self.close(code=4001)
+                return
+            
+            # Verifica se o usuário é do grupo Comercial
+            is_comercial = await self.is_comercial_user()
+            if not is_comercial:
+                logger.warning(f"WebSocket: Usuário {self.scope['user'].username} não é do grupo Comercial")
+                await self.close(code=4003)
+                return
+            
+            # Adiciona à room group do comercial
+            self.room_group_name = 'whatsapp_comercial'
+            
+            # Adiciona à room group
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
+            
+            # Aceita a conexão
+            await self.accept()
+            logger.info(f"✅ WebSocket conectado com sucesso para usuário {self.scope['user'].username}")
+            
+        except Exception as e:
+            logger.error(f"❌ Erro ao conectar WebSocket: {e}")
+            await self.close(code=4000)
     
     async def disconnect(self, close_code):
         """Desconecta o WebSocket"""

@@ -165,10 +165,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function connectWebSocket() {
         try {
+            console.log('🔗 Tentando conectar WebSocket:', wsUrl);
             socket = new WebSocket(wsUrl);
             
             socket.onopen = function(e) {
-                console.log('🟢 WebSocket conectado');
+                console.log('🟢 WebSocket conectado com sucesso');
                 reconnectAttempts = 0;
                 
                 // Mostra indicador de conexão
@@ -197,14 +198,38 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             socket.onclose = function(event) {
-                console.log('🔴 WebSocket desconectado:', event.code);
+                console.log('🔴 WebSocket desconectado. Código:', event.code, 'Motivo:', event.reason);
                 updateConnectionStatus(false);
                 
-                // Tentativa de reconexão
-                if (reconnectAttempts < maxReconnectAttempts) {
+                // Mensagens específicas por código de erro
+                let errorMessage = '';
+                switch(event.code) {
+                    case 4001:
+                        errorMessage = 'Usuário não autenticado';
+                        break;
+                    case 4003:
+                        errorMessage = 'Acesso negado - usuário não é do grupo Comercial';
+                        break;
+                    case 1006:
+                        errorMessage = 'Conexão perdida inesperadamente';
+                        break;
+                    default:
+                        errorMessage = `Erro de conexão (${event.code})`;
+                }
+                
+                console.log('❌ Motivo:', errorMessage);
+                
+                // Tentativa de reconexão apenas para erros recuperáveis
+                if (event.code === 1006 && reconnectAttempts < maxReconnectAttempts) {
                     reconnectAttempts++;
                     console.log(`⏳ Tentando reconectar... (${reconnectAttempts}/${maxReconnectAttempts})`);
                     setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+                } else if (event.code >= 4000) {
+                    console.log('❌ Erro permanente, não tentando reconectar');
+                    showNotification('Erro de WebSocket: ' + errorMessage, 'error');
+                } else if (reconnectAttempts >= maxReconnectAttempts) {
+                    console.log('❌ Máximo de tentativas atingido - WebSocket em modo fallback');
+                    showNotification('WebSocket desconectado - usando modo fallback', 'warning');
                 }
             };
             
@@ -304,8 +329,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function showNotification(message, type = 'info') {
         // Cria e mostra notificação toast
+        let bgColor = 'primary';
+        switch(type) {
+            case 'success': bgColor = 'success'; break;
+            case 'error': bgColor = 'danger'; break;
+            case 'warning': bgColor = 'warning'; break;
+            default: bgColor = 'primary';
+        }
+        
         const toastHtml = `
-            <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'primary'} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+            <div class="toast align-items-center text-white bg-${bgColor} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
                 <div class="d-flex">
                     <div class="toast-body">
                         ${message}
