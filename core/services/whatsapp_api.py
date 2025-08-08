@@ -979,7 +979,7 @@ class WhatsAppWebhookProcessor:
         """
         Processa mensagem recebida
         """
-        from django.db import sync_to_async
+        from asgiref.sync import sync_to_async
         
         wamid = message_data['id']
         from_number = message_data['from']
@@ -1039,7 +1039,7 @@ class WhatsAppWebhookProcessor:
         """
         Busca ou cria uma conversa para o contato
         """
-        from django.db import sync_to_async
+        from asgiref.sync import sync_to_async
         from core.models import WhatsAppConversation
         
         # Verifica se já existe conversa ativa para este contato
@@ -1071,7 +1071,7 @@ class WhatsAppWebhookProcessor:
         """
         Processa atualização de status de mensagem
         """
-        from django.db import sync_to_async
+        from asgiref.sync import sync_to_async
         
         wamid = status_data['id']
         status = status_data['status']
@@ -1104,7 +1104,7 @@ class WhatsAppWebhookProcessor:
         """
         Encontra ou cria contato
         """
-        from django.db import sync_to_async
+        from asgiref.sync import sync_to_async
         
         # Busca informações do contato nos dados do webhook
         contact_info = {}
@@ -1208,7 +1208,7 @@ class WhatsAppWebhookProcessor:
         Notifica nova conversa aguardando atendimento via WebSocket
         """
         from channels.layers import get_channel_layer
-        from django.db import sync_to_async
+        from asgiref.sync import sync_to_async
         
         channel_layer = get_channel_layer()
         if channel_layer:
