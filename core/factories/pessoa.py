@@ -1,13 +1,13 @@
 import factory
 from factory.django import DjangoModelFactory
-from core.models import Pessoa, Telefone, Email
+from core.models import Pessoa
 from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES, TIPO_EMPRESA_CHOICES
+import random
 
 
 class PessoaFactory(DjangoModelFactory):
     class Meta:
         model = Pessoa
-        skip_postgeneration_save = True
 
     tipo_doc = "CPF"
     doc = factory.Sequence(lambda n: f"{n:011d}")
@@ -23,36 +23,20 @@ class PessoaFactory(DjangoModelFactory):
     cidade = factory.Faker("city", locale="pt_BR")
     estado = factory.Faker("estado_sigla", locale="pt_BR")
     
-    # Cria telefone principal após criar a pessoa
-    @factory.post_generation
-    def telefone_principal(obj, create, extracted, **kwargs):
-        if not create:
-            return
-        
-        from .contato import TelefoneFactory
-        import random
-        TelefoneFactory(
-            pessoa=obj,
-            ddi='55',
-            ddd='11',
-            telefone=f"9{random.randint(10000000, 99999999)}",
-            tipo='celular',
-            principal=True
-        )
+    # Campos de email diretos
+    email1 = factory.Faker("email")
+    email2 = factory.LazyFunction(lambda: factory.Faker("email").evaluate(None, None, {'locale': None}) if random.choice([True, False]) else "")
+    email3 = factory.LazyFunction(lambda: factory.Faker("email").evaluate(None, None, {'locale': None}) if random.choice([True, False]) else "")
     
-    # Cria email principal após criar a pessoa
-    @factory.post_generation 
-    def email_principal(obj, create, extracted, **kwargs):
-        if not create:
-            return
-        
-        from .contato import EmailFactory
-        EmailFactory(
-            pessoa=obj,
-            email=factory.Faker("email"),
-            tipo='pessoal',
-            principal=True
-        )
+    # Campos de telefone diretos - Telefone 1 (obrigatório)
+    ddi1 = "55"
+    ddd1 = factory.Faker("random_element", elements=["11", "21", "31", "41", "51", "61", "71", "81", "85"])
+    telefone1 = factory.LazyFunction(lambda: f"9{random.randint(10000000, 99999999)}")
+    
+    # Telefone 2 (opcional)
+    ddi2 = factory.LazyFunction(lambda: "55" if random.choice([True, False]) else None)
+    ddd2 = factory.LazyFunction(lambda: factory.Faker("random_element", elements=["11", "21", "31", "41", "51", "61", "71", "81", "85"]).evaluate(None, None, {'locale': None}) if random.choice([True, False]) else None)
+    telefone2 = factory.LazyFunction(lambda: f"9{random.randint(10000000, 99999999)}" if random.choice([True, False]) else None)
 
 
 class PessoaJuridicaFactory(PessoaFactory):
@@ -64,19 +48,9 @@ class PessoaJuridicaFactory(PessoaFactory):
     sexo = None
     nascimento = None
     
-    # Override para criar email comercial
-    @factory.post_generation 
-    def email_principal(obj, create, extracted, **kwargs):
-        if not create:
-            return
-        
-        from .contato import EmailFactory
-        EmailFactory(
-            pessoa=obj,
-            email=f"contato@{obj.nome.lower().replace(' ', '').replace('.', '')}.com.br",
-            tipo='comercial',
-            principal=True
-        )
+    # Override para email comercial
+    email1 = factory.LazyAttribute(lambda obj: f"contato@{obj.nome.lower().replace(' ', '').replace('.', '').replace(',', '').replace('-', '').replace('(', '').replace(')', '')}".replace('ltda', '') + "ltda.com.br")
+    telefone1 = factory.LazyFunction(lambda: f"{random.randint(30000000, 39999999)}")  # Telefone comercial
 
 
 class EmpresaGrupoROMFactory(PessoaJuridicaFactory):

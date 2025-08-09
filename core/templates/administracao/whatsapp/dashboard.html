@@ -65,14 +65,14 @@
                                             title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-warning" 
+                                    <button type="button" class="btn btn-sm btn-outline-success" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalTestAccount"
-                                            hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
-                                            hx-target="#modalTestAccount .modal-content"
+                                            data-bs-target="#modalBulkSend"
+                                            hx-get="{% url 'administracao:whatsapp:bulk_send_modal' account.id %}"
+                                            hx-target="#modalBulkSend .modal-content"
                                             hx-swap="innerHTML"
-                                            title="Testar">
-                                        <i class="fas fa-vial"></i>
+                                            title="Envio em Massa">
+                                        <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </div>
                             </div>
@@ -232,12 +232,12 @@
     </div>
 </div>
 
-<!-- Modal para teste de conta -->
-<div class="modal fade" id="modalTestAccount" tabindex="-1" aria-labelledby="modalTestAccountLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal para envio em massa -->
+<div class="modal fade" id="modalBulkSend" tabindex="-1" aria-labelledby="modalBulkSendLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="d-flex justify-content-center align-items-center p-5">
-                <div class="spinner-border text-warning" role="status">
+                <div class="spinner-border text-success" role="status">
                     <span class="visually-hidden">Carregando...</span>
                 </div>
             </div>

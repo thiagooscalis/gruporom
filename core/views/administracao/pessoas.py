@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.db.models.deletion import ProtectedError
 from core.models import Pessoa
 from core.forms.pessoa import PessoaForm
-from core.forms.contato import TelefoneFormSet, EmailFormSet
+# from core.forms.contato import TelefoneFormSet, EmailFormSet  # Removido - campos agora estão diretos na Pessoa
 from core.utils.image_processing import crop_to_square, is_valid_image, needs_processing
 
 
@@ -30,7 +30,9 @@ def lista(request):
         pessoas = pessoas.filter(
             Q(nome__icontains=search) |
             Q(doc__icontains=search) |
-            Q(emails__email__icontains=search)
+            Q(email1__icontains=search) |
+            Q(email2__icontains=search) |
+            Q(email3__icontains=search)
         )
     
     # Aplica filtro de tipo se houver
@@ -77,16 +79,11 @@ def nova_modal(request):
     View para retornar o modal de criação de pessoa via HTMX
     """
     form = PessoaForm()
-    # Para formsets inline, precisa passar instance=None para criação
-    telefone_formset = TelefoneFormSet(instance=None, prefix='telefones')
-    email_formset = EmailFormSet(instance=None, prefix='emails')
     
     context = {
         'form': form,
-        'telefone_formset': telefone_formset,
-        'email_formset': email_formset,
     }
-    return render(request, 'administracao/pessoas/modal_form_formsets.html', context)
+    return render(request, 'administracao/pessoas/modal_form.html', context)
 
 
 @login_required
@@ -100,7 +97,7 @@ def nova_modal_simples(request):
     context = {
         'form': form,
     }
-    return render(request, 'administracao/pessoas/modal_form_simples.html', context)
+    return render(request, 'administracao/pessoas/modal_form.html', context)
 
 
 
@@ -112,32 +109,9 @@ def criar(request):
     """
     if request.method == 'POST':
         form = PessoaForm(request.POST, request.FILES)
-        telefone_formset = TelefoneFormSet(request.POST, prefix='telefones')
-        email_formset = EmailFormSet(request.POST, prefix='emails')
         
-        if form.is_valid() and telefone_formset.is_valid() and email_formset.is_valid():
+        if form.is_valid():
             pessoa = form.save()
-            
-            # Salva os telefones
-            telefone_formset.instance = pessoa
-            telefones = telefone_formset.save()
-            
-            # Salva os emails
-            email_formset.instance = pessoa
-            emails = email_formset.save()
-            
-            # Atualiza campos de compatibilidade (telefone e email principal)
-            if telefones:
-                # Pega o primeiro telefone ou o marcado como principal
-                telefone_principal = next((t for t in telefones if t.principal), telefones[0])
-                pessoa.telefone = telefone_principal.numero_completo
-            
-            if emails:
-                # Pega o primeiro email ou o marcado como principal
-                email_principal = next((e for e in emails if e.principal), emails[0])
-                pessoa.email = email_principal.email
-            
-            pessoa.save()
             
             messages.success(request, f'Pessoa {pessoa.nome} criada com sucesso!')
             
@@ -149,10 +123,8 @@ def criar(request):
             # Retorna o formulário com erros
             context = {
                 'form': form,
-                'telefone_formset': telefone_formset,
-                'email_formset': email_formset,
             }
-            return render(request, 'administracao/pessoas/modal_form_formsets.html', context)
+            return render(request, 'administracao/pessoas/modal_form.html', context)
     
     return redirect('/administracao/pessoas/')
 
@@ -165,14 +137,10 @@ def editar_modal(request, pk):
     """
     pessoa = get_object_or_404(Pessoa, pk=pk)
     form = PessoaForm(instance=pessoa)
-    telefone_formset = TelefoneFormSet(instance=pessoa, prefix='telefones')
-    email_formset = EmailFormSet(instance=pessoa, prefix='emails')
     
     context = {
         'form': form,
         'pessoa': pessoa,
-        'telefone_formset': telefone_formset,
-        'email_formset': email_formset,
     }
     return render(request, 'administracao/pessoas/modal_edit.html', context)
 
@@ -187,30 +155,9 @@ def atualizar(request, pk):
     
     if request.method == 'POST':
         form = PessoaForm(request.POST, request.FILES, instance=pessoa)
-        telefone_formset = TelefoneFormSet(request.POST, instance=pessoa, prefix='telefones')
-        email_formset = EmailFormSet(request.POST, instance=pessoa, prefix='emails')
         
-        if form.is_valid() and telefone_formset.is_valid() and email_formset.is_valid():
+        if form.is_valid():
             pessoa_atualizada = form.save()
-            
-            # Salva os telefones
-            telefones = telefone_formset.save()
-            
-            # Salva os emails
-            emails = email_formset.save()
-            
-            # Atualiza campos de compatibilidade (telefone e email principal)
-            if telefones:
-                # Pega o primeiro telefone ou o marcado como principal
-                telefone_principal = next((t for t in telefones if t.principal), telefones[0] if telefones else None)
-                if telefone_principal:
-                    pessoa_atualizada.telefone = telefone_principal.numero_completo
-            
-            if emails:
-                # Pega o primeiro email ou o marcado como principal
-                email_principal = next((e for e in emails if e.principal), emails[0] if emails else None)
-                if email_principal:
-                    pessoa_atualizada.email = email_principal.email
             
             # Verifica se deve remover a cópia do passaporte
             if request.POST.get('remover_passaporte_copia'):
@@ -219,8 +166,7 @@ def atualizar(request, pk):
                     pessoa_atualizada.passaporte_copia.delete(save=False)
                     # Limpa o campo no banco
                     pessoa_atualizada.passaporte_copia = None
-            
-            pessoa_atualizada.save()
+                    pessoa_atualizada.save()
             
             messages.success(request, f'Pessoa {pessoa_atualizada.nome} atualizada com sucesso!')
             
@@ -233,10 +179,8 @@ def atualizar(request, pk):
             context = {
                 'form': form,
                 'pessoa': pessoa,
-                'telefone_formset': telefone_formset,
-                'email_formset': email_formset,
             }
-            return render(request, 'administracao/pessoas/modal_edit_formsets.html', context)
+            return render(request, 'administracao/pessoas/modal_edit.html', context)
     
     return redirect('/administracao/pessoas/')
 

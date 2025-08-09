@@ -71,7 +71,7 @@ class EmpresaGrupoROMFactoryTest(TestCase):
         self.assertEqual(empresa.tipo_doc, "CNPJ")
         self.assertIn(empresa.tipo_empresa, [choice[0] for choice in TIPO_EMPRESA_CHOICES])
         self.assertIsNotNone(empresa.nome)
-        self.assertIsNotNone(empresa.email_str)
+        self.assertIsNotNone(empresa.email_principal)
     
     def test_create_empresa_tipo_especifico(self):
         """Testa a criação de empresa com tipo específico"""

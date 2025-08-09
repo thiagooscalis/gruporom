@@ -1,0 +1,58 @@
+{% if template %}
+<div class="alert alert-light">
+    <h6 class="alert-heading">
+        <i class="fas fa-eye me-2"></i>
+        Prévia do Template
+    </h6>
+    <div class="border rounded p-3 bg-white mb-3">
+        {% if template.header_text %}
+            <div class="fw-bold text-primary mb-2">{{ template.header_text }}</div>
+        {% endif %}
+        
+        <div class="mb-2">{{ template.body_text }}</div>
+        
+        {% if template.footer_text %}
+            <div class="text-muted small">{{ template.footer_text }}</div>
+        {% endif %}
+    </div>
+    
+    {% if template.variables_count > 0 %}
+        <div class="mb-3">
+            <small class="text-muted d-block mb-2">
+                <strong>Variáveis do template:</strong>
+                <span class="text-info">
+                    (Use <code>@cliente</code> para nome do destinatário ou <code>@atendente</code> para seu nome)
+                </span>
+            </small>
+            <div class="row g-2">
+                {% for i in variables_range %}
+                    <div class="col-md-6">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">{% templatetag openvariable %}{{ i }}{% templatetag closevariable %}</span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="variable_{{ i }}" 
+                                   placeholder="Valor {{ i }}"
+                                   hx-post="{% url 'administracao:whatsapp:update_preview' %}"
+                                   hx-trigger="keyup changed delay:500ms"
+                                   hx-target="#preview-with-values"
+                                   hx-include="[name^='variable_'], [name='template_id']">
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div id="preview-with-values">
+            <!-- Prévia com valores será carregada aqui -->
+        </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="alert alert-light">
+    <div class="text-center text-muted py-3">
+        <i class="fas fa-file-alt fa-2x mb-2"></i>
+        <p>Selecione um template para ver a prévia</p>
+    </div>
+</div>
+{% endif %}

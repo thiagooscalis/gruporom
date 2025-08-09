@@ -90,7 +90,51 @@ function initDocumentMasks() {
     });
 }
 
-// Aplicar máscara de telefone
+// Aplicar máscara de telefone dinâmica baseada no DDI
+function applyPhoneMask(telefoneInput, ddiInput) {
+    if (!telefoneInput) return;
+    
+    function updateMask() {
+        const ddi = ddiInput ? ddiInput.value : '55';
+        
+        // Destruir máscara anterior se existir
+        if (telefoneInput._imask) {
+            telefoneInput._imask.destroy();
+        }
+        
+        if (ddi === '55') {
+            // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
+            telefoneInput._imask = IMask(telefoneInput, {
+                mask: [
+                    {
+                        mask: '00000-0000',
+                        startsWith: '9',
+                        country: 'Brasil'
+                    },
+                    {
+                        mask: '0000-0000',
+                        startsWith: '',
+                        country: 'Brasil'
+                    }
+                ]
+            });
+        } else {
+            // Outros países: sem máscara
+            telefoneInput._imask = null;
+        }
+    }
+    
+    // Aplicar máscara inicial
+    updateMask();
+    
+    // Escutar mudanças no DDI
+    if (ddiInput) {
+        ddiInput.addEventListener('input', updateMask);
+        ddiInput.addEventListener('change', updateMask);
+    }
+}
+
+// Aplicar máscara de telefone (versão antiga - manter compatibilidade)
 function initPhoneMasks() {
     const phoneInputs = document.querySelectorAll('input[name="telefone"]');
     
@@ -112,6 +156,19 @@ function initPhoneMasks() {
     });
 }
 
+// Inicializar máscaras de telefone para campos múltiplos
+function initMultiplePhoneMasks() {
+    // Aplicar em formulários de pessoa com múltiplos telefones
+    for (let i = 1; i <= 3; i++) {
+        const telefoneInput = document.getElementById(`id_telefone${i}`);
+        const ddiInput = document.getElementById(`id_ddi${i}`);
+        
+        if (telefoneInput) {
+            applyPhoneMask(telefoneInput, ddiInput);
+        }
+    }
+}
+
 // Aplicar máscara de CEP
 function initCepMasks() {
     const cepInputs = document.querySelectorAll('input[name="cep"]');
@@ -127,14 +184,17 @@ function initCepMasks() {
 function initAllMasks() {
     initDocumentMasks();
     initPhoneMasks();
+    initMultiplePhoneMasks();
     initCepMasks();
 }
 
 // Exportar funções
 export {
     applyDocMask,
+    applyPhoneMask,
     initDocumentMasks,
     initPhoneMasks,
+    initMultiplePhoneMasks,
     initCepMasks,
     initAllMasks
 };

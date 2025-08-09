@@ -95,6 +95,26 @@ class Pessoa(models.Model):
         null=True,
         verbose_name="Tipo de Empresa"
     )
+    
+    # Campos de email diretos
+    email1 = models.EmailField(verbose_name="Email", default="")
+    email2 = models.EmailField(blank=True, null=True, verbose_name="Email")
+    email3 = models.EmailField(blank=True, null=True, verbose_name="Email")
+    
+    # Campos de telefone diretos - Telefone 1 (obrigatório)
+    ddi1 = models.CharField(max_length=4, verbose_name="DDI", default="55")
+    ddd1 = models.CharField(max_length=3, verbose_name="DDD", default="")
+    telefone1 = models.CharField(max_length=20, verbose_name="Telefone", default="")
+    
+    # Campos de telefone diretos - Telefone 2 (opcional)
+    ddi2 = models.CharField(max_length=4, blank=True, null=True, verbose_name="DDI")
+    ddd2 = models.CharField(max_length=3, blank=True, null=True, verbose_name="DDD")
+    telefone2 = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefone")
+    
+    # Campos de telefone diretos - Telefone 3 (opcional)
+    ddi3 = models.CharField(max_length=4, blank=True, null=True, verbose_name="DDI")
+    ddd3 = models.CharField(max_length=3, blank=True, null=True, verbose_name="DDD")
+    telefone3 = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefone")
 
     class Meta:
         ordering = ["nome"]
@@ -143,32 +163,33 @@ class Pessoa(models.Model):
     
     # Propriedades de contato
     @property
-    def telefone_principal(self):
-        """Retorna o telefone principal da pessoa"""
-        return self.telefones.filter(principal=True, ativo=True).first()
-    
-    @property
-    def email_principal(self):
-        """Retorna o email principal da pessoa"""
-        return self.emails.filter(principal=True, ativo=True).first()
-    
-    @property
     def telefone_formatado(self):
-        """Retorna telefone principal formatado para exibição"""
-        telefone = self.telefone_principal
-        return telefone.numero_formatado if telefone else None
+        """Retorna telefone1 formatado para exibição"""
+        if self.ddi1 and self.ddd1 and self.telefone1:
+            if len(self.telefone1) == 9:  # Celular
+                return f"+{self.ddi1} ({self.ddd1}) {self.telefone1[:5]}-{self.telefone1[5:]}"
+            elif len(self.telefone1) == 8:  # Fixo
+                return f"+{self.ddi1} ({self.ddd1}) {self.telefone1[:4]}-{self.telefone1[4:]}"
+            else:
+                return f"+{self.ddi1} ({self.ddd1}) {self.telefone1}"
+        return None
     
     @property
     def telefone_completo(self):
-        """Retorna telefone principal no formato internacional completo"""
-        telefone = self.telefone_principal
-        return telefone.numero_completo if telefone else None
+        """Retorna telefone1 no formato internacional completo"""
+        if self.ddi1 and self.ddd1 and self.telefone1:
+            return f"+{self.ddi1}{self.ddd1}{self.telefone1}"
+        return None
     
     @property
-    def email_str(self):
-        """Retorna email principal como string"""
-        email = self.email_principal
-        return email.email if email else None
+    def email_principal(self):
+        """Retorna email1 (email principal)"""
+        return self.email1
+    
+    @property
+    def telefone_principal(self):
+        """Retorna telefone1 (telefone principal)"""
+        return self.telefone_formatado
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)

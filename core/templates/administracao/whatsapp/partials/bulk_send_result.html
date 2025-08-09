@@ -1,0 +1,92 @@
+<div class="modal-header {% if test_mode %}bg-warning{% else %}bg-success{% endif %} text-white">
+    <h5 class="modal-title">
+        {% if test_mode %}
+            <i class="fas fa-vial me-2"></i>
+            Modo de Teste - Simulação de Envio
+        {% else %}
+            <i class="fas fa-check-circle me-2"></i>
+            Envio Concluído
+        {% endif %}
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="alert {% if test_mode %}alert-warning{% else %}alert-success{% endif %}">
+        <h6 class="alert-heading">
+            {% if test_mode %}
+                <i class="fas fa-info-circle me-2"></i>
+                Resumo da Simulação
+            {% else %}
+                <i class="fas fa-check me-2"></i>
+                Resumo do Envio
+            {% endif %}
+        </h6>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Template:</strong> {{ template.display_name }}<br>
+                <strong>Conta:</strong> {{ account.name }}<br>
+                <strong>Total de Destinatários:</strong> {{ recipients_count }}
+            </div>
+            <div class="col-md-6">
+                {% if not test_mode %}
+                    <strong>Enviadas com Sucesso:</strong> <span class="text-success">{{ sent_count }}</span><br>
+                    <strong>Falhas:</strong> <span class="text-danger">{{ failed_count }}</span><br>
+                {% else %}
+                    <strong>Status:</strong> <span class="badge bg-warning">TESTE</span><br>
+                    <strong>Mensagens Reais:</strong> Não enviadas
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if variables %}
+            <hr>
+            <strong>Variáveis Utilizadas:</strong>
+            <div class="mt-2">
+                {% for key, value in variables.items %}
+                    <span class="badge bg-light text-dark me-2">
+                        {% templatetag openvariable %}{{ key }}{% templatetag closevariable %} = {{ value|default:"(vazio)" }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    {% if test_mode %}
+        <div class="alert alert-info">
+            <i class="fas fa-lightbulb me-2"></i>
+            <strong>Próximos Passos:</strong>
+            <ol class="mb-0 mt-2">
+                <li>Revise os destinatários e o conteúdo do template</li>
+                <li>Desmarque "Modo de Teste" nas opções de envio</li>
+                <li>Clique em "Enviar Mensagens" para realizar o envio real</li>
+            </ol>
+        </div>
+    {% else %}
+        {% if failed_count > 0 %}
+            <div class="alert alert-danger">
+                <h6 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Erros no Envio
+                </h6>
+                <p>{{ failed_count }} mensagens não foram enviadas. Verifique os logs para mais detalhes.</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    {% if test_mode %}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-arrow-left me-2"></i>Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('test_mode').checked = false;">
+            <i class="fas fa-paper-plane me-2"></i>Enviar de Verdade
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            <i class="fas fa-check me-2"></i>Concluir
+        </button>
+    {% endif %}
+</div>

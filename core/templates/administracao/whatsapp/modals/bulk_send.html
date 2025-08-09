@@ -1,0 +1,208 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+        <i class="fab fa-whatsapp me-2"></i>
+        Envio de Mensagens em Massa - {{ account.name }}
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form hx-post="{% url 'administracao:whatsapp:bulk_send_process' account.id %}" 
+      hx-target="#modalBulkSend .modal-content" 
+      hx-swap="innerHTML" 
+      id="bulkSendForm">
+    {% csrf_token %}
+    <div class="modal-body">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Seleção de Template -->
+        <div class="card mb-3 no-hover">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Template de Mensagem
+                </h6>
+            </div>
+            <div class="card-body">
+                <select name="template_id" 
+                        id="template_id" 
+                        class="form-select mb-3"
+                        hx-get="{% url 'administracao:whatsapp:template_preview' %}"
+                        hx-target="#template-preview-container"
+                        hx-trigger="change"
+                        hx-include="[name='template_id']"
+                        required>
+                    <option value="">Selecione um template...</option>
+                    {% for template in templates %}
+                        <option value="{{ template.id }}" 
+                                data-variables="{{ template.variables_count }}">
+                            {{ template.display_name }}
+                            {% if template.variables_count > 0 %}
+                                ({{ template.variables_count }} variáve{{ template.variables_count|pluralize:"l,is" }})
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <!-- Container para prévia do template -->
+                <div id="template-preview-container">
+                    <!-- Carregado via HTMX -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seleção de Tipo de Destinatários -->
+        <div class="card mb-3 no-hover">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Tipo de Destinatários
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="recipient_type" 
+                                   id="type_pessoas" 
+                                   value="pessoas"
+                                   hx-get="{% url 'administracao:whatsapp:load_recipients' %}"
+                                   hx-target="#recipients-container"
+                                   hx-trigger="change"
+                                   hx-include="[name='recipient_type']"
+                                   checked>
+                            <label class="form-check-label" for="type_pessoas">
+                                <i class="fas fa-user me-1"></i> Pessoas Específicas (multi-select)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="recipient_type" 
+                                   id="type_passageiros" 
+                                   value="passageiros"
+                                   hx-get="{% url 'administracao:whatsapp:load_recipients' %}"
+                                   hx-target="#recipients-container"
+                                   hx-trigger="change"
+                                   hx-include="[name='recipient_type']">
+                            <label class="form-check-label" for="type_passageiros">
+                                <i class="fas fa-plane me-1"></i> Passageiros (multi-select caravanas)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="recipient_type" 
+                                   id="type_colaboradores" 
+                                   value="colaboradores"
+                                   hx-get="{% url 'administracao:whatsapp:load_recipients' %}"
+                                   hx-target="#recipients-container"
+                                   hx-trigger="change"
+                                   hx-include="[name='recipient_type']">
+                            <label class="form-check-label" for="type_colaboradores">
+                                <i class="fas fa-id-badge me-1"></i> Colaboradores (select simples)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="recipient_type" 
+                                   id="type_fornecedores" 
+                                   value="fornecedores"
+                                   hx-get="{% url 'administracao:whatsapp:load_recipients' %}"
+                                   hx-target="#recipients-container"
+                                   hx-trigger="change"
+                                   hx-include="[name='recipient_type']">
+                            <label class="form-check-label" for="type_fornecedores">
+                                <i class="fas fa-truck me-1"></i> Fornecedores (select simples)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="recipient_type" 
+                                   id="type_usuarios" 
+                                   value="usuarios"
+                                   hx-get="{% url 'administracao:whatsapp:load_recipients' %}"
+                                   hx-target="#recipients-container"
+                                   hx-trigger="change"
+                                   hx-include="[name='recipient_type']">
+                            <label class="form-check-label" for="type_usuarios">
+                                <i class="fas fa-user-shield me-1"></i> Usuários (select simples)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Container de Destinatários -->
+        <div id="recipients-container">
+            <!-- Carregado via HTMX -->
+            <div class="card mb-3 no-hover">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="fas fa-check-square me-2"></i>
+                        Selecionar Destinatários
+                        <span class="badge bg-primary ms-2">0 selecionados</span>
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center text-muted py-3">
+                        <i class="fas fa-users fa-2x mb-2"></i>
+                        <p>Selecione um tipo de destinatário acima</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-paper-plane me-2"></i>
+            <span>Enviar Mensagens</span>
+            <span class="badge bg-white text-success ms-2" id="send-count">0</span>
+        </button>
+    </div>
+</form>
+
+<style>
+/* Desabilita animação de hover para cards do modal */
+.card.no-hover {
+    transition: none !important;
+    transform: none !important;
+}
+
+.card.no-hover:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.form-check-input:checked ~ .form-check-label {
+    font-weight: 600;
+    color: var(--bs-primary);
+}
+
+.recipient-item:hover {
+    background-color: #f8f9fa;
+}
+
+.recipient-checkbox:checked ~ .flex-grow-1 {
+    background-color: rgba(211, 161, 86, 0.1);
+}
+</style>

@@ -1,0 +1,76 @@
+<div class="card mb-3 no-hover">
+    <div class="card-header bg-light">
+        <h6 class="mb-0">
+            <i class="fas fa-user-shield me-2"></i>
+            Selecionar Usuários do Sistema
+            <span class="badge bg-primary ms-2" id="usuarios-count">{{ selected_count|default:0 }} usuários</span>
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Filtrar por grupo:</label>
+            <select class="form-select" 
+                    id="grupo_filter"
+                    hx-get="{% url 'administracao:whatsapp:filter_usuarios' %}"
+                    hx-target="#usuarios_list"
+                    hx-trigger="change">
+                <option value="">Todos os grupos</option>
+                {% for grupo in grupos %}
+                    <option value="{{ grupo.id }}">{{ grupo.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Selecionar usuários:</label>
+            <div id="usuarios_list">
+                <select name="usuarios_ids" 
+                        class="form-select" 
+                        multiple
+                        size="6">
+                    {% for usuario in usuarios %}
+                        <option value="{{ usuario.id }}" 
+                                {% if usuario.id in selected_usuarios_ids %}selected{% endif %}>
+                            {% if usuario.pessoa %}
+                                {{ usuario.pessoa.nome }} ({{ usuario.username }})
+                                {% if usuario.pessoa.telefone or usuario.pessoa.celular %}
+                                    - {{ usuario.pessoa.celular|default:usuario.pessoa.telefone }}
+                                {% endif %}
+                            {% else %}
+                                {{ usuario.username }}
+                            {% endif %}
+                            {% if usuario.groups.exists %} - {{ usuario.groups.all|join:", " }}{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <small class="form-text text-muted">
+                Segure Ctrl/Cmd para selecionar múltiplos usuários.
+            </small>
+        </div>
+        
+        <div class="alert alert-info mb-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Resumo:</strong>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-primary fs-6" id="total-usuarios">{{ usuarios|length|default:0 }}</span> disponíveis
+                    <span class="badge bg-success fs-6 ms-2" id="valid-phones-usuarios">{{ valid_phones|default:0 }}</span> com WhatsApp
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Atualizar contadores quando usuários são selecionados
+    $('[name="usuarios_ids"]').on('change', function() {
+        const selectedCount = $(this).val() ? $(this).val().length : 0;
+        $('#usuarios-count').text(selectedCount + ' usuários');
+        $('#send-count').text(selectedCount);
+    });
+});
+</script>

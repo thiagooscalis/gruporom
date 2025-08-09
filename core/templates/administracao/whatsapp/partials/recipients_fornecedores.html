@@ -1,0 +1,72 @@
+<div class="card mb-3 no-hover">
+    <div class="card-header bg-light">
+        <h6 class="mb-0">
+            <i class="fas fa-truck me-2"></i>
+            Selecionar Fornecedores
+            <span class="badge bg-primary ms-2" id="fornecedores-count">{{ selected_count|default:0 }} fornecedores</span>
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Filtrar por tipo:</label>
+            <select class="form-select" 
+                    id="tipo_filter"
+                    hx-get="{% url 'administracao:whatsapp:filter_fornecedores' %}"
+                    hx-target="#fornecedores_list"
+                    hx-trigger="change">
+                <option value="">Todos os tipos</option>
+                <option value="produto">Produtos</option>
+                <option value="servico">Serviços</option>
+                <option value="ambos">Produtos e Serviços</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Selecionar fornecedores:</label>
+            <div id="fornecedores_list">
+                <select name="fornecedores_ids" 
+                        class="form-select" 
+                        multiple
+                        size="8">
+                    {% for fornecedor in fornecedores %}
+                        <option value="{{ fornecedor.id }}" 
+                                {% if fornecedor.id in selected_fornecedores_ids %}selected{% endif %}>
+                            {{ fornecedor.pessoa.nome }}
+                            {% if fornecedor.tipo %} - {{ fornecedor.get_tipo_display }}{% endif %}
+                            {% if fornecedor.pessoa.telefone or fornecedor.pessoa.celular %}
+                                - {{ fornecedor.pessoa.celular|default:fornecedor.pessoa.telefone }}
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <small class="form-text text-muted">
+                Segure Ctrl/Cmd para selecionar múltiplos fornecedores.
+            </small>
+        </div>
+        
+        <div class="alert alert-info mb-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Resumo:</strong>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-primary fs-6" id="total-fornecedores">{{ fornecedores|length|default:0 }}</span> disponíveis
+                    <span class="badge bg-success fs-6 ms-2" id="valid-phones-fornecedores">{{ valid_phones|default:0 }}</span> com WhatsApp
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Atualizar contadores quando fornecedores são selecionados
+    $('[name="fornecedores_ids"]').on('change', function() {
+        const selectedCount = $(this).val() ? $(this).val().length : 0;
+        $('#fornecedores-count').text(selectedCount + ' fornecedores');
+        $('#send-count').text(selectedCount);
+    });
+});
+</script>

@@ -2,9 +2,9 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.utils import timezone
-from core.models import Pessoa, Telefone, Email
+from core.models import Pessoa
 from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES
-from core.factories import PessoaFactory, PessoaJuridicaFactory, TelefoneFactory, EmailFactory
+from core.factories import PessoaFactory, PessoaJuridicaFactory
 
 
 @pytest.mark.django_db
@@ -18,13 +18,19 @@ class TestPessoaModel:
             doc="12345678901",
             nome="João da Silva",
             sexo="Masculino",
-            nascimento=timezone.now().date()
+            nascimento=timezone.now().date(),
+            email1="joao@example.com",
+            ddi1="55",
+            ddd1="11",
+            telefone1="999999999"
         )
         assert pessoa.id is not None
         assert pessoa.tipo_doc == "CPF"
         assert pessoa.doc == "12345678901"
         assert pessoa.nome == "João da Silva"
-        # Verifica se telefone e email foram criados
+        # Verifica se telefone e email diretos foram criados
+        assert pessoa.email1 == "joao@example.com"
+        assert pessoa.telefone1 == "999999999"
         assert pessoa.telefone_principal is not None
         assert pessoa.email_principal is not None
 
@@ -39,9 +45,9 @@ class TestPessoaModel:
         assert pessoa.doc == "12345678000199"
         assert pessoa.sexo is None
         assert pessoa.nascimento is None
-        # Verifica se telefone e email foram criados
-        assert pessoa.telefone_principal is not None
-        assert pessoa.email_principal is not None
+        # Verifica se email e telefone diretos foram criados
+        assert pessoa.email1 is not None
+        assert pessoa.telefone1 is not None
 
     def test_doc_unique(self):
         """Testa que doc deve ser único"""
@@ -77,54 +83,63 @@ class TestPessoaModel:
 
     def test_pessoa_com_passaporte(self):
         """Testa criação de pessoa com dados de passaporte"""
+        from core.factories import PaisFactory
+        pais_brasil = PaisFactory(nome="Brasil", iso="BR")
+        
         pessoa = PessoaFactory(
             nome="João Silva",
             passaporte_numero="AB123456",
             passaporte_validade=timezone.now().date(),
-            pais="Brasil"
+            pais=pais_brasil
         )
         assert pessoa.passaporte_numero == "AB123456"
         assert pessoa.passaporte_validade is not None
-        assert pessoa.pais == "Brasil"
+        assert pessoa.pais.nome == "Brasil"
 
     def test_telefone_properties(self):
         """Testa propriedades de telefone da pessoa"""
-        pessoa = PessoaFactory()
-        telefone = pessoa.telefone_principal
+        pessoa = PessoaFactory(
+            ddi1="55",
+            ddd1="11", 
+            telefone1="999999999"
+        )
         
-        assert telefone is not None
-        assert telefone.principal is True
         assert pessoa.telefone_formatado is not None
-        assert pessoa.telefone_completo is not None
+        assert pessoa.telefone_completo == "+5511999999999"
+        assert pessoa.telefone_principal is not None
 
     def test_email_properties(self):
         """Testa propriedades de email da pessoa"""
-        pessoa = PessoaFactory()
-        email = pessoa.email_principal
+        pessoa = PessoaFactory(email1="test@example.com")
         
-        assert email is not None
-        assert email.principal is True
-        assert pessoa.email_str is not None
+        assert pessoa.email_principal == "test@example.com"
+        assert pessoa.email1 == "test@example.com"
 
     def test_multiplos_telefones(self):
         """Testa pessoa com múltiplos telefones"""
-        pessoa = PessoaFactory()
+        pessoa = PessoaFactory(
+            ddi1="55",
+            ddd1="11", 
+            telefone1="999999999",
+            ddi2="55",
+            ddd2="21",
+            telefone2="888888888"
+        )
         
-        # Cria telefone secundário
-        TelefoneFactory(pessoa=pessoa, tipo='residencial', principal=False)
-        
-        assert pessoa.telefones.count() == 2
-        assert pessoa.telefone_principal.principal is True
+        assert pessoa.telefone1 == "999999999"
+        assert pessoa.telefone2 == "888888888"
+        assert pessoa.telefone_principal is not None
 
     def test_multiplos_emails(self):
         """Testa pessoa com múltiplos emails"""
-        pessoa = PessoaFactory()
+        pessoa = PessoaFactory(
+            email1="primary@example.com",
+            email2="secondary@example.com"
+        )
         
-        # Cria email secundário
-        EmailFactory(pessoa=pessoa, tipo='profissional', principal=False)
-        
-        assert pessoa.emails.count() == 2
-        assert pessoa.email_principal.principal is True
+        assert pessoa.email1 == "primary@example.com"
+        assert pessoa.email2 == "secondary@example.com"
+        assert pessoa.email_principal == "primary@example.com"
 
     def test_tipo_pessoa_property(self):
         """Testa propriedade tipo_pessoa"""

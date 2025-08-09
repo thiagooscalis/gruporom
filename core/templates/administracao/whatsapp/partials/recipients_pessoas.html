@@ -1,0 +1,62 @@
+<div class="card mb-3 no-hover">
+    <div class="card-header bg-light">
+        <h6 class="mb-0">
+            <i class="fas fa-user me-2"></i>
+            Selecionar Pessoas Específicas
+            <span class="badge bg-primary ms-2" id="pessoas-count">0 selecionadas</span>
+        </h6>
+    </div>
+    <div class="card-body">
+        <!-- Usando o componente de múltipla seleção existente -->
+        {% include 'components/multiple_autocomplete_field.html' with field_id='pessoas' field_name='pessoas_ids' label='Buscar pessoas' placeholder='Digite o nome, CPF ou documento da pessoa...' search_url='/administracao/buscar-pessoas/' selected_label='Pessoas selecionadas' empty_message='Nenhuma pessoa selecionada' help_text='Digite pelo menos 2 caracteres para buscar. Múltiplas seleções permitidas.' %}
+        
+        <div class="alert alert-info mb-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Resumo:</strong>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-primary fs-6" id="total-pessoas">0</span> pessoas
+                    <span class="badge bg-success fs-6 ms-2" id="valid-phones-pessoas">0</span> com WhatsApp
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Sobrescrever a função padrão para personalizar a seleção
+document.addEventListener('DOMContentLoaded', function() {
+    // Aguarda o componente estar carregado
+    setTimeout(function() {
+        // Encontrar o container de pessoas selecionadas
+        const selectedContainer = document.getElementById('pessoas_selected');
+        const hiddenContainer = document.getElementById('pessoas_hidden_container');
+        
+        if (selectedContainer && hiddenContainer) {
+            // Observer para detectar mudanças nos inputs hidden
+            const observer = new MutationObserver(function(mutations) {
+                updatePessoasCount();
+            });
+            
+            observer.observe(hiddenContainer, { childList: true });
+            
+            function updatePessoasCount() {
+                const hiddenInputs = hiddenContainer.querySelectorAll('input[name="pessoas_ids"]');
+                const count = hiddenInputs.length;
+                
+                document.getElementById('pessoas-count').textContent = count + ' selecionadas';
+                document.getElementById('total-pessoas').textContent = count;
+                document.getElementById('valid-phones-pessoas').textContent = count; // TODO: calcular telefones válidos
+                
+                // Atualizar contador global do botão de envio
+                const sendCount = document.getElementById('send-count');
+                if (sendCount) {
+                    sendCount.textContent = count;
+                }
+            }
+        }
+    }, 100);
+});
+</script>

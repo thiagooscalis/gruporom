@@ -33,54 +33,80 @@
                             {{ form.funcao|as_crispy_field }}
                         </div>
                         
-                        <!-- Telefones Múltiplos -->
+                        <!-- Telefones -->
                         <div class="col-12 mb-3">
-                            <label class="form-label">Telefones</label>
-                            <div id="telefones-container">
-                                <div class="telefone-item mb-2">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <input type="text" class="form-control" name="telefone_ddi[]" placeholder="DDI" value="55" maxlength="4">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <input type="text" class="form-control" name="telefone_ddd[]" placeholder="DDD" maxlength="2" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control telefone-mask" name="telefone_numero[]" placeholder="Telefone" maxlength="10" required>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-outline-danger btn-sm remove-telefone" style="display: none;">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                            <h6 class="text-muted mb-3">Telefones</h6>
+                            
+                            <!-- Telefone 1 (obrigatório) -->
+                            <div class="row mb-2">
+                                <div class="col-md-2">
+                                    {{ form.ddi1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.ddd1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.telefone1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <span class="badge bg-primary">Principal</span>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="add-telefone">
-                                <i class="fas fa-plus me-1"></i>Adicionar Telefone
-                            </button>
+                            
+                            <!-- Telefone 2 (opcional) -->
+                            <div class="row mb-2">
+                                <div class="col-md-2">
+                                    {{ form.ddi2|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.ddd2|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.telefone2|as_crispy_field }}
+                                </div>
+                            </div>
+                            
+                            <!-- Telefone 3 (opcional) -->
+                            <div class="row mb-2">
+                                <div class="col-md-2">
+                                    {{ form.ddi3|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.ddd3|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.telefone3|as_crispy_field }}
+                                </div>
+                            </div>
                         </div>
                         
-                        <!-- Emails Múltiplos -->
+                        <!-- Emails -->
                         <div class="col-12 mb-3">
-                            <label class="form-label">Emails</label>
-                            <div id="emails-container">
-                                <div class="email-item mb-2">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <input type="email" class="form-control" name="email[]" placeholder="email@exemplo.com" required>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-outline-danger btn-sm remove-email" style="display: none;">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                            <h6 class="text-muted mb-3">Emails</h6>
+                            
+                            <!-- Email 1 (obrigatório) -->
+                            <div class="row mb-2">
+                                <div class="col-md-10">
+                                    {{ form.email1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <span class="badge bg-primary">Principal</span>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="add-email">
-                                <i class="fas fa-plus me-1"></i>Adicionar Email
-                            </button>
+                            
+                            <!-- Email 2 (opcional) -->
+                            <div class="row mb-2">
+                                <div class="col-md-10">
+                                    {{ form.email2|as_crispy_field }}
+                                </div>
+                            </div>
+                            
+                            <!-- Email 3 (opcional) -->
+                            <div class="row mb-2">
+                                <div class="col-md-10">
+                                    {{ form.email3|as_crispy_field }}
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="col-12">
@@ -233,199 +259,54 @@
             empresaGruporomCheckbox.addEventListener('change', toggleTipoEmpresa);
         }
         
-        // ===== GESTÃO DE TELEFONES MÚLTIPLOS =====
-        const addTelefoneBtn = document.getElementById('add-telefone');
-        const telefonesContainer = document.getElementById('telefones-container');
-        
-        function updateRemoveTelefoneButtons() {
-            const telefoneItems = telefonesContainer.querySelectorAll('.telefone-item');
-            telefoneItems.forEach((item, index) => {
-                const removeBtn = item.querySelector('.remove-telefone');
-                if (telefoneItems.length > 1) {
-                    removeBtn.style.display = 'block';
-                } else {
-                    removeBtn.style.display = 'none';
+        // ===== MÁSCARAS DE TELEFONE DINÂMICAS =====
+        function aplicarMascaraTelefone(telefoneInput, ddiInput) {
+            if (!window.IMask || !telefoneInput) return;
+            
+            function updateMask() {
+                const ddi = ddiInput ? ddiInput.value : '55';
+                
+                // Destruir máscara anterior se existir
+                if (telefoneInput._imask) {
+                    telefoneInput._imask.destroy();
                 }
-            });
-        }
-        
-        function addTelefoneField() {
-            const newTelefone = document.createElement('div');
-            newTelefone.className = 'telefone-item mb-2';
-            newTelefone.innerHTML = `
-                <div class="row">
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="telefone_ddi[]" placeholder="DDI" value="55" maxlength="4">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="telefone_ddd[]" placeholder="DDD" maxlength="2">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control telefone-mask" name="telefone_numero[]" placeholder="Telefone" maxlength="10">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-telefone">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            telefonesContainer.appendChild(newTelefone);
-            
-            // Adiciona evento de remoção
-            const removeBtn = newTelefone.querySelector('.remove-telefone');
-            removeBtn.addEventListener('click', function() {
-                newTelefone.remove();
-                updateRemoveTelefoneButtons();
-            });
-            
-            // Aplica máscara de telefone no novo campo
-            const telefoneInput = newTelefone.querySelector('.telefone-mask');
-            aplicarMascaraTelefone(telefoneInput);
-            
-            updateRemoveTelefoneButtons();
-        }
-        
-        if (addTelefoneBtn) {
-            addTelefoneBtn.addEventListener('click', addTelefoneField);
-            
-            // Adiciona eventos de remoção aos campos existentes
-            telefonesContainer.querySelectorAll('.remove-telefone').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    btn.closest('.telefone-item').remove();
-                    updateRemoveTelefoneButtons();
-                });
-            });
-            
-            updateRemoveTelefoneButtons();
-        }
-        
-        // ===== GESTÃO DE EMAILS MÚLTIPLOS =====
-        const addEmailBtn = document.getElementById('add-email');
-        const emailsContainer = document.getElementById('emails-container');
-        
-        function updateRemoveEmailButtons() {
-            const emailItems = emailsContainer.querySelectorAll('.email-item');
-            emailItems.forEach((item, index) => {
-                const removeBtn = item.querySelector('.remove-email');
-                if (emailItems.length > 1) {
-                    removeBtn.style.display = 'block';
+                
+                if (ddi === '55') {
+                    // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
+                    telefoneInput._imask = IMask(telefoneInput, {
+                        mask: [
+                            {
+                                mask: '00000-0000',
+                                startsWith: '9',
+                                country: 'Brasil'
+                            },
+                            {
+                                mask: '0000-0000',
+                                startsWith: '',
+                                country: 'Brasil'
+                            }
+                        ]
+                    });
                 } else {
-                    removeBtn.style.display = 'none';
+                    // Outros países: sem máscara
+                    telefoneInput._imask = null;
                 }
-            });
-        }
-        
-        function addEmailField() {
-            const newEmail = document.createElement('div');
-            newEmail.className = 'email-item mb-2';
-            newEmail.innerHTML = `
-                <div class="row">
-                    <div class="col-md-10">
-                        <input type="email" class="form-control" name="email[]" placeholder="email@exemplo.com">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-email">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
+            }
             
-            emailsContainer.appendChild(newEmail);
+            // Aplicar máscara inicial
+            updateMask();
             
-            // Adiciona evento de remoção
-            const removeBtn = newEmail.querySelector('.remove-email');
-            removeBtn.addEventListener('click', function() {
-                newEmail.remove();
-                updateRemoveEmailButtons();
-            });
-            
-            updateRemoveEmailButtons();
-        }
-        
-        if (addEmailBtn) {
-            addEmailBtn.addEventListener('click', addEmailField);
-            
-            // Adiciona eventos de remoção aos campos existentes
-            emailsContainer.querySelectorAll('.remove-email').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    btn.closest('.email-item').remove();
-                    updateRemoveEmailButtons();
-                });
-            });
-            
-            updateRemoveEmailButtons();
-        }
-        
-        // ===== MÁSCARAS DE TELEFONE =====
-        function aplicarMascaraTelefone(input) {
-            if (window.IMask && input) {
-                IMask(input, {
-                    mask: [
-                        {
-                            mask: '00000-0000',
-                            startsWith: '',
-                            country: 'Brasil'
-                        },
-                        {
-                            mask: '0000-0000',
-                            startsWith: '',
-                            country: 'Brasil'
-                        }
-                    ]
-                });
+            // Escutar mudanças no DDI
+            if (ddiInput) {
+                ddiInput.addEventListener('input', updateMask);
+                ddiInput.addEventListener('change', updateMask);
             }
         }
         
-        // Aplica máscara nos campos existentes
-        document.querySelectorAll('.telefone-mask').forEach(aplicarMascaraTelefone);
-        
-        // ===== POPULAÇÃO DE DADOS EXISTENTES =====
-        // Aguarda um pouco para garantir que o DOM esteja pronto
-        setTimeout(function() {
-            // Popula dados existentes da pessoa nos campos múltiplos
-            {% if pessoa.telefone %}
-                const telefoneExistente = "{{ pessoa.telefone }}";
-                const telefonesContainerEdit = document.getElementById('telefones-container');
-                const telefoneItem = telefonesContainerEdit ? telefonesContainerEdit.querySelector('.telefone-item') : null;
-                
-                if (telefoneExistente && telefoneItem) {
-                    // Parse do telefone +5511999999999 -> DDI: 55, DDD: 11, Numero: 999999999
-                    const telefoneClean = telefoneExistente.replace('+', '');
-                    if (telefoneClean.length >= 11) {
-                        const ddi = telefoneClean.substring(0, 2);
-                        const ddd = telefoneClean.substring(2, 4);
-                        const numero = telefoneClean.substring(4);
-                        
-                        const ddiInput = telefoneItem.querySelector('[name="telefone_ddi[]"]');
-                        const dddInput = telefoneItem.querySelector('[name="telefone_ddd[]"]');
-                        const numeroInput = telefoneItem.querySelector('[name="telefone_numero[]"]');
-                        
-                        if (ddiInput) ddiInput.value = ddi;
-                        if (dddInput) dddInput.value = ddd;
-                        if (numeroInput) numeroInput.value = numero;
-                        
-                        console.log('Telefone populado:', {ddi, ddd, numero});
-                    }
-                }
-            {% endif %}
-            
-            {% if pessoa.email %}
-                const emailExistente = "{{ pessoa.email }}";
-                const emailsContainer = document.getElementById('emails-container');
-                const emailItem = emailsContainer ? emailsContainer.querySelector('.email-item') : null;
-                
-                if (emailExistente && emailItem) {
-                    const emailInput = emailItem.querySelector('[name="email[]"]');
-                    if (emailInput) {
-                        emailInput.value = emailExistente;
-                        console.log('Email populado:', emailExistente);
-                    }
-                }
-            {% endif %}
-        }, 100);
+        // Aplicar máscaras nos campos de telefone
+        aplicarMascaraTelefone(document.getElementById('id_telefone1'), document.getElementById('id_ddi1'));
+        aplicarMascaraTelefone(document.getElementById('id_telefone2'), document.getElementById('id_ddi2'));
+        aplicarMascaraTelefone(document.getElementById('id_telefone3'), document.getElementById('id_ddi3'));
         
     })();
 </script>

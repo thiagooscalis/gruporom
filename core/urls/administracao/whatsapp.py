@@ -39,4 +39,16 @@ urlpatterns = [
     
     # API Debug
     path('account/<int:account_id>/api-test/', views.api_permissions_test, name='api_permissions_test'),
+    
+    # Envio em Massa
+    path('account/<int:account_id>/bulk-send/', views.bulk_send_modal, name='bulk_send_modal'),
+    path('account/<int:account_id>/bulk-send/process/', views.bulk_send_process, name='bulk_send_process'),
+    path('bulk-send/load-recipients/', views.load_recipients, name='load_recipients'),
+    path('bulk-send/filter-recipients/', views.filter_recipients, name='filter_recipients'),
+    path('bulk-send/template-preview/', views.template_preview, name='template_preview'),
+    path('bulk-send/update-count/', views.update_count, name='update_count'),
+    path('bulk-send/select-all/', views.select_all_recipients, name='select_all_recipients'),
+    path('bulk-send/clear-selection/', views.clear_selection, name='clear_selection'),
+    path('bulk-send/count-selected/', views.count_selected, name='count_selected'),
+    path('bulk-send/update-preview/', views.update_preview, name='update_preview'),
 ]

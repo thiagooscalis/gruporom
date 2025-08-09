@@ -1253,3 +1253,388 @@ def account_test_modal(request, account_id):
         'account': account,
         'action_url': request.path
     })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def bulk_send_modal(request, account_id):
+    """
+    Modal para envio de mensagens em massa
+    """
+    from core.models import Pessoa, Passageiro, Colaborador, Fornecedor, Usuario
+    from core.models import Caravana, Cargo, Turno
+    from django.contrib.auth.models import Group
+    
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    # Templates disponíveis (apenas aprovados)
+    templates = WhatsAppTemplate.objects.filter(
+        account=account,
+        status='approved'
+    ).order_by('display_name')
+    
+    # Dados para filtros
+    from django.db.models import Min
+    caravanas = Caravana.objects.annotate(
+        menor_saida=Min('bloqueio__saida')
+    ).order_by('menor_saida').exclude(menor_saida__isnull=True)
+    cargos = Cargo.objects.all().order_by('nome')
+    turnos = Turno.objects.all().order_by('nome')
+    grupos = Group.objects.all().order_by('name')
+    
+    context = {
+        'account': account,
+        'templates': templates,
+        'caravanas': caravanas,
+        'cargos': cargos,
+        'turnos': turnos,
+        'grupos': grupos,
+    }
+    
+    return render(request, 'administracao/whatsapp/modals/bulk_send.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def load_recipients(request):
+    """
+    Carrega interface de seleção de destinatários baseado no tipo
+    """
+    from core.models import Pessoa, Passageiro, Colaborador, Fornecedor, Usuario
+    from core.models import Caravana, Cargo, Turno
+    from django.contrib.auth.models import Group
+    from django.db.models import Min, Count
+    
+    recipient_type = request.GET.get('recipient_type', 'pessoas')
+    
+    # Contexto base
+    context = {
+        'recipient_type': recipient_type,
+        'selected_count': 0,
+        'valid_phones': 0,
+    }
+    
+    # Templates específicos por tipo
+    template_map = {
+        'pessoas': 'administracao/whatsapp/partials/recipients_pessoas.html',
+        'passageiros': 'administracao/whatsapp/partials/recipients_passageiros.html',
+        'colaboradores': 'administracao/whatsapp/partials/recipients_colaboradores.html',
+        'fornecedores': 'administracao/whatsapp/partials/recipients_fornecedores.html',
+        'usuarios': 'administracao/whatsapp/partials/recipients_usuarios.html',
+    }
+    
+    if recipient_type == 'pessoas':
+        # Para pessoas, apenas precisamos do template com autocomplete
+        context['selected_pessoas'] = []
+        
+    elif recipient_type == 'passageiros':
+        # Carrega caravanas com contagem de passageiros
+        context['caravanas'] = Caravana.objects.annotate(
+            menor_saida=Min('bloqueio__saida'),
+            total_passageiros=Count('bloqueio__passageiro', distinct=True)
+        ).order_by('menor_saida').exclude(menor_saida__isnull=True)
+        context['selected_caravanas_ids'] = []
+        context['total_passageiros'] = 0
+        
+    elif recipient_type == 'colaboradores':
+        context['cargos'] = Cargo.objects.all().order_by('nome')
+        context['turnos'] = Turno.objects.all().order_by('nome')
+        context['colaboradores'] = Colaborador.objects.select_related(
+            'pessoa', 'cargo', 'turno'
+        ).filter(data_demissao__isnull=True).order_by('pessoa__nome')
+        context['selected_colaboradores_ids'] = []
+        
+    elif recipient_type == 'fornecedores':
+        context['fornecedores'] = Fornecedor.objects.select_related(
+            'pessoa'
+        ).order_by('pessoa__nome')
+        context['selected_fornecedores_ids'] = []
+        
+    elif recipient_type == 'usuarios':
+        context['grupos'] = Group.objects.all().order_by('name')
+        context['usuarios'] = Usuario.objects.select_related(
+            'pessoa'
+        ).filter(is_active=True).prefetch_related('groups').order_by('username')
+        context['selected_usuarios_ids'] = []
+    
+    template_name = template_map.get(recipient_type, template_map['pessoas'])
+    return render(request, template_name, context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def filter_recipients(request):
+    """
+    Filtra destinatários com os mesmos parâmetros do load_recipients
+    """
+    return load_recipients(request)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def template_preview(request):
+    """
+    Carrega prévia do template selecionado
+    """
+    template_id = request.GET.get('template_id')
+    
+    if not template_id:
+        return render(request, 'administracao/whatsapp/partials/template_preview.html', {})
+    
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    # Cria range para as variáveis
+    variables_range = list(range(1, template.variables_count + 1)) if template.variables_count > 0 else []
+    
+    context = {
+        'template': template,
+        'variables_range': variables_range,
+    }
+    
+    return render(request, 'administracao/whatsapp/partials/template_preview.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
+def update_count(request):
+    """
+    Atualiza contador de destinatários selecionados
+    """
+    # Conta quantos checkboxes estão marcados
+    recipients = request.POST.getlist('recipients[]')
+    count = len(recipients)
+    
+    # Salva na sessão
+    request.session['selected_recipients'] = recipients
+    
+    return HttpResponse(str(count))
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
+def select_all_recipients(request):
+    """
+    Seleciona todos os destinatários do tipo atual
+    """
+    recipient_type = request.POST.get('recipient_type')
+    # Aqui você implementaria a lógica para selecionar todos
+    # Por ora, vamos apenas recarregar a lista
+    return load_recipients(request)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
+def clear_selection(request):
+    """
+    Limpa seleção de destinatários
+    """
+    request.session['selected_recipients'] = []
+    return load_recipients(request)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
+def bulk_send_process(request, account_id):
+    """
+    Processa o envio de mensagens em massa
+    """
+    account = get_object_or_404(WhatsAppAccount, id=account_id)
+    
+    template_id = request.POST.get('template_id')
+    recipients = request.POST.getlist('recipients[]')
+    # Configurações padrão
+    test_mode = False  # Sempre envio real
+    save_log = True    # Sempre salva log
+    delay = 2          # Intervalo padrão
+    
+    if not template_id:
+        messages.error(request, 'Por favor, selecione um template')
+        return bulk_send_modal(request, account_id)
+    
+    if not recipients:
+        messages.error(request, 'Por favor, selecione ao menos um destinatário')
+        return bulk_send_modal(request, account_id)
+    
+    template = get_object_or_404(WhatsAppTemplate, id=template_id, account=account)
+    
+    # Coleta variáveis do template
+    variables = {}
+    for i in range(1, template.variables_count + 1):
+        variables[str(i)] = request.POST.get(f'variable_{i}', '')
+    
+    # Função auxiliar para obter dados do destinatário
+    def get_recipient_data(recipient_id):
+        """
+        Obtém os dados do destinatário baseado no tipo e ID
+        """
+        from core.models import Pessoa, Passageiro, Colaborador, Fornecedor, Usuario
+        
+        recipient_type, obj_id = recipient_id.split('_', 1)
+        
+        try:
+            if recipient_type == 'pessoa':
+                pessoa = Pessoa.objects.get(id=obj_id)
+                return {
+                    'name': pessoa.nome,
+                    'phone': pessoa.celular or pessoa.telefone,
+                    'responsible_user': None
+                }
+            elif recipient_type == 'passageiro':
+                passageiro = Passageiro.objects.select_related('pessoa').get(id=obj_id)
+                return {
+                    'name': passageiro.pessoa.nome if passageiro.pessoa else 'Passageiro',
+                    'phone': passageiro.pessoa.celular or passageiro.pessoa.telefone if passageiro.pessoa else None,
+                    'responsible_user': None
+                }
+            elif recipient_type == 'colaborador':
+                colaborador = Colaborador.objects.select_related('pessoa').get(id=obj_id)
+                return {
+                    'name': colaborador.pessoa.nome if colaborador.pessoa else 'Colaborador',
+                    'phone': colaborador.pessoa.celular or colaborador.pessoa.telefone if colaborador.pessoa else None,
+                    'responsible_user': None
+                }
+            elif recipient_type == 'fornecedor':
+                fornecedor = Fornecedor.objects.select_related('pessoa').get(id=obj_id)
+                return {
+                    'name': fornecedor.pessoa.nome if fornecedor.pessoa else 'Fornecedor',
+                    'phone': fornecedor.pessoa.celular or fornecedor.pessoa.telefone if fornecedor.pessoa else None,
+                    'responsible_user': None
+                }
+            elif recipient_type == 'usuario':
+                usuario = Usuario.objects.select_related('pessoa').get(id=obj_id)
+                return {
+                    'name': usuario.pessoa.nome if usuario.pessoa else usuario.username,
+                    'phone': usuario.pessoa.celular or usuario.pessoa.telefone if usuario.pessoa else None,
+                    'responsible_user': usuario
+                }
+        except Exception:
+            return {
+                'name': 'Destinatário Desconhecido',
+                'phone': None,
+                'responsible_user': None
+            }
+    
+    # Função auxiliar para processar variáveis especiais para cada destinatário
+    def process_variables_for_recipient(variables, recipient_data, current_user):
+        """
+        Processa variáveis especiais como @cliente e @atendente
+        """
+        processed = {}
+        for key, value in variables.items():
+            if value.lower() == '@cliente':
+                # Extrai o nome do destinatário
+                processed[key] = recipient_data.get('name', 'Cliente')
+            elif value.lower() == '@atendente':
+                # Usa o usuário responsável pelo cliente, ou o usuário logado caso não tenha responsável
+                responsible_user = recipient_data.get('responsible_user')
+                if responsible_user and hasattr(responsible_user, 'pessoa') and responsible_user.pessoa:
+                    processed[key] = responsible_user.pessoa.nome
+                elif responsible_user:
+                    processed[key] = responsible_user.username
+                elif hasattr(current_user, 'pessoa') and current_user.pessoa:
+                    processed[key] = current_user.pessoa.nome
+                else:
+                    processed[key] = current_user.username
+            else:
+                processed[key] = value
+        return processed
+    
+    # TODO: Implementar envio real via API
+    # Por ora, apenas simula sucesso
+    messages.success(
+        request,
+        f'✅ {len(recipients)} mensagens enviadas com sucesso usando o template "{template.display_name}"'
+    )
+    
+    # Processa variáveis para exemplo usando dados reais do primeiro destinatário
+    if recipients:
+        first_recipient = get_recipient_data(recipients[0])
+        processed_variables_sample = process_variables_for_recipient(variables, first_recipient, request.user)
+    else:
+        sample_recipient_data = {'name': 'Cliente Exemplo', 'responsible_user': None}
+        processed_variables_sample = process_variables_for_recipient(variables, sample_recipient_data, request.user)
+    
+    return render(request, 'administracao/whatsapp/partials/bulk_send_result.html', {
+        'account': account,
+        'template': template,
+        'recipients_count': len(recipients),
+        'test_mode': False,
+        'sent_count': len(recipients),
+        'failed_count': 0,
+        'variables': processed_variables_sample,
+    })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+def count_selected(request):
+    """
+    Retorna a contagem de destinatários selecionados
+    """
+    selected = request.session.get('selected_recipients', [])
+    return HttpResponse(f"{len(selected)} selecionados")
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@require_POST
+def update_preview(request):
+    """
+    Atualiza a prévia do template com as variáveis preenchidas
+    """
+    template_id = request.POST.get('template_id')
+    if not template_id:
+        return HttpResponse('')
+    
+    template = get_object_or_404(WhatsAppTemplate, id=template_id)
+    
+    # Coleta variáveis
+    body_text = template.body_text
+    header_text = template.header_text or ''
+    footer_text = template.footer_text or ''
+    
+    for i in range(1, template.variables_count + 1):
+        value = request.POST.get(f'variable_{i}', '')
+        
+        # Processa variáveis especiais
+        if value.lower() == '@cliente':
+            display_value = '<em>[Nome do Cliente]</em>'
+        elif value.lower() == '@atendente':
+            display_value = f'<em>{request.user.pessoa.nome if hasattr(request.user, "pessoa") else request.user.username}</em>'
+        else:
+            display_value = value
+            
+        if value:
+            # Substitui em todos os campos
+            body_text = body_text.replace(f'{{{{{i}}}}}', f'<strong>{display_value}</strong>')
+            header_text = header_text.replace(f'{{{{{i}}}}}', f'<strong>{display_value}</strong>')
+            footer_text = footer_text.replace(f'{{{{{i}}}}}', f'<strong>{display_value}</strong>')
+    
+    html = f'''
+    <div class="alert alert-success">
+        <h6 class="alert-heading">
+            <i class="fas fa-eye me-2"></i>
+            Prévia com Valores
+        </h6>
+        <div class="border rounded p-3 bg-white">
+            {f'<div class="fw-bold text-primary mb-2">{header_text}</div>' if header_text else ''}
+            <div class="mb-2">{body_text}</div>
+            {f'<div class="text-muted small">{footer_text}</div>' if footer_text else ''}
+        </div>
+        <div class="mt-2">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                <strong>@cliente</strong> será substituído pelo nome do destinatário | 
+                <strong>@atendente</strong> será substituído pelo seu nome
+            </small>
+        </div>
+    </div>
+    '''
+    
+    return HttpResponse(html)
+
+

@@ -1,0 +1,191 @@
+<div class="card mb-3 no-hover">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">
+            <i class="fas fa-check-square me-2"></i>
+            Selecionar Destinatários
+            <span class="badge bg-primary ms-2" 
+                  hx-get="{% url 'administracao:whatsapp:count_selected' %}"
+                  hx-trigger="change from:body"
+                  hx-swap="innerHTML">{{ selected_count|default:0 }} selecionados</span>
+        </h6>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" 
+                    class="btn btn-outline-primary"
+                    hx-post="{% url 'administracao:whatsapp:select_all_recipients' %}"
+                    hx-target="#recipients-list"
+                    hx-swap="innerHTML"
+                    hx-vals='{"recipient_type": "{{ recipient_type }}", "filters": "{{ filters_json }}"}'>
+                <i class="fas fa-check-double me-1"></i> Selecionar Todos
+            </button>
+            <button type="button" 
+                    class="btn btn-outline-secondary"
+                    hx-post="{% url 'administracao:whatsapp:clear_selection' %}"
+                    hx-target="#recipients-list"
+                    hx-swap="innerHTML"
+                    hx-vals='{"recipient_type": "{{ recipient_type }}"}'>
+                <i class="fas fa-times me-1"></i> Limpar Seleção
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filtros -->
+        <div class="mb-3">
+            {% if recipient_type == 'pessoas' %}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" 
+                           class="form-control" 
+                           name="search" 
+                           placeholder="Buscar por nome, CPF, telefone..."
+                           hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                           hx-target="#recipients-list"
+                           hx-trigger="keyup changed delay:500ms"
+                           hx-include="[name='recipient_type']"
+                           value="{{ search }}">
+                </div>
+            
+            {% elif recipient_type == 'passageiros' %}
+                <select class="form-select" 
+                        name="caravana_id"
+                        hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                        hx-target="#recipients-list"
+                        hx-trigger="change"
+                        hx-include="[name='recipient_type']">
+                    <option value="">Selecione uma caravana...</option>
+                    {% for caravana in caravanas %}
+                        <option value="{{ caravana.id }}" {% if caravana.id|stringformat:"s" == caravana_id %}selected{% endif %}>
+                            {{ caravana.nome }} - Saída: {{ caravana.menor_saida|date:"d/m/Y" }}
+                        </option>
+                    {% endfor %}
+                </select>
+            
+            {% elif recipient_type == 'colaboradores' %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <select class="form-select" 
+                                name="cargo_id"
+                                hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                                hx-target="#recipients-list"
+                                hx-trigger="change"
+                                hx-include="[name='recipient_type'], [name='turno_id']">
+                            <option value="">Todos os cargos</option>
+                            {% for cargo in cargos %}
+                                <option value="{{ cargo.id }}" {% if cargo.id|stringformat:"s" == cargo_id %}selected{% endif %}>
+                                    {{ cargo.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select" 
+                                name="turno_id"
+                                hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                                hx-target="#recipients-list"
+                                hx-trigger="change"
+                                hx-include="[name='recipient_type'], [name='cargo_id']">
+                            <option value="">Todos os turnos</option>
+                            {% for turno in turnos %}
+                                <option value="{{ turno.id }}" {% if turno.id|stringformat:"s" == turno_id %}selected{% endif %}>
+                                    {{ turno.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            
+            {% elif recipient_type == 'fornecedores' %}
+                <select class="form-select" 
+                        name="tipo_fornecedor"
+                        hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                        hx-target="#recipients-list"
+                        hx-trigger="change"
+                        hx-include="[name='recipient_type']">
+                    <option value="">Todos os tipos</option>
+                    <option value="produto" {% if tipo_fornecedor == 'produto' %}selected{% endif %}>Produtos</option>
+                    <option value="servico" {% if tipo_fornecedor == 'servico' %}selected{% endif %}>Serviços</option>
+                    <option value="ambos" {% if tipo_fornecedor == 'ambos' %}selected{% endif %}>Produtos e Serviços</option>
+                </select>
+            
+            {% elif recipient_type == 'usuarios' %}
+                <select class="form-select" 
+                        name="grupo_id"
+                        hx-get="{% url 'administracao:whatsapp:filter_recipients' %}"
+                        hx-target="#recipients-list"
+                        hx-trigger="change"
+                        hx-include="[name='recipient_type']">
+                    <option value="">Todos os grupos</option>
+                    {% for grupo in grupos %}
+                        <option value="{{ grupo.id }}" {% if grupo.id|stringformat:"s" == grupo_id %}selected{% endif %}>
+                            {{ grupo.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
+        
+        <!-- Lista de Destinatários -->
+        <div id="recipients-list" class="border rounded p-2" style="max-height: 300px; overflow-y: auto;">
+            {% if recipients %}
+                <div class="list-group list-group-flush">
+                    {% for recipient in recipients %}
+                        <label class="list-group-item d-flex align-items-center recipient-item">
+                            <input class="form-check-input me-3 recipient-checkbox" 
+                                   type="checkbox" 
+                                   name="recipients[]"
+                                   value="{{ recipient.id }}"
+                                   hx-post="{% url 'administracao:whatsapp:update_count' %}"
+                                   hx-trigger="change"
+                                   hx-target="#send-count"
+                                   hx-swap="innerHTML"
+                                   {% if recipient.id in selected_ids %}checked{% endif %}>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ recipient.name }}</strong>
+                                        {% if recipient.extra_info %}
+                                            <small class="text-muted ms-2">{{ recipient.extra_info }}</small>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        {% if recipient.has_whatsapp %}
+                                            <i class="fab fa-whatsapp text-success"></i>
+                                        {% else %}
+                                            <i class="fas fa-phone text-muted"></i>
+                                        {% endif %}
+                                        <span class="ms-2">{{ recipient.phone|default:"Sem telefone" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-muted py-3">
+                    {% if recipient_type == 'passageiros' and not caravana_id %}
+                        <i class="fas fa-plane fa-2x mb-2"></i>
+                        <p>Selecione uma caravana para ver os passageiros</p>
+                    {% else %}
+                        <i class="fas fa-users fa-2x mb-2"></i>
+                        <p>Nenhum destinatário encontrado</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Contador e Informações -->
+        <div class="mt-3">
+            <div class="alert alert-info mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Resumo:</strong>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-primary fs-6">{{ recipients|length|default:0 }}</span> total
+                        <span class="badge bg-success fs-6 ms-2">{{ valid_phones|default:0 }}</span> com WhatsApp
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

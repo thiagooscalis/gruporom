@@ -38,7 +38,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     @property
     def email(self):
-        return self.pessoa.email_str
+        return self.pessoa.email_principal
 
     @property
     def nome(self):

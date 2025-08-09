@@ -43,7 +43,7 @@ class PaisModelTest(TestCase):
     
     def test_str_representation(self):
         pais = PaisFactory(nome='Brasil', iso='BR')
-        self.assertEqual(str(pais), 'Brasil (BR)')
+        self.assertEqual(str(pais), 'Brasil')
 
 
 @override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
