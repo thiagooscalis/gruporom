@@ -19225,3 +19225,5 @@ INFO 2025-08-09 13:31:09,737 runserver WebSocket HANDSHAKING /ws/comercial/whats
 INFO 2025-08-09 13:31:09,800 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.07, 127.0.0.1:44328][0m
 INFO 2025-08-09 13:31:09,804 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:44338]
 INFO 2025-08-09 13:31:09,804 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:34:55,265 whatsapp Notificação WebSocket enviada para status update: 69 (sent → delivered)
+INFO 2025-08-09 13:34:58,281 whatsapp Notificação WebSocket enviada para status update: 69 (delivered → read)

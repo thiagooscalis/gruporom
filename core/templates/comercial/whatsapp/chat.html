@@ -874,22 +874,67 @@ function handleMessageStatusUpdate(statusData) {
     if (currentConversationId && parseInt(currentConversationId) === parseInt(statusData.conversation_id)) {
         console.log(`📋 Atualizando status da mensagem ${statusData.message_id}: ${statusData.old_status} → ${statusData.new_status}`);
         
-        // Atualiza as mensagens para mostrar o novo status
-        htmx.ajax('GET', `/comercial/whatsapp/conversation/${statusData.conversation_id}/messages/`, {
+        // Atualiza apenas o ícone de status da mensagem específica sem recarregar tudo
+        updateMessageStatusIcon(statusData.message_id, statusData.old_status, statusData.new_status);
+    } else {
+        console.log(`📋 Status atualizado em conversa não ativa (${statusData.conversation_id})`);
+    }
+}
+
+function updateMessageStatusIcon(messageId, oldStatus, newStatus) {
+    // Busca a mensagem específica pelo data-message-id
+    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+    
+    if (messageElement) {
+        // Encontrou a mensagem específica, atualiza apenas o ícone
+        const timeElement = messageElement.querySelector('.message-time');
+        const iconElement = timeElement ? timeElement.querySelector('i') : null;
+        
+        if (iconElement) {
+            console.log(`🔄 Atualizando ícone da mensagem ${messageId}: ${oldStatus} → ${newStatus}`);
+            
+            // Remove classes antigas
+            iconElement.className = '';
+            
+            // Adiciona novas classes baseadas no status
+            if (newStatus === 'sent') {
+                iconElement.className = 'fas fa-check text-muted';
+                iconElement.title = 'Enviada';
+            } else if (newStatus === 'delivered') {
+                iconElement.className = 'fas fa-check-double text-muted';
+                iconElement.title = 'Entregue';
+            } else if (newStatus === 'read') {
+                iconElement.className = 'fas fa-check-double text-primary';
+                iconElement.title = 'Lida';
+            } else if (newStatus === 'failed') {
+                iconElement.className = 'fas fa-exclamation-triangle text-danger';
+                iconElement.title = 'Falha no envio';
+            }
+            
+            console.log('✅ Ícone de status atualizado visualmente');
+        } else {
+            console.warn(`⚠️ Ícone não encontrado para mensagem ${messageId}`);
+            // Fallback: recarrega as mensagens
+            reloadMessages();
+        }
+    } else {
+        console.warn(`⚠️ Mensagem ${messageId} não encontrada no DOM`);
+        // Fallback: recarrega as mensagens
+        reloadMessages();
+    }
+}
+
+function reloadMessages() {
+    const currentUrl = new URL(window.location.href);
+    const currentConversationId = currentUrl.searchParams.get('conversation');
+    
+    if (currentConversationId) {
+        htmx.ajax('GET', `/comercial/whatsapp/conversation/${currentConversationId}/messages/`, {
             target: '#messages-container',
             swap: 'innerHTML'
         }).then(() => {
-            console.log('✅ Interface atualizada com novo status');
+            console.log('✅ Mensagens recarregadas');
         });
-        
-        // Mostra notificação discreta sobre status
-        if (statusData.new_status === 'delivered') {
-            showToast('Mensagem entregue ✓✓', 'success');
-        } else if (statusData.new_status === 'read') {
-            showToast('Mensagem lida ✓✓ (azul)', 'info');
-        }
-    } else {
-        console.log(`📋 Status atualizado em conversa não ativa (${statusData.conversation_id})`);
     }
 }
 
