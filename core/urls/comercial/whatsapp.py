@@ -14,6 +14,9 @@ urlpatterns = [
     path('assign/<int:conversation_id>/', views.assign_conversation, name='assign_conversation'),
     path('send-message/', views.send_message, name='send_message'),
     path('register-client/', views.register_client, name='register_client'),
+    
+    # Debug
+    path('test-websocket/', views.test_websocket, name='test_websocket'),
     # path('finish/<int:conversation_id>/', views.finish_conversation, name='finish_conversation'),  # Removido - conclusão em outro módulo
     
     # Legacy

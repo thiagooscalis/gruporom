@@ -193,6 +193,9 @@
                     {{ pending_count|default:0 }}
                 </span>
             </button>
+            <button class="btn btn-outline-secondary btn-sm ms-2" onclick="testWebSocket()" title="Testar WebSocket">
+                🧪
+            </button>
         </div>
     </div>
 
@@ -552,6 +555,96 @@ function sendMessage(event, conversationId) {
 
 // Função finishConversation removida - conclusão será feita em outro módulo
 
+// Função para testar WebSocket manualmente
+function testWebSocket() {
+    console.log('🧪 Testando WebSocket...');
+    console.log('🔍 Estado atual do WebSocket:', socket ? socket.readyState : 'socket is null');
+    console.log('🔍 Estados WebSocket: CONNECTING=0, OPEN=1, CLOSING=2, CLOSED=3');
+    
+    if (socket) {
+        console.log('🔍 URL do WebSocket:', socket.url);
+        console.log('🔍 Protocolo:', socket.protocol);
+    }
+    
+    fetch('/comercial/whatsapp/test-websocket/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('📊 Resposta do teste:', data);
+        
+        if (data.success) {
+            showToast('Teste WebSocket enviado! Verifique se a mensagem aparece.', 'success');
+        } else {
+            showToast(`Erro no teste: ${data.error}`, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Erro no teste WebSocket:', error);
+        showToast('Erro ao testar WebSocket', 'error');
+    });
+}
+
+// Função para mostrar notificações toast
+function showToast(message, type = 'info') {
+    // Cria e mostra notificação toast
+    let bgColor = 'primary';
+    let icon = 'fas fa-info-circle';
+    switch(type) {
+        case 'success': 
+            bgColor = 'success'; 
+            icon = 'fas fa-check-circle';
+            break;
+        case 'error': 
+            bgColor = 'danger'; 
+            icon = 'fas fa-exclamation-circle';
+            break;
+        case 'warning': 
+            bgColor = 'warning'; 
+            icon = 'fas fa-exclamation-triangle';
+            break;
+        default: 
+            bgColor = 'primary';
+            icon = 'fas fa-info-circle';
+    }
+    
+    const toastHtml = `
+        <div class="toast align-items-center text-white bg-${bgColor} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="${icon} me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    // Adiciona à área de toasts
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+    }
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Ativa o toast
+    const toastEl = toastContainer.lastElementChild;
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    
+    // Remove após fechar
+    toastEl.addEventListener('hidden.bs.toast', () => {
+        toastEl.remove();
+    });
+}
+
 // WebSocket para notificações em tempo real
 let socket = null;
 
@@ -559,65 +652,145 @@ function connectWebSocket() {
     const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
     const wsPath = `${wsScheme}://${window.location.host}/ws/comercial/whatsapp/`;
     
-    socket = new WebSocket(wsPath);
+    console.log('🔗 Tentando conectar WebSocket:', wsPath);
+    console.log('🌐 Protocolo:', window.location.protocol);
+    console.log('🏠 Host:', window.location.host);
     
-    socket.onopen = function(e) {
-        console.log('WebSocket conectado');
-        // Para polling se estiver ativo
-        stopPolling();
+    try {
+        socket = new WebSocket(wsPath);
+        
+        socket.onopen = function(e) {
+            console.log('✅ WebSocket conectado com sucesso!');
+            console.log('🔍 Socket state:', socket.readyState);
+            console.log('🔍 Socket URL:', socket.url);
+            
+            // Para polling se estiver ativo
+            stopPolling();
+            
+            // Atualiza indicador de status
+            const statusIndicator = document.getElementById('connection-status');
+            if (statusIndicator) {
+                statusIndicator.className = 'status-indicator status-online';
+                statusIndicator.title = 'Conectado via WebSocket';
+            }
+            
+            // Mostra toast de sucesso
+            showToast('WebSocket conectado!', 'success');
+        };
+    } catch (error) {
+        console.error('❌ Erro ao criar WebSocket:', error);
+        // Se falhar na criação, usa polling
+        startPolling();
+    }
+    
+    socket.onerror = function(error) {
+        console.error('❌ Erro no WebSocket:', error);
+        console.log('🔍 Socket state no erro:', socket ? socket.readyState : 'socket is null');
         
         // Atualiza indicador de status
         const statusIndicator = document.getElementById('connection-status');
         if (statusIndicator) {
-            statusIndicator.className = 'status-indicator status-online';
-            statusIndicator.title = 'Conectado';
+            statusIndicator.className = 'status-indicator status-error';
+            statusIndicator.title = 'Erro na conexão WebSocket';
         }
+        
+        showToast('Erro na conexão WebSocket', 'error');
     };
     
     socket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        console.log('WebSocket recebeu:', data.type);
+        console.log('📨 WebSocket recebeu mensagem:', event.data);
         
-        switch(data.type) {
-            case 'conversation_new':
-                // Atualiza tudo em um só evento
-                handleNewConversation(data.conversation);
-                updatePendingCount(data.pending_count);
-                updateModalIfOpen();
-                break;
-            case 'pending_count_update':
-                // Para outros casos que só atualizam contador
-                updatePendingCount(data.count);
-                updateModalIfOpen();
-                break;
-            case 'conversation_assigned':
-                // Atualiza lista de conversas
-                const contactsListAssigned = document.getElementById('contacts-list');
-                if (contactsListAssigned) {
-                    htmx.trigger(contactsListAssigned, 'load');
-                }
-                break;
+        try {
+            const data = JSON.parse(event.data);
+            console.log('📋 Dados parsados:', data);
+            console.log('🔄 Tipo de evento:', data.type);
+            
+            switch(data.type) {
+                case 'conversation_new':
+                    console.log('🆕 Nova conversa recebida:', data.conversation);
+                    // Atualiza tudo em um só evento
+                    handleNewConversation(data.conversation);
+                    if (data.pending_count !== undefined) {
+                        updatePendingCount(data.pending_count);
+                    }
+                    updateModalIfOpen();
+                    showToast('Nova conversa aguardando atendimento!', 'info');
+                    break;
+                case 'pending_count_update':
+                    console.log('📊 Atualização de contador:', data.count);
+                    // Para outros casos que só atualizam contador
+                    updatePendingCount(data.count);
+                    updateModalIfOpen();
+                    break;
+                case 'conversation_assigned':
+                    console.log('👤 Conversa atribuída:', data.conversation);
+                    // Atualiza lista de conversas
+                    const contactsListAssigned = document.getElementById('contacts-list');
+                    if (contactsListAssigned) {
+                        htmx.trigger(contactsListAssigned, 'load');
+                    }
+                    break;
+                default:
+                    console.warn('⚠️ Tipo de evento desconhecido:', data.type);
+            }
+        } catch (error) {
+            console.error('❌ Erro ao processar mensagem WebSocket:', error);
+            console.error('📄 Dados brutos:', event.data);
         }
     };
     
     socket.onclose = function(e) {
-        console.log('WebSocket desconectado');
+        console.log('🔴 WebSocket desconectado. Código:', e.code, 'Motivo:', e.reason);
+        
+        // Códigos de erro específicos
+        let errorMessage = '';
+        switch(e.code) {
+            case 1000:
+                errorMessage = 'Conexão fechada normalmente';
+                break;
+            case 1001:
+                errorMessage = 'Servidor desconectou';
+                break;
+            case 1006:
+                errorMessage = 'Conexão perdida inesperadamente';
+                break;
+            case 4001:
+                errorMessage = 'Usuário não autenticado';
+                break;
+            case 4003:
+                errorMessage = 'Acesso negado - usuário não é do grupo Comercial';
+                break;
+            default:
+                errorMessage = `Erro desconhecido (${e.code})`;
+        }
+        
+        console.log('💡 Motivo da desconexão:', errorMessage);
+        
         // Atualiza indicador de status
         const statusIndicator = document.getElementById('connection-status');
         if (statusIndicator) {
             statusIndicator.className = 'status-indicator status-offline';
-            statusIndicator.title = 'Desconectado - Usando polling';
+            statusIndicator.title = `Desconectado: ${errorMessage}`;
         }
+        
+        // Mostra toast de erro
+        showToast(`WebSocket desconectado: ${errorMessage}`, 'warning');
         
         // Se WebSocket falhar, usa polling como fallback
         startPolling();
         
-        // Tenta reconectar após 10 segundos
-        setTimeout(connectWebSocket, 10000);
+        // Só tenta reconectar para erros recuperáveis
+        if (e.code !== 4001 && e.code !== 4003) {
+            console.log('⏳ Tentando reconectar em 10 segundos...');
+            setTimeout(connectWebSocket, 10000);
+        } else {
+            console.log('❌ Erro permanente, não tentando reconectar');
+        }
     };
     
     socket.onerror = function(error) {
-        console.error('Erro WebSocket:', error);
+        console.error('❌ Erro no WebSocket:', error);
+        showToast('Erro na conexão WebSocket', 'error');
     };
 }
 
@@ -633,12 +806,32 @@ function handleNewConversation(conversation) {
 }
 
 function updatePendingCount(count) {
+    console.log('🔢 Atualizando contador de conversas pendentes:', count);
+    
     const badge = document.getElementById('pending-badge');
     if (badge) {
-        badge.textContent = count || 0;
+        const oldCount = parseInt(badge.textContent) || 0;
+        const newCount = count || 0;
+        
+        console.log('📊 Contador: ', oldCount, '→', newCount);
+        
+        badge.textContent = newCount;
         // Badge vermelho se > 0, cinza se = 0
-        badge.style.backgroundColor = count > 0 ? '#dc3545' : '#6c757d';
+        badge.style.backgroundColor = newCount > 0 ? '#dc3545' : '#6c757d';
         badge.style.color = 'white';
+        
+        // Efeito visual se mudou
+        if (oldCount !== newCount) {
+            badge.style.transform = 'scale(1.2)';
+            badge.style.transition = 'transform 0.2s';
+            setTimeout(() => {
+                badge.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        console.log('✅ Contador atualizado com sucesso');
+    } else {
+        console.error('❌ Elemento #pending-badge não encontrado');
     }
 }
 

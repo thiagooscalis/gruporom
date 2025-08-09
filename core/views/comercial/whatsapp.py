@@ -17,6 +17,64 @@ logger = logging.getLogger(__name__)
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def test_websocket(request):
+    """
+    Debug endpoint para testar WebSocket manualmente
+    """
+    try:
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        
+        channel_layer = get_channel_layer()
+        if not channel_layer:
+            return JsonResponse({
+                'success': False,
+                'error': 'Channel layer não configurado'
+            })
+        
+        # Envia mensagem de teste
+        test_data = {
+            'id': 999,
+            'contact_name': 'TESTE WebSocket',
+            'contact_phone': '+5511999999999',
+            'message_preview': '🧪 Esta é uma mensagem de teste do WebSocket!',
+            'created_at': timezone.now().isoformat(),
+            'status': 'pending'
+        }
+        
+        # Conta atual de conversas pendentes
+        pending_count = WhatsAppConversation.objects.filter(status='pending').count()
+        
+        # Envia via WebSocket
+        async_to_sync(channel_layer.group_send)(
+            'whatsapp_comercial',
+            {
+                'type': 'conversation_new',
+                'conversation': test_data,
+                'pending_count': pending_count
+            }
+        )
+        
+        logger.info("🧪 Mensagem de teste WebSocket enviada")
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Mensagem de teste enviada via WebSocket',
+            'data': test_data,
+            'pending_count': pending_count
+        })
+        
+    except Exception as e:
+        logger.error(f"Erro no teste WebSocket: {e}")
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 def dashboard(request):
     """
     Dashboard do WhatsApp comercial - Layout de chat completo

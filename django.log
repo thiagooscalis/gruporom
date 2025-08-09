@@ -18685,3 +18685,111 @@ INFO 2025-08-08 21:29:08,314 runserver WebSocket HANDSHAKING /ws/comercial/whats
 INFO 2025-08-08 21:29:08,377 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:46598]
 INFO 2025-08-08 21:29:08,377 consumers ✅ WebSocket conectado com sucesso para usuário thiago
 INFO 2025-08-08 21:29:08,380 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.07, 127.0.0.1:46582][0m
+INFO 2025-08-08 22:14:16,409 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 22:14:19,030 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:14:19,060 runserver [mHTTP GET /comercial/whatsapp/?conversation=20 200 [0.07, 127.0.0.1:55032][0m
+INFO 2025-08-08 22:14:19,110 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:14:19,114 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:14:19,116 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:14:19,127 runserver [mHTTP GET /comercial/whatsapp/conversation/20/messages/ 200 [0.03, 127.0.0.1:55048][0m
+INFO 2025-08-08 22:14:19,127 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:55060][0m
+INFO 2025-08-08 22:14:19,129 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:55032][0m
+INFO 2025-08-08 22:14:27,963 whatsapp Webhook recebido para conta 1
+INFO 2025-08-08 22:14:27,964 whatsapp Webhook adicionado à fila para processamento posterior
+INFO 2025-08-08 22:14:27,969 whatsapp Nova conversa criada 21 para Marcos Ribeiro
+INFO 2025-08-08 22:14:27,970 whatsapp Mensagem wamid.TEST_1754702067 processada - Conversa 21
+INFO 2025-08-08 22:14:28,071 whatsapp Notificações WebSocket enviadas para nova conversa 21
+INFO 2025-08-08 22:14:28,071 whatsapp Webhook processado com sucesso
+INFO 2025-08-08 22:14:28,073 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.12, 127.0.0.1:45062][0m
+INFO 2025-08-08 22:14:41,940 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:50410]
+INFO 2025-08-08 22:14:41,967 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:50410]
+INFO 2025-08-08 22:14:41,968 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:16:22,547 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:50410]
+INFO 2025-08-08 22:16:22,550 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-08 22:16:22,582 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:22,595 runserver [mHTTP GET /comercial/whatsapp/?conversation=20 200 [0.04, 127.0.0.1:60224][0m
+INFO 2025-08-08 22:16:22,637 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:60234]
+INFO 2025-08-08 22:16:22,654 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:60234]
+INFO 2025-08-08 22:16:22,654 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:16:22,660 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:22,661 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:22,663 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:22,669 runserver [mHTTP GET /comercial/whatsapp/conversation/20/messages/ 200 [0.02, 127.0.0.1:60250][0m
+INFO 2025-08-08 22:16:22,678 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:60254][0m
+INFO 2025-08-08 22:16:22,680 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:60224][0m
+INFO 2025-08-08 22:16:32,834 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:60234]
+INFO 2025-08-08 22:16:32,836 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-08 22:16:32,880 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:32,902 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.05, 127.0.0.1:60224][0m
+INFO 2025-08-08 22:16:32,935 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:54688]
+INFO 2025-08-08 22:16:32,949 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:54688]
+INFO 2025-08-08 22:16:32,949 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:16:32,952 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:32,955 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:16:32,974 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:60250][0m
+INFO 2025-08-08 22:16:32,974 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:60254][0m
+INFO 2025-08-08 22:16:40,051 whatsapp Webhook recebido para conta 1
+INFO 2025-08-08 22:16:40,054 whatsapp Webhook adicionado à fila para processamento posterior
+INFO 2025-08-08 22:16:40,069 whatsapp Nova conversa criada 22 para Gabriela Costa
+INFO 2025-08-08 22:16:40,072 whatsapp Mensagem wamid.TEST_1754702200 processada - Conversa 22
+INFO 2025-08-08 22:16:40,079 whatsapp Notificações WebSocket enviadas para nova conversa 22
+INFO 2025-08-08 22:16:40,081 whatsapp Webhook processado com sucesso
+INFO 2025-08-08 22:16:40,087 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.05, 127.0.0.1:51380][0m
+INFO 2025-08-08 22:24:18,508 whatsapp Webhook recebido para conta 1
+INFO 2025-08-08 22:24:18,509 whatsapp Webhook adicionado à fila para processamento posterior
+INFO 2025-08-08 22:24:18,512 whatsapp Nova conversa criada 23 para Carla Lima
+INFO 2025-08-08 22:24:18,512 whatsapp Mensagem wamid.TEST_1754702658 processada - Conversa 23
+INFO 2025-08-08 22:24:18,514 whatsapp Notificações WebSocket enviadas para nova conversa 23
+INFO 2025-08-08 22:24:18,515 whatsapp Webhook processado com sucesso
+INFO 2025-08-08 22:24:18,517 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.01, 127.0.0.1:38826][0m
+INFO 2025-08-08 22:27:11,377 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-08 22:27:11,781 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 22:27:16,541 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:56610][0m
+INFO 2025-08-08 22:27:20,047 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-08 22:27:20,414 autoreload Watching for file changes with StatReloader
+INFO 2025-08-08 22:27:21,575 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:36934]
+INFO 2025-08-08 22:27:21,614 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.04, 127.0.0.1:36936][0m
+INFO 2025-08-08 22:27:21,618 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:36934]
+INFO 2025-08-08 22:27:21,618 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:29:43,334 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:36934]
+INFO 2025-08-08 22:29:43,336 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-08 22:29:43,390 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:29:43,411 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.05, 127.0.0.1:57852][0m
+INFO 2025-08-08 22:29:43,439 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:57852][0m
+INFO 2025-08-08 22:29:43,440 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:57856][0m
+INFO 2025-08-08 22:29:43,440 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:57870][0m
+INFO 2025-08-08 22:29:43,442 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:57856][0m
+INFO 2025-08-08 22:29:43,465 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:57870][0m
+INFO 2025-08-08 22:29:43,465 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:57856][0m
+INFO 2025-08-08 22:29:43,471 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:57886]
+INFO 2025-08-08 22:29:43,473 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:57870][0m
+INFO 2025-08-08 22:29:43,484 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:29:43,487 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:29:43,488 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:57886]
+INFO 2025-08-08 22:29:43,489 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:29:43,498 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:57856][0m
+INFO 2025-08-08 22:29:43,498 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:57852][0m
+INFO 2025-08-08 22:29:47,240 whatsapp 🧪 Mensagem de teste WebSocket enviada
+INFO 2025-08-08 22:29:47,246 runserver [mHTTP POST /comercial/whatsapp/test-websocket/ 200 [0.04, 127.0.0.1:57870][0m
+INFO 2025-08-08 22:30:07,304 whatsapp 🧪 Mensagem de teste WebSocket enviada
+INFO 2025-08-08 22:30:07,310 runserver [mHTTP POST /comercial/whatsapp/test-websocket/ 200 [0.04, 127.0.0.1:57870][0m
+INFO 2025-08-08 22:31:19,166 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:57886]
+INFO 2025-08-08 22:31:19,168 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-08 22:31:19,196 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:31:19,208 runserver [mHTTP GET /comercial/whatsapp/ 200 [0.02, 127.0.0.1:48402][0m
+INFO 2025-08-08 22:31:19,229 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:48408][0m
+INFO 2025-08-08 22:31:19,229 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:48422][0m
+INFO 2025-08-08 22:31:19,229 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:48402][0m
+INFO 2025-08-08 22:31:19,231 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:48422][0m
+INFO 2025-08-08 22:31:19,251 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:48422][0m
+INFO 2025-08-08 22:31:19,252 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:48426]
+INFO 2025-08-08 22:31:19,265 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.01, 127.0.0.1:48402][0m
+INFO 2025-08-08 22:31:19,265 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:48440][0m
+INFO 2025-08-08 22:31:19,269 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:31:19,270 cambio Câmbio encontrado no banco para 2025-08-08: R$ 5.4339
+INFO 2025-08-08 22:31:19,271 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:48426]
+INFO 2025-08-08 22:31:19,272 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-08 22:31:19,282 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:48422][0m
+INFO 2025-08-08 22:31:19,282 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:48408][0m
+INFO 2025-08-08 22:31:29,300 whatsapp 🧪 Mensagem de teste WebSocket enviada
+INFO 2025-08-08 22:31:29,307 runserver [mHTTP POST /comercial/whatsapp/test-websocket/ 200 [0.04, 127.0.0.1:48422][0m
