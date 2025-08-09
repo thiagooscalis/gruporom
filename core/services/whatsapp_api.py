@@ -61,19 +61,22 @@ class WhatsAppAPIService:
             
             result = response.json()
             logger.info(f"Mensagem de texto enviada com sucesso para {to}")
-            return {
-                'success': True,
-                'message_id': result['messages'][0]['id'],
-                'data': result
-            }
+            return result
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro ao enviar mensagem de texto: {e}")
-            return {
-                'success': False,
-                'error': str(e),
-                'data': None
-            }
+            
+            # Tenta extrair mensagem de erro do response se disponível
+            error_message = str(e)
+            if hasattr(e, 'response') and e.response is not None:
+                try:
+                    error_data = e.response.json()
+                    if 'error' in error_data:
+                        error_message = error_data['error'].get('message', str(e))
+                except:
+                    pass
+            
+            raise Exception(error_message)
     
     def send_media_message(self, to: str, media_type: str, media_id: str = None, 
                           media_url: str = None, caption: str = None) -> Dict[str, Any]:

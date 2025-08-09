@@ -377,6 +377,86 @@ def send_message(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def resend_message(request, message_id):
+    """
+    Reenvia uma mensagem que falhou
+    """
+    from django.db import transaction
+    
+    # Busca a mensagem - aceita status 'failed' ou 'sending' (para casos de erro anterior)
+    try:
+        message = WhatsAppMessage.objects.get(
+            id=message_id,
+            sent_by=request.user,
+            status__in=['failed', 'sending']
+        )
+    except WhatsAppMessage.DoesNotExist:
+        # Se não encontrar, retorna as mensagens sem fazer nada
+        conversation = WhatsAppConversation.objects.filter(
+            messages__id=message_id
+        ).first()
+        if conversation:
+            messages = conversation.messages.select_related('contact').order_by('timestamp')
+            return render(request, 'comercial/whatsapp/partials/messages.html', {
+                'messages': messages
+            })
+        return JsonResponse({'success': False, 'error': 'Mensagem não encontrada'})
+    
+    conversation = message.conversation
+    
+    try:
+        from core.services.whatsapp_api import WhatsAppAPIService
+        
+        # Usa transação atômica para evitar problemas
+        with transaction.atomic():
+            # Atualiza status para 'sending'
+            message.status = 'sending'
+            message.error_message = ''
+            message.save(update_fields=['status', 'error_message'])
+        
+        # Tenta reenviar via API (fora da transação)
+        api = WhatsAppAPIService(conversation.account)
+        to_number = conversation.contact.phone_number.lstrip('+')
+        
+        api_response = api.send_text_message(
+            to=to_number,
+            message=message.content
+        )
+        
+        # Se sucesso, atualiza status
+        if api_response.get('messages') and len(api_response['messages']) > 0:
+            api_message = api_response['messages'][0]
+            
+            with transaction.atomic():
+                message.status = 'sent'
+                message.wamid = api_message.get('id', f'local_{timezone.now().timestamp()}')
+                message.save(update_fields=['status', 'wamid'])
+            
+            logger.info(f"Mensagem reenviada com sucesso - WAMID: {message.wamid}")
+        else:
+            raise Exception("API não retornou ID da mensagem")
+            
+    except Exception as api_error:
+        # Se falhar, volta para status 'failed'
+        with transaction.atomic():
+            # Recarrega a mensagem para evitar problemas de estado
+            message.refresh_from_db()
+            message.status = 'failed'
+            message.error_message = str(api_error)[:500]  # Limita tamanho do erro
+            message.save(update_fields=['status', 'error_message'])
+        
+        logger.error(f"Erro ao reenviar mensagem: {api_error}")
+    
+    # Retorna as mensagens atualizadas via HTMX
+    messages = conversation.messages.select_related('contact').order_by('timestamp')
+    return render(request, 'comercial/whatsapp/partials/messages.html', {
+        'messages': messages
+    })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 def assign_conversation(request, conversation_id):
     """
     Atribui uma conversa ao usuário logado

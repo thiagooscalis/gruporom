@@ -13,6 +13,7 @@ urlpatterns = [
     # Actions
     path('assign/<int:conversation_id>/', views.assign_conversation, name='assign_conversation'),
     path('send-message/', views.send_message, name='send_message'),
+    path('resend-message/<int:message_id>/', views.resend_message, name='resend_message'),
     path('register-client/', views.register_client, name='register_client'),
     
     # Debug
