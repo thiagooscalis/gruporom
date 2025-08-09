@@ -693,6 +693,10 @@ function connectWebSocket() {
                         htmx.trigger(contactsListAssigned, 'load');
                     }
                     break;
+                case 'message_received':
+                    console.log('💬 Nova mensagem recebida:', data.message);
+                    handleNewMessage(data.message, data.conversation_id);
+                    break;
                 default:
                     console.warn('⚠️ Tipo de evento desconhecido:', data.type);
             }
@@ -765,6 +769,35 @@ function handleNewConversation(conversation) {
     showNotification(`Nova conversa de ${conversation.contact_name}`, conversation.message_preview);
     
     // Toca som de notificação (opcional)
+    playNotificationSound();
+}
+
+function handleNewMessage(message, conversation_id) {
+    // Verifica se a mensagem é da conversa atual
+    const currentUrl = new URL(window.location.href);
+    const currentConversationId = currentUrl.searchParams.get('conversation');
+    
+    if (currentConversationId && parseInt(currentConversationId) === parseInt(conversation_id)) {
+        // Se estamos visualizando essa conversa, atualiza as mensagens
+        console.log('💬 Atualizando mensagens da conversa atual');
+        
+        htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversation_id}/messages/`, {
+            target: '#messages-container',
+            swap: 'innerHTML'
+        });
+    } else {
+        // Se não estamos na conversa, apenas mostra notificação
+        console.log('💬 Nova mensagem em conversa não ativa');
+        showToast(`Nova mensagem de ${message.contact_name}`, 'info');
+    }
+    
+    // Sempre atualiza a lista de conversas (para mostrar última mensagem)
+    const contactsList = document.getElementById('contacts-list');
+    if (contactsList) {
+        htmx.trigger(contactsList, 'load');
+    }
+    
+    // Toca som de notificação
     playNotificationSound();
 }
 

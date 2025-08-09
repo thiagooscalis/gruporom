@@ -204,9 +204,12 @@ def _process_message_sync(account, message_data, contacts_data):
         
         logger.info(f"Mensagem {wamid} processada - Conversa {conversation.id}")
         
-        # Envia notificação WebSocket se nova conversa foi criada
+        # Envia notificação WebSocket para nova conversa ou nova mensagem
         if conversation_created:
             _send_websocket_notification(conversation, content)
+        else:
+            # Para conversa existente, envia notificação de nova mensagem
+            _send_message_websocket_notification(conversation, message, content)
         
     except Exception as e:
         logger.error(f"Erro ao processar mensagem: {e}")
@@ -310,6 +313,46 @@ def _send_websocket_notification(conversation, message_content):
         
     except Exception as e:
         logger.error(f"Erro ao enviar notificação WebSocket: {e}")
+        # Traceback removido dos logs por segurança em produção
+
+
+def _send_message_websocket_notification(conversation, message, message_content):
+    """
+    Envia notificação WebSocket sobre nova mensagem em conversa existente
+    """
+    try:
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        
+        channel_layer = get_channel_layer()
+        if not channel_layer:
+            logger.warning("Channel layer não configurado - notificação WebSocket ignorada")
+            return
+        
+        # Dados da mensagem para enviar via WebSocket
+        message_data = {
+            'id': message.id,
+            'conversation_id': conversation.id,
+            'content': message_content,
+            'timestamp': message.timestamp.isoformat(),
+            'direction': message.direction,
+            'contact_name': conversation.contact.name or conversation.contact.profile_name or conversation.contact.phone_number,
+        }
+        
+        # Envia notificação de nova mensagem
+        async_to_sync(channel_layer.group_send)(
+            'whatsapp_comercial',
+            {
+                'type': 'message_received',
+                'message': message_data,
+                'conversation_id': conversation.id
+            }
+        )
+        
+        logger.info(f"Notificação WebSocket enviada para nova mensagem {message.id} na conversa {conversation.id}")
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar notificação WebSocket de mensagem: {e}")
         # Traceback removido dos logs por segurança em produção
 
 
