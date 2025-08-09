@@ -264,11 +264,56 @@ def _process_status_update_sync(account, status_data):
             
             logger.info(f"Status da mensagem {wamid} atualizado: {old_status} → {status}")
             
+            # Envia notificação WebSocket para atualizar interface quando status muda
+            if old_status != status:
+                _send_status_update_websocket_notification(message, old_status, status)
+            
         except WhatsAppMessage.DoesNotExist:
             logger.warning(f"Mensagem {wamid} não encontrada para atualização de status")
             
     except Exception as e:
         logger.error(f"Erro ao processar status update: {e}")
+        # Traceback removido dos logs por segurança em produção
+
+
+def _send_status_update_websocket_notification(message, old_status, new_status):
+    """
+    Envia notificação WebSocket quando o status de uma mensagem muda (delivered, read)
+    """
+    try:
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        
+        channel_layer = get_channel_layer()
+        if not channel_layer:
+            logger.warning("Channel layer não configurado - notificação WebSocket ignorada")
+            return
+        
+        # Dados da atualização de status para enviar via WebSocket
+        status_data = {
+            'message_id': message.id,
+            'conversation_id': message.conversation.id,
+            'wamid': message.wamid,
+            'old_status': old_status,
+            'new_status': new_status,
+            'timestamp': message.timestamp.isoformat(),
+            'delivered_at': message.delivered_at.isoformat() if message.delivered_at else None,
+            'read_at': message.read_at.isoformat() if message.read_at else None
+        }
+        
+        # Envia notificação de mudança de status
+        async_to_sync(channel_layer.group_send)(
+            'whatsapp_comercial',
+            {
+                'type': 'message_status_update',
+                'message_status': status_data
+            }
+        )
+        
+        logger.info(f"Notificação WebSocket enviada para status update: {message.id} ({old_status} → {new_status})")
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar notificação WebSocket de status: {e}")
         # Traceback removido dos logs por segurança em produção
 
 

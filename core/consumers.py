@@ -99,6 +99,13 @@ class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
             'count': event['count']
         }))
     
+    async def message_status_update(self, event):
+        """Atualização de status de mensagem (delivered, read)"""
+        await self.send(text_data=json.dumps({
+            'type': 'message_status_update',
+            'message_status': event['message_status']
+        }))
+    
     @database_sync_to_async
     def is_comercial_user(self):
         """Verifica se o usuário pertence ao grupo Comercial"""

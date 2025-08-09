@@ -8,6 +8,8 @@
     /* Layout do Chat */
     .chat-container {
         background: #f0f2f5;
+        height: calc(100vh - 180px); /* Altura fixa menos header/breadcrumb */
+        max-height: calc(100vh - 180px);
     }
     
     /* Lista de Contatos */
@@ -72,6 +74,8 @@
     
     .messages-container {
         padding: 20px;
+        height: 0; /* Permite que flex-fill funcione corretamente */
+        min-height: 0; /* Permite que o scroll funcione */
     }
     
     .message {
@@ -116,6 +120,9 @@
         background: #f0f2f5;
         border-top: 1px solid #ddd;
         z-index: 10;
+        position: sticky;
+        bottom: 0;
+        margin-top: auto; /* Empurra para o bottom */
     }
 
     .chat-input-fixed {
@@ -124,6 +131,10 @@
         border-top: 1px solid #ddd;
         z-index: 1050;
         box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
     
     .status-indicator {
@@ -165,6 +176,34 @@
     
     .htmx-request .fas.fa-search {
         display: none;
+    }
+    
+    /* Responsividade Mobile */
+    @media (max-width: 768px) {
+        .chat-container {
+            height: calc(100vh - 120px); /* Menos altura no mobile */
+        }
+        
+        .contacts-sidebar {
+            width: 100%;
+            min-width: auto;
+        }
+        
+        .chat-area {
+            width: 100%;
+        }
+        
+        .message {
+            max-width: 85%; /* Mais largura no mobile */
+        }
+        
+        .messages-container {
+            padding: 10px; /* Menos padding no mobile */
+        }
+        
+        .chat-input {
+            padding: 10px; /* Menos padding no mobile */
+        }
     }
 </style>
 {% endblock %}
@@ -530,6 +569,17 @@ function sendMessage(event, conversationId) {
             htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversationId}/messages/`, {
                 target: '#messages-container',
                 swap: 'innerHTML'
+            }).then(() => {
+                // Scroll para o final após atualizar mensagens
+                setTimeout(() => {
+                    const container = document.getElementById('messages-container');
+                    if (container) {
+                        container.scrollTo({
+                            top: container.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
             });
             
         } else {
@@ -697,6 +747,10 @@ function connectWebSocket() {
                     console.log('💬 Nova mensagem recebida:', data.message);
                     handleNewMessage(data.message, data.conversation_id);
                     break;
+                case 'message_status_update':
+                    console.log('📋 Status de mensagem atualizado:', data.message_status);
+                    handleMessageStatusUpdate(data.message_status);
+                    break;
                 default:
                     console.warn('⚠️ Tipo de evento desconhecido:', data.type);
             }
@@ -784,6 +838,17 @@ function handleNewMessage(message, conversation_id) {
         htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversation_id}/messages/`, {
             target: '#messages-container',
             swap: 'innerHTML'
+        }).then(() => {
+            // Scroll para o final após atualizar mensagens
+            setTimeout(() => {
+                const container = document.getElementById('messages-container');
+                if (container) {
+                    container.scrollTo({
+                        top: container.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
         });
     } else {
         // Se não estamos na conversa, apenas mostra notificação
@@ -799,6 +864,33 @@ function handleNewMessage(message, conversation_id) {
     
     // Toca som de notificação
     playNotificationSound();
+}
+
+function handleMessageStatusUpdate(statusData) {
+    // Verifica se estamos visualizando a conversa da mensagem atualizada
+    const currentUrl = new URL(window.location.href);
+    const currentConversationId = currentUrl.searchParams.get('conversation');
+    
+    if (currentConversationId && parseInt(currentConversationId) === parseInt(statusData.conversation_id)) {
+        console.log(`📋 Atualizando status da mensagem ${statusData.message_id}: ${statusData.old_status} → ${statusData.new_status}`);
+        
+        // Atualiza as mensagens para mostrar o novo status
+        htmx.ajax('GET', `/comercial/whatsapp/conversation/${statusData.conversation_id}/messages/`, {
+            target: '#messages-container',
+            swap: 'innerHTML'
+        }).then(() => {
+            console.log('✅ Interface atualizada com novo status');
+        });
+        
+        // Mostra notificação discreta sobre status
+        if (statusData.new_status === 'delivered') {
+            showToast('Mensagem entregue ✓✓', 'success');
+        } else if (statusData.new_status === 'read') {
+            showToast('Mensagem lida ✓✓ (azul)', 'info');
+        }
+    } else {
+        console.log(`📋 Status atualizado em conversa não ativa (${statusData.conversation_id})`);
+    }
 }
 
 function updatePendingCount(count) {

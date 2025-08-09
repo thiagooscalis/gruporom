@@ -42,11 +42,21 @@
 {% endfor %}
 
 <script>
-// Auto-scroll para última mensagem
-setTimeout(() => {
+// Auto-scroll para última mensagem - mais robusto
+function scrollToBottom() {
     const container = document.getElementById('messages-container');
     if (container) {
-        container.scrollTop = container.scrollHeight;
+        // Scroll suave até o final
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+        });
     }
-}, 100);
+}
+
+// Executa o scroll após um pequeno delay para garantir que o DOM foi atualizado
+setTimeout(scrollToBottom, 50);
+
+// Também executa quando imagens ou outros elementos carregam
+document.addEventListener('DOMContentLoaded', scrollToBottom);
 </script>
