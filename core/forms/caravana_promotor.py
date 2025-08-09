@@ -10,6 +10,17 @@ class CaravanaPromotorForm(forms.ModelForm):
     Formulário multistep para cadastro de caravana pelo Promotor
     """
     
+    # Campo URL customizado para evitar warnings
+    link = forms.URLField(
+        required=False,
+        widget=forms.URLInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'https://'
+        }),
+        assume_scheme='https',
+        label='Link da Caravana'
+    )
+    
     # Step 1 - Dados da Caravana
     data_saida = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
@@ -113,7 +124,6 @@ class CaravanaPromotorForm(forms.ModelForm):
             'data_contrato': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'repasse_valor': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'repasse_tipo': forms.Select(attrs={'class': 'form-select'}),
-            'link': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://', 'required': False}),
         }
         labels = {
             'free_economica': 'Número de Frees na Econômica',

@@ -11,6 +11,16 @@ class CaravanaForm(forms.ModelForm):
     Formulário para criar/editar caravanas com campos dos bloqueios
     """
     
+    # Campo URL customizado para evitar warnings
+    link = forms.URLField(
+        required=False,
+        widget=forms.URLInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'https://'
+        }),
+        assume_scheme='https'
+    )
+    
     # Campos dos bloqueios que serão criados automaticamente
     data_saida = forms.DateField(
         label="Data de Saída",
@@ -85,7 +95,7 @@ class CaravanaForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
         # Filtra apenas pessoas ativas para líderes
@@ -100,8 +110,8 @@ class CaravanaForm(forms.ModelForm):
         self.fields['lideres'].widget = forms.MultipleHiddenInput()
         
         # Se o usuário tem empresas associadas, filtra
-        if user and hasattr(user, 'empresas'):
-            empresas_usuario = user.empresas.all()
+        if self.user and hasattr(self.user, 'empresas'):
+            empresas_usuario = self.user.empresas.all()
             if empresas_usuario.exists():
                 self.fields['empresa'].queryset = empresas_usuario
         
@@ -172,6 +182,11 @@ class CaravanaForm(forms.ModelForm):
     def save(self, commit=True):
         # Verifica se é uma nova caravana antes de salvar
         is_new = self.instance.pk is None
+        
+        # Se é nova caravana e não tem responsável, define como usuário atual
+        if is_new and not getattr(self.instance, 'responsavel_id', None) and self.user and hasattr(self.user, 'pessoa'):
+            self.instance.responsavel = self.user.pessoa
+            
         caravana = super().save(commit=commit)
         
         # Só cria os bloqueios se for uma nova caravana (não edição)

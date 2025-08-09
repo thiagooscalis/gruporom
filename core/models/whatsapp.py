@@ -223,11 +223,12 @@ class WhatsAppMessage(models.Model):
     ]
 
     MESSAGE_STATUS_CHOICES = [
+        ("pending", "Pendente"),
+        ("sending", "Enviando"),
         ("sent", "Enviada"),
         ("delivered", "Entregue"),
         ("read", "Lida"),
         ("failed", "Falhou"),
-        ("pending", "Pendente"),
     ]
 
     DIRECTION_CHOICES = [

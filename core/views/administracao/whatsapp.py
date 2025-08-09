@@ -114,6 +114,204 @@ def accounts_list(request):
 
 
 
+def _process_message_sync(account, message_data, contacts_data):
+    """
+    Processa mensagem de forma síncrona
+    """
+    from core.models import WhatsAppContact, WhatsAppMessage, WhatsAppConversation
+    from django.utils import timezone
+    
+    try:
+        wamid = message_data['id']
+        from_number = message_data['from']
+        timestamp = timezone.datetime.fromtimestamp(
+            int(message_data['timestamp']), 
+            timezone.get_current_timezone()
+        )
+        
+        # Encontra ou cria contato
+        contact_info = next((c for c in contacts_data if c.get('wa_id') == from_number), None)
+        
+        # Garante que o número esteja no formato correto
+        phone_number = from_number if from_number.startswith('+') else f'+{from_number}'
+        
+        contact, created = WhatsAppContact.objects.get_or_create(
+            account=account,
+            phone_number=phone_number,
+            defaults={
+                'name': contact_info.get('profile', {}).get('name', '') if contact_info else '',
+                'profile_name': contact_info.get('profile', {}).get('name', '') if contact_info else phone_number,
+            }
+        )
+        
+        # Verifica se mensagem já existe
+        if WhatsAppMessage.objects.filter(wamid=wamid).exists():
+            logger.info(f"Mensagem {wamid} já processada")
+            return
+        
+        # Verifica se existe conversa ativa
+        conversation = WhatsAppConversation.objects.filter(
+            account=account,
+            contact=contact,
+            status__in=['pending', 'assigned', 'in_progress']
+        ).first()
+        
+        conversation_created = False
+        if not conversation:
+            # Cria nova conversa
+            conversation = WhatsAppConversation.objects.create(
+                account=account,
+                contact=contact,
+                status='pending',
+                first_message_at=timestamp,
+                last_activity=timestamp,
+                priority='medium'
+            )
+            conversation_created = True
+            logger.info(f"Nova conversa criada {conversation.id} para {contact.name or contact.phone_number}")
+        
+        # Extrai conteúdo da mensagem
+        content = ''
+        message_type = message_data.get('type', 'text')
+        
+        if message_type == 'text':
+            content = message_data.get('text', {}).get('body', '')
+        elif message_type == 'image':
+            content = message_data.get('image', {}).get('caption', '[Imagem]')
+        elif message_type == 'audio':
+            content = '[Áudio]'
+        elif message_type == 'video':
+            content = message_data.get('video', {}).get('caption', '[Vídeo]')
+        elif message_type == 'document':
+            content = f"[Documento: {message_data.get('document', {}).get('filename', 'arquivo')}]"
+        
+        # Cria mensagem
+        message = WhatsAppMessage.objects.create(
+            wamid=wamid,
+            account=account,
+            contact=contact,
+            conversation=conversation,
+            direction='inbound',
+            message_type=message_type,
+            content=content,
+            timestamp=timestamp,
+            status='delivered'
+        )
+        
+        # Atualiza última atividade da conversa
+        conversation.last_activity = timestamp
+        conversation.save(update_fields=['last_activity'])
+        
+        logger.info(f"Mensagem {wamid} processada - Conversa {conversation.id}")
+        
+        # Envia notificação WebSocket se nova conversa foi criada
+        if conversation_created:
+            _send_websocket_notification(conversation, content)
+        
+    except Exception as e:
+        logger.error(f"Erro ao processar mensagem: {e}")
+        # Traceback removido dos logs por segurança em produção
+
+
+def _process_status_update_sync(account, status_data):
+    """
+    Processa atualizações de status de mensagens (delivered, read, failed)
+    """
+    from core.models import WhatsAppMessage
+    from django.utils import timezone
+    
+    try:
+        wamid = status_data.get('id')
+        status = status_data.get('status')
+        timestamp = status_data.get('timestamp')
+        
+        if not wamid or not status:
+            logger.warning("Status update sem WAMID ou status")
+            return
+        
+        # Busca mensagem pelo WAMID
+        try:
+            message = WhatsAppMessage.objects.get(
+                account=account,
+                wamid=wamid,
+                direction='outbound'  # Só mensagens enviadas por nós
+            )
+            
+            # Atualiza status da mensagem
+            old_status = message.status
+            message.status = status
+            
+            # Converte timestamp se fornecido
+            if timestamp:
+                status_timestamp = timezone.datetime.fromtimestamp(
+                    int(timestamp), 
+                    timezone.get_current_timezone()
+                )
+                
+                # Atualiza campos específicos baseado no status
+                if status == 'delivered':
+                    message.delivered_at = status_timestamp
+                elif status == 'read':
+                    message.read_at = status_timestamp
+                    # Se foi lida, também foi entregue
+                    if not message.delivered_at:
+                        message.delivered_at = status_timestamp
+            
+            message.save()
+            
+            logger.info(f"Status da mensagem {wamid} atualizado: {old_status} → {status}")
+            
+        except WhatsAppMessage.DoesNotExist:
+            logger.warning(f"Mensagem {wamid} não encontrada para atualização de status")
+            
+    except Exception as e:
+        logger.error(f"Erro ao processar status update: {e}")
+        # Traceback removido dos logs por segurança em produção
+
+
+def _send_websocket_notification(conversation, message_content):
+    """
+    Envia notificação WebSocket para usuários comerciais sobre nova conversa
+    """
+    try:
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        from core.models import WhatsAppConversation
+        
+        channel_layer = get_channel_layer()
+        if not channel_layer:
+            logger.warning("Channel layer não configurado - notificação WebSocket ignorada")
+            return
+        
+        # Dados da conversa para enviar via WebSocket
+        conversation_data = {
+            'id': conversation.id,
+            'contact_name': conversation.contact.name or conversation.contact.profile_name or conversation.contact.phone_number,
+            'contact_phone': conversation.contact.phone_number,
+            'message_preview': message_content[:100] + ('...' if len(message_content) > 100 else ''),
+            'created_at': conversation.first_message_at.isoformat() if conversation.first_message_at else '',
+            'status': conversation.status
+        }
+        
+        # Conta atual de conversas pendentes
+        pending_count = WhatsAppConversation.objects.filter(status='pending').count()
+        
+        # Envia evento único com nova conversa e contador atualizado
+        async_to_sync(channel_layer.group_send)(
+            'whatsapp_comercial',
+            {
+                'type': 'conversation_new',
+                'conversation': conversation_data,
+                'pending_count': pending_count
+            }
+        )
+        
+        logger.info(f"Notificações WebSocket enviadas para nova conversa {conversation.id}")
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar notificação WebSocket: {e}")
+        # Traceback removido dos logs por segurança em produção
+
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
@@ -142,14 +340,11 @@ def webhook(request, account_id):
     elif request.method == 'POST':
         # Processamento do webhook
         try:
-            # Log detalhado para debug
-            logger.info(f"=== WEBHOOK RECEBIDO ===")
-            logger.info(f"Conta ID: {account_id}")
-            logger.info(f"Headers: {dict(request.headers)}")
-            logger.info(f"Body bruto: {request.body.decode('utf-8')}")
+            # Log básico do webhook
+            logger.info(f"Webhook recebido para conta {account_id}")
             
             payload = json.loads(request.body)
-            logger.info(f"Payload JSON: {payload}")
+            # Payload detalhado removido dos logs por segurança
             
             # Adiciona o webhook à fila para processamento posterior
             from core.models import WhatsAppWebhookQueue
@@ -160,16 +355,26 @@ def webhook(request, account_id):
             )
             logger.info(f"Webhook adicionado à fila para processamento posterior")
             
-            # Tenta processar imediatamente também (best effort)
+            # Processa de forma síncrona para evitar problemas com asyncio no dev server
             try:
-                processor = WhatsAppWebhookProcessor(account)
-                import asyncio
-                result = asyncio.run(processor.process_webhook(payload))
-                logger.info(f"Webhook processado imediatamente com sucesso: {result}")
+                from core.services.whatsapp_api import WhatsAppAPIService
+                
+                # Parse do payload
+                data = WhatsAppAPIService.parse_webhook_payload(payload)
+                
+                # Processa mensagens recebidas de forma síncrona
+                for message_data in data['messages']:
+                    _process_message_sync(account, message_data, data['contacts'])
+                
+                # Processa atualizações de status (delivered, read, etc)
+                for status_data in data.get('statuses', []):
+                    _process_status_update_sync(account, status_data)
+                
+                logger.info(f"Webhook processado com sucesso")
             except Exception as proc_error:
                 # Se falhar o processamento imediato, não é problema
                 # pois está na fila para reprocessamento
-                logger.warning(f"Processamento imediato falhou, mas webhook está na fila: {proc_error}")
+                logger.warning(f"Processamento falhou, mas webhook está na fila: {proc_error}")
             
             return HttpResponse(status=200)
             

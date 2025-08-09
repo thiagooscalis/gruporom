@@ -28,7 +28,7 @@ def lista(request):
         pessoas = pessoas.filter(
             Q(nome__icontains=search) |
             Q(doc__icontains=search) |
-            Q(email__icontains=search)
+            Q(emails__email__icontains=search)
         )
     
     # Aplica filtro de tipo se houver

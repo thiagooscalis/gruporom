@@ -1,0 +1,38 @@
+{% for message in messages %}
+<div class="message {{ message.direction }}">
+    <div class="message-bubble">
+        <div>{{ message.get_display_content }}</div>
+        <div class="message-time">
+            {{ message.timestamp|date:"H:i" }}
+            {% if message.direction == 'outbound' %}
+                {% if message.status == 'sending' %}
+                    <i class="fas fa-clock text-warning" title="Enviando..."></i>
+                {% elif message.status == 'sent' %}
+                    <i class="fas fa-check text-muted" title="Enviada"></i>
+                {% elif message.status == 'delivered' %}
+                    <i class="fas fa-check-double text-muted" title="Entregue"></i>
+                {% elif message.status == 'read' %}
+                    <i class="fas fa-check-double text-primary" title="Lida"></i>
+                {% elif message.status == 'failed' %}
+                    <i class="fas fa-exclamation-triangle text-danger" title="Falha no envio"></i>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="text-center text-muted">
+    <i class="fas fa-comments fa-3x mb-3"></i>
+    <p>Nenhuma mensagem nesta conversa</p>
+</div>
+{% endfor %}
+
+<script>
+// Auto-scroll para última mensagem
+setTimeout(() => {
+    const container = document.getElementById('messages-container');
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+}, 100);
+</script>

@@ -13,32 +13,29 @@ class TestFornecedorModel:
     @pytest.fixture
     def pessoa_fisica(self):
         """Fixture para pessoa física"""
-        return Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        return PessoaFactory(
             tipo_doc="CPF",
             doc="12345678901",
-            nome="João da Silva",
-            email="joao@example.com"
+            nome="João da Silva"
         )
 
     @pytest.fixture
     def pessoa_juridica(self):
         """Fixture para pessoa jurídica"""
-        return Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import PessoaJuridicaFactory
+        return PessoaJuridicaFactory(
             doc="12345678000195",
-            nome="Empresa ABC Ltda",
-            email="contato@abc.com"
+            nome="Empresa ABC Ltda"
         )
 
     @pytest.fixture
     def empresa_gruporom(self):
         """Fixture para empresa do Grupo ROM"""
-        return Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import EmpresaGrupoROMFactory
+        return EmpresaGrupoROMFactory(
             doc="98765432000187",
-            nome="US Travel Operadora",
-            email="contato@ustravel.com",
-            empresa_gruporom=True
+            nome="US Travel Operadora"
         )
 
     def test_create_fornecedor(self, pessoa_fisica, empresa_gruporom):
@@ -75,8 +72,9 @@ class TestFornecedorModel:
         tipos_validos = [choice[0] for choice in TIPO_EMPRESA_CHOICES]
         
         for tipo in tipos_validos:
+            from core.factories import PessoaFactory
             fornecedor = Fornecedor.objects.create(
-                pessoa=Pessoa.objects.create(
+                pessoa=PessoaFactory(
                     tipo_doc="CPF",
                     doc=f"111222333{tipos_validos.index(tipo):02d}",
                     nome=f"Teste {tipo}"
@@ -126,13 +124,12 @@ class TestFornecedorModel:
     def test_fornecedor_multiplas_empresas(self, pessoa_fisica):
         """Testa fornecedor com múltiplas empresas do Grupo ROM"""
         # Cria várias empresas do Grupo ROM
+        from core.factories import EmpresaGrupoROMFactory
         empresas = []
         for i in range(3):
-            empresa = Pessoa.objects.create(
-                tipo_doc="CNPJ",
+            empresa = EmpresaGrupoROMFactory(
                 doc=f"1111222233330{i:02d}",
-                nome=f"Empresa ROM {i+1}",
-                empresa_gruporom=True
+                nome=f"Empresa ROM {i+1}"
             )
             empresas.append(empresa)
         
@@ -168,7 +165,8 @@ class TestFornecedorModel:
         fornecedores = []
         
         for i, nome in enumerate(pessoas_nomes):
-            pessoa = Pessoa.objects.create(
+            from core.factories import PessoaFactory
+            pessoa = PessoaFactory(
                 tipo_doc="CPF",
                 doc=f"9998887770{i:02d}",
                 nome=nome

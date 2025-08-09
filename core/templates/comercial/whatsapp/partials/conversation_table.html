@@ -20,20 +20,22 @@
                                 <i class="fab fa-whatsapp text-success"></i>
                             </div>
                             <div>
-                                <strong>{{ conversation.contact.display_name }}</strong>
-                                <br><small class="text-muted">{{ conversation.contact.display_phone }}</small>
+                                <strong>{{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}</strong>
+                                <br><small class="text-muted">{{ conversation.contact.phone_number }}</small>
                             </div>
                         </div>
                     </td>
                     <td>{{ conversation.account.name }}</td>
                     <td>
-                        {% if conversation.last_message %}
+                        {% with last_msg=conversation.messages.last %}
+                        {% if last_msg %}
                             <div class="text-truncate" style="max-width: 200px;">
-                                {{ conversation.last_message.get_display_content }}
+                                {{ last_msg.get_display_content }}
                             </div>
                         {% else %}
                             <small class="text-muted">Sem mensagens</small>
                         {% endif %}
+                        {% endwith %}
                     </td>
                     <td>
                         <span class="badge bg-primary" data-message-count>{{ conversation.messages_count }}</span>

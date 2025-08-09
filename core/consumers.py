@@ -92,6 +92,13 @@ class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
             'conversation_id': event['conversation_id']
         }))
     
+    async def pending_count_update(self, event):
+        """Atualiza contador de conversas pendentes"""
+        await self.send(text_data=json.dumps({
+            'type': 'pending_count_update',
+            'count': event['count']
+        }))
+    
     @database_sync_to_async
     def is_comercial_user(self):
         """Verifica se o usuário pertence ao grupo Comercial"""

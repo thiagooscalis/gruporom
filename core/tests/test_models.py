@@ -102,9 +102,12 @@ class CaravanaModelTest(TestCase):
         caravana = CaravanaFactory(nome='Caravana Teste', empresa=empresa, lideres=[lider1, lider2])
         
         str_caravana = str(caravana)
-        self.assertTrue(str_caravana.startswith('Caravana Teste com'))
-        self.assertTrue('João Silva' in str_caravana)
-        self.assertTrue('Maria Santos' in str_caravana)
+        self.assertEqual(str_caravana, 'Caravana Teste')
+        
+        # Test lideres_nomes property separately
+        lideres_nomes = caravana.lideres_nomes
+        self.assertIn('João Silva', lideres_nomes)
+        self.assertIn('Maria Santos', lideres_nomes)
 
 
 @override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())

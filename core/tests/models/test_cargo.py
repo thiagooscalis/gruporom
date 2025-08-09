@@ -12,22 +12,19 @@ class TestCargoModel:
     @pytest.fixture
     def empresa_gruporom(self):
         """Fixture para empresa do Grupo ROM"""
-        return Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import EmpresaGrupoROMFactory
+        return EmpresaGrupoROMFactory(
             doc="12345678000195",
-            nome="US Travel Operadora",
-            email="contato@ustravel.com",
-            empresa_gruporom=True
+            nome="US Travel Operadora"
         )
 
     @pytest.fixture
     def empresa_normal(self):
         """Fixture para empresa que não é do Grupo ROM"""
-        return Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import PessoaJuridicaFactory
+        return PessoaJuridicaFactory(
             doc="98765432000187",
             nome="Empresa Externa",
-            email="contato@externa.com",
             empresa_gruporom=False
         )
 
@@ -79,17 +76,14 @@ class TestCargoModel:
 
     def test_mesmo_nome_empresas_diferentes(self):
         """Testa que pode ter mesmo cargo em empresas diferentes"""
-        empresa1 = Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import EmpresaGrupoROMFactory
+        empresa1 = EmpresaGrupoROMFactory(
             doc="11111111000111",
             nome="Empresa ROM 1",
-            empresa_gruporom=True
         )
-        empresa2 = Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        empresa2 = EmpresaGrupoROMFactory(
             doc="22222222000122",
             nome="Empresa ROM 2",
-            empresa_gruporom=True
         )
         
         # Cria mesmo cargo em empresas diferentes
@@ -144,17 +138,14 @@ class TestCargoModel:
     def test_ordenacao_padrao(self):
         """Testa ordenação padrão por empresa e nome"""
         # Cria empresas
-        empresa1 = Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        from core.factories import EmpresaGrupoROMFactory
+        empresa1 = EmpresaGrupoROMFactory(
             doc="33333333000133",
             nome="A Empresa ROM",
-            empresa_gruporom=True
         )
-        empresa2 = Pessoa.objects.create(
-            tipo_doc="CNPJ",
+        empresa2 = EmpresaGrupoROMFactory(
             doc="44444444000144",
             nome="B Empresa ROM",
-            empresa_gruporom=True
         )
         
         # Cria cargos fora de ordem

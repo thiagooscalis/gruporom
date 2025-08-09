@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"{% if hide_padding %} class="h-100"{% endif %}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +10,14 @@
     <link href="{% static 'app.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body{% if hide_padding %} class="h-100"{% endif %}>
     {% include 'includes/aside.html' %}
-    <main id="main">
+    <main id="main"{% if hide_padding %} class="h-100 d-flex flex-column"{% endif %}>
         {% include 'includes/navbar.html' %}
-        <div class="p-3">
-            {% include 'includes/messages.html' %}
+        <div class="{% if not hide_padding %}p-3{% endif %}{% if hide_padding %} flex-fill{% endif %}">
+            {% if not hide_messages %}
+                {% include 'includes/messages.html' %}
+            {% endif %}
             {% block content %}{% endblock content %}
         </div>
     </main>

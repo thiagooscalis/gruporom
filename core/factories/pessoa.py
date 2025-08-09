@@ -1,22 +1,19 @@
 import factory
 from factory.django import DjangoModelFactory
-from core.models import Pessoa
+from core.models import Pessoa, Telefone, Email
 from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES, TIPO_EMPRESA_CHOICES
 
 
 class PessoaFactory(DjangoModelFactory):
     class Meta:
         model = Pessoa
+        skip_postgeneration_save = True
 
     tipo_doc = "CPF"
     doc = factory.Sequence(lambda n: f"{n:011d}")
     nome = factory.Faker("name", locale="pt_BR")
-    # apelido não existe no model atual
     sexo = factory.Iterator(["Masculino", "Feminino"])
     nascimento = factory.Faker("date_of_birth", minimum_age=18, maximum_age=80)
-    email = factory.Faker("email")
-    telefone = factory.Faker("phone_number", locale="pt_BR")
-    # celular não existe no model atual
     
     # Endereço
     cep = factory.Faker("postcode", locale="pt_BR")
@@ -26,7 +23,36 @@ class PessoaFactory(DjangoModelFactory):
     cidade = factory.Faker("city", locale="pt_BR")
     estado = factory.Faker("estado_sigla", locale="pt_BR")
     
-    # is_active não existe no model Pessoa
+    # Cria telefone principal após criar a pessoa
+    @factory.post_generation
+    def telefone_principal(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        
+        from .contato import TelefoneFactory
+        import random
+        TelefoneFactory(
+            pessoa=obj,
+            ddi='55',
+            ddd='11',
+            telefone=f"9{random.randint(10000000, 99999999)}",
+            tipo='celular',
+            principal=True
+        )
+    
+    # Cria email principal após criar a pessoa
+    @factory.post_generation 
+    def email_principal(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        
+        from .contato import EmailFactory
+        EmailFactory(
+            pessoa=obj,
+            email=factory.Faker("email"),
+            tipo='pessoal',
+            principal=True
+        )
 
 
 class PessoaJuridicaFactory(PessoaFactory):
@@ -35,10 +61,22 @@ class PessoaJuridicaFactory(PessoaFactory):
     tipo_doc = "CNPJ"
     doc = factory.Sequence(lambda n: f"{n:014d}")
     nome = factory.Faker("company", locale="pt_BR")
-    # apelido não existe no model atual
     sexo = None
     nascimento = None
-    email = factory.LazyAttribute(lambda obj: f"contato@{obj.nome.lower().replace(' ', '').replace('.', '')}.com.br")
+    
+    # Override para criar email comercial
+    @factory.post_generation 
+    def email_principal(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        
+        from .contato import EmailFactory
+        EmailFactory(
+            pessoa=obj,
+            email=f"contato@{obj.nome.lower().replace(' ', '').replace('.', '')}.com.br",
+            tipo='comercial',
+            principal=True
+        )
 
 
 class EmpresaGrupoROMFactory(PessoaJuridicaFactory):

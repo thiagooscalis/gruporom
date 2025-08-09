@@ -37,12 +37,11 @@ class UsuarioEmpresaModelTest(TestCase):
     def test_limit_choices_to_empresa_gruporom(self):
         """Testa se o limit_choices_to funciona corretamente"""
         # Cria uma pessoa comum
-        pessoa_comum = Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        pessoa_comum = PessoaFactory(
             nome="Pessoa Comum",
             doc="12345678901",
             tipo_doc="CPF",
-            email="comum@teste.com",
-            telefone="11999999999",
             empresa_gruporom=False
         )
         
@@ -72,7 +71,7 @@ class EmpresaGrupoROMFactoryTest(TestCase):
         self.assertEqual(empresa.tipo_doc, "CNPJ")
         self.assertIn(empresa.tipo_empresa, [choice[0] for choice in TIPO_EMPRESA_CHOICES])
         self.assertIsNotNone(empresa.nome)
-        self.assertIsNotNone(empresa.email)
+        self.assertIsNotNone(empresa.email_str)
     
     def test_create_empresa_tipo_especifico(self):
         """Testa a criação de empresa com tipo específico"""

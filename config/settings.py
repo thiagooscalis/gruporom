@@ -157,6 +157,7 @@ LOGIN_EXEMPT_URLS = [
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+
 # Channels Configuration
 ASGI_APPLICATION = "config.asgi.application"
 

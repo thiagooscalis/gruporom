@@ -13,11 +13,11 @@ class TestUsuarioModel:
     @pytest.fixture
     def pessoa(self):
         """Fixture para criar uma pessoa para os testes"""
-        return Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        return PessoaFactory(
             tipo_doc="CPF",
             doc="12345678901",
-            nome="João da Silva",
-            email="joao@example.com"
+            nome="João da Silva"
         )
 
     def test_create_usuario(self, pessoa):
@@ -54,11 +54,11 @@ class TestUsuarioModel:
         )
         
         # Criar nova pessoa para o segundo usuário
-        pessoa2 = Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        pessoa2 = PessoaFactory(
             tipo_doc="CPF",
             doc="98765432109",
-            nome="Maria Santos",
-            email="maria@example.com"
+            nome="Maria Santos"
         )
         
         with pytest.raises(IntegrityError):
@@ -113,7 +113,9 @@ class TestUsuarioModel:
             password="senha123",
             pessoa=pessoa
         )
-        assert usuario.email == "joao@example.com"
+        # Email agora vem do EmailFactory através da propriedade da pessoa
+        assert usuario.email is not None
+        assert "@" in usuario.email
 
     def test_usuario_groups(self, pessoa):
         """Testa associação de usuário com grupos"""
@@ -149,11 +151,11 @@ class TestUsuarioModel:
         assert usuario.has_perm('core.add_pessoa') is False
         
         # Criar nova pessoa para o superusuário
-        pessoa_admin = Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        pessoa_admin = PessoaFactory(
             tipo_doc="CPF",
             doc="11111111111",
-            nome="Admin User",
-            email="admin@example.com"
+            nome="Admin User"
         )
         
         # Superusuário tem todas as permissões

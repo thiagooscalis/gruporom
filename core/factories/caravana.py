@@ -12,6 +12,7 @@ class CaravanaFactory(factory.django.DjangoModelFactory):
     nome = factory.Faker('sentence', nb_words=3)
     empresa = factory.SubFactory(PessoaFactory)
     promotor = factory.SubFactory(PessoaFactory)
+    responsavel = factory.SubFactory(PessoaFactory)
     tipo = factory.Faker('random_element', elements=[choice[0] for choice in TIPO_CARAVANA_CHOICES])
     link = factory.Faker('url')
     destaque_site = factory.Faker('random_int', min=0, max=10)

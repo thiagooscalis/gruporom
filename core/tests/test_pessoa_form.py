@@ -16,8 +16,16 @@ class PessoaFormTest(TestCase):
         self.assertIn('nome', form.fields)
         self.assertIn('tipo_doc', form.fields)
         self.assertIn('doc', form.fields)
-        self.assertIn('email', form.fields)
+        
+        # Campos de contato
+        self.assertIn('ddi', form.fields)
+        self.assertIn('ddd', form.fields)
         self.assertIn('telefone', form.fields)
+        self.assertIn('tipo_telefone', form.fields)
+        self.assertIn('email', form.fields)
+        self.assertIn('tipo_email', form.fields)
+        
+        # Campos de empresa
         self.assertIn('empresa_gruporom', form.fields)
         self.assertIn('tipo_empresa', form.fields)
     
@@ -27,8 +35,15 @@ class PessoaFormTest(TestCase):
             'nome': 'João Silva',
             'tipo_doc': 'CPF',
             'doc': '12345678901',
+            
+            # Campos de contato
+            'ddi': '55',
+            'ddd': '11',
+            'telefone': '999999999',
+            'tipo_telefone': 'celular',
             'email': 'joao@teste.com',
-            'telefone': '11999999999',
+            'tipo_email': 'pessoal',
+            
             'empresa_gruporom': False,
             'tipo_empresa': '',  # Vazio para pessoa comum
         }
@@ -46,8 +61,15 @@ class PessoaFormTest(TestCase):
             'nome': 'ROM Turismo',
             'tipo_doc': 'CNPJ',
             'doc': '12345678000195',
+            
+            # Campos de contato
+            'ddi': '55',
+            'ddd': '11',
+            'telefone': '888888888',
+            'tipo_telefone': 'comercial',
             'email': 'turismo@gruporom.com',
-            'telefone': '11888888888',
+            'tipo_email': 'comercial',
+            
             'empresa_gruporom': True,
             'tipo_empresa': 'Turismo',
         }
@@ -71,12 +93,11 @@ class PessoaFormTest(TestCase):
     def test_editar_pessoa_para_empresa(self):
         """Testa edição de pessoa comum para empresa do Grupo ROM"""
         # Criar pessoa comum
-        pessoa = Pessoa.objects.create(
+        from core.factories import PessoaFactory
+        pessoa = PessoaFactory(
             nome='Maria Santos',
             tipo_doc='CNPJ',
             doc='98765432000111',
-            email='maria@teste.com',
-            telefone='11777777777',
             empresa_gruporom=False
         )
         
@@ -85,8 +106,15 @@ class PessoaFormTest(TestCase):
             'nome': 'Maria Santos Empresa',
             'tipo_doc': 'CNPJ',
             'doc': '98765432000111',
+            
+            # Campos de contato
+            'ddi': '55',
+            'ddd': '11',
+            'telefone': '777777777',
+            'tipo_telefone': 'comercial',
             'email': 'maria@gruporom.com',
-            'telefone': '11777777777',
+            'tipo_email': 'comercial',
+            
             'empresa_gruporom': True,
             'tipo_empresa': 'Alimentação',
         }
@@ -101,13 +129,11 @@ class PessoaFormTest(TestCase):
     def test_editar_empresa_para_pessoa_comum(self):
         """Testa edição de empresa do Grupo ROM para pessoa comum"""
         # Criar empresa
-        empresa = Pessoa.objects.create(
+        from core.factories import EmpresaGrupoROMFactory
+        empresa = EmpresaGrupoROMFactory(
             nome='ROM Administração',
             tipo_doc='CNPJ',
             doc='11111111000122',
-            email='admin@gruporom.com',
-            telefone='11555555555',
-            empresa_gruporom=True,
             tipo_empresa='Administração de Bens'
         )
         
@@ -116,8 +142,15 @@ class PessoaFormTest(TestCase):
             'nome': 'ROM Administração',
             'tipo_doc': 'CNPJ',
             'doc': '11111111000122',
+            
+            # Campos de contato
+            'ddi': '55',
+            'ddd': '11',
+            'telefone': '555555555',
+            'tipo_telefone': 'comercial',
             'email': 'admin@teste.com',
-            'telefone': '11555555555',
+            'tipo_email': 'comercial',
+            
             'empresa_gruporom': False,
             'tipo_empresa': '',  # Limpar tipo
         }
@@ -132,13 +165,11 @@ class PessoaFormTest(TestCase):
     
     def test_form_preserva_dados_na_edicao(self):
         """Testa se o formulário preserva os dados existentes na edição"""
-        empresa = Pessoa.objects.create(
+        from core.factories import EmpresaGrupoROMFactory
+        empresa = EmpresaGrupoROMFactory(
             nome='ROM Turismo Original',
             tipo_doc='CNPJ',
             doc='22222222000133',
-            email='turismo@gruporom.com',
-            telefone='11444444444',
-            empresa_gruporom=True,
             tipo_empresa='Turismo'
         )
         

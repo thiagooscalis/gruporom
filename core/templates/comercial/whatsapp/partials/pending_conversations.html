@@ -1,0 +1,43 @@
+{% if pending_conversations %}
+<div class="list-group">
+    {% for conversation in pending_conversations %}
+    <div class="list-group-item" data-conversation-id="{{ conversation.id }}">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="contact-avatar me-3" style="width: 40px; height: 40px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                    {{ conversation.contact.name|first|upper|default:"?" }}
+                </div>
+                <div>
+                    <h6 class="mb-1">
+                        {{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}
+                    </h6>
+                    <small class="text-muted">
+                        {{ conversation.messages_count }} mensagem{{ conversation.messages_count|pluralize }}
+                        • {{ conversation.last_activity|timesince }} atrás
+                    </small>
+                    <div class="mt-1">
+                        <small class="text-muted">
+                            {% with last_msg=conversation.messages.last %}
+                                {% if last_msg %}
+                                    {{ last_msg.get_display_content|truncatechars:50 }}
+                                {% endif %}
+                            {% endwith %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success btn-sm" onclick="assignConversation({{ conversation.id }})">
+                <i class="fas fa-user-plus me-1"></i>
+                Atender
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
+    <h5 class="text-muted">Nenhuma conversa aguardando</h5>
+    <p class="text-muted">Todas as conversas foram atendidas!</p>
+</div>
+{% endif %}

@@ -210,9 +210,7 @@ class WhatsAppAPIService:
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro ao criar template: {e}")
-            logger.error(f"URL da requisição: {url}")
-            logger.error(f"Headers enviados: {self.headers}")
-            logger.error(f"Payload enviado: {json.dumps(template_data, indent=2, ensure_ascii=False)}")
+            # URLs e headers removidos por segurança em produção
             
             error_response = {}
             error_details = None
@@ -223,30 +221,32 @@ class WhatsAppAPIService:
                     # Status code da resposta
                     logger.error(f"Status HTTP: {e.response.status_code}")
                     
-                    # Headers da resposta
-                    response_headers = dict(e.response.headers)
-                    logger.error(f"Headers da resposta: {json.dumps(response_headers, indent=2)}")
-                    
-                    # Conteúdo da resposta
+                    # Conteúdo da resposta (logs seguros)
                     try:
                         error_text = e.response.text
-                        logger.error(f"Resposta completa da API: {error_text}")
                         
                         if error_text.strip():
                             try:
                                 error_response = e.response.json()
                                 error_details = error_response.get('error', {})
-                                logger.error(f"JSON do erro: {json.dumps(error_response, indent=2, ensure_ascii=False)}")
-                            except json.JSONDecodeError as json_err:
-                                logger.error(f"Resposta não é JSON válido: {json_err}")
-                                error_response = {'raw_response': error_text}
+                                # Log apenas informações seguras de erro
+                                safe_error = {
+                                    'message': error_details.get('message', 'Erro desconhecido'),
+                                    'type': error_details.get('type'),
+                                    'code': error_details.get('code'),
+                                    'status': e.response.status_code
+                                }
+                                logger.error(f"Erro da API WhatsApp: {safe_error}")
+                            except json.JSONDecodeError:
+                                logger.error("Erro na API WhatsApp (resposta inválida)")
+                                error_response = {'error': 'Resposta inválida'}
                         else:
-                            logger.error("Resposta vazia da API")
+                            logger.error("API WhatsApp retornou resposta vazia")
                             error_response = {'error': 'Resposta vazia'}
                             
-                    except Exception as content_error:
-                        logger.error(f"Erro ao ler conteúdo da resposta: {content_error}")
-                        error_response = {'error': 'Erro ao ler resposta'}
+                    except Exception:
+                        logger.error("Erro ao processar resposta da API WhatsApp")
+                        error_response = {'error': 'Erro ao processar resposta'}
                 else:
                     logger.error("Nenhuma resposta HTTP disponível")
                     error_response = {'error': 'Sem resposta HTTP'}
@@ -453,9 +453,8 @@ class WhatsAppAPIService:
         
         # Log do payload para debug
         logger.info(f"Enviando template para aprovação: {template.name}")
-        logger.info(f"URL da API: {self.BASE_URL}/{self.account.business_account_id}/message_templates")
-        logger.info(f"Business Account ID: {self.account.business_account_id}")
-        logger.info(f"Payload do template: {json.dumps(template_data, indent=2, ensure_ascii=False)}")
+        # URLs e IDs de negócio removidos dos logs por segurança
+        # Payload de template removido dos logs por segurança
         
         # Chama a API para criar o template
         result = self.create_message_template(template_data)

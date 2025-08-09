@@ -259,3 +259,13 @@ def create_aeroportos_field(queryset=None, multiple=True, **kwargs):
         return AeroportosMultiSelectField(queryset=queryset, **kwargs)
     else:
         return AeroportoField(queryset=queryset, **kwargs)
+
+
+class HTTPSURLField(forms.URLField):
+    """
+    Campo URLField que assume HTTPS como esquema padrão para resolver warnings do Django 5.2/6.0
+    """
+    
+    def __init__(self, **kwargs):
+        kwargs['assume_scheme'] = 'https'
+        super().__init__(**kwargs)

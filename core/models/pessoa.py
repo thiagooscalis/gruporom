@@ -15,8 +15,6 @@ class Pessoa(models.Model):
         choices=TIPO_DOC_CHOICES,
         verbose_name="Tipo de Documento",
     )
-    email = models.EmailField(verbose_name="E-mail")
-    telefone = models.CharField(max_length=20, verbose_name="Telefone")
     endereco = models.CharField(
         max_length=255, blank=True, null=True, verbose_name="Endereço"
     )
@@ -138,6 +136,35 @@ class Pessoa(models.Model):
         elif self.funcao:
             return self.funcao.abreviacao_masculino  # Default para masculino se sexo não informado
         return None
+    
+    # Propriedades de contato
+    @property
+    def telefone_principal(self):
+        """Retorna o telefone principal da pessoa"""
+        return self.telefones.filter(principal=True, ativo=True).first()
+    
+    @property
+    def email_principal(self):
+        """Retorna o email principal da pessoa"""
+        return self.emails.filter(principal=True, ativo=True).first()
+    
+    @property
+    def telefone_formatado(self):
+        """Retorna telefone principal formatado para exibição"""
+        telefone = self.telefone_principal
+        return telefone.numero_formatado if telefone else None
+    
+    @property
+    def telefone_completo(self):
+        """Retorna telefone principal no formato internacional completo"""
+        telefone = self.telefone_principal
+        return telefone.numero_completo if telefone else None
+    
+    @property
+    def email_str(self):
+        """Retorna email principal como string"""
+        email = self.email_principal
+        return email.email if email else None
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)

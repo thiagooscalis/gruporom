@@ -1,4 +1,5 @@
 from .pessoa import Pessoa
+from .contato import Telefone, Email
 from .usuario import Usuario
 from .fornecedor import Fornecedor
 from .cambio import Cambio
@@ -24,6 +25,8 @@ from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAp
 
 __all__ = [
     "Pessoa",
+    "Telefone",
+    "Email",
     "Usuario",
     "Fornecedor",
     "Cambio",

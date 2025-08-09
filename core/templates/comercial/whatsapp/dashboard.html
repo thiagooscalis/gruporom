@@ -39,7 +39,7 @@
                             <i class="fas fa-clock text-warning fa-2x"></i>
                         </div>
                     </div>
-                    <h3 class="text-warning" data-pending-count>{{ total_pending }}</h3>
+                    <h3 class="text-warning" id="pending-count">{{ total_pending }}</h3>
                     <small class="text-muted">Aguardando Atendimento</small>
                 </div>
             </div>
@@ -78,13 +78,91 @@
             <h3 class="h5 mb-3">
                 <i class="fas fa-headset me-2"></i>
                 Conversas Aguardando Atendimento
+                <span class="badge bg-info ms-2" id="refresh-indicator" style="display: none;">
+                    <i class="fas fa-sync fa-spin"></i> Atualizando...
+                </span>
             </h3>
-            {% include 'comercial/whatsapp/partials/conversation_table.html' %}
+            <!-- Container com auto-refresh via HTMX -->
+            <div id="conversations-container"
+                 hx-get="{% url 'comercial:conversations_table' %}"
+                 hx-trigger="load, every 3s"
+                 hx-indicator="#refresh-indicator">
+                {% include 'comercial/whatsapp/partials/conversation_table.html' %}
+            </div>
         </div>
     </div>
 
 
 </div>
+
+<!-- Script para atualizar contador após refresh da tabela -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Atualiza contador quando a tabela for recarregada
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'conversations-container') {
+            // Conta quantas linhas tem na tabela
+            const rows = evt.detail.target.querySelectorAll('tbody tr[data-conversation-id]');
+            const count = rows.length;
+            
+            // Atualiza o contador
+            const counterElement = document.getElementById('pending-count');
+            if (counterElement) {
+                const oldCount = parseInt(counterElement.textContent);
+                counterElement.textContent = count;
+                
+                // Adiciona efeito visual se mudou
+                if (oldCount !== count) {
+                    counterElement.classList.add('text-white', 'bg-warning', 'rounded', 'px-2');
+                    setTimeout(() => {
+                        counterElement.classList.remove('text-white', 'bg-warning', 'rounded', 'px-2');
+                    }, 1000);
+                }
+            }
+            
+            // Se não tem conversas, mostra 0
+            if (!rows.length) {
+                const noConversations = evt.detail.target.querySelector('.fa-comments');
+                if (noConversations && counterElement) {
+                    counterElement.textContent = '0';
+                }
+            }
+        }
+    });
+    
+    // Som de notificação quando chegar nova conversa
+    let lastCount = parseInt(document.getElementById('pending-count').textContent || '0');
+    
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'conversations-container') {
+            const newCount = evt.detail.target.querySelectorAll('tbody tr[data-conversation-id]').length;
+            
+            // Se aumentou o número de conversas, toca som
+            if (newCount > lastCount) {
+                // Cria elemento de áudio temporário
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSl7y+/XiyMGHm7A7+OZURE');
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log('Erro ao tocar som:', e));
+                
+                // Mostra notificação do navegador se permitido
+                if (Notification.permission === 'granted') {
+                    new Notification('Nova conversa WhatsApp!', {
+                        body: 'Uma nova conversa está aguardando atendimento',
+                        icon: '/static/favicon.png'
+                    });
+                }
+            }
+            
+            lastCount = newCount;
+        }
+    });
+    
+    // Pede permissão para notificações
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+});
+</script>
 
 <!-- WebSocket para atualizações em tempo real -->
 <script>
