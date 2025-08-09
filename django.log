@@ -18997,3 +18997,17 @@ ERROR 2025-08-09 13:07:49,700 whatsapp_api Erro ao enviar mensagem de texto: 401
 ERROR 2025-08-09 13:07:49,705 whatsapp Erro ao reenviar mensagem: Invalid OAuth access token - Cannot parse access token
 INFO 2025-08-09 13:07:49,709 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
 INFO 2025-08-09 13:07:49,729 runserver [mHTTP POST /comercial/whatsapp/resend-message/53/ 200 [0.24, 127.0.0.1:45764][0m
+INFO 2025-08-09 13:10:36,926 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 13:10:37,692 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:10:37,714 runserver [mHTTP GET /comercial/whatsapp/?conversation=17 200 [0.08, 127.0.0.1:38226][0m
+INFO 2025-08-09 13:10:37,751 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:10:37,752 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:10:37,755 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:10:37,767 runserver [mHTTP GET /comercial/whatsapp/conversation/17/messages/ 200 [0.03, 127.0.0.1:38236][0m
+INFO 2025-08-09 13:10:37,768 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:38252][0m
+INFO 2025-08-09 13:10:37,769 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:38226][0m
+INFO 2025-08-09 13:10:44,785 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:53736]
+INFO 2025-08-09 13:10:44,843 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:53736]
+INFO 2025-08-09 13:10:44,843 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:12:23,239 runserver [32mHTTP GET /comercial/whatsapp/ 302 [0.01, 127.0.0.1:43068][0m
+INFO 2025-08-09 13:14:38,246 runserver [32mHTTP HEAD /comercial/whatsapp/ 302 [0.01, 127.0.0.1:56326][0m

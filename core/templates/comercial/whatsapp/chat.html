@@ -193,9 +193,6 @@
                     {{ pending_count|default:0 }}
                 </span>
             </button>
-            <button class="btn btn-outline-secondary btn-sm ms-2" onclick="testWebSocket()" title="Testar WebSocket">
-                🧪
-            </button>
         </div>
     </div>
 
@@ -554,40 +551,6 @@ function sendMessage(event, conversationId) {
 }
 
 // Função finishConversation removida - conclusão será feita em outro módulo
-
-// Função para testar WebSocket manualmente
-function testWebSocket() {
-    console.log('🧪 Testando WebSocket...');
-    console.log('🔍 Estado atual do WebSocket:', socket ? socket.readyState : 'socket is null');
-    console.log('🔍 Estados WebSocket: CONNECTING=0, OPEN=1, CLOSING=2, CLOSED=3');
-    
-    if (socket) {
-        console.log('🔍 URL do WebSocket:', socket.url);
-        console.log('🔍 Protocolo:', socket.protocol);
-    }
-    
-    fetch('/comercial/whatsapp/test-websocket/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('📊 Resposta do teste:', data);
-        
-        if (data.success) {
-            showToast('Teste WebSocket enviado! Verifique se a mensagem aparece.', 'success');
-        } else {
-            showToast(`Erro no teste: ${data.error}`, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('❌ Erro no teste WebSocket:', error);
-        showToast('Erro ao testar WebSocket', 'error');
-    });
-}
 
 // Função para mostrar notificações toast
 function showToast(message, type = 'info') {
