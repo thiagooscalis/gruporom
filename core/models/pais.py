@@ -11,4 +11,4 @@ class Pais(models.Model):
         ordering = ['nome']
     
     def __str__(self):
-        return f"{self.nome} ({self.iso})"
+        return self.nome

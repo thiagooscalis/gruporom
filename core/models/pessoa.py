@@ -33,8 +33,12 @@ class Pessoa(models.Model):
     estado = models.CharField(
         max_length=2, blank=True, null=True, verbose_name="Estado"
     )
-    pais = models.CharField(
-        max_length=100, blank=True, null=True, verbose_name="País"
+    pais = models.ForeignKey(
+        'Pais',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="País"
     )
     cep = models.CharField(
         max_length=10, blank=True, null=True, verbose_name="CEP"

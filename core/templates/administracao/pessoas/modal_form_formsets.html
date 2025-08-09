@@ -1,0 +1,294 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="pessoaModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Pessoa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#pessoaModal" hx-swap="outerHTML" id="formPessoa" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Management forms para formsets -->
+                {{ telefone_formset.management_form }}
+                {{ email_formset.management_form }}
+                
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            {{ form.nome|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.tipo_doc|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.doc|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.nascimento|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.sexo|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            {{ form.funcao|as_crispy_field }}
+                        </div>
+                        
+                        <!-- Telefones usando Formset -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Telefones <span class="text-danger">*</span></label>
+                            <div id="telefones-formset">
+                                {% for telefone_form in telefone_formset %}
+                                    <div class="telefone-formset-item border p-3 mb-2 rounded">
+                                        {% if telefone_form.non_field_errors %}
+                                            <div class="alert alert-danger">
+                                                {{ telefone_form.non_field_errors }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Campos hidden para formset -->
+                                        {% for hidden in telefone_form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                        
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                {{ telefone_form.ddi|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-2">
+                                                {{ telefone_form.ddd|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ telefone_form.telefone|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-2">
+                                                {{ telefone_form.tipo|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-check mt-4">
+                                                    {{ telefone_form.principal }}
+                                                    <label class="form-check-label" for="{{ telefone_form.principal.id_for_label }}">
+                                                        Principal
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                {% if telefone_formset|length > 1 %}
+                                                    <div class="mt-4">
+                                                        {{ telefone_form.DELETE }}
+                                                        <label class="form-check-label text-danger" for="{{ telefone_form.DELETE.id_for_label }}">
+                                                            <small>Excluir</small>
+                                                        </label>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Emails usando Formset -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">E-mails <span class="text-danger">*</span></label>
+                            <div id="emails-formset">
+                                {% for email_form in email_formset %}
+                                    <div class="email-formset-item border p-3 mb-2 rounded">
+                                        {% if email_form.non_field_errors %}
+                                            <div class="alert alert-danger">
+                                                {{ email_form.non_field_errors }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Campos hidden para formset -->
+                                        {% for hidden in email_form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ email_form.email|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                {{ email_form.tipo|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-check mt-4">
+                                                    {{ email_form.principal }}
+                                                    <label class="form-check-label" for="{{ email_form.principal.id_for_label }}">
+                                                        Principal
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                {% if email_formset|length > 1 %}
+                                                    <div class="mt-4">
+                                                        {{ email_form.DELETE }}
+                                                        <label class="form-check-label text-danger" for="{{ email_form.DELETE.id_for_label }}">
+                                                            <small>Excluir</small>
+                                                        </label>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">Dados do Passaporte</h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_numero|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_validade|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_nome|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_copia|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">Endereço</h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.endereco|as_crispy_field }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            {{ form.numero|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.complemento|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            {{ form.bairro|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.cidade|as_crispy_field }}
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            {{ form.estado|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.cep|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            {{ form.pais|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-12">
+                            <hr class="my-3">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                {{ form.empresa_gruporom }}
+                                <label class="form-check-label" for="{{ form.empresa_gruporom.id_for_label }}">
+                                    {{ form.empresa_gruporom.label }}
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3" id="tipo-empresa-field" style="display: none;">
+                            {{ form.tipo_empresa|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializa o modal do Bootstrap quando carregado via HTMX
+    (function() {
+        const modalElement = document.getElementById('pessoaModal');
+        if (modalElement && window.bootstrap) {
+            const modal = new window.bootstrap.Modal(modalElement);
+            
+            // Remove os elementos do DOM quando o modal for fechado
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                modalElement.remove();
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+            });
+            
+            // Interceptar submissão do formulário
+            modalElement.addEventListener('htmx:afterRequest', function(evt) {
+                // Se o response contém HX-Redirect, não reabrir modal
+                if (evt.detail.xhr.getResponseHeader('HX-Redirect')) {
+                    modal.hide();
+                    return;
+                }
+            });
+            
+            // Mostra o modal imediatamente
+            modal.show();
+        }
+        
+        // Controlar visibilidade do campo tipo_empresa baseado no checkbox empresa_gruporom
+        const empresaGruporomCheckbox = document.getElementById('{{ form.empresa_gruporom.id_for_label }}');
+        const tipoEmpresaField = document.getElementById('tipo-empresa-field');
+        
+        if (empresaGruporomCheckbox && tipoEmpresaField) {
+            // Função para mostrar/ocultar campo
+            function toggleTipoEmpresa() {
+                if (empresaGruporomCheckbox.checked) {
+                    tipoEmpresaField.style.display = 'block';
+                } else {
+                    tipoEmpresaField.style.display = 'none';
+                    // Limpar seleção quando ocultar
+                    const tipoEmpresaSelect = tipoEmpresaField.querySelector('select');
+                    if (tipoEmpresaSelect) {
+                        tipoEmpresaSelect.value = '';
+                    }
+                }
+            }
+            
+            // Escutar mudanças no checkbox
+            empresaGruporomCheckbox.addEventListener('change', toggleTipoEmpresa);
+        }
+        
+        // Aplica máscaras de telefone
+        document.querySelectorAll('.telefone-mask').forEach(function(input) {
+            if (window.IMask) {
+                IMask(input, {
+                    mask: [
+                        {
+                            mask: '00000-0000',
+                            startsWith: '',
+                            country: 'Brasil'
+                        },
+                        {
+                            mask: '0000-0000',
+                            startsWith: '',
+                            country: 'Brasil'
+                        }
+                    ]
+                });
+            }
+        });
+        
+    })();
+</script>

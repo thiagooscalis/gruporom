@@ -16,12 +16,32 @@
             <span class="badge bg-success">PJ</span>
         {% endif %}
     </td>
+    <td class="text-center">
+        {% if pessoa.foto %}
+            <i class="fas fa-check text-success" title="Possui foto"></i>
+        {% else %}
+            <i class="fas fa-times text-danger" title="Sem foto"></i>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        {% if pessoa.passaporte_numero and pessoa.passaporte_validade and pessoa.passaporte_nome %}
+            <i class="fas fa-check text-success" title="Passaporte completo"></i>
+        {% else %}
+            <i class="fas fa-times text-danger" title="Passaporte incompleto"></i>
+        {% endif %}
+    </td>
     <td>
         <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
                 hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
                 hx-target="body"
                 hx-swap="beforeend">
             <i class="fas fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" title="Upload Foto"
+                hx-get="{% url 'administracao:pessoas_foto_modal' pessoa.pk %}"
+                hx-target="body"
+                hx-swap="beforeend">
+            <i class="fas fa-camera"></i>
         </button>
         <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
                 hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"

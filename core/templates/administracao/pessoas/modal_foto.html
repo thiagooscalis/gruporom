@@ -1,0 +1,134 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="pessoaFotoModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload de Foto - {{ pessoa.nome }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form hx-post="{% url 'administracao:pessoas_foto_upload' pessoa.pk %}" 
+                  hx-target="#pessoaFotoModal" 
+                  hx-swap="outerHTML" 
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <!-- Foto atual se existir -->
+                    {% if pessoa.foto %}
+                        <div class="text-center mb-3">
+                            <h6 class="text-muted">Foto Atual</h6>
+                            <img src="{{ pessoa.foto.url }}" alt="Foto de {{ pessoa.nome }}" 
+                                 class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                        <hr class="my-3">
+                    {% endif %}
+                    
+                    <!-- Upload de nova foto -->
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Nova Foto</label>
+                        <input type="file" class="form-control" name="foto" id="foto" 
+                               accept="image/*" required>
+                        <small class="form-text text-muted">
+                            <strong>Formatos aceitos:</strong> JPG, PNG, GIF, WEBP<br>
+                            <strong>Tamanho máximo:</strong> 5MB<br>
+                            <strong>Dimensão mínima:</strong> 200x200 pixels<br>
+                            <em class="text-info">ℹ️ A imagem será automaticamente recortada para formato quadrado a partir do centro.</em>
+                        </small>
+                    </div>
+                    
+                    <!-- Preview da nova foto -->
+                    <div id="preview-container" class="text-center" style="display: none;">
+                        <h6 class="text-muted">Preview</h6>
+                        <img id="preview-image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    {% if pessoa.foto %}
+                        <button type="button" class="btn btn-outline-danger" 
+                                hx-post="{% url 'administracao:pessoas_foto_remover' pessoa.pk %}"
+                                hx-target="#pessoaFotoModal" 
+                                hx-swap="outerHTML"
+                                hx-confirm="Tem certeza que deseja remover a foto?">
+                            <i class="fas fa-trash me-2"></i>Remover Foto
+                        </button>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>{% if pessoa.foto %}Atualizar{% else %}Enviar{% endif %} Foto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializa o modal do Bootstrap quando carregado via HTMX
+    (function() {
+        const modalElement = document.getElementById('pessoaFotoModal');
+        if (modalElement && window.bootstrap) {
+            const modal = new window.bootstrap.Modal(modalElement);
+            
+            // Remove os elementos do DOM quando o modal for fechado
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                modalElement.remove();
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+            });
+            
+            // Mostra o modal imediatamente
+            modal.show();
+        }
+        
+        // Preview da imagem selecionada
+        const fotoInput = document.getElementById('foto');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImage = document.getElementById('preview-image');
+        
+        if (fotoInput) {
+            fotoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Verificar tipo de arquivo
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, selecione apenas arquivos de imagem.');
+                        fotoInput.value = '';
+                        previewContainer.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Verificar tamanho (5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('O arquivo é muito grande. Tamanho máximo: 5MB.');
+                        fotoInput.value = '';
+                        previewContainer.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Verificar dimensões mínimas (200x200) e mostrar preview
+                    const img = new Image();
+                    img.onload = function() {
+                        if (this.width < 200 || this.height < 200) {
+                            alert('Imagem muito pequena. Dimensão mínima: 200x200 pixels.');
+                            fotoInput.value = '';
+                            previewContainer.style.display = 'none';
+                            return;
+                        }
+                        
+                        // Se chegou até aqui, mostrar preview
+                        previewImage.src = URL.createObjectURL(file);
+                        previewContainer.style.display = 'block';
+                        
+                        // Cleanup do URL object após uso
+                        previewImage.onload = function() {
+                            URL.revokeObjectURL(this.src);
+                        };
+                    };
+                    img.src = URL.createObjectURL(file);
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            });
+        }
+    })();
+</script>

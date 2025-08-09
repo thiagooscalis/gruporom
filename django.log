@@ -19227,3 +19227,372 @@ INFO 2025-08-09 13:31:09,804 runserver WebSocket CONNECT /ws/comercial/whatsapp/
 INFO 2025-08-09 13:31:09,804 consumers ✅ WebSocket conectado com sucesso para usuário thiago
 INFO 2025-08-09 13:34:55,265 whatsapp Notificação WebSocket enviada para status update: 69 (sent → delivered)
 INFO 2025-08-09 13:34:58,281 whatsapp Notificação WebSocket enviada para status update: 69 (delivered → read)
+INFO 2025-08-09 13:43:04,827 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 13:43:06,479 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:43:06,500 runserver [mHTTP GET /comercial/whatsapp/?conversation=17 200 [0.04, 127.0.0.1:54342][0m
+INFO 2025-08-09 13:43:06,550 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:43:06,551 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:43:06,552 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:43:06,568 runserver [mHTTP GET /comercial/whatsapp/conversation/17/messages/ 200 [0.03, 127.0.0.1:54348][0m
+INFO 2025-08-09 13:43:06,570 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:54358][0m
+INFO 2025-08-09 13:43:06,572 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:54342][0m
+INFO 2025-08-09 13:43:27,507 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:53906]
+INFO 2025-08-09 13:43:27,561 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:53906]
+INFO 2025-08-09 13:43:27,562 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:51:45,944 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 13:51:46,326 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 13:51:51,109 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:41060][0m
+INFO 2025-08-09 13:51:56,064 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:38670]
+INFO 2025-08-09 13:51:56,112 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.04, 127.0.0.1:41060][0m
+INFO 2025-08-09 13:51:56,113 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:38670]
+INFO 2025-08-09 13:51:56,114 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:57:02,790 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 13:57:03,161 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 13:57:07,945 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:12,895 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:41870]
+INFO 2025-08-09 13:57:12,949 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:12,953 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:41870]
+INFO 2025-08-09 13:57:12,953 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:57:23,920 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:41870]
+INFO 2025-08-09 13:57:23,922 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-09 13:57:23,968 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:23,991 runserver [mHTTP GET /comercial/whatsapp/?conversation=17 200 [0.04, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:24,023 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:54704]
+INFO 2025-08-09 13:57:24,037 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:24,042 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:54704]
+INFO 2025-08-09 13:57:24,043 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-09 13:57:24,048 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:24,051 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:24,056 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:24,057 runserver [mHTTP GET /comercial/whatsapp/conversation/17/messages/ 200 [0.03, 127.0.0.1:54706][0m
+INFO 2025-08-09 13:57:24,064 runserver [mHTTP GET /comercial/whatsapp/pending-conversations/ 200 [0.03, 127.0.0.1:54722][0m
+INFO 2025-08-09 13:57:31,643 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:54704]
+INFO 2025-08-09 13:57:31,645 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-09 13:57:31,674 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:31,704 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:33,627 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:33,645 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:57:38,916 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:57:38,943 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.06, 127.0.0.1:54518][0m
+INFO 2025-08-09 13:59:28,359 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:59:28,389 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:55730][0m
+INFO 2025-08-09 13:59:31,380 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 13:59:31,421 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.07, 127.0.0.1:55730][0m
+INFO 2025-08-09 14:00:32,921 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:00:33,304 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:01:27,973 autoreload /home/thiago/Projetos/gruporom/core/models/pessoa.py changed, reloading.
+INFO 2025-08-09 14:01:28,315 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:01:44,608 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:01:44,949 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:03:42,114 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:03:42,142 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:51456][0m
+INFO 2025-08-09 14:03:44,684 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:03:44,717 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.07, 127.0.0.1:51456][0m
+INFO 2025-08-09 14:05:12,458 autoreload /home/thiago/Projetos/gruporom/core/models/pais.py changed, reloading.
+INFO 2025-08-09 14:05:12,806 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:05:31,779 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:05:31,807 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:34282][0m
+INFO 2025-08-09 14:05:33,791 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:05:33,807 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.02, 127.0.0.1:34282][0m
+INFO 2025-08-09 14:06:14,507 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:06:14,533 runserver [mHTTP GET /administracao/pessoas/2/editar/modal/ 200 [0.07, 127.0.0.1:34282][0m
+INFO 2025-08-09 14:08:02,772 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:08:03,128 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:08:10,318 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:08:10,667 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:08:18,891 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:08:19,236 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:09:06,431 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:09:06,453 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:56322][0m
+INFO 2025-08-09 14:09:06,468 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:56322][0m
+INFO 2025-08-09 14:09:06,469 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:56330][0m
+INFO 2025-08-09 14:09:06,470 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:56342][0m
+INFO 2025-08-09 14:09:06,472 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:56322][0m
+INFO 2025-08-09 14:09:06,485 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:56342][0m
+INFO 2025-08-09 14:09:06,486 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:56330][0m
+INFO 2025-08-09 14:09:06,495 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:56342][0m
+INFO 2025-08-09 14:09:08,937 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:09:08,985 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.08, 127.0.0.1:56342][0m
+INFO 2025-08-09 14:12:51,120 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:12:51,155 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:59542][0m
+INFO 2025-08-09 14:12:53,930 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:12:53,959 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.06, 127.0.0.1:59542][0m
+INFO 2025-08-09 14:13:32,733 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 14:13:33,091 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:15:38,093 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:15:38,119 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:47210][0m
+INFO 2025-08-09 14:15:40,174 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:15:40,212 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.07, 127.0.0.1:47210][0m
+INFO 2025-08-09 14:16:38,902 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:16:38,943 runserver [mHTTP GET /administracao/pessoas/ 200 [0.08, 127.0.0.1:47210][0m
+INFO 2025-08-09 14:16:50,497 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:16:50,529 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.06, 127.0.0.1:47210][0m
+INFO 2025-08-09 14:19:50,494 autoreload /home/thiago/Projetos/gruporom/core/urls/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:19:50,842 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:20:30,363 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:20:34,436 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:20:34,776 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:21:00,520 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:21:00,553 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:36312][0m
+INFO 2025-08-09 14:21:00,587 runserver [mHTTP GET /static/app.css 200 [0.02, 127.0.0.1:36316][0m
+INFO 2025-08-09 14:21:00,590 runserver [mHTTP GET /static/app.js 200 [0.02, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:00,591 runserver [mHTTP GET /static/style.css 200 [0.02, 127.0.0.1:36312][0m
+INFO 2025-08-09 14:21:00,597 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:00,618 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:36316][0m
+INFO 2025-08-09 14:21:00,619 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:00,622 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:03,889 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:21:03,921 runserver [mHTTP GET /administracao/pessoas/3/editar/modal/ 200 [0.08, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:54,476 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:21:54,520 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:36320][0m
+INFO 2025-08-09 14:21:55,577 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:21:55,597 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:59302][0m
+INFO 2025-08-09 14:21:55,607 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:59312][0m
+INFO 2025-08-09 14:21:55,608 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:59316][0m
+INFO 2025-08-09 14:21:55,609 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:59302][0m
+INFO 2025-08-09 14:21:55,612 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:59316][0m
+INFO 2025-08-09 14:21:55,627 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:59316][0m
+INFO 2025-08-09 14:21:55,627 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:59312][0m
+INFO 2025-08-09 14:21:55,630 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:59316][0m
+INFO 2025-08-09 14:25:17,307 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:25:17,329 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:37640][0m
+INFO 2025-08-09 14:25:17,340 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:37656][0m
+INFO 2025-08-09 14:25:17,341 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:37640][0m
+INFO 2025-08-09 14:25:17,342 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:37670][0m
+INFO 2025-08-09 14:25:17,344 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:37656][0m
+INFO 2025-08-09 14:25:17,367 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:37656][0m
+INFO 2025-08-09 14:25:17,367 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:37670][0m
+INFO 2025-08-09 14:25:17,370 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:37670][0m
+INFO 2025-08-09 14:26:17,986 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:26:18,014 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:57688][0m
+INFO 2025-08-09 14:26:18,028 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:57688][0m
+INFO 2025-08-09 14:26:18,029 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:57690][0m
+INFO 2025-08-09 14:26:18,030 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:57694][0m
+INFO 2025-08-09 14:26:18,032 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:57688][0m
+INFO 2025-08-09 14:26:18,052 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:57694][0m
+INFO 2025-08-09 14:26:18,058 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:57694][0m
+INFO 2025-08-09 14:26:18,059 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:57690][0m
+INFO 2025-08-09 14:26:59,019 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:26:59,051 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:57694][0m
+INFO 2025-08-09 14:27:03,476 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:27:03,489 runserver [mHTTP GET /administracao/pessoas/3/foto/modal/ 200 [0.05, 127.0.0.1:57694][0m
+INFO 2025-08-09 14:29:30,860 autoreload /home/thiago/Projetos/gruporom/config/settings.py changed, reloading.
+INFO 2025-08-09 14:29:31,214 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:29:42,450 autoreload /home/thiago/Projetos/gruporom/config/urls.py changed, reloading.
+INFO 2025-08-09 14:29:42,799 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:31:44,967 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:31:44,993 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:46460][0m
+INFO 2025-08-09 14:32:17,051 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:32:17,074 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:46460][0m
+INFO 2025-08-09 14:32:18,787 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:32:18,799 runserver [mHTTP GET /administracao/pessoas/6/foto/modal/ 200 [0.05, 127.0.0.1:46460][0m
+INFO 2025-08-09 14:36:47,424 autoreload /home/thiago/Projetos/gruporom/core/utils/__init__.py changed, reloading.
+INFO 2025-08-09 14:36:47,780 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:36:55,999 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:36:56,346 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:37:19,725 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:37:20,076 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:40:31,235 autoreload /home/thiago/Projetos/gruporom/core/utils/image_processing.py changed, reloading.
+INFO 2025-08-09 14:40:31,600 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:40:37,776 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:40:38,139 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:40:55,471 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:40:55,836 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:41:50,219 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:41:50,247 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:56048][0m
+INFO 2025-08-09 14:41:50,267 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:56050][0m
+INFO 2025-08-09 14:41:50,268 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:56048][0m
+INFO 2025-08-09 14:41:50,269 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:41:50,270 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:56050][0m
+INFO 2025-08-09 14:41:50,292 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:41:50,293 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:56050][0m
+INFO 2025-08-09 14:41:50,295 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:41:53,806 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:41:53,818 runserver [mHTTP GET /administracao/pessoas/2/foto/modal/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:04,226 runserver [mHTTP POST /administracao/pessoas/2/foto/upload/ 200 [0.07, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:04,243 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:04,258 runserver [mHTTP GET /administracao/pessoas/ 200 [0.03, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:14,690 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:14,702 runserver [mHTTP GET /administracao/pessoas/2/foto/modal/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:14,733 runserver [mHTTP GET /media/pessoas/fotos/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967_square.jpg 200 [0.02, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:21,069 runserver [mHTTP POST /administracao/pessoas/2/foto/remover/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:21,113 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:21,143 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:23,915 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:23,926 runserver [mHTTP GET /administracao/pessoas/6/foto/modal/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:29,548 runserver [mHTTP POST /administracao/pessoas/6/foto/upload/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:29,584 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:29,610 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:33,278 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:33,290 runserver [mHTTP GET /administracao/pessoas/6/foto/modal/ 200 [0.04, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:33,316 runserver [mHTTP GET /media/pessoas/fotos/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967_square.jpg 200 [0.02, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:42:55,131 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:42:55,158 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:43:43,164 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:43:43,196 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.08, 127.0.0.1:56052][0m
+INFO 2025-08-09 14:47:07,884 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:47:07,925 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:39420][0m
+INFO 2025-08-09 14:47:09,815 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:47:09,832 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.03, 127.0.0.1:39420][0m
+INFO 2025-08-09 14:47:36,976 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:47:37,002 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.06, 127.0.0.1:39420][0m
+INFO 2025-08-09 14:48:29,058 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:48:29,416 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:48:37,631 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:48:37,978 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:49:35,797 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:49:35,821 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:47238][0m
+INFO 2025-08-09 14:49:39,135 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:49:39,168 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:47238][0m
+INFO 2025-08-09 14:50:08,171 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:50:08,185 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.05, 127.0.0.1:47238][0m
+INFO 2025-08-09 14:50:22,424 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:50:22,774 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:50:27,968 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 14:50:28,315 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 14:50:43,233 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:50:43,260 runserver [mHTTP GET /administracao/pessoas/ 200 [0.08, 127.0.0.1:54214][0m
+INFO 2025-08-09 14:50:43,276 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:54214][0m
+INFO 2025-08-09 14:50:43,276 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:54220][0m
+INFO 2025-08-09 14:50:43,277 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:54228][0m
+INFO 2025-08-09 14:50:43,278 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:54214][0m
+INFO 2025-08-09 14:50:43,295 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:54228][0m
+INFO 2025-08-09 14:50:43,302 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:54228][0m
+INFO 2025-08-09 14:50:43,303 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:54220][0m
+INFO 2025-08-09 14:50:45,742 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:50:45,778 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.08, 127.0.0.1:54228][0m
+INFO 2025-08-09 14:51:10,960 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 14:51:10,980 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.06, 127.0.0.1:54228][0m
+INFO 2025-08-09 15:01:12,685 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 15:01:13,047 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 15:03:54,595 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 15:03:54,937 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 15:09:20,088 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 15:09:20,114 runserver [mHTTP GET /administracao/pessoas/ 200 [0.07, 127.0.0.1:55870][0m
+INFO 2025-08-09 15:09:24,404 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 15:09:24,438 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:55870][0m
+INFO 2025-08-09 15:09:44,185 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.04, 127.0.0.1:55870][0m
+INFO 2025-08-09 15:09:44,219 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 15:09:44,238 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:55870][0m
+INFO 2025-08-09 16:01:13,694 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 16:01:14,040 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:01:36,378 autoreload /home/thiago/Projetos/gruporom/core/forms/pessoa.py changed, reloading.
+INFO 2025-08-09 16:01:36,732 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:02:24,387 autoreload /home/thiago/Projetos/gruporom/core/utils/validators.py changed, reloading.
+INFO 2025-08-09 16:02:24,712 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:05:46,610 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:05:46,637 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:53026][0m
+INFO 2025-08-09 16:05:50,229 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:05:50,272 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.08, 127.0.0.1:53026][0m
+INFO 2025-08-09 16:10:07,691 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:10:08,062 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:10:30,204 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:10:30,233 runserver [mHTTP GET /administracao/pessoas/ 200 [0.08, 127.0.0.1:56390][0m
+INFO 2025-08-09 16:10:30,256 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:56400][0m
+INFO 2025-08-09 16:10:30,257 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:56416][0m
+INFO 2025-08-09 16:10:30,257 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:56390][0m
+INFO 2025-08-09 16:10:30,260 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:56400][0m
+INFO 2025-08-09 16:10:30,275 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:56416][0m
+INFO 2025-08-09 16:10:30,282 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:56400][0m
+INFO 2025-08-09 16:10:30,283 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:56416][0m
+INFO 2025-08-09 16:10:32,528 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:10:32,561 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:56416][0m
+INFO 2025-08-09 16:10:38,735 runserver [mHTTP GET /media/pessoas/passaportes/logo_inclusive_branco.png 200 [0.01, 127.0.0.1:56416][0m
+INFO 2025-08-09 16:13:38,008 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:13:38,036 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:50816][0m
+INFO 2025-08-09 16:13:38,052 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:50830][0m
+INFO 2025-08-09 16:13:38,052 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:50816][0m
+INFO 2025-08-09 16:13:38,053 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:50844][0m
+INFO 2025-08-09 16:13:38,055 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50830][0m
+INFO 2025-08-09 16:13:38,075 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50844][0m
+INFO 2025-08-09 16:13:38,075 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50830][0m
+INFO 2025-08-09 16:13:38,080 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:50844][0m
+INFO 2025-08-09 16:13:40,079 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:13:40,111 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:50844][0m
+INFO 2025-08-09 16:14:01,195 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:14:01,220 runserver [mHTTP GET /administracao/pessoas/2/editar/modal/ 200 [0.05, 127.0.0.1:50844][0m
+INFO 2025-08-09 16:15:42,866 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:15:42,890 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:52614][0m
+INFO 2025-08-09 16:15:42,900 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:52616][0m
+INFO 2025-08-09 16:15:42,901 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:52614][0m
+INFO 2025-08-09 16:15:42,901 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:15:42,903 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:52616][0m
+INFO 2025-08-09 16:15:42,918 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:15:42,918 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:52616][0m
+INFO 2025-08-09 16:15:42,923 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:15:45,005 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:15:45,037 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:16:16,459 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:16:16,477 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.05, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:16:48,896 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.02, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:16:48,920 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:16:48,939 runserver [mHTTP GET /administracao/pessoas/ 200 [0.03, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:16:53,373 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:16:53,410 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:52626][0m
+INFO 2025-08-09 16:18:52,190 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:18:52,216 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:18:54,364 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:18:54,388 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:18:57,897 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:18:57,927 runserver [mHTTP GET /administracao/pessoas/ 200 [0.06, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:18:59,996 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:19:00,032 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.07, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:19:28,504 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.04, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:19:28,545 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:19:28,569 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:19:31,726 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:19:31,775 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.08, 127.0.0.1:50694][0m
+INFO 2025-08-09 16:28:03,890 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:28:03,910 runserver [mHTTP GET /administracao/pessoas/ 200 [0.04, 127.0.0.1:32940][0m
+INFO 2025-08-09 16:28:03,925 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:32960][0m
+INFO 2025-08-09 16:28:03,926 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:32940][0m
+INFO 2025-08-09 16:28:03,926 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:32948][0m
+INFO 2025-08-09 16:28:03,927 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:32960][0m
+INFO 2025-08-09 16:28:03,947 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:32948][0m
+INFO 2025-08-09 16:28:03,947 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:32960][0m
+INFO 2025-08-09 16:28:03,952 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:32960][0m
+INFO 2025-08-09 16:28:05,869 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:28:05,897 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:32960][0m
+INFO 2025-08-09 16:29:38,431 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:29:38,799 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:29:45,999 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:29:46,367 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:29:54,592 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:29:54,956 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:30:16,341 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:30:16,694 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:31:03,322 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:31:03,674 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:31:19,994 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:31:20,346 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:32:51,434 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:32:51,815 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:34:01,561 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:34:01,913 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:34:30,616 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:34:30,661 runserver [mHTTP GET /administracao/pessoas/ 200 [0.09, 127.0.0.1:35422][0m
+INFO 2025-08-09 16:34:32,487 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:34:32,517 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:35422][0m
+INFO 2025-08-09 16:34:54,069 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:34:54,106 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.08, 127.0.0.1:35422][0m
+INFO 2025-08-09 16:35:32,236 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:35:32,588 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:35:40,816 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:35:41,167 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:35:49,388 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:35:49,751 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:35:54,943 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-09 16:35:55,287 autoreload Watching for file changes with StatReloader
+INFO 2025-08-09 16:36:05,219 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:36:05,243 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:40594][0m
+INFO 2025-08-09 16:36:07,432 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:36:07,463 runserver [mHTTP GET /administracao/pessoas/6/editar/modal/ 200 [0.06, 127.0.0.1:40594][0m
+INFO 2025-08-09 16:36:19,436 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:36:19,451 runserver [mHTTP POST /administracao/pessoas/6/atualizar/ 200 [0.03, 127.0.0.1:40594][0m
+INFO 2025-08-09 16:37:26,750 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:37:26,771 runserver [mHTTP GET /administracao/pessoas/ 200 [0.05, 127.0.0.1:37362][0m
+INFO 2025-08-09 16:37:28,946 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:37:28,992 runserver [mHTTP GET /administracao/pessoas/nova/modal/ 200 [0.08, 127.0.0.1:37362][0m
+INFO 2025-08-09 16:51:22,483 cambio Câmbio encontrado no banco para 2025-08-09: R$ 5.4268
+INFO 2025-08-09 16:51:22,496 runserver [mHTTP GET /administracao/pessoas/6/foto/modal/ 200 [0.05, 127.0.0.1:58924][0m
+INFO 2025-08-09 16:51:22,529 runserver [36mHTTP GET /media/pessoas/fotos/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967_square.jpg 304 [0.02, 127.0.0.1:58924][0m

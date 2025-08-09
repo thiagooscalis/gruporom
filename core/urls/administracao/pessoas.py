@@ -11,4 +11,7 @@ urlpatterns = [
     path('<int:pk>/atualizar/', pessoas.atualizar, name='pessoas_atualizar'),
     path('<int:pk>/excluir/modal/', pessoas.excluir_modal, name='pessoas_excluir_modal'),
     path('<int:pk>/excluir/', pessoas.excluir, name='pessoas_excluir'),
+    path('<int:pk>/foto/modal/', pessoas.foto_modal, name='pessoas_foto_modal'),
+    path('<int:pk>/foto/upload/', pessoas.foto_upload, name='pessoas_foto_upload'),
+    path('<int:pk>/foto/remover/', pessoas.foto_remover, name='pessoas_foto_remover'),
 ]

@@ -146,24 +146,6 @@ class FuncaoSeeder:
                 'abreviacao_feminino': 'Pres.ª'
             },
             {
-                'masculino': 'Vice-Presidente',
-                'feminino': 'Vice-Presidenta',
-                'abreviacao_masculino': 'Vice-Pres.',
-                'abreviacao_feminino': 'Vice-Pres.ª'
-            },
-            {
-                'masculino': 'Secretário',
-                'feminino': 'Secretária',
-                'abreviacao_masculino': 'Sec.',
-                'abreviacao_feminino': 'Sec.ª'
-            },
-            {
-                'masculino': 'Tesoureiro',
-                'feminino': 'Tesoureira',
-                'abreviacao_masculino': 'Tes.',
-                'abreviacao_feminino': 'Tes.ª'
-            },
-            {
                 'masculino': 'Diretor',
                 'feminino': 'Diretora',
                 'abreviacao_masculino': 'Dir.',
@@ -182,18 +164,6 @@ class FuncaoSeeder:
                 'feminino': 'Missionária',
                 'abreviacao_masculino': 'Miss.',
                 'abreviacao_feminino': 'Miss.ª'
-            },
-            {
-                'masculino': 'Capelão',
-                'feminino': 'Capelã',
-                'abreviacao_masculino': 'Cap.',
-                'abreviacao_feminino': 'Cap.ª'
-            },
-            {
-                'masculino': 'Ancião',
-                'feminino': 'Anciã',
-                'abreviacao_masculino': 'Anc.',
-                'abreviacao_feminino': 'Anc.ª'
             }
         ]
         
