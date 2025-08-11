@@ -21966,3 +21966,841 @@ INFO 2025-08-11 18:50:45,458 runserver [mHTTP GET /comercial/whatsapp/conversat
 INFO 2025-08-11 18:50:45,466 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:58128][0m
 INFO 2025-08-11 18:51:06,927 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
 INFO 2025-08-11 18:51:06,934 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.02, 127.0.0.1:58128][0m
+INFO 2025-08-11 18:55:11,589 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 18:55:12,327 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:12,355 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.08, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:12,398 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:12,400 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:12,410 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.02, 127.0.0.1:50614][0m
+INFO 2025-08-11 18:55:12,422 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:15,113 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:15,125 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:16,903 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:16,911 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.03, 127.0.0.1:50602][0m
+ERROR 2025-08-11 18:55:18,316 whatsapp Erro geral ao processar envio de template: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 18:55:18,318 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:18,320 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:18,321 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:18,445 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 977, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1045, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:18,449 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.17, 127.0.0.1:50602][0m
+ERROR 2025-08-11 18:55:20,830 whatsapp Erro geral ao processar envio de template: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 18:55:20,831 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:20,833 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:20,833 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:20,879 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 977, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1045, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:20,882 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.08, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:24,102 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:41528][0m
+INFO 2025-08-11 18:55:32,309 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:32,319 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:36,339 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:55:36,348 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.03, 127.0.0.1:50602][0m
+ERROR 2025-08-11 18:55:39,864 whatsapp Erro geral ao processar envio de template: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 18:55:39,867 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:39,869 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:39,870 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:39,914 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 977, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1045, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:55:39,917 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.10, 127.0.0.1:50602][0m
+INFO 2025-08-11 18:55:46,917 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:54910]
+INFO 2025-08-11 18:55:46,963 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:54910]
+INFO 2025-08-11 18:55:46,963 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:56:29,897 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 18:56:30,288 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 18:56:35,071 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:56:40,025 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:51748]
+INFO 2025-08-11 18:56:40,088 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.06, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:56:40,091 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:51748]
+INFO 2025-08-11 18:56:40,091 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:56:41,414 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:51748]
+INFO 2025-08-11 18:56:41,416 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 18:56:41,472 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:56:41,500 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.04, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:56:41,538 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:51754]
+INFO 2025-08-11 18:56:41,549 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:51754]
+INFO 2025-08-11 18:56:41,549 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:56:41,555 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:56:41,556 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:56:41,566 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.02, 127.0.0.1:51762][0m
+INFO 2025-08-11 18:56:41,575 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:56:44,136 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:56:44,147 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.03, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:56:45,978 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:56:45,989 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.04, 127.0.0.1:53796][0m
+ERROR 2025-08-11 18:56:47,172 whatsapp Erro geral ao processar envio de template: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 18:56:47,173 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:56:47,175 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:56:47,177 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:56:47,260 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 979, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1052, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:56:47,264 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.13, 127.0.0.1:53796][0m
+INFO 2025-08-11 18:57:15,198 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 18:57:15,582 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 18:57:20,330 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.01, 127.0.0.1:38736][0m
+INFO 2025-08-11 18:57:25,381 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:38744]
+INFO 2025-08-11 18:57:25,430 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:38736][0m
+INFO 2025-08-11 18:57:25,433 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:38744]
+INFO 2025-08-11 18:57:25,433 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:57:28,226 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:38744]
+INFO 2025-08-11 18:57:28,228 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 18:57:28,267 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:57:28,294 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.04, 127.0.0.1:50256][0m
+INFO 2025-08-11 18:57:28,315 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:50256][0m
+INFO 2025-08-11 18:57:28,315 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:50272][0m
+INFO 2025-08-11 18:57:28,317 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:57:28,319 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:50272][0m
+INFO 2025-08-11 18:57:28,333 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:50272][0m
+INFO 2025-08-11 18:57:28,334 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:57:28,344 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:57:28,348 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:50300]
+INFO 2025-08-11 18:57:28,360 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:50300]
+INFO 2025-08-11 18:57:28,361 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:57:28,368 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:57:28,368 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:57:28,381 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.03, 127.0.0.1:50272][0m
+INFO 2025-08-11 18:57:28,390 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:57:31,712 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:57:31,726 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:57:34,598 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:57:34,608 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.03, 127.0.0.1:50284][0m
+ERROR 2025-08-11 18:57:35,831 whatsapp Erro geral ao processar envio de template: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 18:57:35,832 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:57:35,833 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:57:35,833 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:57:35,875 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 976, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1044, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 18:57:35,879 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.09, 127.0.0.1:50284][0m
+INFO 2025-08-11 18:58:45,124 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 18:58:45,510 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 18:58:50,286 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:55382][0m
+INFO 2025-08-11 18:58:53,789 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 18:58:54,130 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 18:58:55,247 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:55402]
+INFO 2025-08-11 18:58:55,305 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.06, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:58:55,306 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:55402]
+INFO 2025-08-11 18:58:55,306 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:59:25,453 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:55402]
+INFO 2025-08-11 18:59:25,454 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 18:59:25,503 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:25,532 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.04, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:59:25,575 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:41630]
+INFO 2025-08-11 18:59:25,584 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:41630]
+INFO 2025-08-11 18:59:25,584 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 18:59:25,589 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:25,592 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:25,610 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.03, 127.0.0.1:41642][0m
+INFO 2025-08-11 18:59:25,624 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.05, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:59:28,209 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:28,224 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:59:30,142 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:30,154 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.05, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:59:31,215 whatsapp Template processado: Teste Promoção
+INFO 2025-08-11 18:59:31,217 whatsapp Template Teste Promoção enviado para conversa 27
+INFO 2025-08-11 18:59:31,219 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:31,230 runserver [mHTTP POST /comercial/whatsapp/send-template/ 200 [0.05, 127.0.0.1:55394][0m
+ERROR 2025-08-11 18:59:31,791 whatsapp Erro geral ao processar envio de mensagem: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+INFO 2025-08-11 18:59:31,794 runserver [mHTTP POST /comercial/whatsapp/send-message/ 200 [0.04, 127.0.0.1:55394][0m
+INFO 2025-08-11 18:59:38,266 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 18:59:38,291 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:55394][0m

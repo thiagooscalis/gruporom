@@ -971,19 +971,8 @@ def send_template(request):
         # Junta tudo com quebras de linha
         final_content = '\n\n'.join(template_content)
         
-        # Cria mensagem no banco
-        message = WhatsAppMessage.objects.create(
-            account=conversation.account,
-            contact=conversation.contact,
-            conversation=conversation,
-            direction='outbound',
-            message_type='template',
-            content=final_content,
-            timestamp=timezone.now(),
-            status='sent',
-            sent_by=request.user,
-            wamid=f'template_{timezone.now().timestamp()}'
-        )
+        # Não salva no banco - vai usar o fluxo natural de envio
+        logger.info(f"Template processado: {template.display_name}")
         
         # Atualiza última atividade da conversa
         conversation.last_activity = timezone.now()
@@ -992,7 +981,8 @@ def send_template(request):
         logger.info(f"Template {template.display_name} enviado para conversa {conversation_id}")
         
         return render(request, 'comercial/whatsapp/partials/send_template_success.html', {
-            'template': template
+            'template': template,
+            'final_content': final_content
         })
         
     except Exception as e:
