@@ -120,11 +120,11 @@ def criar(request):
             response['HX-Redirect'] = request.META.get('HTTP_REFERER', '/administracao/pessoas/')
             return response
         else:
-            # Retorna o formulário com erros
+            # Retorna apenas o conteúdo do modal body com erros (não o modal completo)
             context = {
                 'form': form,
             }
-            return render(request, 'administracao/pessoas/modal_form.html', context)
+            return render(request, 'administracao/pessoas/modal_form_body.html', context)
     
     return redirect('/administracao/pessoas/')
 

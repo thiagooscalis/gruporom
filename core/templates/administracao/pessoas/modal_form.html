@@ -7,19 +7,71 @@
                 <h5 class="modal-title">Nova Pessoa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#pessoaModal" hx-swap="outerHTML" id="formPessoa" enctype="multipart/form-data">
+            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#modal-body-content" hx-swap="outerHTML" id="formPessoa" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body-content">
                     <div class="row">
+                        <!-- ========== CAMPOS OBRIGATÓRIOS ========== -->
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-asterisk me-2"></i>Dados Obrigatórios
+                            </h6>
+                        </div>
+                        
+                        <!-- Nome (obrigatório) -->
                         <div class="col-md-12 mb-3">
                             {{ form.nome|as_crispy_field }}
                         </div>
                         
+                        <!-- Documento (obrigatório) -->
                         <div class="col-md-6 mb-3">
                             {{ form.tipo_doc|as_crispy_field }}
                         </div>
                         <div class="col-md-6 mb-3">
                             {{ form.doc|as_crispy_field }}
+                        </div>
+                        
+                        <!-- Email Principal (obrigatório) -->
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Email Principal <span class="text-danger">*</span></label>
+                            {{ form.email1|as_crispy_field }}
+                        </div>
+                        
+                        <!-- Telefone Principal (obrigatório) -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Telefone Principal <span class="text-danger">*</span></label>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ form.ddi1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.ddd1|as_crispy_field }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.telefone1|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botão Salvar Rápido após campos obrigatórios -->
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span>Você já pode salvar com apenas os dados obrigatórios preenchidos</span>
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check me-2"></i>Salvar Agora
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- ========== DADOS PESSOAIS (OPCIONAIS) ========== -->
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-user me-2"></i>Dados Pessoais
+                            </h6>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -33,25 +85,17 @@
                             {{ form.funcao|as_crispy_field }}
                         </div>
                         
-                        <!-- Telefones -->
+                        <!-- ========== CONTATOS ADICIONAIS (OPCIONAIS) ========== -->
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-address-book me-2"></i>Contatos Adicionais
+                            </h6>
+                        </div>
+                        
+                        <!-- Telefones Adicionais -->
                         <div class="col-12 mb-3">
-                            <h6 class="text-muted mb-3">Telefones</h6>
-                            
-                            <!-- Telefone 1 (obrigatório) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <span class="badge bg-primary">Principal</span>
-                                </div>
-                            </div>
+                            <label class="form-label text-muted">Telefones Adicionais</label>
                             
                             <!-- Telefone 2 (opcional) -->
                             <div class="row mb-2">
@@ -80,19 +124,9 @@
                             </div>
                         </div>
                         
-                        <!-- Emails -->
+                        <!-- Emails Adicionais -->
                         <div class="col-12 mb-3">
-                            <h6 class="text-muted mb-3">Emails</h6>
-                            
-                            <!-- Email 1 (obrigatório) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <span class="badge bg-primary">Principal</span>
-                                </div>
-                            </div>
+                            <label class="form-label text-muted">Emails Adicionais</label>
                             
                             <!-- Email 2 (opcional) -->
                             <div class="row mb-2">
@@ -109,28 +143,12 @@
                             </div>
                         </div>
                         
+                        <!-- ========== ENDEREÇO (OPCIONAL) ========== -->
                         <div class="col-12">
                             <hr class="my-3">
-                            <h6 class="text-muted mb-3">Dados do Passaporte</h6>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_numero|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_validade|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_nome|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_copia|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">Endereço</h6>
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i>Endereço
+                            </h6>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -160,8 +178,34 @@
                             {{ form.pais|as_crispy_field }}
                         </div>
                         
+                        <!-- ========== PASSAPORTE (OPCIONAL) ========== -->
                         <div class="col-12">
                             <hr class="my-3">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-passport me-2"></i>Dados do Passaporte
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_numero|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_validade|as_crispy_field }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_nome|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.passaporte_copia|as_crispy_field }}
+                        </div>
+                        
+                        <!-- ========== EMPRESA (OPCIONAL) ========== -->
+                        <div class="col-12">
+                            <hr class="my-3">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-building me-2"></i>Dados Empresariais
+                            </h6>
                         </div>
                         
                         <div class="col-md-6 mb-3">

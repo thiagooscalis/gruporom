@@ -1,0 +1,246 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-body" id="modal-body-content">
+    <div class="row">
+        <!-- ========== CAMPOS OBRIGATÓRIOS ========== -->
+        <div class="col-12">
+            <h6 class="text-primary mb-3">
+                <i class="fas fa-asterisk me-2"></i>Dados Obrigatórios
+            </h6>
+        </div>
+        
+        <!-- Nome (obrigatório) -->
+        <div class="col-md-12 mb-3">
+            {{ form.nome|as_crispy_field }}
+        </div>
+        
+        <!-- Documento (obrigatório) -->
+        <div class="col-md-6 mb-3">
+            {{ form.tipo_doc|as_crispy_field }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.doc|as_crispy_field }}
+        </div>
+        
+        <!-- Email Principal (obrigatório) -->
+        <div class="col-md-12 mb-3">
+            <label class="form-label">Email Principal <span class="text-danger">*</span></label>
+            {{ form.email1|as_crispy_field }}
+        </div>
+        
+        <!-- Telefone Principal (obrigatório) -->
+        <div class="col-12 mb-3">
+            <label class="form-label">Telefone Principal <span class="text-danger">*</span></label>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form.ddi1|as_crispy_field }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.ddd1|as_crispy_field }}
+                </div>
+                <div class="col-md-8">
+                    {{ form.telefone1|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botão Salvar Rápido após campos obrigatórios -->
+        <div class="col-12 mb-3">
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span>Você já pode salvar com apenas os dados obrigatórios preenchidos</span>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check me-2"></i>Salvar Agora
+                </button>
+            </div>
+        </div>
+        
+        <!-- ========== DADOS PESSOAIS (OPCIONAIS) ========== -->
+        <div class="col-12">
+            <hr class="my-3">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-user me-2"></i>Dados Pessoais
+            </h6>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            {{ form.nascimento|as_crispy_field }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.sexo|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-12 mb-3">
+            {{ form.funcao|as_crispy_field }}
+        </div>
+        
+        <!-- ========== CONTATOS ADICIONAIS (OPCIONAIS) ========== -->
+        <div class="col-12">
+            <hr class="my-3">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-address-book me-2"></i>Contatos Adicionais
+            </h6>
+        </div>
+        
+        <!-- Telefones Adicionais -->
+        <div class="col-12 mb-3">
+            <label class="form-label text-muted">Telefones Adicionais</label>
+            
+            <!-- Telefone 2 (opcional) -->
+            <div class="row mb-2">
+                <div class="col-md-2">
+                    {{ form.ddi2|as_crispy_field }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.ddd2|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.telefone2|as_crispy_field }}
+                </div>
+            </div>
+            
+            <!-- Telefone 3 (opcional) -->
+            <div class="row mb-2">
+                <div class="col-md-2">
+                    {{ form.ddi3|as_crispy_field }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.ddd3|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.telefone3|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Emails Adicionais -->
+        <div class="col-12 mb-3">
+            <label class="form-label text-muted">Emails Adicionais</label>
+            
+            <!-- Email 2 (opcional) -->
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    {{ form.email2|as_crispy_field }}
+                </div>
+            </div>
+            
+            <!-- Email 3 (opcional) -->
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    {{ form.email3|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== ENDEREÇO (OPCIONAL) ========== -->
+        <div class="col-12">
+            <hr class="my-3">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-map-marker-alt me-2"></i>Endereço
+            </h6>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            {{ form.endereco|as_crispy_field }}
+        </div>
+        <div class="col-md-2 mb-3">
+            {{ form.numero|as_crispy_field }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.complemento|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            {{ form.bairro|as_crispy_field }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.cidade|as_crispy_field }}
+        </div>
+        <div class="col-md-1 mb-3">
+            {{ form.estado|as_crispy_field }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.cep|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-12 mb-3">
+            {{ form.pais|as_crispy_field }}
+        </div>
+        
+        <!-- ========== PASSAPORTE (OPCIONAL) ========== -->
+        <div class="col-12">
+            <hr class="my-3">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-passport me-2"></i>Dados do Passaporte
+            </h6>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            {{ form.passaporte_numero|as_crispy_field }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.passaporte_validade|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            {{ form.passaporte_nome|as_crispy_field }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.passaporte_copia|as_crispy_field }}
+        </div>
+        
+        <!-- ========== EMPRESA (OPCIONAL) ========== -->
+        <div class="col-12">
+            <hr class="my-3">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-building me-2"></i>Dados Empresariais
+            </h6>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <div class="form-check">
+                {{ form.empresa_gruporom }}
+                <label class="form-check-label" for="{{ form.empresa_gruporom.id_for_label }}">
+                    {{ form.empresa_gruporom.label }}
+                </label>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-3" id="tipo-empresa-field" style="display: none;">
+            {{ form.tipo_empresa|as_crispy_field }}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Reinicializar máscaras e eventos após atualização HTMX
+    (function() {
+        // Reinicializar máscaras se necessário
+        if (window.initMasks) {
+            window.initMasks();
+        }
+        
+        // Controlar visibilidade do campo tipo_empresa
+        const empresaGruporomCheckbox = document.getElementById('{{ form.empresa_gruporom.id_for_label }}');
+        const tipoEmpresaField = document.getElementById('tipo-empresa-field');
+        
+        if (empresaGruporomCheckbox && tipoEmpresaField) {
+            function toggleTipoEmpresa() {
+                if (empresaGruporomCheckbox.checked) {
+                    tipoEmpresaField.style.display = 'block';
+                } else {
+                    tipoEmpresaField.style.display = 'none';
+                    const tipoEmpresaSelect = tipoEmpresaField.querySelector('select');
+                    if (tipoEmpresaSelect) {
+                        tipoEmpresaSelect.value = '';
+                    }
+                }
+            }
+            
+            toggleTipoEmpresa();
+            empresaGruporomCheckbox.addEventListener('change', toggleTipoEmpresa);
+        }
+    })();
+</script>

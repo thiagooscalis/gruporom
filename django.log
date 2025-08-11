@@ -20633,3 +20633,134 @@ INFO 2025-08-11 12:40:08,374 cambio Câmbio encontrado no banco para 2025-08-11:
 INFO 2025-08-11 12:40:08,390 runserver [mHTTP GET /administracao/ 200 [0.03, 127.0.0.1:35172][0m
 INFO 2025-08-11 12:40:11,211 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
 INFO 2025-08-11 12:40:11,244 runserver [mHTTP GET /administracao/usuarios/ 200 [0.08, 127.0.0.1:35172][0m
+INFO 2025-08-11 13:22:17,955 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 13:22:23,310 runserver [32mHTTP GET / 302 [0.03, 127.0.0.1:50476][0m
+INFO 2025-08-11 13:22:23,324 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:22:23,348 runserver [mHTTP GET /administracao/ 200 [0.04, 127.0.0.1:50476][0m
+INFO 2025-08-11 13:22:25,725 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:22:25,750 runserver [mHTTP GET /administracao/usuarios/ 200 [0.08, 127.0.0.1:50478][0m
+INFO 2025-08-11 13:22:27,511 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:22:27,521 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.02, 127.0.0.1:50478][0m
+INFO 2025-08-11 13:22:29,218 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:22:29,245 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.06, 127.0.0.1:50478][0m
+INFO 2025-08-11 13:23:33,654 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:23:33,671 runserver [mHTTP POST /administracao/pessoas/criar/ 200 [0.07, 127.0.0.1:43720][0m
+INFO 2025-08-11 13:24:35,583 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:24:35,597 runserver [mHTTP GET /administracao/usuarios/ 200 [0.03, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:24:39,228 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:24:39,262 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.06, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:24:40,785 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:24:40,806 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.05, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:25:15,093 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:25:15,137 runserver [mHTTP POST /administracao/pessoas/criar/ 200 [0.07, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:25:22,150 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:25:22,169 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.05, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:25:23,934 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:25:23,966 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.06, 127.0.0.1:56392][0m
+INFO 2025-08-11 13:26:29,005 autoreload /home/thiago/Projetos/gruporom/core/views/administracao/pessoas.py changed, reloading.
+INFO 2025-08-11 13:26:29,376 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 13:27:42,318 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:27:42,349 runserver [mHTTP GET /administracao/usuarios/ 200 [0.07, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:27:43,025 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:27:43,039 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:27:44,406 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:27:44,444 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.06, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:27:45,970 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:27:46,004 runserver [mHTTP GET /administracao/pessoas/nova/modal/simples/ 200 [0.07, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:27:58,116 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:27:58,132 runserver [mHTTP POST /administracao/pessoas/criar/ 200 [0.07, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:28:29,689 runserver [mHTTP POST /administracao/pessoas/criar/ 200 [0.04, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:28:29,737 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:28:29,751 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:28:34,774 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:28:34,791 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.04, 127.0.0.1:33264][0m
+ERROR 2025-08-11 13:28:39,175 log Internal Server Error: /administracao/buscar-pessoas/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/pessoas.py", line 34, in buscar_pessoas
+    pessoas_query.filter(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1503, in build_filter
+    return self._add_q(
+           ^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'email' into field. Choices are: bairro, caravanas_empresa, caravanas_lideres, caravanas_promotor, caravanas_responsavel, cargos, cep, cidade, colaborador, complemento, ddd1, ddd2, ddd3, ddi1, ddi2, ddi3, doc, email1, email2, email3, empresa_gruporom, endereco, estado, fornecedor, fornecedores_relacionados, foto, funcao, funcao_id, id, nascimento, nome, numero, pais, pais_id, passageiro, passaporte_copia, passaporte_nome, passaporte_numero, passaporte_validade, sexo, slug, telefone1, telefone2, telefone3, tipo_doc, tipo_empresa, usuario, usuarios_empresa, whatsapp_contacts
+ERROR 2025-08-11 13:28:39,178 runserver [35;1mHTTP GET /administracao/buscar-pessoas/?q=maria 500 [0.07, 127.0.0.1:33264][0m
+INFO 2025-08-11 13:29:14,594 autoreload /home/thiago/Projetos/gruporom/core/views/pessoas.py changed, reloading.
+INFO 2025-08-11 13:29:14,950 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 13:29:28,245 autoreload /home/thiago/Projetos/gruporom/core/views/pessoas.py changed, reloading.
+INFO 2025-08-11 13:29:28,593 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 13:29:37,647 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:29:37,669 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:29:40,454 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:29:40,482 runserver [mHTTP GET /administracao/usuarios/novo/modal/ 200 [0.06, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:29:43,275 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:29:43,291 runserver [mHTTP GET /administracao/buscar-pessoas/?q=maria 200 [0.05, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:29:59,535 runserver [mHTTP POST /administracao/usuarios/criar/ 200 [0.24, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:29:59,573 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:29:59,595 runserver [mHTTP GET /administracao/usuarios/ 200 [0.05, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:04,116 runserver [32mHTTP POST /logout/ 302 [0.04, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:04,143 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:30:04,155 runserver [mHTTP GET /login/ 200 [0.03, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:08,766 runserver [32mHTTP POST /login/ 302 [0.20, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:08,776 runserver [32mHTTP GET / 302 [0.01, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:08,789 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:30:08,804 runserver [mHTTP GET /comercial/ 200 [0.03, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:11,218 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:30:11,223 runserver [mHTTP GET /alterar-senha/form/ 200 [0.02, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:14,671 runserver [32mHTTP POST /logout/ 302 [0.03, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:14,697 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:30:14,705 runserver [mHTTP GET /login/ 200 [0.03, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:20,565 runserver [32mHTTP POST /login/ 302 [0.19, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:20,574 runserver [32mHTTP GET / 302 [0.01, 127.0.0.1:45922][0m
+INFO 2025-08-11 13:30:20,587 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 13:30:20,594 runserver [mHTTP GET /administracao/ 200 [0.02, 127.0.0.1:45922][0m

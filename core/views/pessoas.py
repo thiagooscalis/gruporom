@@ -34,7 +34,9 @@ def buscar_pessoas(request, area):
         pessoas_query.filter(
             Q(nome__icontains=query)
             | Q(doc__icontains=query)
-            | Q(email__icontains=query)
+            | Q(email1__icontains=query)
+            | Q(email2__icontains=query)
+            | Q(email3__icontains=query)
         )
         .order_by("nome")[:20]
     )  # Limita a 20 resultados
@@ -69,7 +71,9 @@ def buscar_pessoas_para_edicao(request, area):
         .filter(
             Q(nome__icontains=query)
             | Q(doc__icontains=query)
-            | Q(email__icontains=query)
+            | Q(email1__icontains=query)
+            | Q(email2__icontains=query)
+            | Q(email3__icontains=query)
         )
         .order_by("nome")[:20]
     )
