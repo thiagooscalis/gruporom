@@ -16,3 +16,4 @@ node_modules/
 gruporom.sublime-workspace
 logs/
 media/
+django.log
