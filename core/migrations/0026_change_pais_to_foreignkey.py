@@ -4,43 +4,41 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
-def clear_pais_data(apps, schema_editor):
+def backup_pais_data(apps, schema_editor):
     """
-    Limpa os dados de país existentes (texto) antes da conversão para ForeignKey.
+    Salva os dados de país existentes antes da remoção do campo.
     """
     from django.db import connection
     
-    # Primeiro, salvamos os dados existentes em uma tabela temporária
     with connection.cursor() as cursor:
-        # Cria tabela temporária para backup dos dados
+        # Cria tabela temporária para backup
         cursor.execute("""
-            CREATE TEMPORARY TABLE temp_pessoa_pais AS 
-            SELECT id, pais FROM core_pessoa WHERE pais IS NOT NULL AND pais != ''
+            CREATE TABLE IF NOT EXISTS temp_pessoa_pais_backup (
+                pessoa_id INTEGER,
+                pais_nome VARCHAR(255)
+            )
         """)
         
-        # Limpa os dados de país para permitir a conversão
-        cursor.execute("UPDATE core_pessoa SET pais = NULL")
+        # Salva os dados existentes
+        cursor.execute("""
+            INSERT INTO temp_pessoa_pais_backup (pessoa_id, pais_nome)
+            SELECT id, pais FROM core_pessoa 
+            WHERE pais IS NOT NULL AND pais != ''
+        """)
 
 
 def restore_pais_data(apps, schema_editor):
     """
-    Tenta restaurar os dados de país convertendo texto para ForeignKey.
+    Restaura os dados convertendo texto para ForeignKey.
     """
     from django.db import connection
     Pessoa = apps.get_model('core', 'Pessoa')
     Pais = apps.get_model('core', 'Pais')
     
     with connection.cursor() as cursor:
-        # Verifica se a tabela temporária existe
-        cursor.execute("""
-            SELECT EXISTS (
-                SELECT FROM information_schema.tables 
-                WHERE table_name = 'temp_pessoa_pais'
-            )
-        """)
-        if cursor.fetchone()[0]:
+        try:
             # Recupera os dados salvos
-            cursor.execute("SELECT id, pais FROM temp_pessoa_pais")
+            cursor.execute("SELECT pessoa_id, pais_nome FROM temp_pessoa_pais_backup")
             for pessoa_id, pais_nome in cursor.fetchall():
                 try:
                     # Tenta encontrar o país pelo nome
@@ -49,11 +47,16 @@ def restore_pais_data(apps, schema_editor):
                         Pessoa.objects.filter(id=pessoa_id).update(pais=pais_obj)
                 except:
                     pass  # Ignora erros, deixa como null
+            
+            # Remove a tabela temporária
+            cursor.execute("DROP TABLE IF EXISTS temp_pessoa_pais_backup")
+        except:
+            pass  # Ignora se a tabela não existir
 
 
-def reverse_clear_pais_data(apps, schema_editor):
+def reverse_operations(apps, schema_editor):
     """
-    Reverse da limpeza dos dados.
+    Reverse das operações.
     """
     pass
 
@@ -65,13 +68,20 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Primeiro limpa os dados de país
+        # Primeiro salva os dados
         migrations.RunPython(
-            clear_pais_data,
-            reverse_clear_pais_data,
+            backup_pais_data,
+            reverse_operations,
         ),
-        # Depois altera o campo
-        migrations.AlterField(
+        
+        # Remove o campo antigo
+        migrations.RemoveField(
+            model_name="pessoa",
+            name="pais",
+        ),
+        
+        # Adiciona o novo campo como ForeignKey
+        migrations.AddField(
             model_name="pessoa",
             name="pais",
             field=models.ForeignKey(
@@ -82,9 +92,10 @@ class Migration(migrations.Migration):
                 verbose_name="País",
             ),
         ),
-        # Por último tenta restaurar os dados convertidos
+        
+        # Restaura os dados convertidos
         migrations.RunPython(
             restore_pais_data,
-            reverse_clear_pais_data,
+            reverse_operations,
         ),
     ]
