@@ -4,20 +4,46 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
-def clear_pais_field(apps, schema_editor):
+def convert_pais_field_manually(apps, schema_editor):
     """
-    Limpa todos os valores do campo pais para evitar erro de conversão.
+    Converte o campo pais manualmente via SQL puro.
     """
     from django.db import connection
+    
     with connection.cursor() as cursor:
+        # 1. Remove dados existentes
         cursor.execute("UPDATE core_pessoa SET pais = NULL")
+        
+        # 2. Remove o campo antigo
+        cursor.execute("ALTER TABLE core_pessoa DROP COLUMN pais")
+        
+        # 3. Adiciona novo campo como integer
+        cursor.execute("ALTER TABLE core_pessoa ADD COLUMN pais INTEGER")
+        
+        # 4. Adiciona constraint de foreign key
+        cursor.execute("""
+            ALTER TABLE core_pessoa 
+            ADD CONSTRAINT core_pessoa_pais_id_fkey 
+            FOREIGN KEY (pais) REFERENCES core_pais(id) 
+            ON DELETE SET NULL
+        """)
 
 
-def reverse_clear_pais_field(apps, schema_editor):
+def reverse_convert_pais_field(apps, schema_editor):
     """
-    Não faz nada no reverse.
+    Reverse - converte de volta para CharField.
     """
-    pass
+    from django.db import connection
+    
+    with connection.cursor() as cursor:
+        # Remove foreign key constraint
+        cursor.execute("ALTER TABLE core_pessoa DROP CONSTRAINT IF EXISTS core_pessoa_pais_id_fkey")
+        
+        # Remove campo
+        cursor.execute("ALTER TABLE core_pessoa DROP COLUMN pais")
+        
+        # Adiciona campo como varchar
+        cursor.execute("ALTER TABLE core_pessoa ADD COLUMN pais VARCHAR(100)")
 
 
 class Migration(migrations.Migration):
@@ -27,21 +53,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Primeiro limpa todos os dados
         migrations.RunPython(
-            clear_pais_field,
-            reverse_clear_pais_field,
-        ),
-        # Depois altera o campo
-        migrations.AlterField(
-            model_name="pessoa",
-            name="pais",
-            field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                to="core.pais",
-                verbose_name="País",
-            ),
+            convert_pais_field_manually,
+            reverse_convert_pais_field,
         ),
     ]
