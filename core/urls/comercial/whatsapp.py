@@ -3,11 +3,13 @@ from core.views.comercial import whatsapp as views
 
 urlpatterns = [
     path('', views.dashboard, name='whatsapp'),
+    path('geral/', views.whatsapp_geral, name='whatsapp_geral'),
     
     # AJAX/HTMX endpoints
     path('my-conversations/', views.my_conversations, name='my_conversations'),
     path('pending-conversations/', views.pending_conversations, name='pending_conversations'),
     path('conversation/<int:conversation_id>/messages/', views.conversation_messages, name='conversation_messages'),
+    path('conversation/<int:conversation_id>/messages-readonly/', views.conversation_messages_readonly, name='conversation_messages_readonly'),
     path('pending-count/', views.pending_count, name='pending_count'),
     
     # Actions

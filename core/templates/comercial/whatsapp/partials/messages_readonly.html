@@ -1,0 +1,104 @@
+{% if messages %}
+    <!-- Informações da conversa -->
+    <div class="mb-3 p-3 bg-light rounded">
+        <div class="row">
+            <div class="col-md-6">
+                <strong><i class="fas fa-user me-1"></i> Contato:</strong>
+                <span class="ms-1">{{ conversation.contact.name|default:conversation.contact.profile_name|default:"Sem nome" }}</span>
+                <br>
+                <strong><i class="fas fa-phone me-1"></i> Telefone:</strong>
+                <span class="ms-1">{{ conversation.contact.phone_number }}</span>
+            </div>
+            <div class="col-md-6">
+                <strong><i class="fas fa-user-tie me-1"></i> Atendente:</strong>
+                {% if conversation.assigned_to %}
+                    <span class="ms-1">{{ conversation.assigned_to.pessoa.nome|default:conversation.assigned_to.username }}</span>
+                {% else %}
+                    <span class="text-muted ms-1">Não atribuída</span>
+                {% endif %}
+                <br>
+                <strong><i class="fas fa-info-circle me-1"></i> Status:</strong>
+                {% if conversation.status == 'pending' %}
+                    <span class="badge bg-danger ms-1">Pendente</span>
+                {% elif conversation.status == 'assigned' %}
+                    <span class="badge bg-warning ms-1">Atribuída</span>
+                {% elif conversation.status == 'in_progress' %}
+                    <span class="badge bg-info ms-1">Em Andamento</span>
+                {% elif conversation.status == 'resolved' %}
+                    <span class="badge bg-success ms-1">Resolvida</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensagens -->
+    <div class="messages-container-readonly" style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 1rem;">
+        {% for message in messages %}
+        <div class="message-readonly mb-3">
+            <div class="d-flex {% if message.direction == 'outbound' %}justify-content-end{% else %}justify-content-start{% endif %}">
+                <div class="message-bubble-readonly {% if message.direction == 'outbound' %}bg-primary text-white{% else %}bg-light border{% endif %}" 
+                     style="max-width: 70%; padding: 0.75rem; border-radius: 18px;">
+                    <div class="mb-1">{{ message.content }}</div>
+                    <div class="d-flex align-items-center justify-content-between" 
+                         style="font-size: 0.75rem; {% if message.direction == 'outbound' %}color: rgba(255,255,255,0.8);{% else %}color: #6c757d;{% endif %}">
+                        <span>{{ message.timestamp|date:"d/m H:i" }}</span>
+                        {% if message.direction == 'outbound' %}
+                            <div class="ms-2">
+                                {% if message.sent_by %}
+                                    <span class="me-1">{{ message.sent_by.pessoa.nome|default:message.sent_by.username }}</span>
+                                {% endif %}
+                                {% if message.status == 'sent' %}
+                                    <i class="fas fa-check" title="Enviada"></i>
+                                {% elif message.status == 'delivered' %}
+                                    <i class="fas fa-check-double" title="Entregue"></i>
+                                {% elif message.status == 'read' %}
+                                    <i class="fas fa-check-double text-info" title="Lida"></i>
+                                {% elif message.status == 'failed' %}
+                                    <i class="fas fa-exclamation-triangle text-warning" title="Falha no envio"></i>
+                                {% elif message.status == 'sending' %}
+                                    <i class="fas fa-clock text-warning" title="Enviando..."></i>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Estatísticas da conversa -->
+    <div class="row mt-3 text-sm">
+        <div class="col-md-4">
+            <strong><i class="fas fa-envelope me-1"></i> Total de mensagens:</strong>
+            <span class="badge bg-secondary ms-1">{{ messages|length }}</span>
+        </div>
+        {% if conversation.assigned_at %}
+        <div class="col-md-4">
+            <strong><i class="fas fa-calendar me-1"></i> Atribuída em:</strong>
+            <span class="text-muted ms-1">{{ conversation.assigned_at|date:"d/m/Y H:i" }}</span>
+        </div>
+        {% endif %}
+        <div class="col-md-4">
+            <strong><i class="fas fa-clock me-1"></i> Última atividade:</strong>
+            <span class="text-muted ms-1">{{ conversation.last_activity|date:"d/m/Y H:i" }}</span>
+        </div>
+    </div>
+
+{% else %}
+    <div class="text-center text-muted py-5">
+        <i class="fas fa-comments fa-4x mb-3"></i>
+        <h5>Nenhuma mensagem</h5>
+        <p>Esta conversa ainda não possui mensagens.</p>
+    </div>
+{% endif %}
+
+<script>
+// Auto-scroll para última mensagem
+setTimeout(function() {
+    const container = document.querySelector('.messages-container-readonly');
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+}, 100);
+</script>

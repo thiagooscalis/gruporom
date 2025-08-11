@@ -17,6 +17,80 @@ logger = logging.getLogger(__name__)
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def whatsapp_geral(request):
+    """
+    Página WhatsApp Geral - visualiza todas as conversas de todos os atendentes
+    """
+    # Busca todas as conversas ordenadas por data de última atividade
+    from django.db.models import Subquery, OuterRef
+    
+    # Subquery para buscar a última mensagem de cada conversa
+    latest_message = WhatsAppMessage.objects.filter(
+        conversation=OuterRef('pk')
+    ).order_by('-timestamp').values('content')[:1]
+    
+    conversas = WhatsAppConversation.objects.select_related(
+        'account', 'assigned_to', 'assigned_to__pessoa', 'contact'
+    ).annotate(
+        message_count=Count('messages'),
+        last_message_content=Subquery(latest_message)
+    ).order_by('-atualizado_em')
+    
+    # Filtros opcionais
+    status_filter = request.GET.get('status', '')
+    atendente_filter = request.GET.get('atendente', '')
+    search = request.GET.get('search', '')
+    
+    if status_filter:
+        conversas = conversas.filter(status=status_filter)
+    
+    if atendente_filter:
+        if atendente_filter == 'unassigned':
+            conversas = conversas.filter(assigned_to__isnull=True)
+        else:
+            conversas = conversas.filter(assigned_to__id=atendente_filter)
+    
+    if search:
+        conversas = conversas.filter(
+            Q(contact__name__icontains=search) |
+            Q(contact__profile_name__icontains=search) |
+            Q(contact__phone_number__icontains=search) |
+            Q(last_message_content__icontains=search)
+        )
+    
+    # Estatísticas
+    stats = {
+        'total': WhatsAppConversation.objects.count(),
+        'pending': WhatsAppConversation.objects.filter(status='pending').count(),
+        'assigned': WhatsAppConversation.objects.filter(status='assigned').count(),
+        'in_progress': WhatsAppConversation.objects.filter(status='in_progress').count(),
+        'resolved': WhatsAppConversation.objects.filter(status='resolved').count(),
+    }
+    
+    # Lista de atendentes para filtro
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    atendentes = User.objects.filter(
+        groups__name='Comercial',
+        whatsapp_conversations__isnull=False
+    ).distinct().select_related('pessoa')
+    
+    context = {
+        'title': 'WhatsApp Geral',
+        'conversas': conversas,
+        'stats': stats,
+        'atendentes': atendentes,
+        'status_filter': status_filter,
+        'atendente_filter': atendente_filter,
+        'search': search,
+        'status_choices': WhatsAppConversation.STATUS_CHOICES,
+    }
+    
+    return render(request, 'comercial/whatsapp/geral.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 @require_POST
 def test_websocket(request):
     """
@@ -245,6 +319,29 @@ def conversation_messages(request, conversation_id):
     
     return render(request, 'comercial/whatsapp/partials/messages.html', {
         'messages': messages
+    })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def conversation_messages_readonly(request, conversation_id):
+    """
+    Retorna mensagens de qualquer conversa (para visualização read-only no WhatsApp Geral)
+    """
+    conversation = get_object_or_404(
+        WhatsAppConversation.objects.select_related(
+            'contact', 'assigned_to', 'assigned_to__pessoa'
+        ),
+        id=conversation_id
+    )
+    
+    messages = conversation.messages.select_related(
+        'contact', 'sent_by', 'sent_by__pessoa'
+    ).order_by('timestamp')
+    
+    return render(request, 'comercial/whatsapp/partials/messages_readonly.html', {
+        'messages': messages,
+        'conversation': conversation
     })
 
 

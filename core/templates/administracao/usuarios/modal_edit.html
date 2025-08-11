@@ -73,7 +73,7 @@
                             {% endif %}
                         </div>
                         <div class="card-body pt-2">
-                            <div class="form-check form-switch">
+                            <div class="form-check form-switch mb-3">
                                 {{ form.is_active }}
                                 <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
                                     <strong>{{ form.is_active.label }}</strong>
@@ -83,6 +83,17 @@
                                         {% else %}
                                             Usuário pode fazer login no sistema
                                         {% endif %}
+                                    </small>
+                                </label>
+                            </div>
+                            
+                            <div class="form-check form-switch">
+                                {{ form.gerente_comercial }}
+                                <label class="form-check-label" for="{{ form.gerente_comercial.id_for_label }}">
+                                    <strong>{{ form.gerente_comercial.label }}</strong>
+                                    <small class="d-block text-muted">
+                                        <i class="fas fa-shield-alt text-warning me-1"></i>
+                                        Acesso à página WhatsApp Geral
                                     </small>
                                 </label>
                             </div>

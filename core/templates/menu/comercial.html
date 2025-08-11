@@ -7,8 +7,15 @@
 </li>
 
 <li class="nav-item">
-    <a href="{% url 'comercial:whatsapp' %}" class="nav-link {% if 'whatsapp' in request.path %}text-warning{% else %}text-light{% endif %}">
+    <a href="{% url 'comercial:whatsapp' %}" class="nav-link {% if request.resolver_match.url_name == 'whatsapp' %}text-warning{% else %}text-light{% endif %}">
         <i class="fab fa-whatsapp"></i>
         <span class="ms-2">WhatsApp</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{% url 'comercial:whatsapp_geral' %}" class="nav-link {% if request.resolver_match.url_name == 'whatsapp_geral' %}text-warning{% else %}text-light{% endif %}">
+        <i class="fas fa-comments"></i>
+        <span class="ms-2">WhatsApp Geral</span>
     </a>
 </li>

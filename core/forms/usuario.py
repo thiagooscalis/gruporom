@@ -71,12 +71,16 @@ class UsuarioForm(forms.ModelForm):
             "pessoa_search",
             "username",
             "is_active",
+            "gerente_comercial",
             "groups",
             "empresas",
         ]
         widgets = {
             "username": forms.TextInput(attrs={"class": "form-control"}),
             "is_active": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}
+            ),
+            "gerente_comercial": forms.CheckboxInput(
                 attrs={"class": "form-check-input"}
             ),
         }
