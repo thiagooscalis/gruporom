@@ -8,8 +8,9 @@
     /* Layout do Chat */
     .chat-container {
         background: #f0f2f5;
-        height: calc(100vh - 180px); /* Altura fixa menos header/breadcrumb */
-        max-height: calc(100vh - 180px);
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
     }
     
     /* Lista de Contatos */
@@ -20,17 +21,21 @@
         border-right: 1px solid #ddd;
         display: flex;
         flex-direction: column;
+        height: 100%;
     }
     
     .contacts-header {
         padding: 15px;
         background: #f0f2f5;
         border-bottom: 1px solid #ddd;
+        flex-shrink: 0;
     }
     
     .contacts-list {
         flex: 1;
         overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 0;
     }
     
     .contact-item {
@@ -46,6 +51,44 @@
     
     .contact-item.active {
         background: #e9f3fb;
+    }
+    
+    /* Mobile contact list improvements */
+    @media (max-width: 767.98px) {
+        .contact-item {
+            padding: 0;
+            border-bottom: none;
+        }
+        
+        .contact-item .btn {
+            border-radius: 0;
+            transition: background-color 0.2s;
+        }
+        
+        .contact-item .btn:hover {
+            background-color: #f8f9fa !important;
+        }
+        
+        .contact-item .btn:active {
+            background-color: #e9ecef !important;
+        }
+        
+        .contact-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 1.1rem;
+        }
+        
+        /* Força truncate em mobile */
+        .contact-item .btn {
+            min-width: 0;
+            max-width: 100%;
+        }
+        
+        .contact-item .flex-grow-1 {
+            min-width: 0;
+            overflow: hidden;
+        }
     }
     
     .contact-avatar {
@@ -179,70 +222,110 @@
     }
     
     /* Responsividade Mobile */
-    @media (max-width: 768px) {
+    @media (max-width: 767.98px) {
+        /* Layout viewport completo */
+        .page-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .header-section {
+            flex-shrink: 0;
+        }
+        
+        .content-section {
+            flex: 1;
+            overflow: hidden;
+        }
+        
         .chat-container {
-            height: calc(100vh - 120px); /* Menos altura no mobile */
+            height: 100%;
         }
         
         .contacts-sidebar {
             width: 100%;
             min-width: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
-        .chat-area {
-            width: 100%;
+        .contacts-header {
+            flex-shrink: 0;
+        }
+        
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            min-height: 0;
         }
         
         .message {
-            max-width: 85%; /* Mais largura no mobile */
+            max-width: 85%;
         }
         
         .messages-container {
-            padding: 10px; /* Menos padding no mobile */
+            padding: 10px;
         }
         
         .chat-input {
-            padding: 10px; /* Menos padding no mobile */
+            padding: 10px;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column h-100">
-    <!-- Breadcrumb -->
-    <div class="bg-white border-bottom px-3 pt-3 pb-2 flex-shrink-0">
-        {% include 'includes/breadcrumbs.html' %}
-    </div>
+<!-- Container de Mensagens HTMX (fixo no topo) -->
+<div id="htmx-messages" class="position-fixed top-0 end-0 p-3" style="z-index: 1060;">
+    <!-- Mensagens HTMX aparecerão aqui -->
+</div>
 
-    <!-- Header -->
-    <div class="bg-white border-bottom p-3 flex-shrink-0">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <h4 class="mb-0 d-flex align-items-center">
-                    <i class="fab fa-whatsapp text-success me-2"></i>
-                    WhatsApp Business
-                    <span class="status-indicator status-online" id="connection-status" title="Conectado"></span>
-                </h4>
+<div class="page-container d-flex flex-column h-100">
+    <!-- Header Section -->
+    <div class="header-section flex-shrink-0">
+        <!-- Breadcrumb -->
+        <div class="bg-white border-bottom px-3 pt-3 pb-2 d-none d-md-block">
+            {% include 'includes/breadcrumbs.html' %}
+        </div>
+
+        <!-- Header -->
+        <div class="bg-white border-bottom p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0 d-flex align-items-center">
+                        <i class="fab fa-whatsapp text-success me-2"></i>
+                        WhatsApp Business
+                        <span class="status-indicator status-online" id="connection-status" title="Conectado"></span>
+                    </h4>
+                </div>
+                <button class="btn btn-primary new-conversations-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#newConversationsModal"
+                        hx-get="{% url 'comercial:pending_conversations' %}"
+                        hx-target="#pending-conversations-container"
+                        hx-swap="innerHTML"
+                        hx-trigger="click"
+                        title="Novas Conversas">
+                    <i class="fas fa-user-plus d-md-none me-1"></i>
+                    <span class="d-none d-md-inline">Novas Conversas</span>
+                    <span class="badge ms-2" id="pending-badge"
+                          style="background-color: {% if pending_count > 0 %}#dc3545{% else %}#6c757d{% endif %}; color: white;">
+                        {{ pending_count|default:0 }}
+                    </span>
+                </button>
             </div>
-            <button class="btn btn-primary new-conversations-btn" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#newConversationsModal"
-                    hx-get="{% url 'comercial:pending_conversations' %}"
-                    hx-target="#pending-conversations-container"
-                    hx-swap="innerHTML"
-                    hx-trigger="click">
-                Novas Conversas
-                <span class="badge ms-2" id="pending-badge"
-                      style="background-color: {% if pending_count > 0 %}#dc3545{% else %}#6c757d{% endif %}; color: white;">
-                    {{ pending_count|default:0 }}
-                </span>
-            </button>
         </div>
     </div>
 
-    <!-- Chat Container -->
-    <div class="chat-container d-flex flex-fill">
+    <!-- Content Section -->
+    <div class="content-section flex-fill">
+        <!-- Chat Container -->
+        <div class="chat-container d-flex h-100 overflow-hidden">
         <!-- Sidebar de Contatos -->
         <div class="contacts-sidebar">
             <div class="contacts-header">
@@ -271,8 +354,8 @@
             </div>
         </div>
 
-        <!-- Área de Chat -->
-        <div class="chat-area d-flex flex-column flex-fill">
+        <!-- Área de Chat - Desktop -->
+        <div class="chat-area d-flex flex-column flex-fill d-none d-md-flex">
             {% if selected_conversation %}
             <!-- Header do Chat -->
             <div class="chat-header flex-shrink-0">
@@ -288,12 +371,12 @@
                             <small class="text-muted">{{ selected_conversation.contact.phone_number }}</small>
                         </div>
                     </div>
-                    <div>
+                    <div class="d-flex gap-2">
                         {% if selected_conversation.contact.pessoa %}
                             <!-- Cliente já cadastrado - Link para perfil -->
                             <a href="#" class="btn btn-sm btn-outline-info" title="Ver Perfil do Cliente">
                                 <i class="fas fa-user me-1"></i>
-                                Ver Cliente
+                                <span class="d-none d-md-inline">Ver Cliente</span>
                             </a>
                         {% else %}
                             <!-- Cliente não cadastrado - Botão para cadastrar -->
@@ -305,9 +388,43 @@
                                     data-contact-phone="{{ selected_conversation.contact.phone_number }}"
                                     title="Cadastrar Cliente">
                                 <i class="fas fa-user-plus me-1"></i>
-                                Cadastrar Cliente
+                                <span class="d-none d-md-inline">Cadastrar Cliente</span>
                             </button>
                         {% endif %}
+                        
+                        <!-- Dropdown de Opções -->
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-expanded="false">
+                                <i class="fas fa-cog me-1"></i>
+                                <span class="d-none d-md-inline">Opções</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#" 
+                                       data-bs-toggle="modal" 
+                                       data-bs-target="#sendTemplateModal"
+                                       hx-get="{% url 'comercial:load_templates' %}"
+                                       hx-target="#templateSelect"
+                                       hx-trigger="click"
+                                       hx-swap="innerHTML">
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        Enviar mensagem
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" 
+                                       data-bs-toggle="modal" 
+                                       data-bs-target="#dataRetornoModal">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        Data de Retorno
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -344,31 +461,162 @@
                             hx-get="{% url 'comercial:pending_conversations' %}"
                             hx-target="#pending-conversations-container"
                             hx-swap="innerHTML"
-                            hx-trigger="click">
-                        <i class="fas fa-comments me-2"></i>
-                        Ver Novas Conversas
+                            hx-trigger="click"
+                            title="Ver Novas Conversas">
+                        <i class="fas fa-comments me-2 d-md-none"></i>
+                        <i class="fas fa-comments me-2 d-none d-md-inline"></i>
+                        <span class="d-none d-md-inline">Ver Novas Conversas</span>
                     </button>
                 </div>
             </div>
             {% endif %}
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Offcanvas para Chat Mobile - Estrutura fixa -->
+<div class="offcanvas offcanvas-end d-md-none" tabindex="-1" id="mobileConversationOffcanvas" data-bs-backdrop="static" data-bs-scroll="false" style="width: 100vw;">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Voltar"></button>
+        <div class="d-flex align-items-center flex-grow-1 ms-2">
+            <div class="contact-avatar me-3">?</div>
+            <div class="flex-grow-1">
+                <h6 class="mb-0">Selecione uma conversa</h6>
+                <small class="text-muted"></small>
+            </div>
+            <div class="d-flex gap-1">
+                <!-- Ações serão preenchidas -->
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas-body p-0">
+        <!-- Conteúdo dinâmico será carregado aqui -->
+        <div id="mobileConversationContent">
+            <div class="d-flex flex-column h-100">
+                <div class="flex-fill d-flex align-items-center justify-content-center"
+                     style="background: url('data:image/svg+xml;utf8,<svg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'><defs><pattern id=\'a\' patternUnits=\'userSpaceOnUse\' width=\'100\' height=\'100\'><path fill=\'%23e5ddd5\' d=\'M0 0h100v100H0z\'/><path fill=\'%23ddd6ce\' opacity=\'.5\' d=\'M0 0l50 50-50 50m50-100l50 50-50 50\'/></pattern></defs><rect width=\'100%25\' height=\'100%25\' fill=\'url(%23a)\'/></svg>');">
+                    <div class="text-center">
+                        <i class="fab fa-whatsapp text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="mt-3 text-muted">Selecione uma conversa</h5>
+                        <p class="text-muted">Escolha uma conversa da lista para começar</p>
+                    </div>
+                </div>
+                <div class="border-top p-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Selecione uma conversa..." disabled>
+                        <button class="btn btn-secondary" type="button" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Modal de Novas Conversas -->
 <div class="modal fade" id="newConversationsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="fas fa-user-plus me-2"></i>
-                    Novas Conversas Aguardando Atendimento
+                    <span class="d-none d-md-inline">Novas Conversas Aguardando Atendimento</span>
+                    <span class="d-md-none">Novas Conversas</span>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="pending-conversations-container">
                 <!-- Carregado via HTMX -->
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Data de Retorno -->
+<div class="modal fade" id="dataRetornoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    Definir Data de Retorno
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="dataRetornoForm" 
+                  hx-post="{% url 'comercial:save_data_retorno' %}"
+                  hx-target="#htmx-messages"
+                  hx-swap="beforeend">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}">
+                    <div class="mb-3">
+                        <label for="dataRetorno" class="form-label">Data de Retorno <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="dataRetorno" name="data_retorno" required>
+                        <div class="form-text">Selecione quando o cliente deve ser contatado novamente.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calendar-check me-1"></i>
+                        Salvar Data de Retorno
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Envio de Template -->
+<div class="modal fade" id="sendTemplateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    Enviar Template
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="sendTemplateForm" 
+                  hx-post="{% url 'comercial:send_template' %}"
+                  hx-target="#htmx-messages"
+                  hx-swap="beforeend">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}">
+                    <div class="mb-3">
+                        <label for="templateSelect" class="form-label">Selecione o Template <span class="text-danger">*</span></label>
+                        <select class="form-select" id="templateSelect" name="template_id" required
+                                hx-get="{% url 'comercial:template_preview' %}"
+                                hx-target="#templatePreview"
+                                hx-trigger="change"
+                                hx-include="this">
+                            <option value="">Escolha um template...</option>
+                            {% comment %}Templates serão carregados via HTMX{% endcomment %}
+                        </select>
+                    </div>
+                    <div id="templatePreview" class="mb-3">
+                        <!-- Preview do template aparecerá aqui -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane me-1"></i>
+                        Enviar Template
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1129,6 +1377,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 
 // Função para salvar cliente
 function saveClient() {

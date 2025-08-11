@@ -10,13 +10,20 @@ urlpatterns = [
     path('pending-conversations/', views.pending_conversations, name='pending_conversations'),
     path('conversation/<int:conversation_id>/messages/', views.conversation_messages, name='conversation_messages'),
     path('conversation/<int:conversation_id>/messages-readonly/', views.conversation_messages_readonly, name='conversation_messages_readonly'),
+    path('mobile-conversation/<int:conversation_id>/', views.mobile_conversation, name='mobile_conversation'),
+    path('mobile-conversation-content/<int:conversation_id>/', views.mobile_conversation_content, name='mobile_conversation_content'),
     path('pending-count/', views.pending_count, name='pending_count'),
     
     # Actions
     path('assign/<int:conversation_id>/', views.assign_conversation, name='assign_conversation'),
     path('send-message/', views.send_message, name='send_message'),
+    path('send-message-form/', views.send_message_form, name='send_message_form'),
     path('resend-message/<int:message_id>/', views.resend_message, name='resend_message'),
     path('register-client/', views.register_client, name='register_client'),
+    path('save-data-retorno/', views.save_data_retorno, name='save_data_retorno'),
+    path('load-templates/', views.load_templates, name='load_templates'),
+    path('template-preview/', views.template_preview, name='template_preview'),
+    path('send-template/', views.send_template, name='send_template'),
     
     # Debug
     path('test-websocket/', views.test_websocket, name='test_websocket'),

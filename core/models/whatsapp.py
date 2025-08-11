@@ -388,6 +388,8 @@ class WhatsAppMessage(models.Model):
             return "📍 Localização"
         elif self.message_type == "contacts":
             return "👤 Contatos"
+        elif self.message_type == "template":
+            return self.content  # Para templates, retorna o conteúdo processado
         else:
             return f"[{self.get_message_type_display()}]"
 
@@ -689,6 +691,14 @@ class WhatsAppConversation(models.Model):
         blank=True,
         verbose_name="Notas",
         help_text="Notas internas sobre a conversa",
+    )
+
+    # Data de retorno para acompanhamento
+    data_retorno = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Data de Retorno",
+        help_text="Data para retornar o contato com o cliente",
     )
 
     criado_em = models.DateTimeField(auto_now_add=True)

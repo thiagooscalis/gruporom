@@ -141,14 +141,14 @@ USE_S3 = os.getenv("USE_S3") == "True"
 if USE_S3:
     # Add storages to installed apps
     INSTALLED_APPS.append("storages")
-    
+
     # AWS Settings
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "gruporom")
     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
     AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN")
-    
+
     # S3 Storage Settings
     AWS_DEFAULT_ACL = None
     AWS_S3_OBJECT_PARAMETERS = {
@@ -156,7 +156,7 @@ if USE_S3:
     }
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_SIGNATURE_VERSION = "s3v4"
-    
+
     # Static and Media Storage
     STORAGES = {
         "default": {
@@ -171,23 +171,23 @@ if USE_S3:
                 "object_parameters": AWS_S3_OBJECT_PARAMETERS,
                 "signature_version": AWS_S3_SIGNATURE_VERSION,
                 "location": "media/",
-            }
+            },
         },
         "staticfiles": {
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
         },
     }
-    
+
     # Custom domain for media files
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
     else:
         MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/media/"
-    
+
     # Security for file uploads
     AWS_QUERYSTRING_AUTH = False  # Don't add auth parameters to URLs
-    AWS_S3_SECURE_URLS = True     # Use HTTPS
-    
+    AWS_S3_SECURE_URLS = True  # Use HTTPS
+
 else:
     # Local storage fallback
     STORAGES = {

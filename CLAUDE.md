@@ -65,6 +65,7 @@ gruporom/
   - Desktop: Sidebar fixa (#333333) + conteúdo principal
   - Mobile: Offcanvas sidebar + botão hamburger
 - **Modais**: Sistema HTMX para operações CRUD sem reload
+- **⚠️ IMPORTANTE**: Sempre usar componentes Bootstrap (modais, dropdowns, offcanvas, etc.) e HTMX para interações. JavaScript customizado deve ser usado apenas em último caso quando não há solução via Bootstrap/HTMX
 
 ### 🔐 Autenticação e Autorização
 - **Modelo de Usuário Customizado**: `Usuario` (AbstractBaseUser + PermissionsMixin)

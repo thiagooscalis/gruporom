@@ -1,0 +1,4 @@
+<option value="">Escolha um template...</option>
+{% for template in templates %}
+<option value="{{ template.id }}">{{ template.display_name }}</option>
+{% endfor %}

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Q, Count
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from core.models import (
@@ -735,3 +735,268 @@ def conversation_detail(request, conversation_id):
     }
     
     return render(request, 'comercial/whatsapp/conversation.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def mobile_conversation(request, conversation_id):
+    """
+    Retorna template do offcanvas mobile para uma conversa específica
+    """
+    conversation = get_object_or_404(
+        WhatsAppConversation.objects.select_related('contact', 'account', 'contact__pessoa'),
+        id=conversation_id
+    )
+    
+    # Verifica se o usuário tem acesso a esta conversa
+    if conversation.assigned_to != request.user:
+        return HttpResponseForbidden("Você não tem acesso a esta conversa.")
+    
+    context = {
+        'conversation': conversation,
+    }
+    
+    return render(request, 'comercial/whatsapp/partials/mobile_conversation.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def send_message_form(request):
+    """
+    Envia mensagem WhatsApp via form data (para HTMX)
+    Retorna apenas o HTML da nova mensagem enviada
+    """
+    conversation_id = request.POST.get('conversation_id')
+    message_text = request.POST.get('message')
+    
+    if not message_text or not message_text.strip():
+        return JsonResponse({'success': False, 'error': 'Mensagem não pode estar vazia'})
+    
+    conversation = get_object_or_404(
+        WhatsAppConversation,
+        id=conversation_id,
+        assigned_to=request.user
+    )
+    
+    try:
+        # Cria mensagem local primeiro
+        message = WhatsAppMessage.objects.create(
+            conversation=conversation,
+            direction='outbound',
+            content=message_text.strip(),
+            status='sending',
+            sent_by=request.user
+        )
+        
+        # Para fins de demonstração, marca como enviada
+        # Em produção, aqui seria feita a chamada para API do WhatsApp
+        message.status = 'sent'
+        message.save()
+        
+        logger.info(f"Mensagem {message.id} enviada via mobile para conversa {conversation_id}")
+        
+        # Retorna HTML da mensagem para inserir no chat
+        context = {
+            'message': message,
+            'show_sender': False,  # Mobile não mostra sender
+        }
+        
+        return render(request, 'comercial/whatsapp/partials/message_item.html', context)
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar mensagem via mobile: {e}")
+        return JsonResponse({'success': False, 'error': 'Erro ao enviar mensagem'})
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def mobile_conversation_content(request, conversation_id):
+    """
+    Retorna apenas o conteúdo da conversa mobile (sem header do offcanvas)
+    """
+    conversation = get_object_or_404(
+        WhatsAppConversation.objects.select_related('contact', 'account', 'contact__pessoa'),
+        id=conversation_id
+    )
+    
+    # Verifica se o usuário tem acesso a esta conversa
+    if conversation.assigned_to != request.user:
+        return HttpResponseForbidden("Você não tem acesso a esta conversa.")
+    
+    context = {
+        'conversation': conversation,
+    }
+    
+    return render(request, 'comercial/whatsapp/partials/mobile_conversation_content.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def save_data_retorno(request):
+    """
+    Salva a data de retorno para uma conversa
+    """
+    conversation_id = request.POST.get('conversation_id')
+    data_retorno = request.POST.get('data_retorno')
+    
+    if not conversation_id or not data_retorno:
+        return render(request, 'comercial/whatsapp/partials/data_retorno_error.html', {
+            'error': 'Dados incompletos.'
+        })
+    
+    try:
+        conversation = get_object_or_404(
+            WhatsAppConversation,
+            id=conversation_id,
+            assigned_to=request.user
+        )
+        
+        conversation.data_retorno = data_retorno
+        conversation.save(update_fields=['data_retorno'])
+        
+        return render(request, 'comercial/whatsapp/partials/data_retorno_success.html')
+        
+    except Exception as e:
+        logger.error(f"Erro ao salvar data de retorno: {e}")
+        return render(request, 'comercial/whatsapp/partials/data_retorno_error.html', {
+            'error': 'Erro ao salvar data de retorno.'
+        })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def load_templates(request):
+    """
+    Carrega templates ativos para o select
+    """
+    templates = WhatsAppTemplate.objects.filter(
+        status='approved',
+        is_active=True
+    ).order_by('display_name')
+    
+    return render(request, 'comercial/whatsapp/partials/template_options.html', {
+        'templates': templates
+    })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def template_preview(request):
+    """
+    Mostra preview do template selecionado
+    """
+    template_id = request.GET.get('template_id')
+    
+    if not template_id:
+        return render(request, 'comercial/whatsapp/partials/template_preview.html', {
+            'template': None
+        })
+    
+    try:
+        template = WhatsAppTemplate.objects.get(
+            id=template_id,
+            status='approved',
+            is_active=True
+        )
+        return render(request, 'comercial/whatsapp/partials/template_preview.html', {
+            'template': template
+        })
+    except WhatsAppTemplate.DoesNotExist:
+        return render(request, 'comercial/whatsapp/partials/template_preview.html', {
+            'template': None
+        })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def send_template(request):
+    """
+    Envia template para a conversa
+    """
+    conversation_id = request.POST.get('conversation_id')
+    template_id = request.POST.get('template_id')
+    
+    if not conversation_id or not template_id:
+        return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+            'error': 'Dados incompletos.'
+        })
+    
+    try:
+        conversation = get_object_or_404(
+            WhatsAppConversation,
+            id=conversation_id,
+            assigned_to=request.user
+        )
+        
+        template = get_object_or_404(
+            WhatsAppTemplate,
+            id=template_id,
+            status='approved',
+            is_active=True
+        )
+        
+        # Processa o conteúdo do template
+        template_content = []
+        
+        # Adiciona cabeçalho se existir
+        if template.header_text:
+            template_content.append(f"*{template.header_text}*")
+        
+        # Adiciona corpo da mensagem (obrigatório)
+        body_text = template.body_text
+        
+        # Substitui variáveis por valores de exemplo ({{1}}, {{2}}, etc.)
+        # Em produção, isso deveria vir de um formulário ou dados do cliente
+        import re
+        variables = re.findall(r'\{\{(\d+)\}\}', body_text)
+        for var in set(variables):
+            # Por enquanto, substitui por valores genéricos
+            # Futuramente pode ser melhorado para coletar valores do usuário
+            if var == '1':
+                body_text = body_text.replace(f'{{{{{var}}}}}', conversation.contact.display_name or 'Cliente')
+            elif var == '2':
+                body_text = body_text.replace(f'{{{{{var}}}}}', 'Grupo ROM')
+            else:
+                body_text = body_text.replace(f'{{{{{var}}}}}', f'[Variável {var}]')
+        
+        template_content.append(body_text)
+        
+        # Adiciona rodapé se existir
+        if template.footer_text:
+            template_content.append(f"_{template.footer_text}_")
+        
+        # Junta tudo com quebras de linha
+        final_content = '\n\n'.join(template_content)
+        
+        # Cria mensagem no banco
+        message = WhatsAppMessage.objects.create(
+            account=conversation.account,
+            contact=conversation.contact,
+            conversation=conversation,
+            direction='outbound',
+            message_type='template',
+            content=final_content,
+            timestamp=timezone.now(),
+            status='sent',
+            sent_by=request.user,
+            wamid=f'template_{timezone.now().timestamp()}'
+        )
+        
+        # Atualiza última atividade da conversa
+        conversation.last_activity = timezone.now()
+        conversation.save(update_fields=['last_activity'])
+        
+        logger.info(f"Template {template.display_name} enviado para conversa {conversation_id}")
+        
+        return render(request, 'comercial/whatsapp/partials/send_template_success.html', {
+            'template': template
+        })
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar template: {e}")
+        return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+            'error': 'Erro ao enviar template.'
+        })

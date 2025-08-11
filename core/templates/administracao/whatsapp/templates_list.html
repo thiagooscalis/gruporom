@@ -192,7 +192,8 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         
-                                        <!-- Editar -->
+                                        <!-- Editar (apenas se não estiver aprovado) -->
+                                        {% if template.status != 'approved' %}
                                         <button type="button" class="btn btn-sm btn-outline-primary" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#modalWhatsAppTemplate"
@@ -202,6 +203,7 @@
                                                 title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        {% endif %}
                                         
                                         <!-- Enviar para Aprovação -->
                                         {% if template.status in 'pending,rejected' and not template.template_id %}

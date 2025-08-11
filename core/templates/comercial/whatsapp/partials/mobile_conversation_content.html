@@ -1,0 +1,80 @@
+<!-- Conteúdo da conversa mobile - Carregado via HTMX -->
+<div class="d-flex flex-column h-100">
+    <!-- Ações da Conversa -->
+    <div class="border-bottom p-3 bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">{{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}</h6>
+                <small class="text-muted">{{ conversation.contact.phone_number }}</small>
+            </div>
+            <div class="d-flex gap-1">
+                {% if conversation.contact.pessoa %}
+                    <a href="#" class="btn btn-sm btn-outline-info" title="Ver Perfil do Cliente">
+                        <i class="fas fa-user"></i>
+                    </a>
+                {% else %}
+                    <button class="btn btn-sm btn-success" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#clientRegistrationModal"
+                            data-contact-id="{{ conversation.contact.id }}"
+                            data-contact-name="{{ conversation.contact.name|default:conversation.contact.profile_name|default:'' }}"
+                            data-contact-phone="{{ conversation.contact.phone_number }}"
+                            title="Cadastrar Cliente">
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                {% endif %}
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                            type="button" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false"
+                            title="Opções">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="#" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#dataRetornoModal">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Data de Retorno
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mensagens -->
+    <div class="flex-fill overflow-auto p-3" id="mobile-messages-container"
+         style="background: url('data:image/svg+xml;utf8,<svg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'><defs><pattern id=\'a\' patternUnits=\'userSpaceOnUse\' width=\'100\' height=\'100\'><path fill=\'%23e5ddd5\' d=\'M0 0h100v100H0z\'/><path fill=\'%23ddd6ce\' opacity=\'.5\' d=\'M0 0l50 50-50 50m50-100l50 50-50 50\'/></pattern></defs><rect width=\'100%25\' height=\'100%25\' fill=\'url(%23a)\'/></svg>');"
+         hx-get="{% url 'comercial:conversation_messages' conversation.id %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-2 text-muted">Carregando mensagens...</p>
+        </div>
+    </div>
+    
+    <!-- Input de Mensagem -->
+    <div class="border-top p-3">
+        <form hx-post="{% url 'comercial:send_message_form' %}" 
+              hx-target="#mobile-messages-container" 
+              hx-swap="beforeend"
+              hx-on::after-request="this.reset(); setTimeout(() => { const container = document.getElementById('mobile-messages-container'); container.scrollTop = container.scrollHeight; }, 100);">
+            {% csrf_token %}
+            <input type="hidden" name="conversation_id" value="{{ conversation.id }}">
+            <div class="input-group">
+                <input type="text" class="form-control" name="message" placeholder="Digite uma mensagem..." required>
+                <button class="btn btn-success" type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -4,7 +4,8 @@
     <div class="list-group-item" data-conversation-id="{{ conversation.id }}">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div class="contact-avatar me-3" style="width: 40px; height: 40px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                <!-- Avatar apenas no desktop -->
+                <div class="contact-avatar me-3 d-none d-md-flex" style="width: 40px; height: 40px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
                     {{ conversation.contact.name|first|upper|default:"?" }}
                 </div>
                 <div>
@@ -26,9 +27,10 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-success btn-sm" onclick="assignConversation({{ conversation.id }})">
-                <i class="fas fa-user-plus me-1"></i>
-                Atender
+            <button class="btn btn-success btn-sm" onclick="assignConversation({{ conversation.id }})" title="Atender">
+                <i class="fas fa-arrow-right d-md-none"></i>
+                <i class="fas fa-user-plus me-1 d-none d-md-inline"></i>
+                <span class="d-none d-md-inline">Atender</span>
             </button>
         </div>
     </div>

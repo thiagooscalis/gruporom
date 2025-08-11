@@ -1,0 +1,37 @@
+<!-- Resposta de sucesso para HTMX -->
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="data-retorno-alert">
+    <i class="fas fa-check-circle me-2"></i>
+    Data de retorno definida com sucesso!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<script>
+// Fecha o modal e limpa o formulário
+bootstrap.Modal.getInstance(document.getElementById('dataRetornoModal')).hide();
+document.getElementById('dataRetornoForm').reset();
+
+// Remove o alert após 5 segundos
+setTimeout(() => {
+    const alert = document.getElementById('data-retorno-alert');
+    if (alert) {
+        alert.remove();
+    }
+}, 5000);
+
+// Atualiza a lista de contatos para mostrar o badge
+console.log('Tentando atualizar lista de contatos...');
+const contactsList = document.getElementById('contacts-list');
+if (contactsList) {
+    console.log('Elemento encontrado, disparando trigger...');
+    htmx.ajax('GET', '/comercial/whatsapp/my-conversations/', {
+        target: '#contacts-list',
+        swap: 'innerHTML'
+    }).then(() => {
+        console.log('Lista atualizada com sucesso!');
+    }).catch((error) => {
+        console.error('Erro ao atualizar lista:', error);
+    });
+} else {
+    console.error('Elemento #contacts-list não encontrado');
+}
+</script>

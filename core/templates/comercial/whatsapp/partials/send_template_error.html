@@ -1,0 +1,16 @@
+<!-- Resposta de erro para envio de template -->
+<div class="alert alert-danger alert-dismissible fade show" role="alert" id="send-template-error-alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<script>
+// Remove o alert após 5 segundos
+setTimeout(() => {
+    const alert = document.getElementById('send-template-error-alert');
+    if (alert) {
+        alert.remove();
+    }
+}, 5000);
+</script>

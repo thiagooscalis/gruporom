@@ -1,0 +1,24 @@
+{% if template %}
+<div class="card">
+    <div class="card-header">
+        <small class="text-muted">Preview do Template</small>
+    </div>
+    <div class="card-body">
+        <h6 class="card-title">{{ template.display_name }}</h6>
+        <div class="border rounded p-3 bg-light">
+            {% if template.header_text %}
+            <div class="fw-bold mb-2">{{ template.header_text }}</div>
+            {% endif %}
+            <div class="mb-2">{{ template.body_text }}</div>
+            {% if template.footer_text %}
+            <div class="small text-muted">{{ template.footer_text }}</div>
+            {% endif %}
+        </div>
+        <small class="text-muted mt-2 d-block">
+            <i class="fas fa-info-circle me-1"></i>
+            Categoria: {{ template.get_category_display }} | 
+            Idioma: {{ template.get_language_display }}
+        </small>
+    </div>
+</div>
+{% endif %}

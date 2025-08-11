@@ -1,0 +1,23 @@
+<div class="message {{ message.direction }}" data-message-id="{{ message.id }}">
+    <div class="message-bubble">
+        <div>{{ message.get_display_content }}</div>
+        <div class="message-time">
+            {{ message.timestamp|date:"H:i" }}
+            {% if message.direction == 'outbound' %}
+                {% if message.status == 'sent' %}
+                    <i class="fas fa-check text-muted" title="Enviada"></i>
+                {% elif message.status == 'delivered' %}
+                    <i class="fas fa-check-double text-muted" title="Entregue"></i>
+                {% elif message.status == 'read' %}
+                    <i class="fas fa-check-double text-primary" title="Lida"></i>
+                {% elif message.status == 'failed' or message.status == 'sending' %}
+                    {% if message.status == 'failed' %}
+                        <i class="fas fa-exclamation-triangle text-danger" title="Falha no envio"></i>
+                    {% else %}
+                        <i class="fas fa-clock text-warning" title="Enviando..."></i>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

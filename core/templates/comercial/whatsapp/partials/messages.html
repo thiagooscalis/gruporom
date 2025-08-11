@@ -1,7 +1,7 @@
 {% for message in messages %}
 <div class="message {{ message.direction }}" data-message-id="{{ message.id }}">
     <div class="message-bubble">
-        <div>{{ message.get_display_content }}</div>
+        <div>{{ message.get_display_content|linebreaks }}</div>
         <div class="message-time">
             {{ message.timestamp|date:"H:i" }}
             {% if message.direction == 'outbound' %}

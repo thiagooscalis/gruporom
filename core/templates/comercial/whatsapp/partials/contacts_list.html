@@ -1,38 +1,109 @@
 {% for conversation in my_conversations %}
-<div class="contact-item d-flex align-items-center text-decoration-none text-dark {% if selected_conversation.id == conversation.id %}active{% endif %}"
-     hx-get="{% url 'comercial:whatsapp' %}?conversation={{ conversation.id }}"
-     hx-target="body"
-     hx-push-url="true"
-     style="cursor: pointer;">
-    <div class="contact-avatar me-3">
-        {{ conversation.contact.name|first|upper|default:"?" }}
-    </div>
-    <div class="flex-grow-1">
-        <div class="d-flex justify-content-between">
-            <strong>{{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number|truncatechars:20 }}</strong>
-            <small class="text-muted">{{ conversation.last_activity|timesince }}</small>
-        </div>
-        <div class="d-flex justify-content-between">
-            <small class="text-muted text-truncate" style="max-width: 200px;">
-                {% with last_msg=conversation.messages.last %}
-                    {% if last_msg %}
-                        {{ last_msg.get_display_content|truncatechars:30 }}
-                    {% else %}
-                        Sem mensagens
-                    {% endif %}
-                {% endwith %}
-            </small>
-            {% if conversation.unread_count > 0 %}
-            <span class="badge bg-success rounded-pill">{{ conversation.unread_count }}</span>
+<!-- Container único para desktop e mobile -->
+<div class="contact-item {% if selected_conversation and selected_conversation.id == conversation.id %}active{% endif %}"
+     data-conversation-id="{{ conversation.id }}">
+     
+    <!-- Desktop: Link direto -->
+    <div class="d-none d-md-flex w-100 align-items-center"
+         hx-get="{% url 'comercial:whatsapp' %}?conversation={{ conversation.id }}"
+         hx-target="body"
+         hx-push-url="true">
+        <div class="flex-grow-1 min-width-0 overflow-hidden">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong class="text-truncate d-block me-2" style="max-width: calc(100% - 60px);">
+                    {{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}
+                </strong>
+                <small class="text-muted text-nowrap flex-shrink-0">{{ conversation.last_activity|timesince|truncatechars:10 }}</small>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted text-truncate d-block" style="max-width: calc(100% - 40px);">
+                    {% with last_msg=conversation.messages.last %}
+                        {% if last_msg %}
+                            {% if last_msg.direction == 'outbound' %}
+                                <i class="fas fa-reply me-1" style="font-size: 0.7em;"></i>
+                            {% endif %}
+                            {{ last_msg.get_display_content|truncatechars:50 }}
+                        {% else %}
+                            <em>Sem mensagens</em>
+                        {% endif %}
+                    {% endwith %}
+                </small>
+                {% if conversation.unread_count > 0 %}
+                <span class="badge bg-success rounded-pill flex-shrink-0 ms-2">{{ conversation.unread_count }}</span>
+                {% endif %}
+            </div>
+            {% if conversation.data_retorno %}
+            <div class="mt-1">
+                <small class="badge bg-warning text-dark">
+                    <i class="fas fa-calendar-alt me-1" style="font-size: 0.7em;"></i>
+                    Retorno: {{ conversation.data_retorno|date:"d/m/Y" }}
+                </small>
+            </div>
             {% endif %}
         </div>
     </div>
+    
+    <!-- Mobile: Botão que abre offcanvas -->
+    <button type="button" 
+            class="btn p-3 border-0 d-flex align-items-start w-100 text-start bg-transparent d-md-none"
+            style="border-bottom: 1px solid #e9ecef !important; min-width: 0;"
+            data-bs-toggle="offcanvas" 
+            data-bs-target="#mobileConversationOffcanvas"
+            hx-get="{% url 'comercial:mobile_conversation_content' conversation.id %}"
+            hx-target="#mobileConversationContent"
+            hx-swap="innerHTML">
+            
+            <!-- Conteúdo da conversa -->
+            <div class="flex-grow-1 min-width-0">
+                <!-- Linha 1: Nome e horário -->
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h6 class="mb-0 text-dark fw-semibold text-truncate me-2 flex-grow-1" style="min-width: 0;">
+                        {{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}
+                    </h6>
+                    <div class="d-flex align-items-center flex-shrink-0 gap-2">
+                        {% if conversation.unread_count > 0 %}
+                        <span class="badge bg-success rounded-pill">{{ conversation.unread_count }}</span>
+                        {% endif %}
+                        <small class="text-muted text-nowrap">{{ conversation.last_activity|timesince|truncatechars:8 }}</small>
+                    </div>
+                </div>
+                
+                <!-- Linha 2: Última mensagem -->
+                <div class="text-muted small text-truncate">
+                    {% with last_msg=conversation.messages.last %}
+                        {% if last_msg %}
+                            {% if last_msg.direction == 'outbound' %}
+                                <i class="fas fa-reply me-1" style="font-size: 0.7em;"></i>
+                            {% endif %}
+                            {{ last_msg.get_display_content }}
+                        {% else %}
+                            <em>Sem mensagens</em>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                
+                <!-- Badge de data de retorno (mobile) -->
+                {% if conversation.data_retorno %}
+                <div class="mt-1">
+                    <small class="badge bg-warning text-dark">
+                        <i class="fas fa-calendar-alt me-1" style="font-size: 0.65em;"></i>
+                        {{ conversation.data_retorno|date:"d/m" }}
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+    </button>
 </div>
 {% empty %}
 <div class="text-center p-4">
     <i class="fas fa-comments text-muted fa-3x mb-3"></i>
     <p class="text-muted">Nenhuma conversa ativa</p>
-    <button class="btn btn-sm btn-primary" onclick="openNewConversationsModal()">
+    <button class="btn btn-sm btn-primary" 
+            data-bs-toggle="modal" 
+            data-bs-target="#newConversationsModal"
+            hx-get="{% url 'comercial:pending_conversations' %}"
+            hx-target="#pending-conversations-container"
+            hx-swap="innerHTML">
         <i class="fas fa-plus me-2"></i>
         Atender Nova Conversa
     </button>
