@@ -1,6 +1,7 @@
 from fabric import Connection
 from invoke import task
 
+
 BASE_DIR = "/home/thiago/gruporom"
 
 
