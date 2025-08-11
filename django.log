@@ -22804,3 +22804,828 @@ DETAIL:  Chave (wamid)=() já existe.
 INFO 2025-08-11 18:59:31,794 runserver [mHTTP POST /comercial/whatsapp/send-message/ 200 [0.04, 127.0.0.1:55394][0m
 INFO 2025-08-11 18:59:38,266 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
 INFO 2025-08-11 18:59:38,291 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:55394][0m
+INFO 2025-08-11 19:01:00,665 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:01:01,399 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:01,427 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.05, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:01,465 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:41670]
+INFO 2025-08-11 19:01:01,498 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:01,499 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:01,502 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:41670]
+INFO 2025-08-11 19:01:01,502 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:01:01,510 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.04, 127.0.0.1:41686][0m
+INFO 2025-08-11 19:01:01,520 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.05, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:01,963 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:41670]
+INFO 2025-08-11 19:01:01,965 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:01:02,012 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:02,029 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.05, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:02,066 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:41702]
+INFO 2025-08-11 19:01:02,079 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:02,079 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:41702]
+INFO 2025-08-11 19:01:02,080 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:01:02,081 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:02,092 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.02, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:02,100 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:41686][0m
+INFO 2025-08-11 19:01:03,161 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:03,195 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.07, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:03,255 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:03,264 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:03,274 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.03, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:03,276 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:41686][0m
+INFO 2025-08-11 19:01:10,223 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:44772][0m
+INFO 2025-08-11 19:01:17,632 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:41702]
+INFO 2025-08-11 19:01:17,634 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:01:17,685 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:17,695 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.02, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:17,736 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:40700]
+INFO 2025-08-11 19:01:17,748 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:17,750 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:17,750 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:40700]
+INFO 2025-08-11 19:01:17,751 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:01:17,760 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.02, 127.0.0.1:40716][0m
+INFO 2025-08-11 19:01:17,768 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:41656][0m
+INFO 2025-08-11 19:01:21,405 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:40700]
+INFO 2025-08-11 19:01:21,407 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:01:21,461 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:21,476 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.05, 127.0.0.1:40722][0m
+INFO 2025-08-11 19:01:21,495 runserver [mHTTP GET /static/style.css 200 [0.00, 127.0.0.1:40722][0m
+INFO 2025-08-11 19:01:21,496 runserver [mHTTP GET /static/app.css 200 [0.00, 127.0.0.1:40726][0m
+INFO 2025-08-11 19:01:21,497 runserver [mHTTP GET /static/app.js 200 [0.00, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:21,498 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:40726][0m
+INFO 2025-08-11 19:01:21,516 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:21,516 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:40726][0m
+INFO 2025-08-11 19:01:21,525 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:21,531 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:40748]
+INFO 2025-08-11 19:01:21,542 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:21,547 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:40748]
+INFO 2025-08-11 19:01:21,547 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:01:21,553 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:21,563 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.03, 127.0.0.1:40726][0m
+INFO 2025-08-11 19:01:21,567 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:22,856 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:22,882 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.06, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:22,946 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:22,950 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:01:22,965 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.03, 127.0.0.1:40726][0m
+INFO 2025-08-11 19:01:22,974 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:40742][0m
+INFO 2025-08-11 19:01:22,985 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:40764][0m
+INFO 2025-08-11 19:03:54,813 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:40748]
+INFO 2025-08-11 19:03:54,816 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:03:54,864 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:54,878 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:03:54,931 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:35686]
+INFO 2025-08-11 19:03:54,943 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:54,944 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:35686]
+INFO 2025-08-11 19:03:54,946 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:03:54,947 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:54,957 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.02, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:03:54,964 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:03:57,361 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:57,397 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.07, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:03:57,457 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:57,463 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:03:57,475 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.03, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:03:57,485 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:03:57,612 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:52358][0m
+INFO 2025-08-11 19:04:00,006 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,037 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.07, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:04:00,094 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,096 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,103 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:04:00,111 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:04:00,254 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:52358][0m
+INFO 2025-08-11 19:04:00,821 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,859 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.08, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:04:00,922 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,935 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:04:00,945 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.03, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:04:00,948 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:04:01,069 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:52358][0m
+INFO 2025-08-11 19:05:00,463 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:35686]
+INFO 2025-08-11 19:05:00,464 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:05:00,502 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:00,537 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.06, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:00,575 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:40600]
+INFO 2025-08-11 19:05:00,589 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:00,590 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:40600]
+INFO 2025-08-11 19:05:00,590 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:05:00,596 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:00,604 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:00,608 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:05:01,654 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:01,662 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:01,711 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:01,719 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:01,730 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.03, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:01,738 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:05:03,214 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:03,238 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.06, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:03,307 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:03,319 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:03,339 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.04, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:03,348 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.06, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:05:07,393 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:07,428 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.08, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:07,481 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:07,486 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:07,509 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.04, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:07,527 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.06, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:05:10,973 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:10,989 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.05, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:11,062 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:11,064 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:11,074 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:11,083 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:05:14,384 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:14,425 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.08, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:14,490 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:14,494 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:05:14,505 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.02, 127.0.0.1:35670][0m
+INFO 2025-08-11 19:05:14,520 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:35698][0m
+INFO 2025-08-11 19:06:37,836 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:40600]
+INFO 2025-08-11 19:06:37,838 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:06:37,874 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:37,886 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.02, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:37,921 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:54860]
+INFO 2025-08-11 19:06:37,931 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:54860]
+INFO 2025-08-11 19:06:37,931 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:06:37,939 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:37,940 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:37,947 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.02, 127.0.0.1:54868][0m
+INFO 2025-08-11 19:06:37,957 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:46,277 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:46,287 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.02, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:46,352 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:46,356 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:46,368 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.03, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:46,379 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:54868][0m
+INFO 2025-08-11 19:06:52,332 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:52,366 runserver [mHTTP GET /comercial/whatsapp/?conversation=20 200 [0.07, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:52,444 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:52,446 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:52,452 runserver [mHTTP GET /comercial/whatsapp/conversation/20/messages/ 200 [0.02, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:52,462 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:54868][0m
+INFO 2025-08-11 19:06:55,608 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:55,637 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.07, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:55,695 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:55,700 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:06:55,711 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.02, 127.0.0.1:54856][0m
+INFO 2025-08-11 19:06:55,724 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:54868][0m
+INFO 2025-08-11 19:07:59,289 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:54860]
+INFO 2025-08-11 19:07:59,292 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:07:59,321 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:07:59,333 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.02, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:07:59,369 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:53928]
+INFO 2025-08-11 19:07:59,381 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:53928]
+INFO 2025-08-11 19:07:59,381 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:07:59,385 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:07:59,387 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:07:59,395 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.02, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:07:59,402 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:02,100 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:02,119 runserver [mHTTP GET /comercial/whatsapp/?conversation=26 200 [0.05, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:02,180 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:02,183 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:02,191 runserver [mHTTP GET /comercial/whatsapp/conversation/26/messages/ 200 [0.02, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:02,198 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:08:05,009 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:05,051 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.08, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:05,111 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:05,111 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:05,118 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.02, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:05,127 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:08:07,209 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:07,243 runserver [mHTTP GET /comercial/whatsapp/?conversation=20 200 [0.07, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:07,304 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:07,304 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:07,311 runserver [mHTTP GET /comercial/whatsapp/conversation/20/messages/ 200 [0.02, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:07,320 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:08:09,695 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:09,734 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.07, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:09,809 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:09,815 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:09,833 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.03, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:09,839 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:08:10,172 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:10,192 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.06, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:10,260 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:10,264 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:10,295 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.05, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:10,314 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.07, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:08:13,344 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:13,369 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.06, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:13,441 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:13,444 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:08:13,453 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.02, 127.0.0.1:53924][0m
+INFO 2025-08-11 19:08:13,461 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:53942][0m
+INFO 2025-08-11 19:11:43,335 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:53928]
+INFO 2025-08-11 19:11:43,337 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:11:43,370 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:43,383 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.02, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:43,421 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:42112]
+INFO 2025-08-11 19:11:43,461 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:42112]
+INFO 2025-08-11 19:11:43,462 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:11:43,467 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:43,468 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:43,483 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.06, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:11:43,495 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.07, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:46,922 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:46,959 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.08, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:47,036 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:47,036 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:47,046 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.02, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:47,062 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:11:50,979 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:50,999 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.06, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:51,053 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:51,063 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:51,080 runserver [mHTTP GET /comercial/whatsapp/conversation/24/messages/ 200 [0.04, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:51,088 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.05, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:11:53,188 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:53,223 runserver [mHTTP GET /comercial/whatsapp/?conversation=20 200 [0.07, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:53,292 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:53,297 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:53,308 runserver [mHTTP GET /comercial/whatsapp/conversation/20/messages/ 200 [0.03, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:53,324 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:11:59,143 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:59,165 runserver [mHTTP GET /comercial/whatsapp/?conversation=25 200 [0.06, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:59,223 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:59,229 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:11:59,241 runserver [mHTTP GET /comercial/whatsapp/conversation/25/messages/ 200 [0.03, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:11:59,250 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:12:02,613 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:12:02,647 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.07, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:12:02,709 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:12:02,720 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:12:02,739 runserver [mHTTP GET /comercial/whatsapp/conversation/27/messages/ 200 [0.04, 127.0.0.1:42098][0m
+INFO 2025-08-11 19:12:02,749 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.05, 127.0.0.1:42114][0m
+INFO 2025-08-11 19:14:39,947 autoreload /home/thiago/Projetos/gruporom/core/urls/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:14:40,333 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:14:54,543 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:14:54,886 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:14:55,124 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:49594][0m
+INFO 2025-08-11 19:15:00,076 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:34102]
+INFO 2025-08-11 19:15:00,139 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.07, 127.0.0.1:49594][0m
+INFO 2025-08-11 19:15:00,143 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:34102]
+INFO 2025-08-11 19:15:00,143 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:17:34,601 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:34102]
+INFO 2025-08-11 19:17:34,604 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:17:34,640 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:17:34,672 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.05, 127.0.0.1:59826][0m
+INFO 2025-08-11 19:17:34,712 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:59842]
+INFO 2025-08-11 19:17:34,724 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:17:34,725 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:59842]
+INFO 2025-08-11 19:17:34,726 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:17:34,749 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:59826][0m
+INFO 2025-08-11 19:19:36,552 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:59842]
+INFO 2025-08-11 19:19:36,554 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:19:36,602 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:19:36,625 runserver [mHTTP GET /comercial/whatsapp/?conversation=27 200 [0.05, 127.0.0.1:47524][0m
+INFO 2025-08-11 19:19:36,655 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:47526]
+INFO 2025-08-11 19:19:36,665 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:47526]
+INFO 2025-08-11 19:19:36,665 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:19:36,675 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:19:36,690 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.02, 127.0.0.1:47524][0m
+INFO 2025-08-11 19:19:41,341 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:19:41,360 runserver [mHTTP GET /comercial/whatsapp/conversation/26/chat-area/ 200 [0.05, 127.0.0.1:47524][0m
+INFO 2025-08-11 19:19:43,638 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:19:43,658 runserver [mHTTP GET /comercial/whatsapp/conversation/25/chat-area/ 200 [0.05, 127.0.0.1:47524][0m
+INFO 2025-08-11 19:19:46,336 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:19:46,355 runserver [mHTTP GET /comercial/whatsapp/conversation/24/chat-area/ 200 [0.04, 127.0.0.1:47524][0m
+INFO 2025-08-11 19:22:33,498 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:22:33,872 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:22:38,652 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:43624][0m
+INFO 2025-08-11 19:22:43,607 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:43632]
+INFO 2025-08-11 19:22:43,665 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:43624][0m
+INFO 2025-08-11 19:22:43,668 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:43632]
+INFO 2025-08-11 19:22:43,668 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:24:02,287 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:24:02,662 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:24:07,447 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:42712][0m
+INFO 2025-08-11 19:24:12,400 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:42724]
+INFO 2025-08-11 19:24:12,454 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:42712][0m
+INFO 2025-08-11 19:24:12,456 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:42724]
+INFO 2025-08-11 19:24:12,456 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:24:21,128 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:24:21,516 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:24:26,281 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.04, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:31,244 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:50704]
+INFO 2025-08-11 19:24:31,310 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.07, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:31,313 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:50704]
+INFO 2025-08-11 19:24:31,314 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:24:40,769 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:50704]
+INFO 2025-08-11 19:24:40,772 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:24:40,818 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:24:40,853 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.05, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:40,881 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:37038]
+INFO 2025-08-11 19:24:40,894 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:37038]
+INFO 2025-08-11 19:24:40,894 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:24:40,899 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:24:40,916 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:46,609 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:24:46,621 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:48,523 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:24:48,535 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.04, 127.0.0.1:49254][0m
+ERROR 2025-08-11 19:24:49,724 whatsapp Erro ao enviar template: cannot access local variable 'message' where it is not associated with a value
+ERROR 2025-08-11 19:24:49,725 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:24:49,820 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1006, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1098, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:24:49,823 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.13, 127.0.0.1:49254][0m
+INFO 2025-08-11 19:24:49,995 runserver [36mHTTP GET /static/app.js.map 304 [0.00, 127.0.0.1:57510][0m
+INFO 2025-08-11 19:25:15,545 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:25:15,923 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:25:20,715 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:50582][0m
+INFO 2025-08-11 19:25:25,670 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:50594]
+INFO 2025-08-11 19:25:25,718 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.05, 127.0.0.1:50582][0m
+INFO 2025-08-11 19:25:25,722 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:50594]
+INFO 2025-08-11 19:25:25,722 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:25:34,247 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:50594]
+INFO 2025-08-11 19:25:34,249 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:25:34,292 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:25:34,319 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.04, 127.0.0.1:33988][0m
+INFO 2025-08-11 19:25:34,346 runserver [mHTTP GET /static/style.css 200 [0.01, 127.0.0.1:33988][0m
+INFO 2025-08-11 19:25:34,347 runserver [mHTTP GET /static/app.js 200 [0.01, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:25:34,347 runserver [mHTTP GET /static/app.css 200 [0.01, 127.0.0.1:33992][0m
+INFO 2025-08-11 19:25:34,349 runserver [mHTTP GET /static/logo_gruporom.svg 200 [0.00, 127.0.0.1:33988][0m
+INFO 2025-08-11 19:25:34,367 runserver [mHTTP GET /static/favicon.png 200 [0.00, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:25:34,368 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:34012]
+INFO 2025-08-11 19:25:34,372 runserver [mHTTP GET /static/fa-brands-400.32a863c5.woff2 200 [0.00, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:25:34,373 runserver [mHTTP GET /static/fa-solid-900.5b60a450.woff2 200 [0.00, 127.0.0.1:33992][0m
+INFO 2025-08-11 19:25:34,382 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:34012]
+INFO 2025-08-11 19:25:34,382 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:25:34,386 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:25:34,404 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.03, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:25:37,286 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:25:37,294 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.02, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:25:39,223 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:25:39,233 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.04, 127.0.0.1:34008][0m
+ERROR 2025-08-11 19:25:40,319 whatsapp Erro ao enviar template: cannot access local variable 'message' where it is not associated with a value
+ERROR 2025-08-11 19:25:40,321 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:25:40,380 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1006, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1095, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:25:40,384 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.10, 127.0.0.1:34008][0m
+INFO 2025-08-11 19:26:10,975 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:26:11,367 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:26:16,147 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.04, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:26:21,109 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:47512]
+INFO 2025-08-11 19:26:21,164 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.06, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:26:21,164 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:47512]
+INFO 2025-08-11 19:26:21,165 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:26:24,346 runserver WebSocket DISCONNECT /ws/comercial/whatsapp/ [127.0.0.1:47512]
+INFO 2025-08-11 19:26:24,348 consumers WebSocket desconectado para usuário thiago
+INFO 2025-08-11 19:26:24,409 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:26:24,435 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.04, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:26:24,486 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:47518]
+INFO 2025-08-11 19:26:24,502 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:26:24,503 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:47518]
+INFO 2025-08-11 19:26:24,504 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:26:24,530 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:26:27,119 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:26:27,130 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:26:28,784 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:26:28,791 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.04, 127.0.0.1:42428][0m
+ERROR 2025-08-11 19:26:29,887 whatsapp Erro ao salvar status de falha da mensagem: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 19:26:29,887 whatsapp Erro ao enviar template via API: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+ERROR 2025-08-11 19:26:29,888 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:26:29,888 whatsapp Erro ao enviar template: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:26:29,888 context_processors Erro ao obter câmbio no context processor: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:26:29,951 log Internal Server Error: /comercial/whatsapp/send-template/
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UniqueViolation: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1006, in send_template
+    message = WhatsAppMessage.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/psycopg/cursor.py", line 97, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicar valor da chave viola a restrição de unicidade "core_whatsappmessage_wamid_key"
+DETAIL:  Chave (wamid)=() já existe.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py", line 1103, in send_template
+    return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/home/thiago/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/core/context_processors.py", line 46, in dados_globais
+    for group in request.user.groups.all():
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 99, in _execute
+    self.db.validate_no_broken_transaction()
+  File "/home/thiago/Projetos/gruporom/.venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 521, in validate_no_broken_transaction
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't execute queries until the end of the 'atomic' block.
+ERROR 2025-08-11 19:26:29,954 runserver [35;1mHTTP POST /comercial/whatsapp/send-template/ 500 [0.09, 127.0.0.1:42428][0m
+INFO 2025-08-11 19:31:06,025 autoreload /home/thiago/Projetos/gruporom/core/views/comercial/whatsapp.py changed, reloading.
+INFO 2025-08-11 19:31:06,398 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 19:31:11,187 runserver [mHTTP GET /comercial/whatsapp/pending-count/ 200 [0.04, 127.0.0.1:45238][0m
+INFO 2025-08-11 19:31:15,135 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:31:15,164 runserver [mHTTP GET /comercial/whatsapp/?conversation=24 200 [0.04, 127.0.0.1:45238][0m
+INFO 2025-08-11 19:31:15,212 runserver WebSocket HANDSHAKING /ws/comercial/whatsapp/ [127.0.0.1:45254]
+INFO 2025-08-11 19:31:15,241 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:31:15,244 runserver WebSocket CONNECT /ws/comercial/whatsapp/ [127.0.0.1:45254]
+INFO 2025-08-11 19:31:15,244 consumers ✅ WebSocket conectado com sucesso para usuário thiago
+INFO 2025-08-11 19:31:15,257 runserver [mHTTP GET /comercial/whatsapp/my-conversations/ 200 [0.04, 127.0.0.1:45238][0m
+INFO 2025-08-11 19:31:18,336 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:31:18,349 runserver [mHTTP GET /comercial/whatsapp/load-templates/ 200 [0.04, 127.0.0.1:45238][0m
+INFO 2025-08-11 19:31:21,075 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:31:21,085 runserver [mHTTP GET /comercial/whatsapp/template-preview/?template_id=3 200 [0.04, 127.0.0.1:45238][0m
+ERROR 2025-08-11 19:31:22,337 whatsapp_api Erro ao enviar template: 401 Client Error: Unauthorized for url: https://graph.facebook.com/v19.0/654331217774079/messages
+ERROR 2025-08-11 19:31:22,551 whatsapp_api Erro ao enviar mensagem de texto: 401 Client Error: Unauthorized for url: https://graph.facebook.com/v19.0/654331217774079/messages
+ERROR 2025-08-11 19:31:22,552 whatsapp Erro ao enviar template: Invalid OAuth access token - Cannot parse access token
+INFO 2025-08-11 19:31:22,555 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 19:31:22,565 runserver [mHTTP POST /comercial/whatsapp/send-template/ 200 [0.48, 127.0.0.1:45238][0m

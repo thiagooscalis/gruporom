@@ -19,36 +19,8 @@ setTimeout(() => {
     }
 }, 5000);
 
-// Simula digitação no campo de texto e clica no botão de envio
-const messageInput = document.getElementById('message-input');
-const sendForm = messageInput ? messageInput.closest('form') : null;
-
-if (messageInput && sendForm) {
-    // Cola o conteúdo do template no campo
-    messageInput.value = `{{ final_content|escapejs }}`;
-    
-    // Simula o envio do formulário após um pequeno delay
-    setTimeout(() => {
-        // Dispara o evento de submit do formulário
-        const submitEvent = new Event('submit', {
-            bubbles: true,
-            cancelable: true
-        });
-        sendForm.dispatchEvent(submitEvent);
-        
-        // Atualiza o alert para mostrar sucesso
-        const alert = document.getElementById('send-template-alert');
-        if (alert) {
-            alert.innerHTML = `
-                <i class="fas fa-check-circle me-2"></i>
-                Template "{{ template.display_name }}" enviado com sucesso!
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-        }
-    }, 500);
-} else {
-    console.error('Campo de mensagem ou formulário não encontrado');
-}
+// Template foi enviado via API - apenas atualiza interface
+console.log('Template "{{ template.display_name }}" processado via API');
 
 // Atualiza a lista de contatos para mostrar a última atividade
 const contactsList = document.getElementById('contacts-list');

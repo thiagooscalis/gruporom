@@ -1,0 +1,115 @@
+{% if selected_conversation %}
+<!-- Header do Chat -->
+<div class="chat-header flex-shrink-0">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="contact-avatar me-3">
+                {{ selected_conversation.contact.name|first|upper|default:"?" }}
+            </div>
+            <div>
+                <h5 class="mb-0">
+                    {{ selected_conversation.contact.name|default:selected_conversation.contact.profile_name|default:selected_conversation.contact.phone_number }}
+                </h5>
+                <small class="text-muted">{{ selected_conversation.contact.phone_number }}</small>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            {% if selected_conversation.contact.pessoa %}
+                <!-- Cliente já cadastrado - Link para perfil -->
+                <a href="#" class="btn btn-sm btn-outline-info" title="Ver Perfil do Cliente">
+                    <i class="fas fa-user me-1"></i>
+                    <span class="d-none d-md-inline">Ver Cliente</span>
+                </a>
+            {% else %}
+                <!-- Cliente não cadastrado - Botão para cadastrar -->
+                <button class="btn btn-sm btn-success" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#clientRegistrationModal"
+                        data-contact-id="{{ selected_conversation.contact.id }}"
+                        data-contact-name="{{ selected_conversation.contact.name|default:selected_conversation.contact.profile_name|default:'' }}"
+                        data-contact-phone="{{ selected_conversation.contact.phone_number }}"
+                        title="Cadastrar Cliente">
+                    <i class="fas fa-user-plus me-1"></i>
+                    <span class="d-none d-md-inline">Cadastrar Cliente</span>
+                </button>
+            {% endif %}
+            
+            <!-- Dropdown de Opções -->
+            <div class="dropdown" id="optionsDropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle chat-options-dropdown" 
+                        type="button" 
+                        id="optionsDropdownButton"
+                        data-bs-toggle="dropdown" 
+                        data-bs-auto-close="true"
+                        aria-expanded="false">
+                    <i class="fas fa-cog me-1"></i>
+                    <span class="d-none d-md-inline">Opções</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsDropdownButton">
+                    <li>
+                        <a class="dropdown-item" href="#" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#sendTemplateModal"
+                           hx-get="{% url 'comercial:load_templates' %}"
+                           hx-target="#templateSelect"
+                           hx-trigger="click"
+                           hx-swap="innerHTML">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Enviar mensagem
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="#" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#dataRetornoModal">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            Data de Retorno
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mensagens -->
+<div class="messages-container flex-fill overflow-auto" id="messages-container">
+    {% include 'comercial/whatsapp/partials/messages_clean.html' %}
+</div>
+
+<!-- Input de Mensagem -->
+<div class="chat-input flex-shrink-0">
+    <form onsubmit="sendMessage(event, {{ selected_conversation.id }})">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Digite uma mensagem..." 
+                   id="message-input" required>
+            <button class="btn btn-success" type="submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+{% else %}
+<!-- Sem conversa selecionada -->
+<div class="d-flex align-items-center justify-content-center h-100">
+    <div class="text-center">
+        <i class="fab fa-whatsapp text-muted" style="font-size: 100px;"></i>
+        <h5 class="mt-3 text-muted">Selecione uma conversa para começar</h5>
+        <p class="text-muted">Escolha uma conversa da lista ao lado ou atenda uma nova</p>
+        <button class="btn btn-primary mt-3" 
+                data-bs-toggle="modal" 
+                data-bs-target="#newConversationsModal"
+                hx-get="{% url 'comercial:pending_conversations' %}"
+                hx-target="#pending-conversations-container"
+                hx-swap="innerHTML"
+                hx-trigger="click"
+                title="Ver Novas Conversas">
+            <i class="fas fa-comments me-2 d-md-none"></i>
+            <i class="fas fa-comments me-2 d-none d-md-inline"></i>
+            <span class="d-none d-md-inline">Ver Novas Conversas</span>
+        </button>
+    </div>
+</div>
+{% endif %}

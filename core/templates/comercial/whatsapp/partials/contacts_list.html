@@ -5,9 +5,11 @@
      
     <!-- Desktop: Link direto -->
     <div class="d-none d-md-flex w-100 align-items-center"
-         hx-get="{% url 'comercial:whatsapp' %}?conversation={{ conversation.id }}"
-         hx-target="body"
-         hx-push-url="true">
+         hx-get="{% url 'comercial:conversation_chat_area' conversation.id %}"
+         hx-target="#chat-area"
+         hx-push-url="{% url 'comercial:whatsapp' %}?conversation={{ conversation.id }}"
+         hx-trigger="click"
+         style="cursor: pointer;">
         <div class="flex-grow-1 min-width-0 overflow-hidden">
             <div class="d-flex justify-content-between align-items-center">
                 <strong class="text-truncate d-block me-2" style="max-width: calc(100% - 60px);">

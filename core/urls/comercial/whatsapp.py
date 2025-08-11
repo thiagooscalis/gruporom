@@ -10,6 +10,7 @@ urlpatterns = [
     path('pending-conversations/', views.pending_conversations, name='pending_conversations'),
     path('conversation/<int:conversation_id>/messages/', views.conversation_messages, name='conversation_messages'),
     path('conversation/<int:conversation_id>/messages-readonly/', views.conversation_messages_readonly, name='conversation_messages_readonly'),
+    path('conversation/<int:conversation_id>/chat-area/', views.conversation_chat_area, name='conversation_chat_area'),
     path('mobile-conversation/<int:conversation_id>/', views.mobile_conversation, name='mobile_conversation'),
     path('mobile-conversation-content/<int:conversation_id>/', views.mobile_conversation_content, name='mobile_conversation_content'),
     path('pending-count/', views.pending_count, name='pending_count'),

@@ -317,9 +317,36 @@ def conversation_messages(request, conversation_id):
         'contact'
     ).order_by('timestamp')
     
-    return render(request, 'comercial/whatsapp/partials/messages.html', {
+    # Usa template sem script se for requisição HTMX
+    template_name = 'comercial/whatsapp/partials/messages_clean.html' if request.headers.get('HX-Request') else 'comercial/whatsapp/partials/messages.html'
+    return render(request, template_name, {
         'messages': messages
     })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def conversation_chat_area(request, conversation_id):
+    """
+    Retorna área de chat completa para uma conversa (para substituir apenas a área de chat)
+    """
+    conversation = get_object_or_404(
+        WhatsAppConversation,
+        id=conversation_id,
+        assigned_to=request.user,
+        status__in=['assigned', 'in_progress']
+    )
+    
+    messages = conversation.messages.select_related(
+        'contact'
+    ).order_by('timestamp')
+    
+    context = {
+        'selected_conversation': conversation,
+        'messages': messages,
+    }
+    
+    return render(request, 'comercial/whatsapp/partials/chat_area.html', context)
 
 
 @login_required
@@ -971,18 +998,85 @@ def send_template(request):
         # Junta tudo com quebras de linha
         final_content = '\n\n'.join(template_content)
         
-        # Não salva no banco - vai usar o fluxo natural de envio
-        logger.info(f"Template processado: {template.display_name}")
+        # Envia template via WhatsApp API
+        from django.db import transaction
+        from core.services.whatsapp_api import WhatsAppAPIService
         
-        # Atualiza última atividade da conversa
-        conversation.last_activity = timezone.now()
-        conversation.save(update_fields=['last_activity'])
+        try:
+            with transaction.atomic():
+                # 1. Tenta enviar via WhatsApp API primeiro
+                api = WhatsAppAPIService(conversation.account)
+                to_number = conversation.contact.phone_number.lstrip('+')
+                
+                # Prepara componentes do template
+                components = []
+                if variables:
+                    parameters = []
+                    for var in sorted(set(variables), key=int):
+                        if var == '1':
+                            parameters.append({'type': 'text', 'text': conversation.contact.display_name or 'Cliente'})
+                        elif var == '2':
+                            parameters.append({'type': 'text', 'text': 'Grupo ROM'})
+                        else:
+                            parameters.append({'type': 'text', 'text': f'Variável {var}'})
+                    
+                    components = [{
+                        'type': 'body',
+                        'parameters': parameters
+                    }]
+                
+                # Envia via WhatsApp API
+                api_response = api.send_template_message(
+                    to=to_number,
+                    template_name=template.name,
+                    language_code=template.language,
+                    components=components if components else None
+                )
+                
+                # Se falhar como template, tenta como texto
+                if not api_response.get('success', False):
+                    api_response = api.send_text_message(to=to_number, message=final_content)
+                
+                # Verifica se API retornou sucesso
+                if not (api_response.get('messages') and len(api_response['messages']) > 0):
+                    raise Exception("Falha ao enviar mensagem via WhatsApp")
+                
+                # 2. Só salva no banco se WhatsApp foi bem-sucedido
+                api_message = api_response['messages'][0]
+                message = WhatsAppMessage.objects.create(
+                    account=conversation.account,
+                    contact=conversation.contact,
+                    conversation=conversation,
+                    direction='outbound',
+                    message_type='template',
+                    content=final_content,
+                    timestamp=timezone.now(),
+                    status='sent',
+                    wamid=api_message.get('id', f'template_{timezone.now().timestamp()}'),
+                    sent_by=request.user
+                )
+                
+                # Atualiza conversa
+                conversation.last_activity = timezone.now()
+                if conversation.status == 'pending':
+                    conversation.status = 'in_progress'
+                conversation.save(update_fields=['last_activity', 'status'])
+                
+                logger.info(f"Template {template.display_name} enviado com sucesso")
+                
+        except Exception as e:
+            logger.error(f"Erro ao enviar template: {e}")
+            return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+                'error': 'Não foi possível enviar o template. Tente novamente.'
+            })
         
         logger.info(f"Template {template.display_name} enviado para conversa {conversation_id}")
         
-        return render(request, 'comercial/whatsapp/partials/send_template_success.html', {
+        # Retorna sucesso com atualização das mensagens
+        return render(request, 'comercial/whatsapp/partials/send_template_success_htmx.html', {
             'template': template,
-            'final_content': final_content
+            'message': message,
+            'conversation': conversation
         })
         
     except Exception as e:

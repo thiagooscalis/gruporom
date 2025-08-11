@@ -1,0 +1,58 @@
+<!-- Resposta de sucesso para envio de template -->
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="send-template-alert">
+    <i class="fas fa-check-circle me-2"></i>
+    Template "{{ template.display_name }}" enviado com sucesso!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<script>
+// Fecha o modal e limpa o formulário
+const modal = bootstrap.Modal.getInstance(document.getElementById('sendTemplateModal'));
+if (modal) {
+    modal.hide();
+}
+document.getElementById('sendTemplateForm').reset();
+document.getElementById('templatePreview').innerHTML = '';
+
+// Remove o alert após 5 segundos
+setTimeout(() => {
+    const alert = document.getElementById('send-template-alert');
+    if (alert) {
+        alert.remove();
+    }
+}, 5000);
+
+// Atualiza as mensagens da conversa via HTMX
+const messagesContainer = document.getElementById('messages-container');
+if (messagesContainer) {
+    // Atualiza mensagens para mostrar o template enviado
+    htmx.ajax('GET', '/comercial/whatsapp/conversation/{{ conversation.id }}/messages/', {
+        target: '#messages-container',
+        swap: 'innerHTML'
+    }).then(() => {
+        // Scroll para o final após atualizar mensagens
+        setTimeout(() => {
+            const container = document.getElementById('messages-container');
+            if (container) {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }, 100);
+        
+        // Atualiza a lista de contatos após as mensagens carregarem
+        // para garantir que a conversa apareça no topo (última atividade)
+        const contactsList = document.getElementById('contacts-list');
+        if (contactsList) {
+            setTimeout(() => {
+                const currentConversationId = '{{ conversation.id }}';
+                htmx.ajax('GET', '/comercial/whatsapp/my-conversations/?conversation=' + currentConversationId, {
+                    target: '#contacts-list',
+                    swap: 'innerHTML'
+                });
+            }, 200); // Pequeno delay adicional para garantir que o banco foi atualizado
+        }
+    });
+}
+</script>
