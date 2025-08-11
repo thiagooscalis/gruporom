@@ -20615,3 +20615,21 @@ INFO 2025-08-09 20:57:18,299 whatsapp Webhook adicionado à fila para processame
 INFO 2025-08-09 20:57:18,305 whatsapp Mensagem wamid.test123 já processada
 INFO 2025-08-09 20:57:18,305 whatsapp Webhook processado com sucesso
 INFO 2025-08-09 20:57:18,310 runserver [mHTTP POST /webhook/whatsapp/1/ 200 [0.04, 127.0.0.1:42098][0m
+INFO 2025-08-11 12:37:56,034 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 12:38:01,064 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:38:01,095 runserver [mHTTP GET /comercial/ 200 [0.07, 127.0.0.1:46788][0m
+INFO 2025-08-11 12:39:46,697 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:39:46,729 runserver [mHTTP GET /comercial/ 200 [0.06, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:39:48,632 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:39:48,646 runserver [mHTTP GET /alterar-senha/form/ 200 [0.03, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:39:55,578 runserver [32mHTTP POST /logout/ 302 [0.03, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:39:55,603 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:39:55,615 runserver [mHTTP GET /login/ 200 [0.03, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:40:00,248 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:40:00,250 runserver [mHTTP POST /login/ 200 [0.20, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:40:08,345 runserver [32mHTTP POST /login/ 302 [0.20, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:40:08,355 runserver [32mHTTP GET / 302 [0.01, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:40:08,374 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:40:08,390 runserver [mHTTP GET /administracao/ 200 [0.03, 127.0.0.1:35172][0m
+INFO 2025-08-11 12:40:11,211 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 12:40:11,244 runserver [mHTTP GET /administracao/usuarios/ 200 [0.08, 127.0.0.1:35172][0m

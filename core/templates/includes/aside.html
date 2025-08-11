@@ -43,5 +43,23 @@
             </a>
         </li>
         {% endif %}
+        
+        <!-- Links universais para todos os usuários logados -->
+        <hr class="my-3 border-secondary">
+        <li class="nav-item">
+            <a href="#" class="nav-link text-light" 
+               data-bs-toggle="modal" 
+               data-bs-target="#modalAlterarSenha"
+               hx-get="{% url 'alterar_senha_form' %}"
+               hx-target="#modalAlterarSenhaBody"
+               hx-swap="innerHTML">
+                <i class="fas fa-fw fa-key text-light"></i> Alterar Senha
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#modalLogout">
+                <i class="fas fa-fw fa-sign-out-alt text-light"></i> Sair
+            </a>
+        </li>
     </ul>
 </aside>

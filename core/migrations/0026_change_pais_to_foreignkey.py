@@ -4,6 +4,47 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
+def convert_pais_to_foreignkey(apps, schema_editor):
+    """
+    Converte valores de país (CharField) para ForeignKey do model Pais.
+    Como não temos dados existentes, apenas define como null para não quebrar.
+    """
+    Pessoa = apps.get_model('core', 'Pessoa')
+    Pais = apps.get_model('core', 'Pais')
+    
+    # Para pessoas existentes que possam ter país como texto,
+    # vamos tentar encontrar o país correspondente ou definir como null
+    for pessoa in Pessoa.objects.all():
+        if hasattr(pessoa, 'pais') and pessoa.pais:
+            # Tenta encontrar país pelo nome (se existir como texto)
+            try:
+                pais_obj = Pais.objects.filter(nome__icontains=pessoa.pais).first()
+                if pais_obj:
+                    pessoa.pais = pais_obj
+                else:
+                    pessoa.pais = None
+                pessoa.save()
+            except:
+                # Se der erro, apenas define como null
+                pessoa.pais = None
+                pessoa.save()
+
+
+def reverse_pais_to_charfield(apps, schema_editor):
+    """
+    Reverse: converte ForeignKey de volta para CharField.
+    """
+    Pessoa = apps.get_model('core', 'Pessoa')
+    
+    for pessoa in Pessoa.objects.all():
+        if pessoa.pais:
+            # Salva o nome do país como texto
+            pessoa.pais = pessoa.pais.nome
+        else:
+            pessoa.pais = None
+        pessoa.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -11,6 +52,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Primeiro converte dados existentes
+        migrations.RunPython(
+            convert_pais_to_foreignkey,
+            reverse_pais_to_charfield,
+        ),
+        # Depois altera o campo
         migrations.AlterField(
             model_name="pessoa",
             name="pais",
