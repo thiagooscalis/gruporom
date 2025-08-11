@@ -21124,3 +21124,30 @@ INFO 2025-08-11 14:46:29,422 cambio Câmbio encontrado no banco para 2025-08-11:
 INFO 2025-08-11 14:46:29,455 runserver [mHTTP GET /comercial/whatsapp/geral/ 200 [0.06, 127.0.0.1:34838][0m
 INFO 2025-08-11 14:46:32,049 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
 INFO 2025-08-11 14:46:32,057 runserver [mHTTP GET /comercial/whatsapp/conversation/35/messages-readonly/ 200 [0.05, 127.0.0.1:34838][0m
+INFO 2025-08-11 14:49:34,850 autoreload Watching for file changes with StatReloader
+INFO 2025-08-11 14:49:35,578 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:35,609 runserver [mHTTP GET /administracao/ 200 [0.08, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:36,764 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:36,778 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:39,990 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:40,024 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.07, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:44,086 runserver [mHTTP POST /administracao/usuarios/1/atualizar/ 200 [0.07, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:44,140 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:44,155 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:48,086 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:48,115 runserver [mHTTP GET /comercial/ 200 [0.05, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:50,530 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:50,551 runserver [mHTTP GET /comercial/whatsapp/geral/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:53,717 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:53,739 runserver [mHTTP GET /administracao/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:55,774 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:55,788 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:49:58,395 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:49:58,418 runserver [mHTTP GET /administracao/usuarios/1/editar/modal/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:50:01,682 runserver [mHTTP POST /administracao/usuarios/1/atualizar/ 200 [0.03, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:50:01,739 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:50:01,759 runserver [mHTTP GET /administracao/usuarios/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:50:05,042 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:50:05,076 runserver [mHTTP GET /comercial/ 200 [0.06, 127.0.0.1:43118][0m
+INFO 2025-08-11 14:50:06,633 cambio Câmbio encontrado no banco para 2025-08-11: R$ 5.4520
+INFO 2025-08-11 14:50:06,670 runserver [mHTTP GET /comercial/whatsapp/geral/ 200 [0.08, 127.0.0.1:43118][0m

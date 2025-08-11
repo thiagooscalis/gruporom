@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists() and u.has_perm('core.controle_whatsapp'))
 def whatsapp_geral(request):
     """
     Página WhatsApp Geral - visualiza todas as conversas de todos os atendentes

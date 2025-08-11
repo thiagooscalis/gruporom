@@ -13,9 +13,11 @@
     </a>
 </li>
 
+{% if perms.core.controle_whatsapp %}
 <li class="nav-item">
     <a href="{% url 'comercial:whatsapp_geral' %}" class="nav-link {% if request.resolver_match.url_name == 'whatsapp_geral' %}text-warning{% else %}text-light{% endif %}">
         <i class="fas fa-comments"></i>
         <span class="ms-2">WhatsApp Geral</span>
     </a>
 </li>
+{% endif %}
