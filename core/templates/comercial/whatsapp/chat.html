@@ -225,7 +225,13 @@
                     <span class="status-indicator status-online" id="connection-status" title="Conectado"></span>
                 </h4>
             </div>
-            <button class="btn btn-primary new-conversations-btn" onclick="openNewConversationsModal()">
+            <button class="btn btn-primary new-conversations-btn" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#newConversationsModal"
+                    hx-get="{% url 'comercial:pending_conversations' %}"
+                    hx-target="#pending-conversations-container"
+                    hx-swap="innerHTML"
+                    hx-trigger="click">
                 Novas Conversas
                 <span class="badge ms-2" id="pending-badge"
                       style="background-color: {% if pending_count > 0 %}#dc3545{% else %}#6c757d{% endif %}; color: white;">
@@ -332,7 +338,13 @@
                     <i class="fab fa-whatsapp text-muted" style="font-size: 100px;"></i>
                     <h5 class="mt-3 text-muted">Selecione uma conversa para começar</h5>
                     <p class="text-muted">Escolha uma conversa da lista ao lado ou atenda uma nova</p>
-                    <button class="btn btn-primary mt-3" onclick="openNewConversationsModal()">
+                    <button class="btn btn-primary mt-3" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#newConversationsModal"
+                            hx-get="{% url 'comercial:pending_conversations' %}"
+                            hx-target="#pending-conversations-container"
+                            hx-swap="innerHTML"
+                            hx-trigger="click">
                         <i class="fas fa-comments me-2"></i>
                         Ver Novas Conversas
                     </button>
@@ -354,9 +366,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="pending-conversations-container"
-                 hx-get="{% url 'comercial:pending_conversations' %}"
-                 hx-trigger="load">
+            <div class="modal-body" id="pending-conversations-container">
                 <!-- Carregado via HTMX -->
             </div>
         </div>
@@ -490,13 +500,11 @@
 <script>
 // Busca de conversas implementada com HTMX
 
-// Abrir modal de novas conversas
+// Função não é mais necessária - botão usa HTMX diretamente
+// Mantida para compatibilidade se houver outras chamadas
 function openNewConversationsModal() {
     const modal = new bootstrap.Modal(document.getElementById('newConversationsModal'));
     modal.show();
-    
-    // Recarrega lista de pendentes
-    htmx.trigger('#pending-conversations-container', 'load');
 }
 
 // Atribuir conversa
@@ -602,62 +610,6 @@ function sendMessage(event, conversationId) {
 
 // Função finishConversation removida - conclusão será feita em outro módulo
 
-// Função para mostrar notificações toast
-function showToast(message, type = 'info') {
-    // Cria e mostra notificação toast
-    let bgColor = 'primary';
-    let icon = 'fas fa-info-circle';
-    switch(type) {
-        case 'success': 
-            bgColor = 'success'; 
-            icon = 'fas fa-check-circle';
-            break;
-        case 'error': 
-            bgColor = 'danger'; 
-            icon = 'fas fa-exclamation-circle';
-            break;
-        case 'warning': 
-            bgColor = 'warning'; 
-            icon = 'fas fa-exclamation-triangle';
-            break;
-        default: 
-            bgColor = 'primary';
-            icon = 'fas fa-info-circle';
-    }
-    
-    const toastHtml = `
-        <div class="toast align-items-center text-white bg-${bgColor} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="${icon} me-2"></i>${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    `;
-    
-    // Adiciona à área de toasts
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-    
-    // Ativa o toast
-    const toastEl = toastContainer.lastElementChild;
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
-    
-    // Remove após fechar
-    toastEl.addEventListener('hidden.bs.toast', () => {
-        toastEl.remove();
-    });
-}
-
 // WebSocket para notificações em tempo real
 let socket = null;
 
@@ -687,8 +639,8 @@ function connectWebSocket() {
                 statusIndicator.title = 'Conectado via WebSocket';
             }
             
-            // Mostra toast de sucesso
-            showToast('WebSocket conectado!', 'success');
+            // WebSocket conectado silenciosamente
+            console.log('✅ Conexão estabelecida');
         };
     } catch (error) {
         console.error('❌ Erro ao criar WebSocket:', error);
@@ -707,7 +659,7 @@ function connectWebSocket() {
             statusIndicator.title = 'Erro na conexão WebSocket';
         }
         
-        showToast('Erro na conexão WebSocket', 'error');
+        console.error('❌ Erro na conexão WebSocket');
     };
     
     socket.onmessage = function(event) {
@@ -727,7 +679,7 @@ function connectWebSocket() {
                         updatePendingCount(data.pending_count);
                     }
                     updateModalIfOpen();
-                    showToast('Nova conversa aguardando atendimento!', 'info');
+                    console.log('📝 Nova conversa aguardando atendimento');
                     break;
                 case 'pending_count_update':
                     console.log('📊 Atualização de contador:', data.count);
@@ -795,7 +747,7 @@ function connectWebSocket() {
         }
         
         // Mostra toast de erro
-        showToast(`WebSocket desconectado: ${errorMessage}`, 'warning');
+        console.warn(`🔴 WebSocket desconectado: ${errorMessage}`);
         
         // Se WebSocket falhar, usa polling como fallback
         startPolling();
@@ -811,7 +763,7 @@ function connectWebSocket() {
     
     socket.onerror = function(error) {
         console.error('❌ Erro no WebSocket:', error);
-        showToast('Erro na conexão WebSocket', 'error');
+        console.error('❌ Erro na conexão WebSocket');
     };
 }
 

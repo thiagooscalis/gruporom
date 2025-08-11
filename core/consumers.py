@@ -65,9 +65,13 @@ class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
     # Handlers para diferentes tipos de eventos
     async def conversation_new(self, event):
         """Nova conversa aguardando atendimento"""
+        # Busca o contador atualizado de conversas pendentes
+        pending_count = await self.get_pending_count()
+        
         await self.send(text_data=json.dumps({
             'type': 'conversation_new',
-            'conversation': event['conversation']
+            'conversation': event['conversation'],
+            'pending_count': pending_count
         }))
     
     async def conversation_assigned(self, event):
@@ -99,14 +103,20 @@ class WhatsAppComercialConsumer(AsyncWebsocketConsumer):
             'count': event['count']
         }))
     
+    @database_sync_to_async
+    def is_comercial_user(self):
+        """Verifica se o usuário pertence ao grupo Comercial"""
+        return self.scope["user"].groups.filter(name='Comercial').exists()
+    
+    @database_sync_to_async
+    def get_pending_count(self):
+        """Retorna o número de conversas pendentes"""
+        from core.models import WhatsAppConversation
+        return WhatsAppConversation.objects.filter(status='pending').count()
+    
     async def message_status_update(self, event):
         """Atualização de status de mensagem (delivered, read)"""
         await self.send(text_data=json.dumps({
             'type': 'message_status_update',
             'message_status': event['message_status']
         }))
-    
-    @database_sync_to_async
-    def is_comercial_user(self):
-        """Verifica se o usuário pertence ao grupo Comercial"""
-        return self.scope["user"].groups.filter(name='Comercial').exists()
