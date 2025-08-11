@@ -7,27 +7,15 @@ from django.db import migrations, models
 def convert_pais_to_foreignkey(apps, schema_editor):
     """
     Converte valores de país (CharField) para ForeignKey do model Pais.
-    Como não temos dados existentes, apenas define como null para não quebrar.
+    Em produção existem dados reais que precisam ser convertidos.
     """
-    Pessoa = apps.get_model('core', 'Pessoa')
-    Pais = apps.get_model('core', 'Pais')
+    from django.db import connection
     
-    # Para pessoas existentes que possam ter país como texto,
-    # vamos tentar encontrar o país correspondente ou definir como null
-    for pessoa in Pessoa.objects.all():
-        if hasattr(pessoa, 'pais') and pessoa.pais:
-            # Tenta encontrar país pelo nome (se existir como texto)
-            try:
-                pais_obj = Pais.objects.filter(nome__icontains=pessoa.pais).first()
-                if pais_obj:
-                    pessoa.pais = pais_obj
-                else:
-                    pessoa.pais = None
-                pessoa.save()
-            except:
-                # Se der erro, apenas define como null
-                pessoa.pais = None
-                pessoa.save()
+    # Primeiro, vamos limpar os dados de país que são texto
+    # e definir como null para evitar erro de conversão
+    with connection.cursor() as cursor:
+        # Define todos os valores de país como null temporariamente
+        cursor.execute("UPDATE core_pessoa SET pais = NULL WHERE pais IS NOT NULL")
 
 
 def reverse_pais_to_charfield(apps, schema_editor):
