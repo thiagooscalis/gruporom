@@ -19,7 +19,7 @@
                 
             {% elif message.message_type == 'video' %}
                 <div class="media-message video-message">
-                    <video controls class="media-video" preload="metadata">
+                    <video controls class="media-video" preload="metadata" muted>
                         <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
                         Seu navegador não suporta vídeos.
                     </video>
