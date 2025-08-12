@@ -1,7 +1,8 @@
 <div class="message {{ message.direction }}" data-message-id="{{ message.id }}">
     <div class="message-bubble">
-        {% if message.is_media and message.media_url %}
+        {% if message.is_media %}
             <!-- Renderização de mídias -->
+            {% if message.media_url %}
             {% if message.message_type == 'image' %}
                 <div class="media-message image-message">
                     <img src="{{ message.media_url }}" 
@@ -97,6 +98,45 @@
                     {{ message.get_display_content }}
                 </div>
             {% endif %}
+            
+            {% else %}
+                <!-- Mídia não baixada ainda -->
+                <div class="media-message pending-media">
+                    <div class="alert alert-warning mb-0">
+                        {% if message.message_type == 'image' %}
+                            <i class="fas fa-image me-2"></i>
+                            <strong>Imagem não carregada</strong>
+                        {% elif message.message_type == 'video' %}
+                            <i class="fas fa-video me-2"></i>
+                            <strong>Vídeo não carregado</strong>
+                        {% elif message.message_type == 'audio' %}
+                            <i class="fas fa-microphone me-2"></i>
+                            <strong>Áudio não carregado</strong>
+                        {% elif message.message_type == 'document' %}
+                            <i class="fas fa-file me-2"></i>
+                            <strong>Documento não carregado</strong>
+                        {% else %}
+                            <i class="fas fa-paperclip me-2"></i>
+                            <strong>Mídia não carregada</strong>
+                        {% endif %}
+                        <br>
+                        <small class="text-muted">
+                            {% if message.media_id %}
+                                ID: {{ message.media_id }}<br>
+                            {% endif %}
+                            {% if message.content %}
+                                {{ message.content }}
+                            {% endif %}
+                        </small>
+                        <br>
+                        <small class="text-danger">
+                            A mídia não foi baixada do WhatsApp. 
+                            Verifique as credenciais da API.
+                        </small>
+                    </div>
+                </div>
+            {% endif %}
+            
         {% else %}
             <!-- Mensagem de texto normal -->
             <div class="text-message">{{ message.content|linebreaks }}</div>
