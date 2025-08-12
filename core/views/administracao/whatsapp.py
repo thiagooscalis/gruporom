@@ -318,17 +318,30 @@ def _process_message_sync(account, message_data, contacts_data):
         # Extrai conteúdo da mensagem
         content = ''
         message_type = message_data.get('type', 'text')
+        media_data = {}
         
         if message_type == 'text':
             content = message_data.get('text', {}).get('body', '')
         elif message_type == 'image':
-            content = message_data.get('image', {}).get('caption', '[Imagem]')
+            media_data = message_data.get('image', {})
+            content = media_data.get('caption', '[Imagem]')
         elif message_type == 'audio':
+            media_data = message_data.get('audio', {})
             content = '[Áudio]'
         elif message_type == 'video':
-            content = message_data.get('video', {}).get('caption', '[Vídeo]')
+            media_data = message_data.get('video', {})
+            content = media_data.get('caption', '[Vídeo]')
         elif message_type == 'document':
-            content = f"[Documento: {message_data.get('document', {}).get('filename', 'arquivo')}]"
+            media_data = message_data.get('document', {})
+            content = f"[Documento: {media_data.get('filename', 'arquivo')}]"
+        elif message_type == 'sticker':
+            media_data = message_data.get('sticker', {})
+            content = '[Figurinha]'
+        elif message_type == 'location':
+            location = message_data.get('location', {})
+            content = f"Lat: {location.get('latitude', 0)}, Lng: {location.get('longitude', 0)}"
+            if location.get('name'):
+                content = f"{location['name']} - {content}"
         
         # Cria mensagem
         message = WhatsAppMessage.objects.create(
