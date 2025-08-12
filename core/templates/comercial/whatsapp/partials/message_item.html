@@ -3,45 +3,45 @@
         {% if message.is_media %}
             <!-- Renderização de mídias -->
             {% if message.media_url %}
-            {% if message.message_type == 'image' %}
-                <div class="media-message image-message">
-                    <img src="{{ message.media_url }}" 
-                         class="media-image" 
-                         alt="Imagem enviada"
-                         loading="lazy"
-                         hx-get="{% url 'comercial:media_modal' %}?url={{ message.media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
-                         hx-target="body"
-                         hx-swap="beforeend"
-                         style="cursor: pointer;">
-                    {% if message.content %}
-                        <div class="media-caption">{{ message.content }}</div>
-                    {% endif %}
-                </div>
-                
-            {% elif message.message_type == 'video' %}
-                <div class="media-message video-message">
-                    <video controls class="media-video" preload="metadata" muted>
-                        <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
-                        Seu navegador não suporta vídeos.
-                    </video>
-                    {% if message.content %}
-                        <div class="media-caption">{{ message.content }}</div>
-                    {% endif %}
-                </div>
-                
-            {% elif message.message_type == 'audio' %}
-                <div class="media-message audio-message">
-                    <div class="audio-player">
-                        <i class="fas fa-microphone me-2"></i>
-                        <audio controls class="media-audio">
-                            <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'audio/ogg' }}">
-                            Seu navegador não suporta áudio.
-                        </audio>
+                {% if message.message_type == 'image' %}
+                    <div class="media-message image-message">
+                        <img src="{{ message.media_url }}" 
+                             class="media-image" 
+                             alt="Imagem enviada"
+                             loading="lazy"
+                             hx-get="{% url 'comercial:media_modal' %}?url={{ message.media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
+                             hx-target="body"
+                             hx-swap="beforeend"
+                             style="cursor: pointer;">
+                        {% if message.content %}
+                            <div class="media-caption">{{ message.content }}</div>
+                        {% endif %}
                     </div>
-                </div>
-                
-            {% elif message.message_type == 'document' %}
-                <div class="media-message document-message">
+                    
+                {% elif message.message_type == 'video' %}
+                    <div class="media-message video-message">
+                        <video controls class="media-video" preload="metadata" muted>
+                            <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
+                            Seu navegador não suporta vídeos.
+                        </video>
+                        {% if message.content %}
+                            <div class="media-caption">{{ message.content }}</div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif message.message_type == 'audio' %}
+                    <div class="media-message audio-message">
+                        <div class="audio-player">
+                            <i class="fas fa-microphone me-2"></i>
+                            <audio controls class="media-audio">
+                                <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'audio/ogg' }}">
+                                Seu navegador não suporta áudio.
+                            </audio>
+                        </div>
+                    </div>
+                    
+                {% elif message.message_type == 'document' %}
+                    <div class="media-message document-message">
                     <div class="document-preview">
                         <div class="document-icon">
                             {% if '.pdf' in message.media_filename|lower %}
@@ -75,25 +75,25 @@
                     {% endif %}
                 </div>
                 
-            {% elif message.message_type == 'sticker' %}
-                <div class="media-message sticker-message">
+                {% elif message.message_type == 'sticker' %}
+                    <div class="media-message sticker-message">
                     <img src="{{ message.media_url }}" 
                          class="media-sticker" 
                          alt="Figurinha"
                          loading="lazy">
                 </div>
                 
-            {% elif message.message_type == 'location' %}
-                <div class="media-message location-message">
+                {% elif message.message_type == 'location' %}
+                    <div class="media-message location-message">
                     <div class="location-preview">
                         <i class="fas fa-map-marker-alt text-danger me-2"></i>
                         <div class="location-text">{{ message.content }}</div>
                     </div>
                 </div>
                 
-            {% else %}
-                <!-- Mídia desconhecida - fallback -->
-                <div class="media-message unknown-message">
+                {% else %}
+                    <!-- Mídia desconhecida - fallback -->
+                    <div class="media-message unknown-message">
                     <i class="fas fa-file-alt me-2"></i>
                     {{ message.get_display_content }}
                 </div>
