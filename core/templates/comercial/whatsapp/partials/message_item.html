@@ -1,15 +1,16 @@
 <div class="message {{ message.direction }}" data-message-id="{{ message.id }}">
     <div class="message-bubble">
+        <!-- DEBUG: is_media={{ message.is_media }} | media_url="{{ message.media_url }}" | media_id="{{ message.media_id }}" -->
         {% if message.is_media %}
             <!-- Renderização de mídias -->
             {% if message.media_url %}
                 {% if message.message_type == 'image' %}
                     <div class="media-message image-message">
-                        <img src="{{ message.media_url }}" 
+                        <img src="{{ message.get_signed_media_url }}" 
                              class="media-image" 
                              alt="Imagem enviada"
                              loading="lazy"
-                             hx-get="{% url 'comercial:media_modal' %}?url={{ message.media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
+                             hx-get="{% url 'comercial:media_modal' %}?url={{ message.get_signed_media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
                              hx-target="body"
                              hx-swap="beforeend"
                              style="cursor: pointer;">
@@ -21,7 +22,7 @@
                 {% elif message.message_type == 'video' %}
                     <div class="media-message video-message">
                         <video controls class="media-video" preload="metadata" muted>
-                            <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
+                            <source src="{{ message.get_signed_media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
                             Seu navegador não suporta vídeos.
                         </video>
                         {% if message.content %}
@@ -34,7 +35,7 @@
                         <div class="audio-player">
                             <i class="fas fa-microphone me-2"></i>
                             <audio controls class="media-audio">
-                                <source src="{{ message.media_url }}" type="{{ message.media_mimetype|default:'audio/ogg' }}">
+                                <source src="{{ message.get_signed_media_url }}" type="{{ message.media_mimetype|default:'audio/ogg' }}">
                                 Seu navegador não suporta áudio.
                             </audio>
                         </div>
@@ -64,7 +65,7 @@
                             <div class="document-name">{{ message.media_filename|default:"Documento" }}</div>
                             <div class="document-type">{{ message.media_mimetype|default:"application/octet-stream" }}</div>
                         </div>
-                        <a href="{{ message.media_url }}" 
+                        <a href="{{ message.get_signed_media_url }}" 
                            target="_blank" 
                            class="btn btn-outline-primary btn-sm document-download">
                             <i class="fas fa-download"></i>
@@ -77,7 +78,7 @@
                 
                 {% elif message.message_type == 'sticker' %}
                     <div class="media-message sticker-message">
-                    <img src="{{ message.media_url }}" 
+                    <img src="{{ message.get_signed_media_url }}" 
                          class="media-sticker" 
                          alt="Figurinha"
                          loading="lazy">

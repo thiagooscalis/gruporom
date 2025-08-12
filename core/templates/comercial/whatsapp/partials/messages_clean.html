@@ -1,7 +1,153 @@
 {% for message in messages %}
 <div class="message {{ message.direction }}" data-message-id="{{ message.id }}">
     <div class="message-bubble">
-        <div>{{ message.get_display_content|linebreaks }}</div>
+        <div>
+            {% if message.is_media %}
+                {% if message.message_type == 'image' and message.media_url %}
+                    <div class="media-message image-message mb-2">
+                        <img src="{{ message.get_signed_media_url }}" 
+                             class="img-fluid rounded" 
+                             alt="Imagem enviada"
+                             style="max-width: 250px; cursor: pointer;"
+                             hx-get="{% url 'comercial:media_modal' %}?url={{ message.get_signed_media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
+                             hx-target="body"
+                             hx-swap="beforeend"
+                             hx-trigger="click">
+                        {% if message.content %}
+                            <div class="mt-1 small">{{ message.content }}</div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif message.message_type == 'video' %}
+                    <div class="media-message video-message mb-2">
+                        {% if message.get_signed_media_url and message.media_url %}
+                            <video controls class="rounded" style="max-width: 250px;" preload="metadata" muted
+                                   onerror="handleVideoError(this)"
+                                   onloadstart="console.log('🎬 Iniciando carregamento do vídeo:', this.currentSrc)"
+                                   oncanplay="console.log('✅ Vídeo pode ser reproduzido')"
+                                   onabort="console.log('❌ Carregamento do vídeo abortado')"
+                                   onstalled="console.log('⏸️ Carregamento do vídeo pausado')">
+                                <source src="{{ message.get_signed_media_url }}" 
+                                        type="{{ message.media_mimetype|default:'video/mp4' }}"
+                                        onerror="handleVideoError(this.parentElement)">
+                                Seu navegador não suporta vídeos.
+                            </video>
+                            <!-- Fallback quando vídeo falha -->
+                            <div class="video-error-fallback bg-warning rounded p-3 text-center" style="display: none; max-width: 250px;">
+                                <i class="fas fa-exclamation-triangle mb-2"></i>
+                                <div class="small fw-bold">Erro ao carregar vídeo</div>
+                                <div class="text-muted small">{{ message.media_filename|default:"Arquivo não encontrado" }}</div>
+                                <button class="btn btn-sm btn-outline-dark mt-2" 
+                                        onclick="this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='block';"
+                                        title="Tentar novamente">
+                                    <i class="fas fa-redo me-1"></i>Tentar novamente
+                                </button>
+                            </div>
+                        {% else %}
+                            <!-- Video placeholder -->
+                            <div class="video-placeholder bg-dark rounded d-flex align-items-center justify-content-center position-relative" 
+                                 style="width: 250px; height: 140px; cursor: pointer;"
+                                 hx-get="{% url 'comercial:media_modal' %}?url=placeholder&type=video&name={{ message.media_filename|default:'Vídeo'|urlencode }}"
+                                 hx-target="body"
+                                 hx-swap="beforeend"
+                                 hx-trigger="click"
+                                 title="Clique para abrir em modal">
+                                <div class="text-center text-white">
+                                    <div class="video-play-button bg-white bg-opacity-75 rounded-circle d-flex align-items-center justify-content-center mb-2 mx-auto" 
+                                         style="width: 50px; height: 50px;">
+                                        <i class="fas fa-play text-dark fs-4"></i>
+                                    </div>
+                                    <div class="small">
+                                        <i class="fas fa-video me-1"></i>
+                                        {{ message.media_filename|default:"Vídeo" }}
+                                    </div>
+                                </div>
+                                <div class="position-absolute bottom-0 end-0 p-2">
+                                    <span class="badge bg-dark bg-opacity-75 text-white small">0:15</span>
+                                </div>
+                                <div class="position-absolute top-0 end-0 p-1">
+                                    <i class="fas fa-expand text-white text-opacity-75" style="font-size: 0.7rem;" title="Expandir"></i>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if message.content %}
+                            <div class="mt-1 small">{{ message.content }}</div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif message.message_type == 'audio' %}
+                    <div class="media-message audio-message mb-2">
+                        <div class="audio-player-container p-2 bg-light rounded d-flex align-items-center position-relative" 
+                             style="max-width: 280px; cursor: pointer;"
+                             hx-get="{% url 'comercial:media_modal' %}?url={{ message.get_signed_media_url|urlencode }}&type=audio&name={{ message.media_filename|default:'Mensagem de Áudio'|urlencode }}"
+                             hx-target="body"
+                             hx-swap="beforeend"
+                             hx-trigger="click"
+                             title="Clique para abrir em modal">
+                            <div class="audio-icon me-2">
+                                <i class="fas fa-microphone text-success fs-5"></i>
+                            </div>
+                            <div class="audio-controls flex-grow-1">
+                                <div class="audio-placeholder d-flex align-items-center" onclick="event.stopPropagation();">
+                                    <button class="btn btn-sm btn-outline-success me-2" onclick="playTestAudio()" title="Reproduzir áudio">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div class="flex-grow-1">
+                                        <div class="bg-success rounded" style="height: 4px; width: 100%;"></div>
+                                        <small class="text-muted">Mensagem de áudio • 0:03</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-absolute top-0 end-0 p-1">
+                                <i class="fas fa-expand text-muted" style="font-size: 0.7rem;" title="Expandir"></i>
+                            </div>
+                        </div>
+                        {% if message.content %}
+                            <div class="mt-1 small">{{ message.content }}</div>
+                        {% endif %}
+                    </div>
+                    
+                {% elif message.message_type == 'document' %}
+                    <div class="media-message document-message mb-2">
+                        {% if message.media_url %}
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="fas fa-file me-2 text-muted"></i>
+                                <div class="flex-grow-1">
+                                    <div class="small fw-bold">{{ message.media_filename|default:"Documento" }}</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">{{ message.media_mimetype|default:"application/octet-stream" }}</div>
+                                </div>
+                                <a href="{{ message.get_signed_media_url }}" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="fas fa-file me-2 text-muted"></i>
+                                <div class="flex-grow-1">
+                                    <div class="small fw-bold">{{ message.media_filename|default:"Documento" }}</div>
+                                    <div class="text-muted small">Documento não disponível</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if message.content %}
+                            <div class="mt-1 small">{{ message.content }}</div>
+                        {% endif %}
+                    </div>
+                    
+                {% else %}
+                    <!-- Mídia desconhecida -->
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-paperclip me-2"></i>
+                        {{ message.get_display_content }}
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- Mensagem de texto normal -->
+                {{ message.get_display_content|linebreaks }}
+            {% endif %}
+        </div>
         <div class="message-time">
             {{ message.timestamp|date:"H:i" }}
             {% if message.direction == 'outbound' %}

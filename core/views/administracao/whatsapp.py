@@ -362,11 +362,20 @@ def _process_message_sync(account, message_data, contacts_data):
         
         # Se tem mídia, faz download
         if message.is_media and message.media_id:
+            logger.info(f"Tentando baixar mídia {message.media_id} do tipo {message.message_type}")
             try:
-                _download_media_sync(message)
+                success = _download_media_sync(message)
+                if success:
+                    logger.info(f"Mídia {message.media_id} baixada com sucesso! URL: {message.media_url}")
+                else:
+                    logger.error(f"Falha ao baixar mídia {message.media_id}")
             except Exception as e:
                 logger.error(f"Erro ao baixar mídia {message.media_id}: {e}")
+                import traceback
+                logger.error(f"Traceback: {traceback.format_exc()}")
                 # Continua mesmo se o download falhar
+        else:
+            logger.info(f"Mensagem não tem mídia ou media_id vazio. is_media={message.is_media}, media_id={message.media_id}")
         
         # Atualiza última atividade da conversa
         conversation.last_activity = timestamp

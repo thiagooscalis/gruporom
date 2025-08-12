@@ -731,37 +731,11 @@ def register_client(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
-def conversation_detail(request, conversation_id):
-    """
-    Página de conversa individual para atendimento
-    """
-    conversation = get_object_or_404(
-        WhatsAppConversation.objects.select_related('contact', 'account'),
-        id=conversation_id
-    )
-    
-    # Verifica se o usuário tem acesso a esta conversa
-    if conversation.assigned_to != request.user:
-        return JsonResponse({'success': False, 'message': 'Você não tem acesso a esta conversa.'})
-    
-    # Busca todas as mensagens da conversa
-    messages_list = conversation.messages.select_related('sent_by').order_by('timestamp')
-    
-    # Marca mensagens como lidas
-    unread_messages = messages_list.filter(
-        direction='inbound',
-        status__in=['sent', 'delivered']
-    )
-    for msg in unread_messages:
-        msg.mark_as_read()
-    
-    context = {
-        'title': f'Conversa - {conversation.contact.display_name}',
-        'conversation': conversation,
-        'messages': messages_list,
-    }
-    
-    return render(request, 'comercial/whatsapp/conversation.html', context)
+# def conversation_detail(request, conversation_id):
+#     """
+#     REMOVIDO - usar dashboard com ?conversation=ID
+#     """
+#     pass
 
 
 @login_required

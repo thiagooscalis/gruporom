@@ -31,7 +31,6 @@ urlpatterns = [
     path('test-websocket/', views.test_websocket, name='test_websocket'),
     # path('finish/<int:conversation_id>/', views.finish_conversation, name='finish_conversation'),  # Removido - conclusão em outro módulo
     
-    # Legacy
-    path('conversation/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
+    # Removido: conversation_detail - usar dashboard com ?conversation=ID
     path('conversations-table/', views.conversations_table, name='conversations_table'),
 ]

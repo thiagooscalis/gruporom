@@ -403,6 +403,47 @@ class WhatsAppMessage(models.Model):
             "video",
             "sticker",
         ]
+    
+    def get_signed_media_url(self, expires_in=3600):
+        """
+        Gera URL assinada para acesso à mídia no S3
+        Args:
+            expires_in: Tempo de expiração em segundos (padrão: 1 hora)
+        """
+        if not self.media_url or not self.is_media:
+            return None
+            
+        try:
+            from django.core.files.storage import default_storage
+            from django.conf import settings
+            from urllib.parse import urlparse
+            
+            # Extrai o caminho do arquivo da URL usando urlparse
+            parsed = urlparse(self.media_url)
+            file_path = parsed.path.lstrip('/')  # Remove barra inicial
+            
+            if not file_path:
+                return self.media_url  # Retorna URL original se não conseguir extrair
+            
+            # Gera URL assinada se temos boto3
+            if hasattr(default_storage, 'connection') and hasattr(default_storage.connection.meta.client, 'generate_presigned_url'):
+                signed_url = default_storage.connection.meta.client.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 
+                        'Key': file_path  # file_path já inclui media/
+                    },
+                    ExpiresIn=expires_in
+                )
+                return signed_url
+            
+            return self.media_url  # Fallback para URL original
+            
+        except Exception as e:
+            import logging
+            logger = logging.getLogger('whatsapp')
+            logger.error(f"Erro ao gerar URL assinada para {self.wamid}: {e}")
+            return self.media_url  # Fallback para URL original
 
     @property
     def age(self):

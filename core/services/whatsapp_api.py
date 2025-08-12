@@ -696,6 +696,58 @@ class WhatsAppAPIService:
         """
         Obtém URL de download da mídia
         """
+        # Para IDs de teste do simulador, retorna URLs de exemplo
+        if media_id.startswith('media_'):
+            test_media_urls = {
+                'image': {
+                    'url': 'https://picsum.photos/800/600',
+                    'mime_type': 'image/jpeg',
+                    'file_size': 150000
+                },
+                'audio': {
+                    'url': 'https://www.kozco.com/tech/LRMonoPhase4.wav',
+                    'mime_type': 'audio/wav',
+                    'file_size': 50000
+                },
+                'video': {
+                    'url': 'https://sample-videos.com/zip/10/mp4/SampleVideo_360x240_1mb.mp4',
+                    'mime_type': 'video/mp4',
+                    'file_size': 1000000
+                },
+                'document': {
+                    'url': 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                    'mime_type': 'application/pdf',
+                    'file_size': 100000
+                }
+            }
+            
+            # Identifica tipo baseado no ID
+            media_type = None
+            type_mapping = {
+                'img': 'image',      # media_img_* -> image
+                'image': 'image',    # media_image_* -> image  
+                'audio': 'audio',    # media_audio_* -> audio
+                'video': 'video',    # media_video_* -> video
+                'doc': 'document'    # media_doc_* -> document
+            }
+            
+            for id_pattern, type_name in type_mapping.items():
+                if id_pattern in media_id:
+                    media_type = type_name
+                    break
+            
+            if media_type:
+                media_info = test_media_urls[media_type]
+                logger.info(f"Retornando URL de teste para {media_id}: {media_info['url']}")
+                return {
+                    'success': True,
+                    'url': media_info['url'],
+                    'mime_type': media_info['mime_type'],
+                    'file_size': media_info['file_size'],
+                    'data': media_info
+                }
+        
+        # URL real para IDs de produção
         url = f"{self.BASE_URL}/{media_id}"
         
         try:

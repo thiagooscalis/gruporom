@@ -1196,6 +1196,7 @@ function stopPolling() {
     }
 }
 
+
 // Listener simplificado para HTMX - apenas para modal de conversas
 if (!window.htmxListenerRegistered) {
     window.htmxListenerRegistered = true;
@@ -1328,6 +1329,101 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Função para reproduzir áudio de teste
+function playTestAudio() {
+    try {
+        // Cria um som simples usando Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Som de notificação similar ao WhatsApp
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.2);
+        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
+        
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+        
+        console.log('🎵 Áudio de teste reproduzido');
+    } catch (e) {
+        console.log('❌ Erro ao reproduzir áudio:', e);
+        alert('Não foi possível reproduzir o áudio');
+    }
+}
+
+// Função para lidar com erros de vídeo
+function handleVideoError(videoElement) {
+    console.log('❌ Erro no vídeo:', videoElement);
+    try {
+        const fallback = videoElement.nextElementSibling;
+        if (fallback && fallback.classList.contains('video-error-fallback')) {
+            videoElement.style.display = 'none';
+            fallback.style.display = 'block';
+        }
+    } catch (e) {
+        console.log('Erro ao mostrar fallback:', e);
+    }
+}
+
+// Função para reproduzir vídeo de teste
+function playTestVideo() {
+    try {
+        // Simula reprodução de vídeo com visual feedback
+        const button = event.target.closest('button');
+        const originalContent = button.innerHTML;
+        
+        // Muda botão para estado "reproduzindo"
+        button.innerHTML = '<i class="fas fa-pause me-2"></i>Pausar';
+        button.classList.remove('btn-info');
+        button.classList.add('btn-warning');
+        
+        // Simula progresso do vídeo
+        let progress = 0;
+        const progressBar = button.closest('.video-modal-container').querySelector('.bg-info');
+        const duration = button.closest('.video-modal-container').querySelector('.text-light');
+        
+        const interval = setInterval(() => {
+            progress += 6.67; // 15 segundos / 15 = 6.67% por "segundo"
+            if (progressBar) {
+                progressBar.style.width = Math.min(progress, 100) + '%';
+            }
+            
+            // Atualiza tempo
+            const currentTime = Math.floor((progress / 100) * 15);
+            if (duration) {
+                duration.innerHTML = '<i class="fas fa-clock me-1"></i>' + 
+                    Math.floor(currentTime / 60) + ':' + 
+                    (currentTime % 60).toString().padStart(2, '0') + ' / 0:15';
+            }
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                // Restaura estado original
+                button.innerHTML = originalContent;
+                button.classList.remove('btn-warning');
+                button.classList.add('btn-info');
+                
+                if (progressBar) progressBar.style.width = '80%';
+                if (duration) duration.innerHTML = '<i class="fas fa-clock me-1"></i>0:15';
+            }
+        }, 1000);
+        
+        console.log('🎬 Vídeo de teste reproduzido');
+    } catch (e) {
+        console.log('❌ Erro ao reproduzir vídeo:', e);
+        alert('Não foi possível reproduzir o vídeo');
+    }
+}
 
 // Função para salvar cliente
 function saveClient() {
