@@ -14,6 +14,7 @@ urlpatterns = [
     path('mobile-conversation/<int:conversation_id>/', views.mobile_conversation, name='mobile_conversation'),
     path('mobile-conversation-content/<int:conversation_id>/', views.mobile_conversation_content, name='mobile_conversation_content'),
     path('pending-count/', views.pending_count, name='pending_count'),
+    path('media-modal/', views.media_modal, name='media_modal'),
     
     # Actions
     path('assign/<int:conversation_id>/', views.assign_conversation, name='assign_conversation'),

@@ -788,6 +788,25 @@ def mobile_conversation(request, conversation_id):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def media_modal(request):
+    """
+    Modal HTMX para visualizar mídia
+    """
+    media_url = request.GET.get('url')
+    media_type = request.GET.get('type', 'image')
+    media_name = request.GET.get('name', 'Mídia')
+    
+    context = {
+        'media_url': media_url,
+        'media_type': media_type,
+        'media_name': media_name,
+    }
+    
+    return render(request, 'comercial/whatsapp/partials/media_modal.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 @require_POST
 def send_message_form(request):
     """
@@ -1035,14 +1054,21 @@ def send_template(request):
                 
                 # Se falhar como template, tenta como texto
                 if not api_response.get('success', False):
-                    api_response = api.send_text_message(to=to_number, message=final_content)
+                    logger.warning(f"Template falhou, tentando como texto: {api_response.get('error')}")
+                    text_response = api.send_text_message(to=to_number, message=final_content)
+                    if text_response.get('success'):
+                        api_response = text_response
                 
                 # Verifica se API retornou sucesso
-                if not (api_response.get('messages') and len(api_response['messages']) > 0):
-                    raise Exception("Falha ao enviar mensagem via WhatsApp")
+                if not api_response.get('success', False):
+                    raise Exception(f"Falha ao enviar mensagem: {api_response.get('error', 'Erro desconhecido')}")
+                
+                # Obtém message_id
+                message_id = api_response.get('message_id')
+                if not message_id:
+                    raise Exception("API não retornou message_id")
                 
                 # 2. Só salva no banco se WhatsApp foi bem-sucedido
-                api_message = api_response['messages'][0]
                 message = WhatsAppMessage.objects.create(
                     account=conversation.account,
                     contact=conversation.contact,
@@ -1052,7 +1078,7 @@ def send_template(request):
                     content=final_content,
                     timestamp=timezone.now(),
                     status='sent',
-                    wamid=api_message.get('id', f'template_{timezone.now().timestamp()}'),
+                    wamid=message_id,
                     sent_by=request.user
                 )
                 

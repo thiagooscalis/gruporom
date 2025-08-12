@@ -114,6 +114,151 @@ def accounts_list(request):
 
 
 
+def _download_media_sync(message):
+    """
+    Faz download de mídia de forma síncrona e salva no storage (S3 ou local)
+    """
+    from core.services.whatsapp_api import WhatsAppAPIService
+    from django.core.files.storage import default_storage
+    from django.core.files.base import ContentFile
+    from django.conf import settings
+    import os
+    import io
+    
+    try:
+        api = WhatsAppAPIService(message.account)
+        
+        # 1. Obtém URL da mídia
+        media_info = api.get_media_url(message.media_id)
+        if not media_info['success']:
+            logger.error(f"Erro ao obter URL da mídia {message.media_id}: {media_info.get('error')}")
+            return False
+        
+        media_url = media_info['url']
+        mime_type = media_info.get('mime_type', '')
+        file_size = media_info.get('file_size', 0)
+        
+        # Verifica tamanho do arquivo antes de baixar
+        if file_size and file_size > 25 * 1024 * 1024:  # 25MB
+            logger.warning(f"Arquivo muito grande ({file_size} bytes) para {message.media_id}, pulando download")
+            return False
+        
+        # 2. Baixa a mídia usando streaming para economizar memória
+        import requests
+        response = requests.get(
+            media_url,
+            headers=api.headers,
+            timeout=60,
+            stream=True
+        )
+        response.raise_for_status()
+        
+        # Usa BytesIO para streaming eficiente
+        file_buffer = io.BytesIO()
+        total_size = 0
+        
+        for chunk in response.iter_content(chunk_size=8192):
+            file_buffer.write(chunk)
+            total_size += len(chunk)
+            
+            # Limite de 25MB
+            if total_size > 25 * 1024 * 1024:
+                logger.warning(f"Arquivo muito grande para {message.media_id}, limitando a 25MB")
+                break
+        
+        file_buffer.seek(0)  # Volta ao início do buffer
+        
+        # 3. Define nome e extensão do arquivo
+        extension = _get_extension_from_mime(mime_type)
+        if message.media_filename:
+            filename = message.media_filename
+            # Adiciona extensão se não tiver
+            if not os.path.splitext(filename)[1]:
+                filename = f"{filename}{extension}"
+        else:
+            filename = f"{message.wamid}{extension}"
+        
+        # Remove caracteres problemáticos do nome
+        filename = "".join(c for c in filename if c.isalnum() or c in ".-_")
+        
+        # 4. Salva no storage (S3 ou local, dependendo da configuração)
+        date_path = message.timestamp.strftime('%Y/%m/%d')
+        file_path = f"whatsapp/{message.message_type}/{date_path}/{filename}"
+        
+        # ContentFile com o buffer para upload eficiente
+        content_file = ContentFile(file_buffer.read())
+        
+        # Define metadata para S3 se estiver usando
+        if hasattr(default_storage, 'object_parameters'):
+            # Adiciona metadata no S3
+            content_file.content_type = mime_type
+            default_storage.object_parameters = {
+                'ContentType': mime_type,
+                'ContentDisposition': f'inline; filename="{filename}"',
+                'Metadata': {
+                    'whatsapp-message-id': str(message.id),
+                    'whatsapp-wamid': message.wamid,
+                    'whatsapp-contact': message.contact.phone_number,
+                }
+            }
+        
+        saved_path = default_storage.save(file_path, content_file)
+        
+        # 5. Atualiza mensagem com URL do storage
+        media_url = default_storage.url(saved_path)
+        message.media_url = media_url
+        message.media_mimetype = mime_type
+        message.save(update_fields=['media_url', 'media_mimetype'])
+        
+        storage_type = "S3" if getattr(settings, 'USE_S3', False) else "local"
+        logger.info(f"Mídia {message.media_id} salva no {storage_type}: {saved_path}")
+        
+        # Limpa o buffer
+        file_buffer.close()
+        
+        return True
+        
+    except requests.exceptions.Timeout:
+        logger.error(f"Timeout ao baixar mídia {message.media_id}")
+        return False
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Erro de rede ao baixar mídia {message.media_id}: {e}")
+        return False
+    except Exception as e:
+        logger.error(f"Erro ao processar mídia {message.media_id}: {e}")
+        return False
+
+
+def _get_extension_from_mime(mime_type):
+    """
+    Retorna extensão baseada no tipo MIME
+    """
+    mime_map = {
+        'image/jpeg': '.jpg',
+        'image/png': '.png',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'video/mp4': '.mp4',
+        'video/3gpp': '.3gp',
+        'audio/ogg': '.ogg',
+        'audio/mpeg': '.mp3',
+        'audio/amr': '.amr',
+        'audio/aac': '.aac',
+        'audio/wav': '.wav',
+        'application/pdf': '.pdf',
+        'application/vnd.ms-powerpoint': '.ppt',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+        'application/msword': '.doc',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+        'application/vnd.ms-excel': '.xls',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+        'application/zip': '.zip',
+        'text/plain': '.txt',
+    }
+    
+    return mime_map.get(mime_type, '.bin')
+
+
 def _process_message_sync(account, message_data, contacts_data):
     """
     Processa mensagem de forma síncrona
@@ -195,8 +340,20 @@ def _process_message_sync(account, message_data, contacts_data):
             message_type=message_type,
             content=content,
             timestamp=timestamp,
-            status='delivered'
+            status='delivered',
+            media_id=media_data.get('id', ''),
+            media_filename=media_data.get('filename', ''),
+            media_mimetype=media_data.get('mime_type', ''),
+            context_data=message_data.get('context', {})
         )
+        
+        # Se tem mídia, faz download
+        if message.is_media and message.media_id:
+            try:
+                _download_media_sync(message)
+            except Exception as e:
+                logger.error(f"Erro ao baixar mídia {message.media_id}: {e}")
+                # Continua mesmo se o download falhar
         
         # Atualiza última atividade da conversa
         conversation.last_activity = timestamp

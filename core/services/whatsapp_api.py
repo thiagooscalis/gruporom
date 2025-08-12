@@ -1025,6 +1025,12 @@ class WhatsAppWebhookProcessor:
             context_data=message_data.get('context', {})
         )
         
+        # Se mensagem tem mídia, faz download assíncrono
+        if message.is_media and message.media_id:
+            # Faz download da mídia em background (não bloqueia o webhook)
+            import asyncio
+            asyncio.create_task(self._download_message_media(message))
+        
         # Atualiza última atividade da conversa
         await sync_to_async(lambda: setattr(conversation, 'last_activity', timestamp) or conversation.save(update_fields=['last_activity']))()
         

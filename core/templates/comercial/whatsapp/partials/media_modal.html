@@ -1,0 +1,60 @@
+<!-- Modal para visualizar mídia via HTMX -->
+<div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="mediaModalLabel">{{ media_name }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body p-0 d-flex justify-content-center align-items-center" style="min-height: 50vh;">
+                {% if media_type == 'image' %}
+                    <img src="{{ media_url }}" 
+                         class="img-fluid" 
+                         alt="{{ media_name }}"
+                         style="max-height: 80vh; object-fit: contain;">
+                         
+                {% elif media_type == 'video' %}
+                    <video controls class="w-100" style="max-height: 80vh;">
+                        <source src="{{ media_url }}" type="video/mp4">
+                        Seu navegador não suporta vídeos.
+                    </video>
+                    
+                {% elif media_type == 'audio' %}
+                    <div class="text-center p-4">
+                        <i class="fas fa-music fa-4x mb-3 text-primary"></i>
+                        <h5>{{ media_name }}</h5>
+                        <audio controls class="w-100 mt-3">
+                            <source src="{{ media_url }}" type="audio/mpeg">
+                            Seu navegador não suporta áudio.
+                        </audio>
+                    </div>
+                    
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="fas fa-file fa-4x mb-3 text-info"></i>
+                        <h5>{{ media_name }}</h5>
+                        <p class="text-muted">Clique no botão abaixo para fazer download</p>
+                        <a href="{{ media_url }}" 
+                           target="_blank" 
+                           class="btn btn-primary">
+                            <i class="fas fa-download me-2"></i>Fazer Download
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-abre o modal quando carregado via HTMX
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = new bootstrap.Modal(document.getElementById('mediaModal'));
+    modal.show();
+    
+    // Remove modal do DOM quando fechado
+    document.getElementById('mediaModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+    });
+});
+</script>
