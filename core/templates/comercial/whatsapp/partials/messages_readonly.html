@@ -38,7 +38,116 @@
             <div class="d-flex {% if message.direction == 'outbound' %}justify-content-end{% else %}justify-content-start{% endif %}">
                 <div class="message-bubble-readonly {% if message.direction == 'outbound' %}bg-primary text-white{% else %}bg-light border{% endif %}" 
                      style="max-width: 70%; padding: 0.75rem; border-radius: 18px;">
-                    <div class="mb-1">{{ message.content }}</div>
+                    <div class="mb-1">
+                        {% if message.is_media %}
+                            {% if message.message_type == 'image' and message.media_url %}
+                                <div class="media-message image-message mb-2">
+                                    <img src="{{ message.get_signed_media_url }}" 
+                                         class="img-fluid rounded" 
+                                         alt="Imagem enviada"
+                                         style="max-width: 200px; cursor: pointer;"
+                                         onclick="window.open('{{ message.get_signed_media_url }}', '_blank')"
+                                         title="Clique para abrir em nova aba">
+                                    {% if message.content %}
+                                        <div class="mt-1 small">{{ message.content }}</div>
+                                    {% endif %}
+                                </div>
+                            
+                            {% elif message.message_type == 'video' %}
+                                <div class="media-message video-message mb-2">
+                                    {% if message.get_signed_media_url and message.media_url %}
+                                        <video controls class="rounded" style="max-width: 200px;" preload="metadata" muted>
+                                            <source src="{{ message.get_signed_media_url }}" type="{{ message.media_mimetype|default:'video/mp4' }}">
+                                            Seu navegador não suporta vídeos.
+                                        </video>
+                                    {% else %}
+                                        <!-- Video placeholder readonly -->
+                                        <div class="video-placeholder bg-dark rounded d-flex align-items-center justify-content-center" 
+                                             style="width: 200px; height: 110px;">
+                                            <div class="text-center text-white">
+                                                <div class="video-play-button bg-white bg-opacity-75 rounded-circle d-flex align-items-center justify-content-center mb-1 mx-auto" 
+                                                     style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-play text-dark"></i>
+                                                </div>
+                                                <div class="small">
+                                                    <i class="fas fa-video me-1"></i>
+                                                    Vídeo indisponível
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if message.content %}
+                                        <div class="mt-1 small">{{ message.content }}</div>
+                                    {% endif %}
+                                </div>
+                            
+                            {% elif message.message_type == 'audio' %}
+                                <div class="media-message audio-message mb-2">
+                                    {% if message.get_signed_media_url and message.media_url %}
+                                        <!-- Player nativo do browser -->
+                                        <audio controls class="w-100" style="max-width: 300px; height: 32px;">
+                                            <source src="{{ message.get_signed_media_url }}" type="{{ message.media_mimetype|default:'audio/mpeg' }}">
+                                            Seu navegador não suporta áudio.
+                                        </audio>
+                                    {% else %}
+                                        <!-- Placeholder quando áudio não está disponível -->
+                                        <div class="audio-player-container p-2 bg-light rounded d-flex align-items-center" 
+                                             style="max-width: 240px;">
+                                            <div class="audio-icon me-2">
+                                                <i class="fas fa-microphone text-muted"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="small text-muted">{{ message.media_filename|default:"Mensagem de áudio" }}</div>
+                                                <div class="text-muted" style="font-size: 0.75rem;">Áudio não disponível</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if message.content %}
+                                        <div class="mt-1 small">{{ message.content }}</div>
+                                    {% endif %}
+                                </div>
+                            
+                            {% elif message.message_type == 'document' %}
+                                <div class="media-message document-message mb-2">
+                                    {% if message.media_url %}
+                                        <div class="d-flex align-items-center p-2 bg-light rounded">
+                                            <i class="fas fa-file me-2 text-muted"></i>
+                                            <div class="flex-grow-1">
+                                                <div class="small fw-bold">{{ message.media_filename|default:"Documento" }}</div>
+                                                <div class="text-muted" style="font-size: 0.7rem;">{{ message.media_mimetype|default:"application/octet-stream" }}</div>
+                                            </div>
+                                            <a href="{{ message.get_signed_media_url }}" 
+                                               target="_blank" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <div class="d-flex align-items-center p-2 bg-light rounded">
+                                            <i class="fas fa-file me-2 text-muted"></i>
+                                            <div class="flex-grow-1">
+                                                <div class="small fw-bold">{{ message.media_filename|default:"Documento" }}</div>
+                                                <div class="text-muted small">Documento não disponível</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if message.content %}
+                                        <div class="mt-1 small">{{ message.content }}</div>
+                                    {% endif %}
+                                </div>
+                            
+                            {% else %}
+                                <!-- Mídia desconhecida -->
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-paperclip me-2"></i>
+                                    {{ message.get_display_content }}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <!-- Mensagem de texto normal -->
+                            {{ message.get_display_content|linebreaks }}
+                        {% endif %}
+                    </div>
                     <div class="d-flex align-items-center justify-content-between" 
                          style="font-size: 0.75rem; {% if message.direction == 'outbound' %}color: rgba(255,255,255,0.8);{% else %}color: #6c757d;{% endif %}">
                         <span>{{ message.timestamp|date:"d/m H:i" }}</span>
@@ -101,4 +210,6 @@ setTimeout(function() {
         container.scrollTop = container.scrollHeight;
     }
 }, 100);
+
+// Função JavaScript removida - agora usando player nativo do browser
 </script>
