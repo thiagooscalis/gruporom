@@ -385,6 +385,50 @@ def pending_count(request):
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 @require_POST
+def check_24h_window(request):
+    """
+    Verifica se a conversa está dentro da janela de 24h do WhatsApp
+    """
+    conversation_id = request.POST.get('conversation_id')
+    
+    if not conversation_id:
+        return JsonResponse({'error': 'ID da conversa não fornecido'}, status=400)
+    
+    try:
+        conversation = get_object_or_404(
+            WhatsAppConversation,
+            id=conversation_id,
+            assigned_to=request.user
+        )
+        
+        within_window = conversation.is_within_24h_window()
+        
+        response_data = {
+            'within_24h_window': within_window,
+            'conversation_id': conversation_id
+        }
+        
+        if not within_window:
+            # Busca última mensagem recebida para mostrar no toast
+            last_inbound = conversation.messages.filter(
+                direction='inbound'
+            ).order_by('-timestamp').first()
+            
+            if last_inbound:
+                from django.utils import timezone
+                time_diff = timezone.now() - last_inbound.timestamp
+                hours_passed = int(time_diff.total_seconds() / 3600)
+                response_data['hours_since_last_message'] = hours_passed
+            
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        logger.error(f"Erro ao verificar janela de 24h: {e}")
+        return JsonResponse({'error': 'Erro interno do servidor'}, status=500)
+
+
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
 def send_message(request):
     """
     Envia mensagem WhatsApp com sincronização API

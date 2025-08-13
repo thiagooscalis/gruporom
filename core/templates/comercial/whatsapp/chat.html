@@ -769,7 +769,31 @@ function assignConversation(conversationId) {
     });
 }
 
-// Enviar mensagem
+// Função para mostrar toast
+function showToast(message, type = 'info') {
+    const toastContainer = document.getElementById('htmx-messages');
+    if (!toastContainer) return;
+    
+    const toastId = 'toast-' + Date.now();
+    const toastHtml = `
+        <div class="alert alert-${type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show" 
+             role="alert" id="${toastId}">
+            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Remove automaticamente após 5 segundos
+    setTimeout(() => {
+        const toast = document.getElementById(toastId);
+        if (toast) toast.remove();
+    }, 5000);
+}
+
+// Enviar mensagem com verificação de janela de 24h
 function sendMessage(event, conversationId) {
     event.preventDefault();
     
@@ -779,7 +803,58 @@ function sendMessage(event, conversationId) {
     
     if (!message) return;
     
-    // Desabilita botão e input durante envio
+    // Primeiro verifica a janela de 24h
+    console.log('🕐 Verificando janela de 24h antes de enviar mensagem...');
+    
+    // Desabilita botão temporariamente
+    input.disabled = true;
+    sendButton.disabled = true;
+    sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    
+    fetch('/comercial/whatsapp/check-24h-window/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: `conversation_id=${conversationId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.within_24h_window) {
+            // Fora da janela de 24h - mostra toast e não envia
+            const hoursText = data.hours_since_last_message ? 
+                ` (${data.hours_since_last_message}h atrás)` : '';
+            
+            showToast(
+                `⏰ Janela de 24h expirada${hoursText}. Envie um template primeiro para reabrir a conversa.`,
+                'warning'
+            );
+            
+            console.log('❌ Fora da janela de 24h - mensagem não enviada');
+            return;
+        }
+        
+        // Dentro da janela - pode enviar mensagem normal
+        console.log('✅ Dentro da janela de 24h - enviando mensagem...');
+        sendMessageNow(conversationId, message, input, sendButton);
+    })
+    .catch(error => {
+        console.error('Erro ao verificar janela de 24h:', error);
+        showToast('Erro ao verificar janela de 24h. Tente novamente.', 'error');
+    })
+    .finally(() => {
+        // Reabilita botão
+        input.disabled = false;
+        sendButton.disabled = false;
+        sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        input.focus();
+    });
+}
+
+// Função separada para enviar mensagem (após verificação)
+function sendMessageNow(conversationId, message, input, sendButton) {
+    // Desabilita novamente para envio
     input.disabled = true;
     sendButton.disabled = true;
     sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -808,13 +883,13 @@ function sendMessage(event, conversationId) {
             });
             
         } else {
-            alert('Erro ao enviar mensagem: ' + (data.error || data.message || 'Erro desconhecido'));
+            showToast('Erro ao enviar mensagem: ' + (data.error || data.message || 'Erro desconhecido'), 'error');
             console.error('Erro ao enviar mensagem:', data);
         }
     })
     .catch(error => {
         console.error('Erro na requisição:', error);
-        alert('Erro de conexão ao enviar mensagem');
+        showToast('Erro de conexão ao enviar mensagem', 'error');
     })
     .finally(() => {
         // Reabilita botão e input

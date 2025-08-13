@@ -18,6 +18,7 @@ urlpatterns = [
     
     # Actions
     path('assign/<int:conversation_id>/', views.assign_conversation, name='assign_conversation'),
+    path('check-24h-window/', views.check_24h_window, name='check_24h_window'),
     path('send-message/', views.send_message, name='send_message'),
     path('send-message-form/', views.send_message_form, name='send_message_form'),
     path('resend-message/<int:message_id>/', views.resend_message, name='resend_message'),

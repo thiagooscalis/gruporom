@@ -799,6 +799,29 @@ class WhatsAppConversation(models.Model):
         """Calcula tempo de resposta médio"""
         # TODO: Implementar cálculo de tempo de resposta
         return None
+    
+    def is_within_24h_window(self):
+        """
+        Verifica se a conversa está dentro da janela de 24h do WhatsApp.
+        Retorna True se a última mensagem RECEBIDA foi há menos de 24h.
+        """
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        # Busca a última mensagem recebida (inbound) na conversa
+        last_inbound_message = self.messages.filter(
+            direction='inbound'
+        ).order_by('-timestamp').first()
+        
+        if not last_inbound_message:
+            # Se não há mensagem recebida, não está na janela
+            return False
+        
+        # Verifica se foi há menos de 24h
+        now = timezone.now()
+        window_limit = now - timedelta(hours=24)
+        
+        return last_inbound_message.timestamp > window_limit
 
 
 class WhatsAppWebhookQueue(models.Model):
