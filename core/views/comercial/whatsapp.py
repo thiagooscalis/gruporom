@@ -1073,14 +1073,14 @@ def send_template(request):
                 
         except Exception as e:
             logger.error(f"Erro ao enviar template: {e}")
-            return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+            return render(request, 'comercial/whatsapp/partials/send_template_error_simple.html', {
                 'error': 'Não foi possível enviar o template. Tente novamente.'
             })
         
         logger.info(f"Template {template.display_name} enviado para conversa {conversation_id}")
         
         # Retorna sucesso com atualização das mensagens
-        return render(request, 'comercial/whatsapp/partials/send_template_success_htmx.html', {
+        return render(request, 'comercial/whatsapp/partials/send_template_success_simple.html', {
             'template': template,
             'message': message,
             'conversation': conversation
@@ -1088,6 +1088,6 @@ def send_template(request):
         
     except Exception as e:
         logger.error(f"Erro ao enviar template: {e}")
-        return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
+        return render(request, 'comercial/whatsapp/partials/send_template_error_simple.html', {
             'error': 'Erro ao enviar template.'
         })

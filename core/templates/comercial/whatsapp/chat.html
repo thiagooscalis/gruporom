@@ -501,10 +501,13 @@
             </div>
             <form id="sendTemplateForm" 
                   hx-post="{% url 'comercial:send_template' %}"
-                  hx-target="#htmx-messages"
-                  hx-swap="beforeend"
+                  hx-target="#templateFormResult"
+                  hx-swap="innerHTML"
                   onsubmit="return validateTemplateForm(event)">
                 <div class="modal-body">
+                    <!-- Container para resultado do HTMX -->
+                    <div id="templateFormResult"></div>
+                    
                     {% csrf_token %}
                     <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}" id="sendTemplateConversationId">
                     <div class="mb-3">
@@ -1313,6 +1316,8 @@ function updateTemplateModalConversationId(conversationId) {
         console.log('✅ Campo dataRetornoConversationId atualizado:', dataRetornoField.value);
     }
 }
+
+// Função removida - agora usa abordagem mais simples via templates HTMX
 
 // Função para validar formulário de template antes do envio
 function validateTemplateForm(event) {

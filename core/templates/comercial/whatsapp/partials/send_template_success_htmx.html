@@ -6,13 +6,61 @@
 </div>
 
 <script>
-// Fecha o modal e limpa o formulário
-const modal = bootstrap.Modal.getInstance(document.getElementById('sendTemplateModal'));
-if (modal) {
-    modal.hide();
-}
-document.getElementById('sendTemplateForm').reset();
-document.getElementById('templatePreview').innerHTML = '';
+// Aguarda um momento para garantir que o DOM está pronto
+setTimeout(() => {
+    console.log('🎯 Template de sucesso carregado - resetando modal...');
+    
+    const modalElement = document.getElementById('sendTemplateModal');
+    if (modalElement) {
+        // Remove todas as instâncias existentes
+        let modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            console.log('🗑️ Removendo instância existente do modal...');
+            modal.dispose(); // Remove a instância completamente
+        }
+        
+        // Reset completo do modal
+        modalElement.classList.remove('show');
+        modalElement.style.display = 'none';
+        modalElement.setAttribute('aria-hidden', 'true');
+        modalElement.removeAttribute('aria-modal');
+        modalElement.removeAttribute('role');
+        
+        // Remove backdrop se existir
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+            console.log('🗑️ Backdrop removido');
+        }
+        
+        // Remove classe modal-open do body
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+    }
+    
+    // Limpa formulário e preview
+    const form = document.getElementById('sendTemplateForm');
+    if (form) {
+        form.reset();
+        console.log('📝 Formulário resetado');
+    }
+    
+    const preview = document.getElementById('templatePreview');
+    if (preview) {
+        preview.innerHTML = '';
+        console.log('🧹 Preview limpo');
+    }
+    
+    // Limpa o select de templates
+    const templateSelect = document.getElementById('templateSelect');
+    if (templateSelect) {
+        templateSelect.innerHTML = '<option value="">Escolha um template...</option>';
+        console.log('📋 Select de templates resetado');
+    }
+    
+    console.log('✅ Modal completamente resetado via template de sucesso');
+}, 200);
 
 // Remove o alert após 5 segundos
 setTimeout(() => {

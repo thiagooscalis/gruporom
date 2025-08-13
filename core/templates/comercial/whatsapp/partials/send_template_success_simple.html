@@ -1,0 +1,73 @@
+<!-- Resposta de sucesso simples para envio de template -->
+<div class="alert alert-success" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    Template "{{ template.display_name }}" enviado com sucesso!
+</div>
+
+<script>
+// Fecha o modal via Bootstrap API
+console.log('✅ Template enviado com sucesso - fechando modal...');
+
+setTimeout(() => {
+    const modalElement = document.getElementById('sendTemplateModal');
+    if (modalElement) {
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        modal.hide();
+        
+        // Limpa o formulário quando modal for fechado
+        modalElement.addEventListener('hidden.bs.modal', function onceHidden() {
+            console.log('🧹 Modal fechado - limpando formulário...');
+            
+            // Remove este listener para não acumular
+            modalElement.removeEventListener('hidden.bs.modal', onceHidden);
+            
+            // Limpa formulário e preview
+            const form = document.getElementById('sendTemplateForm');
+            if (form) form.reset();
+            
+            const preview = document.getElementById('templatePreview');
+            if (preview) preview.innerHTML = '';
+            
+            const select = document.getElementById('templateSelect');
+            if (select) select.innerHTML = '<option value="">Escolha um template...</option>';
+            
+            // Limpa o resultado HTMX
+            const result = document.getElementById('templateFormResult');
+            if (result) result.innerHTML = '';
+            
+            console.log('✅ Formulário limpo e pronto para próximo uso');
+        }, { once: true });
+    }
+    
+    // Atualiza as mensagens da conversa
+    const messagesContainer = document.getElementById('messages-container');
+    if (messagesContainer) {
+        htmx.ajax('GET', '/comercial/whatsapp/conversation/{{ conversation.id }}/messages/', {
+            target: '#messages-container',
+            swap: 'innerHTML'
+        }).then(() => {
+            setTimeout(() => {
+                const container = document.getElementById('messages-container');
+                if (container) {
+                    container.scrollTo({
+                        top: container.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
+        });
+    }
+    
+    // Atualiza lista de contatos
+    const contactsList = document.getElementById('contacts-list');
+    if (contactsList) {
+        setTimeout(() => {
+            const currentConversationId = '{{ conversation.id }}';
+            htmx.ajax('GET', '/comercial/whatsapp/my-conversations/?conversation=' + currentConversationId, {
+                target: '#contacts-list',
+                swap: 'innerHTML'
+            });
+        }, 300);
+    }
+}, 100);
+</script>
