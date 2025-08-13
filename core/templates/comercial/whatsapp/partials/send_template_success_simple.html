@@ -39,22 +39,12 @@ setTimeout(() => {
         }, { once: true });
     }
     
-    // Atualiza as mensagens da conversa
+    // Atualiza as mensagens da conversa (HTMX afterSwap configurará o botão automaticamente)
     const messagesContainer = document.getElementById('messages-container');
     if (messagesContainer) {
         htmx.ajax('GET', '/comercial/whatsapp/conversation/{{ conversation.id }}/messages/', {
             target: '#messages-container',
             swap: 'innerHTML'
-        }).then(() => {
-            setTimeout(() => {
-                const container = document.getElementById('messages-container');
-                if (container) {
-                    container.scrollTo({
-                        top: container.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
         });
     }
     

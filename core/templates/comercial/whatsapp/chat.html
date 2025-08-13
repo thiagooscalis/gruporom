@@ -217,6 +217,53 @@
         100% { opacity: 1; }
     }
     
+    /* Botão flutuante para ir ao final da conversa */
+    .scroll-to-bottom {
+        position: fixed;
+        bottom: 120px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: #25d366;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        display: none;
+    }
+    
+    .scroll-to-bottom:hover {
+        background: #1ebe57;
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
+    }
+    
+    .scroll-to-bottom.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIn 0.3s ease;
+    }
+    
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
     .new-conversations-btn {
         position: relative;
     }
@@ -271,6 +318,15 @@
         .chat-area {
             height: calc(100vh - 140px);
             max-height: calc(100vh - 140px);
+        }
+        
+        /* Ajuste do botão para mobile */
+        .scroll-to-bottom {
+            bottom: 80px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
         }
         
         .contacts-header {
@@ -389,6 +445,11 @@
         </div>
     </div>
 </div>
+
+<!-- Botão flutuante para ir ao final da conversa -->
+<button class="scroll-to-bottom" id="scrollToBottom" onclick="scrollToBottomChat()" title="Ir para o final da conversa">
+    <i class="fas fa-chevron-down"></i>
+</button>
 
 <!-- Offcanvas para Chat Mobile - Estrutura fixa -->
 <div class="offcanvas offcanvas-end d-md-none" tabindex="-1" id="mobileConversationOffcanvas" data-bs-backdrop="static" data-bs-scroll="false" style="width: 100vw;">
@@ -740,21 +801,10 @@ function sendMessage(event, conversationId) {
             input.value = '';
             console.log(`Mensagem enviada - Status: ${data.status}, WAMID: ${data.wamid}`);
             
-            // Força atualização das mensagens
+            // Força atualização das mensagens (HTMX afterSwap configurará o botão automaticamente)
             htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversationId}/messages/`, {
                 target: '#messages-container',
                 swap: 'innerHTML'
-            }).then(() => {
-                // Scroll para o final após atualizar mensagens
-                setTimeout(() => {
-                    const container = document.getElementById('messages-container');
-                    if (container) {
-                        container.scrollTo({
-                            top: container.scrollHeight,
-                            behavior: 'smooth'
-                        });
-                    }
-                }, 100);
             });
             
         } else {
@@ -957,17 +1007,6 @@ function handleNewMessage(message, conversation_id) {
         htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversation_id}/messages/`, {
             target: '#messages-container',
             swap: 'innerHTML'
-        }).then(() => {
-            // Scroll para o final após atualizar mensagens
-            setTimeout(() => {
-                const container = document.getElementById('messages-container');
-                if (container) {
-                    container.scrollTo({
-                        top: container.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
         });
     } else {
         // Se não estamos na conversa, apenas mostra notificação
@@ -1229,7 +1268,7 @@ function stopPolling() {
 }
 
 
-// Listener simplificado para HTMX - apenas para modal de conversas
+// Listener HTMX para diversos eventos
 if (!window.htmxListenerRegistered) {
     window.htmxListenerRegistered = true;
     
@@ -1246,6 +1285,21 @@ if (!window.htmxListenerRegistered) {
         if (event.target.id === 'chat-area') {
             updateModalConversationIds();
             initializeChatAreaDropdowns();
+        }
+    });
+    
+    // Listener para afterSwap - mais preciso para quando conteúdo é inserido
+    document.addEventListener('htmx:afterSwap', function(event) {
+        // Configura botão de scroll quando chat area é atualizada
+        if (event.target.id === 'chat-area') {
+            console.log('🔄 HTMX afterSwap - Nova conversa carregada');
+            setupScrollButton();
+        }
+        
+        // Configura botão quando mensagens são atualizadas
+        if (event.target.id === 'messages-container') {
+            console.log('🔄 HTMX afterSwap - Mensagens atualizadas');
+            setupScrollButtonForMessages();
         }
     });
 }
@@ -1389,10 +1443,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializa dropdowns da chat area na primeira carga
     initializeChatAreaDropdowns();
     
-    // Auto-scroll nas mensagens
+    // Auto-scroll nas mensagens e configura botão de scroll
     const messagesContainer = document.getElementById('messages-container');
+    const scrollButton = document.getElementById('scrollToBottom');
     if (messagesContainer) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        // Esconde botão inicialmente (conversa inicia no final)
+        if (scrollButton) {
+            scrollButton.classList.remove('show');
+        }
+        
+        // Adiciona listener para controlar botão de scroll
+        messagesContainer.addEventListener('scroll', toggleScrollButton);
     }
     
     // Pré-preencher dados do cliente quando modal abrir
@@ -1533,6 +1596,124 @@ function playTestVideo() {
         console.log('❌ Erro ao reproduzir vídeo:', e);
         alert('Não foi possível reproduzir o vídeo');
     }
+}
+
+// Função para rolar para o final da conversa
+function scrollToBottomChat() {
+    const messagesContainer = document.getElementById('messages-container');
+    const scrollButton = document.getElementById('scrollToBottom');
+    
+    if (messagesContainer) {
+        messagesContainer.scrollTo({
+            top: messagesContainer.scrollHeight,
+            behavior: 'smooth'
+        });
+        
+        // Esconde o botão imediatamente ao clicar
+        if (scrollButton) {
+            scrollButton.classList.remove('show');
+        }
+        
+        console.log('📜 Rolando para o final da conversa e escondendo botão');
+    }
+}
+
+// Função para controlar visibilidade do botão de scroll
+function toggleScrollButton() {
+    const messagesContainer = document.getElementById('messages-container');
+    const scrollButton = document.getElementById('scrollToBottom');
+    
+    if (!messagesContainer || !scrollButton) return;
+    
+    // Verifica se há conteúdo suficiente para scroll
+    const hasScrollableContent = messagesContainer.scrollHeight > messagesContainer.clientHeight;
+    if (!hasScrollableContent) {
+        scrollButton.classList.remove('show');
+        return;
+    }
+    
+    // Calcula se está próximo do final (100px de tolerância)
+    const scrollTop = messagesContainer.scrollTop;
+    const scrollHeight = messagesContainer.scrollHeight;
+    const clientHeight = messagesContainer.clientHeight;
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+    
+    // Mostra botão se estiver longe do final (mais de 100px)
+    const wasVisible = scrollButton.classList.contains('show');
+    if (distanceFromBottom > 100) {
+        if (!wasVisible) {
+            scrollButton.classList.add('show');
+            console.log('👆 Usuário subiu na conversa - mostrando botão');
+        }
+    } else {
+        if (wasVisible) {
+            scrollButton.classList.remove('show');
+            console.log('👇 Usuário chegou ao final - escondendo botão');
+        }
+    }
+}
+
+// Função para configurar botão de scroll em nova conversa (chamada via HTMX afterSwap)
+function setupScrollButton() {
+    console.log('🔧 Configurando botão de scroll para nova conversa...');
+    
+    const messagesContainer = document.getElementById('messages-container');
+    const scrollButton = document.getElementById('scrollToBottom');
+    
+    if (!messagesContainer || !scrollButton) {
+        console.log('❌ Container de mensagens ou botão não encontrado');
+        return;
+    }
+    
+    // Remove listener anterior para evitar duplicação
+    messagesContainer.removeEventListener('scroll', toggleScrollButton);
+    
+    // Adiciona novo listener
+    messagesContainer.addEventListener('scroll', toggleScrollButton);
+    
+    // O conteúdo já foi carregado pelo HTMX, não precisa de setTimeout
+    // Verifica se há conteúdo suficiente para scroll
+    const hasScrollableContent = messagesContainer.scrollHeight > messagesContainer.clientHeight;
+    
+    if (hasScrollableContent) {
+        // Se há conteúdo scrollável, vai para o final
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        console.log('📜 Nova conversa com conteúdo - scrollando para o final');
+        
+        // Verifica se deve mostrar botão (geralmente não, pois acabou de ir para o final)
+        setTimeout(toggleScrollButton, 100);
+    } else {
+        // Se não há conteúdo suficiente, apenas esconde botão
+        scrollButton.classList.remove('show');
+        console.log('📭 Nova conversa sem conteúdo suficiente para scroll');
+    }
+    
+    console.log('✅ Botão de scroll configurado para nova conversa');
+}
+
+// Função específica para quando mensagens são atualizadas (envio, recebimento, template)
+function setupScrollButtonForMessages() {
+    console.log('🔧 Configurando botão após atualização de mensagens...');
+    
+    const messagesContainer = document.getElementById('messages-container');
+    const scrollButton = document.getElementById('scrollToBottom');
+    
+    if (!messagesContainer || !scrollButton) return;
+    
+    // Reconfigura listener (pode ter sido perdido na atualização)
+    messagesContainer.removeEventListener('scroll', toggleScrollButton);
+    messagesContainer.addEventListener('scroll', toggleScrollButton);
+    
+    // Auto-scroll para o final e esconde botão
+    messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+    });
+    
+    // Esconde botão pois está indo para o final
+    scrollButton.classList.remove('show');
+    
+    console.log('✅ Mensagens atualizadas - scrollado para o final e botão escondido');
 }
 
 // Função para salvar cliente
