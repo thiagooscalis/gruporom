@@ -939,7 +939,14 @@ def send_template(request):
     conversation_id = request.POST.get('conversation_id')
     template_id = request.POST.get('template_id')
     
+    # Debug logs para rastrear problema
+    logger.info(f"🔧 send_template chamado:")
+    logger.info(f"  - conversation_id: '{conversation_id}' (tipo: {type(conversation_id)})")
+    logger.info(f"  - template_id: '{template_id}' (tipo: {type(template_id)})")
+    logger.info(f"  - POST data: {dict(request.POST)}")
+    
     if not conversation_id or not template_id:
+        logger.warning(f"❌ Dados incompletos - conversation_id: '{conversation_id}', template_id: '{template_id}'")
         return render(request, 'comercial/whatsapp/partials/send_template_error.html', {
             'error': 'Dados incompletos.'
         })

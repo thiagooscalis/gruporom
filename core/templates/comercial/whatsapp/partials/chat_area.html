@@ -1,6 +1,6 @@
 {% if selected_conversation %}
 <!-- Header do Chat -->
-<div class="chat-header flex-shrink-0">
+<div class="chat-header">
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
             <div class="contact-avatar me-3">
@@ -53,9 +53,10 @@
                            hx-get="{% url 'comercial:load_templates' %}"
                            hx-target="#templateSelect"
                            hx-trigger="click"
-                           hx-swap="innerHTML">
+                           hx-swap="innerHTML"
+                           onclick="updateTemplateModalConversationId({{ selected_conversation.id }})">
                             <i class="fas fa-paper-plane me-2"></i>
-                            Enviar mensagem
+                            Enviar Template
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
@@ -74,12 +75,12 @@
 </div>
 
 <!-- Mensagens -->
-<div class="messages-container flex-fill overflow-auto" id="messages-container">
+<div class="messages-container" id="messages-container">
     {% include 'comercial/whatsapp/partials/messages_clean.html' %}
 </div>
 
 <!-- Input de Mensagem -->
-<div class="chat-input flex-shrink-0">
+<div class="chat-input">
     <form onsubmit="sendMessage(event, {{ selected_conversation.id }})">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Digite uma mensagem..." 

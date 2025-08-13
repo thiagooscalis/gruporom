@@ -38,6 +38,18 @@ class WhatsAppAPIService:
         Returns:
             Dict com resposta da API
         """
+        # Mock para ambiente de desenvolvimento
+        if settings.DEBUG:
+            import uuid
+            mock_id = f"wamid.{uuid.uuid4().hex[:20]}"
+            logger.info(f"🎭 MOCK: Simulando envio de mensagem de texto para {to}")
+            return {
+                'messages': [{
+                    'id': mock_id
+                }],
+                'success': True,
+                'message_id': mock_id
+            }
         url = f"{self.BASE_URL}/{self.phone_number_id}/messages"
         
         payload = {
@@ -149,6 +161,20 @@ class WhatsAppAPIService:
             language_code: Código do idioma
             components: Componentes do template (parâmetros, botões, etc.)
         """
+        # Mock para ambiente de desenvolvimento
+        if settings.DEBUG:
+            import uuid
+            mock_id = f"wamid.{uuid.uuid4().hex[:20]}"
+            logger.info(f"🎭 MOCK: Simulando envio de template '{template_name}' para {to}")
+            return {
+                'success': True,
+                'message_id': mock_id,
+                'data': {
+                    'messages': [{
+                        'id': mock_id
+                    }]
+                }
+            }
         url = f"{self.BASE_URL}/{self.phone_number_id}/messages"
         
         payload = {
