@@ -14,6 +14,10 @@ from .dia_roteiro import DiaRoteiroFactory
 from .extra import ExtraFactory
 from .tarefa import TarefaFactory
 from .nota import NotaFactory, NotaRespostaFactory
+from .whatsapp import (
+    WhatsAppAccountFactory, WhatsAppTemplateFactory, WhatsAppTemplateSimpleFactory,
+    WhatsAppContactFactory, WhatsAppConversationFactory, WhatsAppMessageFactory
+)
 
 __all__ = [
     "PessoaFactory",
@@ -39,4 +43,10 @@ __all__ = [
     "TarefaFactory",
     "NotaFactory",
     "NotaRespostaFactory",
+    "WhatsAppAccountFactory",
+    "WhatsAppTemplateFactory",
+    "WhatsAppTemplateSimpleFactory",
+    "WhatsAppContactFactory",
+    "WhatsAppConversationFactory",
+    "WhatsAppMessageFactory",
 ]

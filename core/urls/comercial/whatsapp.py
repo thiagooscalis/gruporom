@@ -25,8 +25,10 @@ urlpatterns = [
     path('register-client/', views.register_client, name='register_client'),
     path('save-data-retorno/', views.save_data_retorno, name='save_data_retorno'),
     path('load-templates/', views.load_templates, name='load_templates'),
+    path('preview-template/', views.preview_template, name='whatsapp_preview_template'),
     path('template-preview/', views.template_preview, name='template_preview'),
     path('send-template/', views.send_template, name='send_template'),
+    path('novo-contato/', views.novo_contato, name='whatsapp_novo_contato'),
     
     # Debug
     path('test-websocket/', views.test_websocket, name='test_websocket'),

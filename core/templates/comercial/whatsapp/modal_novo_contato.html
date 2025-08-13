@@ -1,0 +1,83 @@
+<!-- Modal de Novo Contato -->
+<div class="modal fade" id="modalNovoContato" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fab fa-whatsapp text-success me-2"></i>
+                    Novo Contato WhatsApp
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form hx-post="{% url 'comercial:whatsapp_novo_contato' %}"
+                  hx-target="#novo-contato-form-content"
+                  hx-swap="innerHTML">
+                {% csrf_token %}
+                <div class="modal-body" id="novo-contato-form-content">
+                    {% include 'comercial/whatsapp/partials/novo_contato_form_content.html' %}
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fab fa-whatsapp me-1"></i> Iniciar Conversa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTemplatePreview(select) {
+    const previewDiv = document.getElementById('novoContatoTemplatePreview');
+    
+    if (!select.value) {
+        previewDiv.innerHTML = '';
+        return;
+    }
+    
+    // Faz requisição AJAX para buscar o preview do template
+    fetch(`{% url 'comercial:template_preview' %}?template_id=${select.value}`)
+        .then(response => response.text())
+        .then(html => {
+            previewDiv.innerHTML = html;
+        })
+        .catch(error => {
+            previewDiv.innerHTML = '<div class="alert alert-warning">Erro ao carregar preview do template.</div>';
+        });
+}
+
+// Event listener para fechar modal em caso de sucesso
+document.body.addEventListener('closeModal', function(event) {
+    setTimeout(() => {
+        const modalElement = document.getElementById('modalNovoContato');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem de sucesso
+});
+
+// Event listener para atualizar lista de conversas
+document.body.addEventListener('refreshConversations', function(event) {
+    // Recarrega lista principal de conversas (sidebar) usando HTMX load
+    const contactsList = document.getElementById('contacts-list');
+    if (contactsList) {
+        htmx.ajax('GET', contactsList.getAttribute('hx-get'), {
+            target: '#contacts-list',
+            swap: 'innerHTML'
+        });
+    }
+    
+    // Recarrega conversas pendentes no modal se estiver aberto
+    const pendingContainer = document.getElementById('pending-conversations-container');
+    if (pendingContainer) {
+        htmx.trigger(pendingContainer, 'refresh');
+    }
+});
+</script>
+

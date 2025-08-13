@@ -103,7 +103,7 @@ function applyPhoneMask(telefoneInput, ddiInput) {
         }
         
         if (ddi === '55') {
-            // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
+            // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx) sem DDD
             telefoneInput._imask = IMask(telefoneInput, {
                 mask: [
                     {
@@ -134,25 +134,35 @@ function applyPhoneMask(telefoneInput, ddiInput) {
     }
 }
 
-// Aplicar máscara de telefone (versão antiga - manter compatibilidade)
+// Aplicar máscara de telefone (sem DDD)
 function initPhoneMasks() {
-    const phoneInputs = document.querySelectorAll('input[name="telefone"]');
+    const phoneInputs = document.querySelectorAll('input[name="telefone"], .telefone-mask');
     
     phoneInputs.forEach(input => {
-        IMask(input, {
-            mask: [
-                {
-                    mask: '(00) 0000-0000',
-                    startsWith: '',
-                    country: 'Brasil'
-                },
-                {
-                    mask: '(00) 00000-0000',
-                    startsWith: '',
-                    country: 'Brasil'
-                }
-            ]
-        });
+        // Buscar campo DDI correspondente
+        const form = input.closest('form');
+        const ddiInput = form ? form.querySelector('input[name="ddi"]') : null;
+        
+        if (ddiInput) {
+            // Se tem campo DDI, usar função applyPhoneMask
+            applyPhoneMask(input, ddiInput);
+        } else {
+            // Caso contrário, aplicar máscara padrão sem DDD
+            IMask(input, {
+                mask: [
+                    {
+                        mask: '0000-0000',
+                        startsWith: '',
+                        country: 'Brasil'
+                    },
+                    {
+                        mask: '00000-0000',
+                        startsWith: '9',
+                        country: 'Brasil'
+                    }
+                ]
+            });
+        }
     });
 }
 

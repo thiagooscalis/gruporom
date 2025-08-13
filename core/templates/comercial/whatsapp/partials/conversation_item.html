@@ -1,0 +1,34 @@
+<!-- Item de conversa para adicionar na lista -->
+<a href="#" 
+   class="list-group-item list-group-item-action"
+   hx-get="{% url 'comercial:conversation_chat_area' conversation.id %}"
+   hx-target="#chat-area"
+   hx-swap="innerHTML"
+   hx-push-url="?conversation={{ conversation.id }}">
+    <div class="d-flex align-items-start">
+        <div class="flex-shrink-0">
+            <div class="avatar-sm rounded-circle bg-success text-white d-flex align-items-center justify-content-center">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+        </div>
+        <div class="flex-grow-1 ms-3">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="mb-1">{{ conversation.contact.display_name }}</h6>
+                    <small class="text-muted">{{ conversation.contact.phone_number }}</small>
+                </div>
+                <small class="text-muted">agora</small>
+            </div>
+            {% if conversation.messages.last %}
+            <p class="text-muted small mb-0 text-truncate" style="max-width: 250px;">
+                {% if conversation.messages.last.direction == 'outbound' %}
+                    <i class="fas fa-check text-success me-1"></i>
+                {% endif %}
+                {{ conversation.messages.last.content|truncatechars:50 }}
+            </p>
+            {% else %}
+            <p class="text-muted small mb-0">Nova conversa iniciada</p>
+            {% endif %}
+        </div>
+    </div>
+</a>

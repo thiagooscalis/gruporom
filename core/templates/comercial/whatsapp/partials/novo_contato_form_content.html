@@ -1,0 +1,93 @@
+
+{% if success %}
+<div class="alert alert-success alert-dismissible fade show">
+    <i class="fas fa-check-circle me-2"></i>
+    Conversa criada com sucesso! Aguarde...
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {% for error in form.non_field_errors %}
+        <div>{{ error }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if api_error %}
+<div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ api_error }}
+</div>
+{% endif %}
+
+{% if form %}
+<div class="row g-3">
+    <!-- Nome do Contato -->
+    <div class="col-12">
+        {{ form.nome.label_tag }}
+        {{ form.nome }}
+        {% if form.nome.errors %}
+            <div class="text-danger small">{{ form.nome.errors.0 }}</div>
+        {% endif %}
+    </div>
+    
+    <!-- DDI -->
+    <div class="col-md-2">
+        {{ form.ddi.label_tag }}
+        {{ form.ddi }}
+        {% if form.ddi.errors %}
+            <div class="text-danger small">{{ form.ddi.errors.0 }}</div>
+        {% endif %}
+        {% if form.ddi.help_text %}
+            <small class="text-muted">{{ form.ddi.help_text }}</small>
+        {% endif %}
+    </div>
+    
+    <!-- DDD -->
+    <div class="col-md-2">
+        {{ form.ddd.label_tag }}
+        {{ form.ddd }}
+        {% if form.ddd.errors %}
+            <div class="text-danger small">{{ form.ddd.errors.0 }}</div>
+        {% endif %}
+    </div>
+    
+    <!-- Telefone -->
+    <div class="col-md-8">
+        {{ form.telefone.label_tag }}
+        {{ form.telefone }}
+        {% if form.telefone.errors %}
+            <div class="text-danger small">{{ form.telefone.errors.0 }}</div>
+        {% endif %}
+        {% if form.telefone.help_text %}
+            <small class="text-muted">{{ form.telefone.help_text }}</small>
+        {% endif %}
+    </div>
+    
+    <!-- Template -->
+    <div class="col-12">
+        {{ form.template_id.label_tag }}
+        <select class="form-select" name="template_id" id="templateSelect" onchange="showTemplatePreview(this)">
+            <option value="">Selecione um template...</option>
+            {% for value, label in form.template_id.field.choices %}
+                {% if value %}
+                    <option value="{{ value }}" {% if form.template_id.value == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        {% if form.template_id.errors %}
+            <div class="text-danger small">{{ form.template_id.errors.0 }}</div>
+        {% endif %}
+    </div>
+    
+    <!-- Preview do Template -->
+    <div class="col-12" id="novoContatoTemplatePreview"></div>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    Formulário não disponível.
+</div>
+{% endif %}

@@ -1,3 +1,14 @@
+<!-- Botão Novo Contato - sempre primeiro na lista -->
+<div class="contact-item border-primary" 
+     style="border: 2px dashed #d3a156 !important; background-color: rgba(211, 161, 86, 0.05); cursor: pointer;"
+     data-bs-toggle="modal"
+     data-bs-target="#modalNovoContato">
+    <div class="d-flex align-items-center justify-content-center py-2">
+        <i class="fas fa-user-plus text-primary me-2"></i>
+        <span class="fw-bold text-primary">Novo Contato</span>
+    </div>
+</div>
+
 {% for conversation in my_conversations %}
 <!-- Container único para desktop e mobile -->
 <div class="contact-item {% if selected_conversation and selected_conversation.id == conversation.id %}active{% endif %}"

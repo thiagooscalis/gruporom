@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Q, Count
+from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.utils import timezone
@@ -938,7 +939,7 @@ def load_templates(request):
     templates = WhatsAppTemplate.objects.filter(
         status='approved',
         is_active=True
-    ).order_by('display_name')
+    ).order_by('name')
     
     return render(request, 'comercial/whatsapp/partials/template_options.html', {
         'templates': templates
@@ -947,15 +948,47 @@ def load_templates(request):
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
-def template_preview(request):
+def preview_template(request):
     """
-    Mostra preview do template selecionado
+    Retorna preview do template com campos para parâmetros
     """
     template_id = request.GET.get('template_id')
     
     if not template_id:
-        return render(request, 'comercial/whatsapp/partials/template_preview.html', {
+        return render(request, 'comercial/whatsapp/preview_template.html', {
             'template': None
+        })
+    
+    try:
+        template = WhatsAppTemplate.objects.get(id=template_id)
+        
+        # Adiciona método helper para range de parâmetros
+        import re
+        param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+        template.get_parameter_count = lambda: param_count
+        template.get_parameter_range = lambda: range(1, param_count + 1)
+        
+        return render(request, 'comercial/whatsapp/preview_template.html', {
+            'template': template
+        })
+    except WhatsAppTemplate.DoesNotExist:
+        return render(request, 'comercial/whatsapp/preview_template.html', {
+            'template': None
+        })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def template_preview(request):
+    """
+    Retorna preview do template e campos de parâmetros via HTMX
+    """
+    template_id = request.GET.get('template_id') or request.POST.get('template_id')
+    
+    if not template_id:
+        return render(request, 'comercial/whatsapp/partials/template_preview.html', {
+            'template': None,
+            'param_count': 0
         })
     
     try:
@@ -964,13 +997,226 @@ def template_preview(request):
             status='approved',
             is_active=True
         )
+        
+        # Conta parâmetros no template
+        import re
+        param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+        
         return render(request, 'comercial/whatsapp/partials/template_preview.html', {
-            'template': template
+            'template': template,
+            'param_count': param_count,
+            'param_range': list(range(1, param_count + 1))
         })
+        
     except WhatsAppTemplate.DoesNotExist:
         return render(request, 'comercial/whatsapp/partials/template_preview.html', {
-            'template': None
+            'template': None,
+            'param_count': 0
         })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def novo_contato(request):
+    """
+    Cria novo contato e inicia conversa WhatsApp
+    """
+    if request.method == 'POST':
+        from core.forms.whatsapp import NovoContatoForm
+        form = NovoContatoForm(request.POST)
+        
+        if not form.is_valid():
+            
+            # Retorna formulário com erros - mesmos dados do GET
+            templates = WhatsAppTemplate.objects.filter(
+                status='approved',
+                is_active=True
+            ).select_related('account').order_by('account__name', 'name')
+            
+            # Adiciona helper de parâmetros para cada template
+            import re
+            for template in templates:
+                param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+                template.get_parameter_count = param_count
+                template.get_parameter_range = list(range(1, param_count + 1))
+            
+            return render(request, 'comercial/whatsapp/partials/novo_contato_form_content.html', {
+                'form': form,
+                'templates': templates
+            })
+        
+        phone_number = form.get_phone_number()
+        template = form.cleaned_data['template_id']
+        account = template.account
+        nome = form.cleaned_data['nome']
+        template_params = form.get_template_params()
+        
+        # Monta conteúdo do template com parâmetros
+        body_text = template.body_text
+        for param_num, param_value in template_params.items():
+            body_text = body_text.replace(f'{{{{{param_num}}}}}', param_value)
+        
+        try:
+            # Envia mensagem via API do WhatsApp primeiro
+            from core.services.whatsapp_api import WhatsAppAPIService
+            api_service = WhatsAppAPIService(account)
+            
+            # Monta componentes do template para a API
+            components = []
+            if template_params:
+                body_params = []
+                for param_num in sorted(template_params.keys()):
+                    body_params.append({
+                        "type": "text",
+                        "text": template_params[param_num]
+                    })
+                
+                components.append({
+                    "type": "body",
+                    "parameters": body_params
+                })
+            
+            # Envia template via API
+            response = api_service.send_template_message(
+                phone_number,
+                template.name,
+                template.language,
+                components
+            )
+            
+            if response.get('success'):
+                # Sucesso na API - agora cria contato, conversa e mensagem
+                wamid = response.get('message_id', f"local_{timezone.now().timestamp()}")
+                
+                # Cria ou busca o contato
+                contact, created = WhatsAppContact.objects.get_or_create(
+                    phone_number=phone_number,
+                    defaults={
+                        'name': nome,
+                        'profile_name': nome,
+                        'account': account,
+                    }
+                )
+                
+                if not created and not contact.name:
+                    contact.name = nome
+                    contact.save()
+                
+                # Cria nova conversa
+                now = timezone.now()
+                conversation = WhatsAppConversation.objects.create(
+                    account=account,
+                    contact=contact,
+                    status='assigned',
+                    assigned_to=request.user,
+                    last_activity=now,
+                    first_message_at=now,
+                    assigned_at=now
+                )
+                
+                # Cria mensagem no banco com WAMID real
+                message = WhatsAppMessage.objects.create(
+                    account=account,
+                    contact=contact,
+                    conversation=conversation,
+                    direction='outbound',
+                    message_type='template',
+                    content=body_text,
+                    timestamp=timezone.now(),
+                    status='sent',
+                    sent_by=request.user,
+                    wamid=wamid
+                )
+                
+                # Em caso de sucesso, retorna form limpo e trigger para fechar modal
+                from core.forms.whatsapp import NovoContatoForm
+                form = NovoContatoForm()  # Form limpo
+                
+                templates = WhatsAppTemplate.objects.filter(
+                    status='approved',
+                    is_active=True
+                ).select_related('account').order_by('account__name', 'name')
+                
+                response = render(request, 'comercial/whatsapp/partials/novo_contato_form_content.html', {
+                    'form': form,
+                    'templates': templates,
+                    'success': True
+                })
+                
+                # Trigger para indicar sucesso
+                import json
+                response['HX-Trigger'] = json.dumps({
+                    'closeModal': None,
+                    'refreshConversations': None
+                })
+                
+                return response
+                
+            else:
+                # Erro no envio - adiciona erro ao form
+                error_msg = response.get('error', 'Erro desconhecido ao enviar template')
+                
+                templates = WhatsAppTemplate.objects.filter(
+                    status='approved',
+                    is_active=True
+                ).select_related('account').order_by('account__name', 'name')
+                
+                return render(request, 'comercial/whatsapp/partials/novo_contato_form_content.html', {
+                    'form': form,
+                    'templates': templates,
+                    'api_error': f'Erro ao enviar template: {error_msg}'
+                })
+                
+        except Exception as api_error:
+            logger.error(f"Erro na API WhatsApp: {api_error}")
+            
+            templates = WhatsAppTemplate.objects.filter(
+                status='approved',
+                is_active=True
+            ).select_related('account').order_by('account__name', 'name')
+            
+            return render(request, 'comercial/whatsapp/partials/novo_contato_form_content.html', {
+                'form': form,
+                'templates': templates,
+                'api_error': f'Erro de conexão com WhatsApp: {str(api_error)}'
+            })
+            
+        except Exception as e:
+            # Com ATOMIC_REQUESTS=True, não podemos fazer queries após exceção
+            # Retorna erro HTML simples sem renderizar template
+            from django.http import HttpResponse
+            html = f'''
+            <div class="alert alert-danger">
+                <h6 class="alert-heading">Erro ao criar contato</h6>
+                <p class="mb-0">Erro ao criar contato: {str(e)}</p>
+                <hr>
+                <button class="btn btn-sm btn-outline-danger" onclick="location.reload()">
+                    <i class="fas fa-redo me-1"></i> Tentar Novamente
+                </button>
+            </div>
+            '''
+            return HttpResponse(html)
+    
+    # GET - retorna modal com form
+    from core.forms.whatsapp import NovoContatoForm
+    form = NovoContatoForm()
+    
+    templates = WhatsAppTemplate.objects.filter(
+        status='approved',
+        is_active=True
+    ).order_by('name')
+    
+    # Adiciona helper de parâmetros para cada template
+    import re
+    for template in templates:
+        param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+        template.get_parameter_count = param_count
+        template.get_parameter_range = list(range(1, param_count + 1))
+    
+    return render(request, 'comercial/whatsapp/modal_novo_contato.html', {
+        'form': form,
+        'templates': templates
+    })
 
 
 @login_required

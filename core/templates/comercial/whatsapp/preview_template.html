@@ -1,0 +1,20 @@
+{% if template %}
+<div class="alert alert-info">
+    <h6 class="alert-heading mb-2">Preview do Template:</h6>
+    <div class="mb-2">{{ template.content|default:"" }}</div>
+    
+    {% if template.get_parameter_count > 0 %}
+    <hr>
+    <h6 class="mb-2">Parâmetros do Template:</h6>
+    <div class="row g-2">
+        {% for i in template.get_parameter_range %}
+        <div class="col-12">
+            <label class="form-label">Parâmetro {% templatetag openvariable %}{{ i }}{% templatetag closevariable %}</label>
+            <input type="text" class="form-control" name="param_{{ i }}" 
+                   placeholder="Valor para {% templatetag openvariable %}{{ i }}{% templatetag closevariable %}" required>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endif %}

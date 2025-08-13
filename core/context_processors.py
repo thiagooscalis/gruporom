@@ -43,19 +43,23 @@ def dados_globais(request):
     tipos_empresa_usuario = []
     
     if request.user.is_authenticated:
-        for group in request.user.groups.all():
-            group_slug = slugify(group.name)
-            if f"/{group_slug}/" in request.path:
-                area = group_slug
-                break
-        
-        # Obtém os tipos de empresa do usuário
-        if hasattr(request.user, 'empresas'):
-            tipos_set = set(
-                request.user.empresas.filter(empresa_gruporom=True)
-                .values_list('tipo_empresa', flat=True)
-            )
-            tipos_empresa_usuario = list(tipos_set)
+        try:
+            for group in request.user.groups.all():
+                group_slug = slugify(group.name)
+                if f"/{group_slug}/" in request.path:
+                    area = group_slug
+                    break
+            
+            # Obtém os tipos de empresa do usuário
+            if hasattr(request.user, 'empresas'):
+                tipos_set = set(
+                    request.user.empresas.filter(empresa_gruporom=True)
+                    .values_list('tipo_empresa', flat=True)
+                )
+                tipos_empresa_usuario = list(tipos_set)
+        except Exception:
+            # Se há erro de transação, retorna valores padrão
+            pass
 
     return {
         "sistema_nome": "Grupo ROM",

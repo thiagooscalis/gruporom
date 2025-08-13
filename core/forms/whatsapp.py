@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, Button, HTML
 from crispy_forms.bootstrap import FormActions
 from core.models import WhatsAppAccount, WhatsAppTemplate, Usuario
+import re
 
 
 class WhatsAppAccountForm(forms.ModelForm):
@@ -632,3 +634,129 @@ class WhatsAppTemplateForm(forms.ModelForm):
                 Column('is_active', css_class='col-md-6 d-flex align-items-center'),
             ),
         )
+
+
+class NovoContatoForm(forms.Form):
+    """
+    Formulário para criar novo contato e iniciar conversa WhatsApp
+    """
+    nome = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ex: João Silva'
+        }),
+        label='Nome do Contato'
+    )
+    
+    ddi = forms.CharField(
+        max_length=3,
+        initial='55',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '55',
+            'maxlength': '3',
+            'pattern': '[0-9]+'
+        }),
+        label='DDI',
+        help_text='Brasil: 55'
+    )
+    
+    ddd = forms.CharField(
+        max_length=2,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '11',
+            'maxlength': '2',
+            'pattern': '[0-9]{2}'
+        }),
+        label='DDD'
+    )
+    
+    telefone = forms.CharField(
+        max_length=15,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control telefone-mask',
+            'placeholder': '90000-0000 ou 0000-0000'
+        }),
+        label='Telefone',
+        help_text='Digite apenas números'
+    )
+    
+    template_id = forms.ModelChoiceField(
+        queryset=WhatsAppTemplate.objects.filter(
+            status='approved',
+            is_active=True
+        ).select_related('account').order_by('account__name', 'name'),
+        empty_label='Selecione um template...',
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+            'onchange': 'showTemplatePreview(this)'
+        }),
+        label='Template a Enviar'
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Personaliza as opções do template para mostrar a conta
+        templates = WhatsAppTemplate.objects.filter(
+            status='approved',
+            is_active=True
+        ).select_related('account').order_by('account__name', 'name')
+        
+        # Cria lista de choices personalizada
+        choices = [('', 'Selecione um template...')]
+        for template in templates:
+            # Adiciona dados extras aos templates para JavaScript
+            param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+            template._param_count = param_count
+            
+            # Formato: "Template Name - Conta"
+            label = f"{template.name} - {template.account.name}"
+            choices.append((template.pk, label))
+        
+        self.fields['template_id'].choices = choices
+    
+    def clean_telefone(self):
+        telefone = self.cleaned_data['telefone']
+        # Remove caracteres não numéricos
+        telefone_limpo = re.sub(r'\D', '', telefone)
+        
+        # Valida se tem pelo menos 8 dígitos (fixo) ou 9 (celular)
+        if len(telefone_limpo) < 8 or len(telefone_limpo) > 9:
+            raise ValidationError('Telefone deve ter 8 ou 9 dígitos.')
+        
+        return telefone_limpo
+    
+    def clean_ddi(self):
+        ddi = self.cleaned_data['ddi']
+        if not ddi.isdigit():
+            raise ValidationError('DDI deve conter apenas números.')
+        return ddi
+    
+    def clean_ddd(self):
+        ddd = self.cleaned_data['ddd']
+        if not ddd.isdigit() or len(ddd) != 2:
+            raise ValidationError('DDD deve ter exatamente 2 dígitos.')
+        return ddd
+    
+    def get_phone_number(self):
+        """Retorna número completo formatado"""
+        if self.is_valid():
+            ddi = self.cleaned_data['ddi']
+            ddd = self.cleaned_data['ddd']
+            telefone = self.cleaned_data['telefone']
+            return f"+{ddi}{ddd}{telefone}"
+        return None
+    
+    def get_template_params(self):
+        """Extrai parâmetros do template do POST data"""
+        params = {}
+        if hasattr(self, 'data'):
+            for key, value in self.data.items():
+                if key.startswith('param_') and value:
+                    param_num = key.replace('param_', '')
+                    if param_num.isdigit():
+                        params[int(param_num)] = value
+        return params

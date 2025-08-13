@@ -574,7 +574,7 @@
                     <div class="mb-3">
                         <label for="templateSelect" class="form-label">Selecione o Template <span class="text-danger">*</span></label>
                         <select class="form-select" id="templateSelect" name="template_id" required
-                                hx-get="{% url 'comercial:template_preview' %}"
+                                hx-get="{% url 'comercial:whatsapp_preview_template' %}"
                                 hx-target="#templatePreview"
                                 hx-trigger="change"
                                 hx-include="this">
@@ -600,6 +600,12 @@
         </div>
     </div>
 </div>
+
+<!-- Container para Modal de Novo Contato (carregado via HTMX) -->
+<div id="modalNovoContatoContainer"
+     hx-get="{% url 'comercial:whatsapp_novo_contato' %}"
+     hx-trigger="load"
+     hx-swap="innerHTML"></div>
 
 <!-- Modal de Cadastro de Cliente -->
 <div class="modal fade" id="clientRegistrationModal" tabindex="-1">
@@ -1858,5 +1864,43 @@ function saveClient() {
         saveBtn.innerHTML = originalText;
     });
 }
+
+// Listener para fechar modal via HTMX
+document.body.addEventListener('closeModal', function(event) {
+    console.log('📝 Fechando modal via HTMX trigger');
+    
+    // Aguarda 1 segundo para mostrar mensagem de sucesso
+    setTimeout(() => {
+        const modalElement = document.getElementById('modalNovoContato');
+        if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+                
+                // Quando o modal fechar, recarrega o container para limpar o form
+                modalElement.addEventListener('hidden.bs.modal', function() {
+                    const container = document.getElementById('modalNovoContatoContainer');
+                    if (container) {
+                        htmx.trigger(container, 'load');
+                    }
+                }, { once: true });
+            }
+        }
+    }, 1000);
+});
+
+// Listener para atualizar conversas
+document.body.addEventListener('refreshConversations', function(event) {
+    console.log('🔄 Atualizando lista de conversas');
+    const contactsList = document.getElementById('contacts-list');
+    if (contactsList) {
+        htmx.trigger(contactsList, 'load');
+    }
+    
+    // Mostra toast de sucesso
+    if (typeof showToast === 'function') {
+        showToast('✅ Conversa criada com sucesso!', 'success');
+    }
+});
 </script>
 {% endblock %}
