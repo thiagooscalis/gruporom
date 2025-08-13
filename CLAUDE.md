@@ -179,6 +179,9 @@ gruporom/
   - [x] Interface de chat para atendimento
   - [x] Espelhamento automático via webhook
   - [x] Controle de status de conversas
+  - [x] Verificação de janela de 24h do WhatsApp antes de enviar mensagens
+  - [x] Notificações toast quando fora da janela de 24h
+  - [x] Envio de templates para reabrir conversas expiradas
 - [x] **Sistema de Mídias Completo**: Visualização robusta de todos os tipos de mídia
   - [x] Imagens com modal HTMX e zoom
   - [x] Vídeos com player HTML5 e fallback de erro
@@ -186,6 +189,12 @@ gruporom/
   - [x] Documentos com preview e download S3
   - [x] URLs S3 assinadas para segurança
   - [x] Tratamento de erro automático com retry
+- [x] **Interface de Chat Otimizada**: UX profissional para atendimento
+  - [x] Layout responsivo com altura fixa
+  - [x] Botão flutuante para ir ao final da conversa
+  - [x] Modais HTMX para envio de templates
+  - [x] Mock API para ambiente de desenvolvimento
+  - [x] Limpeza automática de formulários após envio
 
 ### 6. Máscaras de Entrada Inteligentes
 - [x] **CPF**: Formatação automática `000.000.000-00`
@@ -205,6 +214,9 @@ gruporom/
 - [x] **Espelhamento Automático**: Webhook cria conversas automaticamente
 - [x] **Menu Lateral Específico**: Navegação otimizada para área comercial
 - [x] **Estatísticas em Tempo Real**: Conversas pendentes, minhas conversas
+- [x] **Janela de 24h WhatsApp**: Verificação automática antes de enviar mensagens
+- [x] **Templates para Reativação**: Sistema para reabrir conversas expiradas
+- [x] **UX Otimizada**: Botão scroll, modais inteligentes, layout responsivo
 
 ### 8. Sistema Multi-Área
 - [x] **Grupos de Acesso**: Administração, Comercial, Operacional (expansível)
@@ -242,12 +254,12 @@ gruporom/
 
 **O projeto está em estado PRODUTIVO COMPLETO** com:
 - **3 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo)
-- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial) + **Mídias integradas**
+- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial) + **Mídias integradas** + **Janela 24h**
 - **Sistema de mídias robusto**: Imagens, vídeos, áudios e documentos com S3 e fallback
 - **Sistema de turismo empresarial**: 14 models interconectados para gestão completa
-- **Sistema de conversas**: Webhook → Fila → Atribuição → Chat individual → **Visualização de mídias**
+- **Sistema de conversas avançado**: Webhook → Fila → Atribuição → Chat individual → **Verificação 24h** → **Templates automáticos**
 - **135 testes implementados**: Sistema de testes robusto com InMemoryStorage
-- **Máscaras inteligentes** e **interface otimizada**
+- **UX profissional** com botão scroll, modais inteligentes e layout otimizado
 - **Segurança robusta** e **arquitetura escalável**
 
 ## 🔮 Próximas Expansões Sugeridas
@@ -459,9 +471,9 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 12/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna e multi-área operacional  
-**Módulos**: 10+ modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Cambio, Pais, WhatsApp), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, tratamento de erros robusto
+**Última atualização**: 13/08/2025  
+**Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna, janela 24h automática e multi-área operacional  
+**Módulos**: 10+ modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Cambio, Pais, WhatsApp), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, UX otimizada
 
 ## 🆕 Últimas Atualizações
 
@@ -525,3 +537,19 @@ if request.headers.get('HX-Request'):
 - **🎯 Estrutura de Templates Otimizada**: Lógica reorganizada para detectar corretamente tipos de mídia
 - **📂 Organização S3 Profissional**: Estrutura hierárquica `media/whatsapp/tipo/ano/mes/dia/arquivo`
 - **🚀 Integração HTMX**: Modais carregados dinamicamente com JavaScript local para máxima compatibilidade
+
+### Agosto 2025 - Interface de Chat Profissional e Janela 24h
+- **⏰ Verificação Automática de Janela 24h**: Sistema inteligente que verifica se a conversa está dentro da janela de 24h do WhatsApp
+  - Método `is_within_24h_window()` no model WhatsAppConversation
+  - Endpoint AJAX `/comercial/whatsapp/check-24h-window/` para verificação em tempo real
+  - Bloqueio automático de mensagens quando fora da janela com toast informativo
+  - Redirecionamento para envio de templates quando necessário reativar conversa
+- **🎯 UX Otimizada para Atendimento**: Interface profissional com foco na experiência do atendente
+  - Layout responsivo com altura fixa para evitar scroll indesejado
+  - Botão flutuante inteligente para ir ao final da conversa (aparece/desaparece conforme scroll)
+  - Modais HTMX para envio de templates com limpeza automática após uso
+  - Sistema de eventos HTMX (`afterSwap`) para sincronização automática de componentes
+- **🛠️ Ambiente de Desenvolvimento**: Mocks completos para desenvolvimento sem API real
+  - Mock responses para WhatsApp API em modo DEBUG
+  - Simulação realística de envio de mensagens e templates
+  - Logs coloridos e informativos para debug
