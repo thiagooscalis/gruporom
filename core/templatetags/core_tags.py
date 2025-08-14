@@ -2,6 +2,8 @@ import locale
 
 from django import template
 from django.utils.text import slugify
+from django.utils import timezone
+from datetime import datetime, timedelta
 
 
 register = template.Library()
@@ -52,3 +54,42 @@ def area_url(group_name):
     """Retorna a URL base para cada área/grupo"""
     area_slug = slugify(group_name)
     return f'{area_slug}:home'
+
+
+@register.filter
+def smart_datetime(timestamp):
+    """
+    Formata data/hora de forma inteligente:
+    - Se for hoje: mostra apenas horário (HH:MM)
+    - Se for ontem: mostra "Ontem HH:MM"
+    - Se for este ano: mostra "DD/MM HH:MM"
+    - Se for outro ano: mostra "DD/MM/AAAA HH:MM"
+    """
+    if not timestamp:
+        return ""
+    
+    # Garante que estamos trabalhando com timezone-aware datetime
+    if timezone.is_naive(timestamp):
+        timestamp = timezone.make_aware(timestamp)
+    
+    now = timezone.now()
+    today = now.date()
+    yesterday = today - timedelta(days=1)
+    timestamp_date = timestamp.date()
+    
+    # Formata o horário
+    time_str = timestamp.strftime("%H:%M")
+    
+    # Decide o formato baseado na data
+    if timestamp_date == today:
+        # Hoje: apenas horário
+        return time_str
+    elif timestamp_date == yesterday:
+        # Ontem
+        return f"Ontem {time_str}"
+    elif timestamp.year == now.year:
+        # Este ano: dia/mês horário
+        return timestamp.strftime("%d/%m %H:%M")
+    else:
+        # Outro ano: data completa
+        return timestamp.strftime("%d/%m/%Y %H:%M")

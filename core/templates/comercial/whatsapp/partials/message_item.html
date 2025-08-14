@@ -145,7 +145,8 @@
         
         <!-- Timestamp e status -->
         <div class="message-time">
-            {{ message.timestamp|date:"H:i" }}
+            {% load core_tags %}
+            {{ message.timestamp|smart_datetime }}
             {% if message.direction == 'outbound' %}
                 {% if message.status == 'sent' %}
                     <i class="fas fa-check text-muted" title="Enviada"></i>

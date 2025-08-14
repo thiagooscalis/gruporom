@@ -876,12 +876,21 @@ class NovoContatoForm(forms.Form):
 
     def clean_telefone(self):
         telefone = self.cleaned_data["telefone"]
+        ddi = self.cleaned_data.get("ddi", "")
+        
         # Remove caracteres não numéricos
         telefone_limpo = re.sub(r"\D", "", telefone)
 
-        # Valida se tem pelo menos 8 dígitos (fixo) ou 9 (celular)
-        if len(telefone_limpo) < 8 or len(telefone_limpo) > 9:
-            raise ValidationError("Telefone deve ter 8 ou 9 dígitos.")
+        # Validação específica para Brasil (DDI 55)
+        if ddi == "55":
+            # Brasil: 10 ou 11 dígitos (DDD + número)
+            # DDD (2 dígitos) + número (8 ou 9 dígitos)
+            if len(telefone_limpo) < 8 or len(telefone_limpo) > 9:
+                raise ValidationError("Para números brasileiros, o telefone deve ter 8 ou 9 dígitos.")
+        else:
+            # Internacional: 5 a 15 dígitos
+            if len(telefone_limpo) < 5 or len(telefone_limpo) > 15:
+                raise ValidationError("Para números internacionais, o telefone deve ter entre 5 e 15 dígitos.")
 
         return telefone_limpo
 

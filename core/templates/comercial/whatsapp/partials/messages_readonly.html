@@ -150,7 +150,8 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between" 
                          style="font-size: 0.75rem; {% if message.direction == 'outbound' %}color: rgba(255,255,255,0.8);{% else %}color: #6c757d;{% endif %}">
-                        <span>{{ message.timestamp|date:"d/m H:i" }}</span>
+                        {% load core_tags %}
+                        <span>{{ message.timestamp|smart_datetime }}</span>
                         {% if message.direction == 'outbound' %}
                             <div class="ms-2">
                                 {% if message.sent_by %}
