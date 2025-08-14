@@ -66,3 +66,10 @@ class PessoaComPassaporteFactory(PessoaFactory):
     passaporte_numero = factory.Faker("bothify", text="??######")
     passaporte_pais = factory.Faker("country_code")
     passaporte_validade = factory.Faker("date_between", start_date="+1y", end_date="+10y")
+
+
+class EmpresaTurismoFactory(PessoaJuridicaFactory):
+    """Factory específica para empresas de turismo"""
+    
+    tipo_empresa = "Turismo"
+    nome = factory.Sequence(lambda n: f"Empresa Turismo {n:03d}")

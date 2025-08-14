@@ -1,6 +1,6 @@
 import factory
 from core.models import Caravana
-from core.choices import TIPO_CARAVANA_CHOICES, REPASSE_TIPO_CHOICES
+from core.choices import TIPO_CARAVANA_CHOICES, REPASSE_TIPO_CHOICES, MOEDA_CHOICES
 from .pessoa import PessoaFactory
 
 
@@ -18,6 +18,7 @@ class CaravanaFactory(factory.django.DjangoModelFactory):
     destaque_site = factory.Faker('random_int', min=0, max=10)
     repasse_valor = factory.Faker('pydecimal', left_digits=6, right_digits=2, positive=True)
     repasse_tipo = factory.Faker('random_element', elements=[choice[0] for choice in REPASSE_TIPO_CHOICES])
+    repasse_moeda = factory.Faker('random_element', elements=[choice[0] for choice in MOEDA_CHOICES])
     quantidade = factory.Faker('random_int', min=10, max=100)
     free_economica = factory.Faker('random_int', min=0, max=5)
     free_executiva = factory.Faker('random_int', min=0, max=2)

@@ -1,0 +1,194 @@
+{% comment %}
+Template unificado para renderização de mídias WhatsApp
+
+Parâmetros:
+- message: Objeto da mensagem
+- mode: 'interactive' (padrão) ou 'readonly'  
+- max_width: Largura máxima (padrão: 250px para interactive, 200px para readonly)
+{% endcomment %}
+
+{% if message.is_media %}
+    {% if message.message_type == 'image' and message.media_url %}
+        <div class="media-message image-message mb-2">
+            <img src="{{ message.get_signed_media_url }}" 
+                 class="img-fluid rounded" 
+                 alt="Imagem enviada"
+                 style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %}; cursor: pointer;"
+                 {% if mode == 'readonly' %}
+                     onclick="window.open('{{ message.get_signed_media_url }}', '_blank')"
+                     title="Clique para abrir em nova aba"
+                 {% else %}
+                     hx-get="{% url 'comercial:media_modal' %}?url={{ message.get_signed_media_url|urlencode }}&type=image&name={{ message.media_filename|default:'Imagem'|urlencode }}"
+                     hx-target="body"
+                     hx-swap="beforeend"
+                     hx-trigger="click"
+                 {% endif %}>
+            {% if message.content %}
+                <div class="mt-1 small">{{ message.content }}</div>
+            {% endif %}
+        </div>
+        
+    {% elif message.message_type == 'video' %}
+        <div class="media-message video-message mb-2">
+            {% if message.get_signed_media_url and message.media_url %}
+                <video controls class="rounded" 
+                       style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %};" 
+                       preload="metadata" muted
+                       {% if mode != 'readonly' %}
+                           onerror="handleVideoError(this)"
+                           onloadstart="console.log('🎬 Iniciando carregamento do vídeo:', this.currentSrc)"
+                           oncanplay="console.log('✅ Vídeo pode ser reproduzido')"
+                           onabort="console.log('❌ Carregamento do vídeo abortado')"
+                           onstalled="console.log('⏸️ Carregamento do vídeo pausado')"
+                       {% endif %}>
+                    <source src="{{ message.get_signed_media_url }}" 
+                            type="{{ message.media_mimetype|default:'video/mp4' }}"
+                            {% if mode != 'readonly' %}onerror="handleVideoError(this.parentElement)"{% endif %}>
+                    Seu navegador não suporta vídeos.
+                </video>
+                
+                {% if mode != 'readonly' %}
+                    <!-- Fallback quando vídeo falha -->
+                    <div class="video-error-fallback bg-warning rounded p-3 text-center" 
+                         style="display: none; max-width: {{ max_width|default:'250px' }};">
+                        <i class="fas fa-exclamation-triangle mb-2"></i>
+                        <div class="small fw-bold">Erro ao carregar vídeo</div>
+                        <div class="text-muted small">{{ message.media_filename|default:"Arquivo não encontrado" }}</div>
+                        <button class="btn btn-sm btn-outline-dark mt-2" 
+                                onclick="this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='block';"
+                                title="Tentar novamente">
+                            <i class="fas fa-redo me-1"></i>Tentar novamente
+                        </button>
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- Video placeholder -->
+                <div class="video-placeholder bg-dark rounded d-flex align-items-center justify-content-center position-relative" 
+                     style="width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %}; height: 140px; cursor: pointer;"
+                     {% if mode == 'readonly' %}
+                         onclick="alert('Vídeo não disponível')"
+                         title="Vídeo não disponível"
+                     {% else %}
+                         hx-get="{% url 'comercial:media_modal' %}?url=placeholder&type=video&name={{ message.media_filename|default:'Vídeo'|urlencode }}"
+                         hx-target="body"
+                         hx-swap="beforeend"
+                         hx-trigger="click"
+                     {% endif %}>
+                    <div class="text-center text-light">
+                        <i class="fas fa-video fa-2x mb-2"></i>
+                        <div class="small">Vídeo</div>
+                        {% if message.media_filename %}
+                            <div class="text-muted small">{{ message.media_filename }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if message.content %}
+                <div class="mt-1 small">{{ message.content }}</div>
+            {% endif %}
+        </div>
+        
+    {% elif message.message_type == 'audio' %}
+        <div class="media-message audio-message mb-2">
+            {% if message.get_signed_media_url and message.media_url %}
+                <div class="audio-player bg-light rounded p-3" 
+                     style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %};">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-volume-up text-primary me-2"></i>
+                        <div class="flex-grow-1">
+                            <audio controls class="w-100">
+                                <source src="{{ message.get_signed_media_url }}" 
+                                        type="{{ message.media_mimetype|default:'audio/ogg' }}">
+                                Seu navegador não suporta áudios.
+                            </audio>
+                        </div>
+                    </div>
+                    {% if message.media_filename %}
+                        <div class="text-muted small mt-1">{{ message.media_filename }}</div>
+                    {% endif %}
+                    {% if mode != 'readonly' %}
+                        <!-- Demonstração Web Audio API -->
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary" 
+                                    onclick="playAudioDemo('{{ message.get_signed_media_url }}')"
+                                    title="Demonstração com Web Audio API">
+                                <i class="fas fa-play me-1"></i>Demo API
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <!-- Audio placeholder -->
+                <div class="audio-placeholder bg-secondary rounded p-3 text-center text-light" 
+                     style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %};">
+                    <i class="fas fa-volume-up fa-2x mb-2"></i>
+                    <div class="small">Áudio</div>
+                    {% if message.media_filename %}
+                        <div class="text-muted small">{{ message.media_filename }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if message.content %}
+                <div class="mt-1 small">{{ message.content }}</div>
+            {% endif %}
+        </div>
+        
+    {% elif message.message_type == 'document' %}
+        <div class="media-message document-message mb-2">
+            <div class="document-card bg-light border rounded p-3 d-flex align-items-center" 
+                 style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %};">
+                <div class="document-icon me-3">
+                    {% if 'pdf' in message.media_mimetype|default:'' %}
+                        <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                    {% elif 'word' in message.media_mimetype|default:'' or 'docx' in message.media_mimetype|default:'' %}
+                        <i class="fas fa-file-word fa-2x text-primary"></i>
+                    {% elif 'excel' in message.media_mimetype|default:'' or 'xlsx' in message.media_mimetype|default:'' %}
+                        <i class="fas fa-file-excel fa-2x text-success"></i>
+                    {% elif 'image' in message.media_mimetype|default:'' %}
+                        <i class="fas fa-file-image fa-2x text-info"></i>
+                    {% else %}
+                        <i class="fas fa-file fa-2x text-muted"></i>
+                    {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                    <div class="document-name fw-bold small">{{ message.media_filename|default:"Documento" }}</div>
+                    {% if message.media_mimetype %}
+                        <div class="text-muted small">{{ message.media_mimetype }}</div>
+                    {% endif %}
+                    {% if message.get_signed_media_url and message.media_url %}
+                        <a href="{{ message.get_signed_media_url }}" 
+                           class="btn btn-sm btn-outline-primary mt-1" 
+                           target="_blank" 
+                           rel="noopener noreferrer">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                    {% else %}
+                        <div class="text-muted small mt-1">Documento não disponível</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if message.content %}
+                <div class="mt-1 small">{{ message.content }}</div>
+            {% endif %}
+        </div>
+        
+    {% else %}
+        <!-- Tipo de mídia desconhecido -->
+        <div class="media-message unknown-media mb-2">
+            <div class="unknown-media-card bg-warning rounded p-3 text-center" 
+                 style="max-width: {% if max_width %}{{ max_width }}{% elif mode == 'readonly' %}200px{% else %}250px{% endif %};">
+                <i class="fas fa-question-circle fa-2x mb-2"></i>
+                <div class="small fw-bold">Tipo de mídia não suportado</div>
+                {% if message.media_filename %}
+                    <div class="text-muted small">{{ message.media_filename }}</div>
+                {% endif %}
+                {% if message.media_mimetype %}
+                    <div class="text-muted small">{{ message.media_mimetype }}</div>
+                {% endif %}
+            </div>
+            {% if message.content %}
+                <div class="mt-1 small">{{ message.content }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}

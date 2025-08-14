@@ -29,12 +29,7 @@
     <!-- Container para resultados do autocomplete -->
     <div id="{{ search_field.id_for_label }}-autocomplete-results" 
          class="autocomplete-results border rounded bg-white position-absolute w-100 shadow-sm"
-         style="display: none; z-index: 1000; max-height: 300px; overflow-y: auto;"
-         hx-get="{{ search_url }}"
-         hx-trigger="keyup changed delay:500ms from:#{{ search_field.id_for_label }}"
-         hx-include="#{{ search_field.id_for_label }}{% if include_params %},{{ include_params }}{% endif %}"
-         hx-target="#{{ search_field.id_for_label }}-autocomplete-results"
-         hx-swap="innerHTML">
+         style="display: none; z-index: 1000; max-height: 300px; overflow-y: auto;">
     </div>
     
     <!-- Pessoa selecionada -->
@@ -62,14 +57,72 @@
         const selectedText = document.getElementById('{{ search_field.id_for_label }}-nome-selecionado');
         const clearButton = selectedDisplay?.querySelector('.autocomplete-clear-btn');
         
-        // Configura HTMX para enviar o valor como 'q'
-        if (resultsContainer) {
-            resultsContainer.addEventListener('htmx:configRequest', function(evt) {
-                evt.detail.parameters['q'] = searchInput.value;
-                // Remove o parâmetro com o nome do campo
-                delete evt.detail.parameters['{{ search_field.name }}'];
-            });
+        // Implementação manual de autocomplete
+        let debounceTimer;
+        
+        function fetchAutocomplete(query) {
+            console.log('[DEBUG] Fazendo fetch manual para:', query);
+            
+            const url = new URL('{{ search_url }}', window.location.origin);
+            url.searchParams.set('q', query);
+            url.searchParams.set('all', 'true');
+            
+            console.log('[DEBUG] URL da requisição:', url.toString());
+            
+            fetch(url)
+                .then(response => {
+                    console.log('[DEBUG] Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log('[DEBUG] HTML recebido:', html.substring(0, 200));
+                    resultsContainer.innerHTML = html;
+                    resultsContainer.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('[DEBUG] Erro no fetch:', error);
+                    resultsContainer.style.display = 'none';
+                });
         }
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            console.log('[DEBUG] Input event - query:', query, 'length:', query.length);
+            
+            clearTimeout(debounceTimer);
+            
+            if (query.length < 2) {
+                console.log('[DEBUG] Query muito curta, ocultando resultados');
+                resultsContainer.style.display = 'none';
+                return;
+            }
+            
+            debounceTimer = setTimeout(() => {
+                fetchAutocomplete(query);
+            }, 500);
+        });
+        
+        // Ocultar resultados ao clicar fora (com delay para permitir cliques nos resultados)
+        document.addEventListener('click', function(evt) {
+            if (!searchInput.contains(evt.target) && !resultsContainer.contains(evt.target)) {
+                setTimeout(() => {
+                    console.log('[DEBUG] Ocultando resultados - clique fora');
+                    resultsContainer.style.display = 'none';
+                }, 100);
+            }
+        });
+        
+        // Mostrar resultados quando o campo ganha foco (se já tem conteúdo)
+        searchInput.addEventListener('focus', function() {
+            const query = searchInput.value.trim();
+            if (query.length >= 2 && resultsContainer.children.length > 0) {
+                console.log('[DEBUG] Mostrando resultados existentes no focus');
+                resultsContainer.style.display = 'block';
+            }
+        });
         
         if (searchInput && hiddenInput && resultsContainer && window.AutocompleteField) {
             const autocomplete = new AutocompleteField({

@@ -5,7 +5,7 @@ from decimal import Decimal
 from datetime import date, timedelta
 from core.forms.caravana import CaravanaForm
 from core.models import Caravana, Bloqueio
-from core.factories import UsuarioFactory, PessoaFactory
+from core.factories import UsuarioFactory, PessoaFactory, EmpresaTurismoFactory
 
 
 class CaravanaFormTest(TestCase):
@@ -22,16 +22,15 @@ class CaravanaFormTest(TestCase):
         self.user = UsuarioFactory()
         self.user.groups.add(self.operacional_group)
         
-        # Criar pessoas para teste
-        self.empresa = PessoaFactory(
-            tipo_doc='CNPJ',
-            empresa_gruporom=True,
-            nome='Empresa Teste'
-        )
+        # Criar empresa de turismo para teste
+        self.empresa = EmpresaTurismoFactory()
         
         # Criar pessoas com usuários ativos para promotor e líderes
         self.promotor = PessoaFactory(nome='Promotor Teste')
         self.promotor_user = UsuarioFactory(pessoa=self.promotor, is_active=True)
+        
+        # Criar responsável (pode ser empresa ou pessoa sem usuário)
+        self.responsavel = PessoaFactory(nome='Responsável Teste')
         
         self.lider1 = PessoaFactory(nome='Líder 1')
         self.lider1_user = UsuarioFactory(pessoa=self.lider1, is_active=True)
@@ -48,8 +47,10 @@ class CaravanaFormTest(TestCase):
         self.assertIn('empresa', form.fields)
         self.assertIn('tipo', form.fields)
         self.assertIn('promotor', form.fields)
+        self.assertIn('responsavel', form.fields)
         self.assertIn('lideres', form.fields)
         self.assertIn('quantidade', form.fields)
+        self.assertIn('repasse_moeda', form.fields)
         
         # Campos dos bloqueios
         self.assertIn('data_saida', form.fields)
@@ -75,12 +76,14 @@ class CaravanaFormTest(TestCase):
             'empresa': self.empresa.pk,
             'tipo': 'Evangélica',
             'promotor': self.promotor.pk,
+            'responsavel': self.responsavel.pk,
             'lideres': [self.lider1.pk, self.lider2.pk],
             'quantidade': 50,
             'free_economica': 2,
             'free_executiva': 1,
             'repasse_valor': Decimal('1000.00'),
             'repasse_tipo': 'Total',
+            'repasse_moeda': 'Dólar',
             'data_contrato': date.today(),
             'destaque_site': 0,
             
@@ -104,11 +107,13 @@ class CaravanaFormTest(TestCase):
             'empresa': self.empresa.pk,
             'tipo': 'Evangélica',
             'promotor': self.promotor.pk,
+            'responsavel': self.responsavel.pk,
             'quantidade': 10,
             'free_economica': 8,
             'free_executiva': 5,  # 8 + 5 = 13 > 10
             'repasse_valor': Decimal('1000.00'),
             'repasse_tipo': 'Total',
+            'repasse_moeda': 'Real',
             'data_contrato': date.today(),
             'destaque_site': 0,
             
@@ -133,12 +138,14 @@ class CaravanaFormTest(TestCase):
             'empresa': self.empresa.pk,
             'tipo': 'Evangélica',
             'promotor': self.promotor.pk,
+            'responsavel': self.responsavel.pk,
             'lideres': [self.lider1.pk],
             'quantidade': 40,
             'free_economica': 1,
             'free_executiva': 1,
             'repasse_valor': Decimal('800.00'),
             'repasse_tipo': 'Total',
+            'repasse_moeda': 'Dólar',
             'data_contrato': date.today(),
             'destaque_site': 0,
             
@@ -200,12 +207,14 @@ class CaravanaFormTest(TestCase):
             'empresa': self.empresa.pk,
             'tipo': 'Evangélica',
             'promotor': self.promotor.pk,
+            'responsavel': self.responsavel.pk,
             'lideres': [self.lider1.pk],
             'quantidade': 30,
             'free_economica': 1,
             'free_executiva': 0,
             'repasse_valor': Decimal('500.00'),
             'repasse_tipo': 'Total',
+            'repasse_moeda': 'Real',
             'data_contrato': date.today(),
             'destaque_site': 0,
             

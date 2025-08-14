@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import administracao_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -12,8 +12,7 @@ from core.forms.pessoa import PessoaForm
 from core.utils.image_processing import crop_to_square, is_valid_image, needs_processing
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def lista(request):
     """
     View para listagem de pessoas
@@ -72,8 +71,7 @@ def lista(request):
     return render(request, 'administracao/pessoas/lista.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def nova_modal(request):
     """
     View para retornar o modal de criação de pessoa via HTMX
@@ -86,8 +84,7 @@ def nova_modal(request):
     return render(request, 'administracao/pessoas/modal_form.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def nova_modal_simples(request):
     """
     View para retornar o modal simplificado de criação de pessoa
@@ -101,8 +98,7 @@ def nova_modal_simples(request):
 
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def criar(request):
     """
     View para processar o formulário de criação de pessoa
@@ -129,8 +125,7 @@ def criar(request):
     return redirect('/administracao/pessoas/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def editar_modal(request, pk):
     """
     View para retornar o modal de edição de pessoa via HTMX
@@ -145,8 +140,7 @@ def editar_modal(request, pk):
     return render(request, 'administracao/pessoas/modal_edit.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def atualizar(request, pk):
     """
     View para processar o formulário de edição de pessoa
@@ -185,8 +179,7 @@ def atualizar(request, pk):
     return redirect('/administracao/pessoas/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def excluir_modal(request, pk):
     """
     View para retornar o modal de confirmação de exclusão via HTMX
@@ -203,8 +196,7 @@ def excluir_modal(request, pk):
     return render(request, 'administracao/pessoas/modal_delete.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def excluir(request, pk):
     """
     View para processar a exclusão de pessoa
@@ -227,8 +219,7 @@ def excluir(request, pk):
     return redirect('/administracao/pessoas/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def foto_modal(request, pk):
     """
     View para retornar o modal de upload de foto via HTMX
@@ -240,8 +231,7 @@ def foto_modal(request, pk):
     return render(request, 'administracao/pessoas/modal_foto.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def foto_upload(request, pk):
     """
     View para processar o upload de foto com recorte automático
@@ -321,8 +311,7 @@ def foto_upload(request, pk):
     return redirect('/administracao/pessoas/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def foto_remover(request, pk):
     """
     View para remover a foto da pessoa

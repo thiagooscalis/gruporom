@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.db.models import Q
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, HTML, Div
 from core.models import Caravana, Pessoa, Bloqueio
@@ -10,6 +11,16 @@ class CaravanaForm(forms.ModelForm):
     """
     Formulário para criar/editar caravanas com campos dos bloqueios
     """
+    
+    # Campo para autocomplete do responsável
+    responsavel_search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite o nome do responsável para buscar...'
+        }),
+        label="Buscar Responsável"
+    )
     
     # Campo URL customizado para evitar warnings
     link = forms.URLField(
@@ -74,12 +85,14 @@ class CaravanaForm(forms.ModelForm):
             'empresa',
             'tipo',
             'promotor',
+            'responsavel',
             'lideres',
             'quantidade',
             'free_economica',
             'free_executiva',
             'repasse_valor',
             'repasse_tipo',
+            'repasse_moeda',
             'data_contrato',
             'link',
             'destaque_site',
@@ -98,7 +111,7 @@ class CaravanaForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Filtra apenas pessoas ativas para líderes
+        # Filtra apenas pessoas ativas para líderes e promotor
         pessoas_ativas = Pessoa.objects.filter(
             usuario__is_active=True
         ).distinct()
@@ -106,63 +119,35 @@ class CaravanaForm(forms.ModelForm):
         self.fields['promotor'].queryset = pessoas_ativas
         self.fields['lideres'].queryset = pessoas_ativas
         
+        # Responsável pode ser qualquer pessoa ou empresa (quem está fechando o negócio)
+        self.fields['responsavel'].queryset = Pessoa.objects.all()
+        self.fields['responsavel'].widget = forms.HiddenInput()  # Será substituído por autocomplete
+        
         # Remove o widget padrão do campo lideres - será substituído por autocomplete
         self.fields['lideres'].widget = forms.MultipleHiddenInput()
         
-        # Se o usuário tem empresas associadas, filtra
+        # Filtra apenas empresas de turismo
+        empresas_validas = Pessoa.objects.filter(
+            tipo_empresa='Turismo',
+            tipo_doc='CNPJ'  # Empresas devem ter CNPJ
+        )
+        
+        # Se o usuário tem empresas associadas, cruza com empresas válidas
         if self.user and hasattr(self.user, 'empresas'):
             empresas_usuario = self.user.empresas.all()
             if empresas_usuario.exists():
-                self.fields['empresa'].queryset = empresas_usuario
+                # Intersecção: empresas do usuário que são válidas
+                empresas_validas = empresas_validas.filter(
+                    id__in=empresas_usuario.values_list('id', flat=True)
+                )
         
-        # Configuração do Crispy Forms
+        self.fields['empresa'].queryset = empresas_validas
+        
+        # Configuração do Crispy Forms (simplificado pois estamos usando renderização manual)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        
-        self.helper.layout = Layout(
-            HTML('<h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>Informações da Caravana</h5>'),
-            Row(
-                Column('nome', css_class='col-md-6'),
-                Column('empresa', css_class='col-md-3'),
-                Column('tipo', css_class='col-md-3'),
-            ),
-            Row(
-                Column('promotor', css_class='col-md-6'),
-                Column('data_contrato', css_class='col-md-6'),
-            ),
-            Row(
-                Column('quantidade', css_class='col-md-4'),
-                Column('free_economica', css_class='col-md-4'),
-                Column('free_executiva', css_class='col-md-4'),
-            ),
-            Row(
-                Column('repasse_valor', css_class='col-md-6'),
-                Column('repasse_tipo', css_class='col-md-6'),
-            ),
-            HTML('<div class="col-md-12" id="lideres-autocomplete-container"></div>'),
-            Row(
-                Column('link', css_class='col-md-9'),
-                Column('destaque_site', css_class='col-md-3'),
-            ),
-            
-            HTML('<hr class="my-4">'),
-            HTML('<h5 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Dados dos Bloqueios</h5>'),
-            HTML('<p class="text-muted mb-3">Serão criados automaticamente 3 bloqueios: Econômica, Executiva e Terrestre</p>'),
-            
-            Row(
-                Column('data_saida', css_class='col-md-6'),
-                Column('taxas', css_class='col-md-6'),
-            ),
-            Row(
-                Column('moeda_valor', css_class='col-md-6'),
-                Column('moeda_taxas', css_class='col-md-6'),
-            ),
-            Row(
-                Column('valor_economica', css_class='col-md-4'),
-                Column('valor_executiva', css_class='col-md-4'),
-                Column('valor_terrestre', css_class='col-md-4'),
-            ),
-        )
+        self.helper.form_show_labels = True
+        self.helper.form_show_errors = True
     
     def clean(self):
         cleaned_data = super().clean()
@@ -183,10 +168,6 @@ class CaravanaForm(forms.ModelForm):
         # Verifica se é uma nova caravana antes de salvar
         is_new = self.instance.pk is None
         
-        # Se é nova caravana e não tem responsável, define como usuário atual
-        if is_new and not getattr(self.instance, 'responsavel_id', None) and self.user and hasattr(self.user, 'pessoa'):
-            self.instance.responsavel = self.user.pessoa
-            
         caravana = super().save(commit=commit)
         
         # Só cria os bloqueios se for uma nova caravana (não edição)

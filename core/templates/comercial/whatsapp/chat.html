@@ -1842,14 +1842,11 @@ function saveClient() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Fecha modal
-            bootstrap.Modal.getInstance(modal).hide();
-            
-            // Mostra mensagem de sucesso
+            // Mostra mensagem de sucesso e fecha modal
             alert('Cliente cadastrado com sucesso!');
             
-            // Atualiza a página para mostrar o botão "Ver Cliente"
-            window.location.reload();
+            // Fecha modal e atualiza a página
+            window.modalUtils.closeAndReload(modal.id);
         } else {
             alert('Erro ao cadastrar cliente: ' + (data.error || 'Erro desconhecido'));
         }

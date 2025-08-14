@@ -20,7 +20,7 @@ def buscar_pessoas(request, area):
     if len(query) < 2:
         # Não busca com menos de 2 caracteres
         return render(
-            request, "components/pessoas_autocomplete.html", {"pessoas": []}
+            request, "components/pessoas_autocomplete.html", {"pessoas": [], "query": query}
         )
 
     # Busca pessoas

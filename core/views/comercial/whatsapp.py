@@ -2,6 +2,7 @@
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import comercial_required
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.db import transaction
@@ -16,8 +17,8 @@ from core.models import (
 logger = logging.getLogger(__name__)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists() and u.has_perm('core.controle_whatsapp'))
+@comercial_required
+@user_passes_test(lambda u: u.has_perm('core.controle_whatsapp'))
 def whatsapp_geral(request):
     """
     Página WhatsApp Geral - visualiza todas as conversas de todos os atendentes
@@ -90,8 +91,7 @@ def whatsapp_geral(request):
     return render(request, 'comercial/whatsapp/geral.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def test_websocket(request):
     """
@@ -148,8 +148,7 @@ def test_websocket(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def dashboard(request):
     """
     Dashboard do WhatsApp comercial - Layout de chat completo
@@ -204,8 +203,7 @@ def dashboard(request):
     return render(request, 'comercial/whatsapp/chat.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def conversations_table(request):
     """
     Retorna apenas a tabela de conversas para atualização via HTMX
@@ -232,8 +230,7 @@ def conversations_table(request):
     return render(request, 'comercial/whatsapp/partials/conversation_table.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def my_conversations(request):
     """
     Retorna lista de conversas do usuário (para atualização HTMX)
@@ -281,8 +278,7 @@ def my_conversations(request):
     return render(request, 'comercial/whatsapp/partials/contacts_list.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def pending_conversations(request):
     """
     Retorna conversas pendentes para o modal
@@ -302,8 +298,7 @@ def pending_conversations(request):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def conversation_messages(request, conversation_id):
     """
     Retorna mensagens de uma conversa (para atualização HTMX)
@@ -325,8 +320,7 @@ def conversation_messages(request, conversation_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def conversation_chat_area(request, conversation_id):
     """
     Retorna área de chat completa para uma conversa (para substituir apenas a área de chat)
@@ -350,8 +344,7 @@ def conversation_chat_area(request, conversation_id):
     return render(request, 'comercial/whatsapp/partials/chat_area.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def conversation_messages_readonly(request, conversation_id):
     """
     Retorna mensagens de qualquer conversa (para visualização read-only no WhatsApp Geral)
@@ -373,8 +366,7 @@ def conversation_messages_readonly(request, conversation_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def pending_count(request):
     """
     Retorna contador de conversas pendentes (JSON)
@@ -383,8 +375,7 @@ def pending_count(request):
     return JsonResponse({'count': count})
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def check_24h_window(request):
     """
@@ -428,7 +419,7 @@ def check_24h_window(request):
         return JsonResponse({'error': 'Erro interno do servidor'}, status=500)
 
 
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def send_message(request):
     """
@@ -530,8 +521,7 @@ def send_message(request):
         })
 
 
-# @login_required
-# @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+# @comercial_required
 # @require_POST
 # def finish_conversation(request, conversation_id):
 #     """
@@ -550,8 +540,7 @@ def send_message(request):
 #     return JsonResponse({'success': True})
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def resend_message(request, message_id):
     """
@@ -630,8 +619,7 @@ def resend_message(request, message_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def assign_conversation(request, conversation_id):
     """
     Atribui uma conversa ao usuário logado
@@ -669,8 +657,7 @@ def assign_conversation(request, conversation_id):
     return JsonResponse({'success': True, 'message': f'Conversa atribuída com sucesso!'})
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def register_client(request):
     """
@@ -780,8 +767,7 @@ def register_client(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 # def conversation_detail(request, conversation_id):
 #     """
 #     REMOVIDO - usar dashboard com ?conversation=ID
@@ -789,8 +775,7 @@ def register_client(request):
 #     pass
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def mobile_conversation(request, conversation_id):
     """
     Retorna template do offcanvas mobile para uma conversa específica
@@ -811,8 +796,7 @@ def mobile_conversation(request, conversation_id):
     return render(request, 'comercial/whatsapp/partials/mobile_conversation.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def media_modal(request):
     """
     Modal HTMX para visualizar mídia
@@ -830,8 +814,7 @@ def media_modal(request):
     return render(request, 'comercial/whatsapp/partials/media_modal.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def send_message_form(request):
     """
@@ -880,8 +863,7 @@ def send_message_form(request):
         return JsonResponse({'success': False, 'error': 'Erro ao enviar mensagem'})
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def mobile_conversation_content(request, conversation_id):
     """
     Retorna apenas o conteúdo da conversa mobile (sem header do offcanvas)
@@ -902,8 +884,7 @@ def mobile_conversation_content(request, conversation_id):
     return render(request, 'comercial/whatsapp/partials/mobile_conversation_content.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def save_data_retorno(request):
     """
@@ -936,8 +917,7 @@ def save_data_retorno(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def load_templates(request):
     """
     Carrega templates ativos para o select
@@ -952,8 +932,7 @@ def load_templates(request):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def preview_template(request):
     """
     Retorna preview do template com campos para parâmetros
@@ -983,8 +962,7 @@ def preview_template(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def template_preview(request):
     """
     Retorna preview do template e campos de parâmetros via HTMX
@@ -1021,8 +999,7 @@ def template_preview(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def novo_contato(request):
     """
     Cria novo contato e inicia conversa WhatsApp
@@ -1225,8 +1202,7 @@ def novo_contato(request):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 @require_POST
 def send_template(request):
     """

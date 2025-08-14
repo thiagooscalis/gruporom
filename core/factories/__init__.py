@@ -1,4 +1,4 @@
-from .pessoa import PessoaFactory, PessoaJuridicaFactory, PessoaComPassaporteFactory, EmpresaGrupoROMFactory
+from .pessoa import PessoaFactory, PessoaJuridicaFactory, PessoaComPassaporteFactory, EmpresaGrupoROMFactory, EmpresaTurismoFactory
 from .usuario import UsuarioFactory, SuperUsuarioFactory, UsuarioAdministracaoFactory, GroupFactory
 from .cia_area import CiaAreaFactory
 from .pais import PaisFactory
@@ -24,6 +24,7 @@ __all__ = [
     "PessoaJuridicaFactory", 
     "PessoaComPassaporteFactory",
     "EmpresaGrupoROMFactory",
+    "EmpresaTurismoFactory",
     "UsuarioFactory",
     "SuperUsuarioFactory",
     "UsuarioAdministracaoFactory",

@@ -1,6 +1,6 @@
 from django.db import models
 from .pessoa import Pessoa
-from core.choices import TIPO_CARAVANA_CHOICES, REPASSE_TIPO_CHOICES
+from core.choices import TIPO_CARAVANA_CHOICES, REPASSE_TIPO_CHOICES, MOEDA_CHOICES
 
 
 class Caravana(models.Model):
@@ -43,6 +43,12 @@ class Caravana(models.Model):
         max_length=20,
         choices=REPASSE_TIPO_CHOICES,
         verbose_name="Tipo de Repasse",
+    )
+    repasse_moeda = models.CharField(
+        max_length=10,
+        choices=MOEDA_CHOICES,
+        default="Dólar",
+        verbose_name="Moeda do Repasse",
     )
     banner_site = models.ImageField(
         upload_to="caravanas/banners/",

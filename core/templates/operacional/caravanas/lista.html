@@ -64,16 +64,15 @@
 </div>
 
 <!-- Floating Action Button -->
-<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
-   style="width: 56px; height: 56px;"
-   data-bs-toggle="modal"
-   data-bs-target="#caravanaModal"
-   hx-get="{% url 'operacional:caravana_criar' %}"
-   hx-target="#caravanaModalContainer"
-   hx-swap="innerHTML"
-   title="Nova Caravana">
+<button type="button" 
+        class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
+        style="width: 56px; height: 56px;"
+        hx-get="{% url 'operacional:caravana_criar' %}"
+        hx-target="#caravanaModalContainer"
+        hx-swap="innerHTML"
+        title="Nova Caravana">
     <i class="fas fa-plus text-white"></i>
-</a>
+</button>
 
 <!-- Container para Modais -->
 <div id="caravanaModalContainer"></div>

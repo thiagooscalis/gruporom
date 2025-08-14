@@ -65,9 +65,7 @@ def criar(request):
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalFornecedor'));
-                        if (modal) modal.hide();
-                        window.location.reload();
+                        window.modalUtils.closeAndReload('modalFornecedor');
                     </script>
                 """)
             except Exception as e:
@@ -158,9 +156,7 @@ def atualizar(request, pk):
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalFornecedor'));
-                        if (modal) modal.hide();
-                        window.location.reload();
+                        window.modalUtils.closeAndReload('modalFornecedor');
                     </script>
                 """)
             except Exception as e:
@@ -177,44 +173,3 @@ def atualizar(request, pk):
     
     return redirect('administracao:fornecedores_lista')
 
-
-@login_required
-def excluir_modal(request, pk):
-    """Retorna o modal para confirmar exclusão do fornecedor via HTMX"""
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    return render(request, 'administracao/fornecedores/modal_excluir.html', {
-        'fornecedor': fornecedor,
-        'title': f'Excluir Fornecedor - {fornecedor.pessoa.nome}',
-        'action_url': 'administracao:fornecedores_excluir',
-    })
-
-
-@login_required
-def excluir(request, pk):
-    """Exclui fornecedor via HTMX"""
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    
-    if request.method == 'POST':
-        try:
-            nome_fornecedor = fornecedor.pessoa.nome
-            fornecedor.delete()
-            messages.success(request, f'Fornecedor "{nome_fornecedor}" excluído com sucesso!')
-            
-            # Retorna script para fechar modal e recarregar página
-            return HttpResponse("""
-                <script>
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalFornecedor'));
-                    if (modal) modal.hide();
-                    window.location.reload();
-                </script>
-            """)
-        except Exception as e:
-            messages.error(request, f'Erro ao excluir fornecedor: {str(e)}')
-            return render(request, 'administracao/fornecedores/modal_excluir.html', {
-                'fornecedor': fornecedor,
-                'title': f'Excluir Fornecedor - {fornecedor.pessoa.nome}',
-                'action_url': 'administracao:fornecedores_excluir',
-                'error': str(e)
-            })
-    
-    return redirect('administracao:fornecedores_lista')

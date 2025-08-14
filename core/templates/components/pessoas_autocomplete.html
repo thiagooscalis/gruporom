@@ -6,20 +6,23 @@
          data-pessoa-doc="{{ pessoa.doc }}"
          style="cursor: pointer;"
          onmouseover="this.style.backgroundColor='#f8f9fa'"
-         onmouseout="this.style.backgroundColor='white'">
+         onmouseout="this.style.backgroundColor='white'"
+         onclick="selecionarPessoa('{{ pessoa.pk }}', '{{ pessoa.nome|escapejs }}', '{{ pessoa.doc|escapejs }}')">
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <strong>{{ pessoa.nome }}</strong>
                 <br>
                 <small class="text-muted">
                     {{ pessoa.get_tipo_doc_display }}: {{ pessoa.doc }}
-                    {% if pessoa.email %} | {{ pessoa.email }}{% endif %}
+                    {% if pessoa.email1 %} | {{ pessoa.email1 }}{% endif %}
                 </small>
             </div>
             <div class="text-end">
-                <span class="badge bg-{% if pessoa.tipo_pessoa|lower == 'fisica' %}info{% else %}success{% endif %}">
-                    {{ pessoa.get_tipo_pessoa_display }}
-                </span>
+                {% if pessoa.tipo_empresa %}
+                    <span class="badge bg-success">{{ pessoa.tipo_empresa }}</span>
+                {% else %}
+                    <span class="badge bg-info">Pessoa Física</span>
+                {% endif %}
             </div>
         </div>
     </div>

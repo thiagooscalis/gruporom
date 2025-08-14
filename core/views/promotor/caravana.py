@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import promotor_required
 from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponse
@@ -9,8 +9,7 @@ from core.models import Caravana, Pessoa, Bloqueio, Pais, Aeroporto
 from core.forms.caravana_promotor import CaravanaPromotorForm
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Promotor').exists())
+@promotor_required
 def cadastrar_caravana_view(request):
     """
     View principal para cadastrar caravana com HTMX multistep

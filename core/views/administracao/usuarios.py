@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import administracao_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -11,8 +11,7 @@ from core.models import Usuario, Pessoa
 from core.forms.usuario import UsuarioForm
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def lista(request):
     """
     View para listagem de usuários
@@ -57,8 +56,7 @@ def lista(request):
     return render(request, 'administracao/usuarios/lista.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def novo_modal(request):
     """
     View para retornar o modal de criação de usuário via HTMX
@@ -71,8 +69,7 @@ def novo_modal(request):
     return render(request, 'administracao/usuarios/modal_form.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def criar(request):
     """
     View para processar o formulário de criação de usuário
@@ -98,8 +95,7 @@ def criar(request):
     return redirect('/administracao/usuarios/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def editar_modal(request, pk):
     """
     View para retornar o modal de edição de usuário via HTMX
@@ -122,8 +118,7 @@ def editar_modal(request, pk):
     return render(request, 'administracao/usuarios/modal_edit.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def atualizar(request, pk):
     """
     View para processar o formulário de edição de usuário
@@ -172,8 +167,7 @@ def atualizar(request, pk):
     return redirect('/administracao/usuarios/')
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def excluir_modal(request, pk):
     """
     View para retornar o modal de confirmação de exclusão via HTMX
@@ -190,8 +184,7 @@ def excluir_modal(request, pk):
     return render(request, 'administracao/usuarios/modal_delete.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def excluir(request, pk):
     """
     View para processar a exclusão de usuário

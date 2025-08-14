@@ -56,7 +56,7 @@ gruporom/
 
 ### 🎨 Frontend e Styling
 - **Framework CSS**: Bootstrap 5 com cor primária personalizada (#d3a156 - cor do logo)
-- **Ícones**: FontAwesome 6 (importado via CSS)
+- **Ícones**: FontAwesome 7 (importado via CSS)
 - **Build**: Parcel.js para compilação de assets
 - **Máscaras**: IMask para CPF, CNPJ, Passaporte (multi-formato), Telefone e CEP
 - **Autocomplete**: Sistema AJAX reutilizável para busca de pessoas
@@ -65,28 +65,31 @@ gruporom/
   - Desktop: Sidebar fixa (#333333) + conteúdo principal
   - Mobile: Offcanvas sidebar + botão hamburger
 - **Modais**: Sistema HTMX para operações CRUD sem reload
+- **Template Tags**: Customizadas para moeda, telefone e documentos
 - **⚠️ IMPORTANTE**: Sempre usar componentes Bootstrap (modais, dropdowns, offcanvas, etc.) e HTMX para interações. JavaScript customizado deve ser usado apenas em último caso quando não há solução via Bootstrap/HTMX
 
 ### 🔐 Autenticação e Autorização
 - **Modelo de Usuário Customizado**: `Usuario` (AbstractBaseUser + PermissionsMixin)
 - **Dados Pessoais**: Model `Pessoa` separado com OneToOne para Usuario
-- **Grupos**: Sistema baseado em grupos Django (ex: "Administração")
+- **Grupos**: Sistema baseado em grupos Django (Administração, Comercial, Operacional, Promotor)
 - **Redirecionamento**: Usuários redirecionados automaticamente para área do seu grupo
 - **Middleware**: LoginRequiredMiddleware ativo (todas as páginas autenticadas)
 - **Segurança**: Controle de acesso Django Admin restrito, configurações de segurança robustas
+- **Criptografia**: Campos sensíveis (tokens WhatsApp) criptografados com Fernet
 
 ### 🗃️ Banco de Dados
-- **Modelos Implementados**:
+- **Modelos Implementados (23 models)**:
   - `Pessoa`: Dados pessoais completos (CPF/CNPJ, endereço, passaporte, etc.)
   - `Usuario`: Autenticação customizada (AbstractBaseUser + PermissionsMixin)
   - `Fornecedor`: Gestão de fornecedores com relacionamento ManyToMany para empresas
   - `Colaborador`: Gestão completa (salário, comissão, turnos, datas admissão/demissão)
   - `Cargo`: Cargos organizacionais com salário base
   - `Turno`: Turnos de trabalho (manhã, tarde, noite)
+  - `Funcao`: Funções profissionais com títulos por sexo
   - `Cambio`: Sistema automático de cotação USD/BRL via AwesomeAPI
   - **Sistema de Turismo Completo**:
     - `CiaArea`: Companhias aéreas com código IATA único
-    - `Pais`: Países com código ISO de 2 dígitos único
+    - `Pais`: Países com código ISO de 2 dígitos único (193 países)
     - `Cidade`: Cidades vinculadas a países
     - `Aeroporto`: Aeroportos com código IATA e timezone
     - `Caravana`: Caravanas com empresa, promotor, líderes e configurações
@@ -94,12 +97,18 @@ gruporom/
     - `Hotel`: Hotéis com endereço e cidade
     - `Bloqueio`: Bloqueios de passagens com países, hotéis e inclusos
     - `Passageiro`: Passageiros vinculados a bloqueios (Guia, VIP, Free)
-    - `Voo`: Voos com companhia, aeroportos e horários
+    - `Voo`: Voos com companhia, aeroportos e horários timezone-aware
     - `DiaRoteiro`: Roteiro dia-a-dia dos bloqueios
     - `Extra`: Extras opcionais com valores
     - `Tarefa`: Tarefas operacionais (Aéreo, Terrestre, Passageiro)
     - `Nota`: Sistema de notas com threads de resposta
-  - **WhatsApp Business**: Contas, templates, mensagens e integração API
+  - **WhatsApp Business (6 models)**: 
+    - `WhatsAppAccount`: Contas Business com criptografia de tokens
+    - `WhatsAppTemplate`: Templates de mensagens com variáveis
+    - `WhatsAppConversation`: Gestão de conversas e atendimento
+    - `WhatsAppMessage`: Mensagens com suporte a mídias
+    - `WhatsAppWebhookLog`: Auditoria de webhooks
+    - `WhatsAppMedia`: Armazenamento de mídias
 - **Configuração**: PostgreSQL (prod) / SQLite (dev)
 - **Localização**: PT-BR, timezone America/Sao_Paulo
 - **Padrão ForeignKey**: Todos os relacionamentos ForeignKey usam `on_delete=models.PROTECT` por padrão para evitar exclusões acidentais
@@ -108,11 +117,11 @@ gruporom/
 - **Seeder**: `python manage.py seed` - Popula dados iniciais (usuário admin, países, whatsapp)
 - **Seeder Específico**: `python manage.py seed --seeder paises` - Popula apenas países (193 países)
 - **Build**: `npm run build` - Compila assets
-- **Testes**: `./test.sh` - Executa 135 testes com InMemoryStorage (sem warnings)
+- **Testes**: `./test.sh` - Executa 247 testes com InMemoryStorage (sem warnings)
 - **Usuário Admin**: 
   - Username: `thiago`
   - Password: `admin123`
-  - Grupos: `Administração`, `Comercial`, `Operacional`
+  - Grupos: `Administração`, `Comercial`, `Operacional`, `Promotor`
 
 ## ✅ Funcionalidades Implementadas
 
@@ -217,9 +226,10 @@ gruporom/
 - [x] **Janela de 24h WhatsApp**: Verificação automática antes de enviar mensagens
 - [x] **Templates para Reativação**: Sistema para reabrir conversas expiradas
 - [x] **UX Otimizada**: Botão scroll, modais inteligentes, layout responsivo
+- [x] **Novo Contato**: Cadastro rápido com validação inteligente de telefone (Brasil/Internacional)
 
 ### 8. Sistema Multi-Área
-- [x] **Grupos de Acesso**: Administração, Comercial, Operacional (expansível)
+- [x] **Grupos de Acesso**: Administração, Comercial, Operacional, Promotor
 - [x] **Menu de Alternância**: Modal para trocar entre áreas rapidamente
 - [x] **Context Processor**: Detecção automática da área atual
 - [x] **Autorização Granular**: `user_passes_test` para cada área
@@ -236,7 +246,7 @@ gruporom/
 - [x] **Sistema de Notas**: Comunicação interna com threads de resposta
 
 ### 10. Sistema de Testes Completo
-- [x] **135 Testes Implementados**: Cobertura completa de todos os models e factories
+- [x] **247 Testes Implementados**: Cobertura completa de todos os models, views e forms
 - [x] **InMemoryStorage**: Testes não salvam arquivos no disco
 - [x] **Timezone-Aware**: Todos os DateTimeFields com timezone correto
 - [x] **Factory-Boy Otimizado**: 14 factories com relacionamentos ManyToMany
@@ -253,14 +263,14 @@ gruporom/
 ## 🚀 Status Atual: Sistema Empresarial Completo com WhatsApp Business e Mídias
 
 **O projeto está em estado PRODUTIVO COMPLETO** com:
-- **3 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo)
+- **4 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo) + Promotor (caravanas)
 - **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial) + **Mídias integradas** + **Janela 24h**
 - **Sistema de mídias robusto**: Imagens, vídeos, áudios e documentos com S3 e fallback
-- **Sistema de turismo empresarial**: 14 models interconectados para gestão completa
+- **Sistema de turismo empresarial**: 15 models interconectados para gestão completa
 - **Sistema de conversas avançado**: Webhook → Fila → Atribuição → Chat individual → **Verificação 24h** → **Templates automáticos**
-- **135 testes implementados**: Sistema de testes robusto com InMemoryStorage
+- **247 testes implementados**: Sistema de testes robusto com InMemoryStorage e cobertura completa
 - **UX profissional** com botão scroll, modais inteligentes e layout otimizado
-- **Segurança robusta** e **arquitetura escalável**
+- **Segurança robusta** com criptografia de campos sensíveis e **arquitetura escalável**
 
 ## 🔮 Próximas Expansões Sugeridas
 
@@ -333,7 +343,7 @@ uv run python test_whatsapp_flow.py
 
 ### Comandos de Testes
 ```bash
-# Executar todos os 135 testes (recomendado)
+# Executar todos os 247 testes (recomendado)
 ./test.sh
 
 # Parar no primeiro erro
@@ -377,8 +387,18 @@ DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
 #### Área Comercial
 - `/comercial/` - Dashboard comercial
 - `/comercial/whatsapp/` - Atendimento WhatsApp (fila de conversas)
+- `/comercial/whatsapp/geral/` - Visão gerencial de todas as conversas
+- `/comercial/whatsapp/novo-contato/` - Cadastro rápido de novos contatos
 - `/comercial/whatsapp/assign/{id}/` - Atribuir conversa ao usuário
 - `/comercial/whatsapp/conversation/{id}/` - Interface de chat individual
+
+#### Área Operacional
+- `/operacional/` - Dashboard operacional
+- `/operacional/caravanas/` - Gestão de caravanas
+
+#### Área Promotor
+- `/promotor/` - Dashboard do promotor
+- `/promotor/nova-caravana/` - Cadastro multi-step de caravanas
 
 #### Sistema
 - `/admin/` - Django Admin nativo (acesso restrito)
@@ -410,6 +430,12 @@ DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
 - **Busca Otimizada**: Índices Q() para múltiplos campos
 - **Asset Bundling**: CSS/JS otimizados via Parcel
 - **Cache de Templates**: Rendering otimizado
+
+### 📋 Área Promotor
+- [x] **Dashboard Promotor**: Interface dedicada para promotores
+- [x] **Cadastro de Caravanas**: Sistema multi-step para criação de caravanas
+- [x] **Gestão de Caravanas**: Listagem e edição de caravanas próprias
+- [x] **Controle de Acesso**: Promotores só veem suas próprias caravanas
 
 ### 📋 Padrão de Paginação "Carregar Mais"
 **Implementação HTMX para todas as listagens do sistema:**
@@ -471,9 +497,9 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 13/08/2025  
+**Última atualização**: 14/08/2025  
 **Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna, janela 24h automática e multi-área operacional  
-**Módulos**: 10+ modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Cambio, Pais, WhatsApp), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, UX otimizada
+**Módulos**: 23 modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Funcao, Cambio, Pais, WhatsApp [6 models], Turismo [15 models]), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, validação inteligente de telefones, UX otimizada
 
 ## 🆕 Últimas Atualizações
 
@@ -537,6 +563,13 @@ if request.headers.get('HX-Request'):
 - **🎯 Estrutura de Templates Otimizada**: Lógica reorganizada para detectar corretamente tipos de mídia
 - **📂 Organização S3 Profissional**: Estrutura hierárquica `media/whatsapp/tipo/ano/mes/dia/arquivo`
 - **🚀 Integração HTMX**: Modais carregados dinamicamente com JavaScript local para máxima compatibilidade
+
+### Agosto 2025 - Validação Inteligente de Telefones Internacionais
+- **🌍 Validação por DDI**: Sistema inteligente que ajusta validação baseado no país
+  - Brasil (DDI 55): Aceita apenas 8 ou 9 dígitos para o número
+  - Internacional (outros DDIs): Aceita entre 5 e 15 dígitos
+- **📱 Formulário NovoContatoForm**: Atualizado com validação contextual
+- **✅ Melhor UX**: Mensagens de erro específicas por tipo de número
 
 ### Agosto 2025 - Interface de Chat Profissional e Janela 24h
 - **⏰ Verificação Automática de Janela 24h**: Sistema inteligente que verifica se a conversa está dentro da janela de 24h do WhatsApp

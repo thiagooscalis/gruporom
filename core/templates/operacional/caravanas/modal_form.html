@@ -9,7 +9,7 @@
      data-bs-backdrop="true" 
      data-bs-keyboard="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content" id="modal-content-wrapper">
             <div class="modal-header">
                 <h5 class="modal-title" id="caravanaModalLabel">
                     <i class="fas fa-bus me-2"></i>{{ titulo }}
@@ -22,19 +22,78 @@
             <form method="post" 
                   action="{{ action_url }}"
                   hx-post="{{ action_url }}"
-                  hx-target="#caravanaModal"
+                  hx-target="#modal-content-wrapper"
+                  hx-select="#modal-content-wrapper"
                   hx-swap="outerHTML">
                 {% csrf_token %}
                 <div class="modal-body">
-                    {% crispy form %}
+                    <!-- Seção: Informações da Caravana -->
+                    <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>Informações da Caravana</h5>
+                    <div class="row">
+                        <div class="col-md-6">{{ form.nome|as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.empresa|as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.tipo|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">{{ form.promotor|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.data_contrato|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{ form.quantidade|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.free_economica|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.free_executiva|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{ form.repasse_valor|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.repasse_tipo|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.repasse_moeda|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">{{ form.link|as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.destaque_site|as_crispy_field }}</div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Seção: Responsável e Líderes -->
+                    <h5 class="mb-3"><i class="fas fa-users me-2"></i>Responsável e Líderes</h5>
+                    
+                    <!-- Autocomplete para responsável -->
+                    <div class="mb-3">
+                        {% if form.instance.pk %}
+                            {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' initial_value=form.instance.responsavel %}
+                        {% else %}
+                            {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' %}
+                        {% endif %}
+                    </div>
                     
                     <!-- Autocomplete múltiplo para líderes -->
-                    <div id="lideres-autocomplete-container">
+                    <div class="mb-3">
                         {% if form.instance.pk %}
-                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/pessoas/autocomplete/' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
+                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
                         {% else %}
-                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/pessoas/autocomplete/' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
+                            {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
                         {% endif %}
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Seção: Dados dos Bloqueios -->
+                    <h5 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Dados dos Bloqueios</h5>
+                    <p class="text-muted mb-3">Serão criados automaticamente 3 bloqueios: Econômica, Executiva e Terrestre</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">{{ form.data_saida|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.taxas|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">{{ form.moeda_valor|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.moeda_taxas|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{ form.valor_economica|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.valor_executiva|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.valor_terrestre|as_crispy_field }}</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -66,20 +125,15 @@
             if (backdrop) backdrop.remove();
         });
         
-        // Escutar submissão bem-sucedida do formulário
-        modalElement.addEventListener('htmx:afterRequest', function(evt) {
-            if (evt.detail.xhr.status === 200) {
-                try {
-                    const response = JSON.parse(evt.detail.xhr.responseText);
-                    if (response.success) {
-                        modal.hide();
-                        setTimeout(() => location.reload(), 300);
-                        return;
-                    }
-                } catch (e) {
-                    // Se não for JSON, continuar com o comportamento padrão
-                }
-            }
+        // Escutar eventos HTMX
+        document.body.addEventListener('caravanaCreated', function() {
+            modal.hide();
+            setTimeout(() => location.reload(), 100);
+        });
+        
+        document.body.addEventListener('caravanaUpdated', function() {
+            modal.hide();
+            setTimeout(() => location.reload(), 100);
         });
         
         // Mostra o modal imediatamente

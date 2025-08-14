@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import administracao_required
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Max
 from django.db import models
@@ -22,8 +22,7 @@ from core.forms.whatsapp import WhatsAppAccountForm, WhatsAppAccountTestForm, Wh
 logger = logging.getLogger(__name__)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def dashboard(request):
     """
     Dashboard principal do WhatsApp
@@ -77,8 +76,7 @@ def dashboard(request):
     return render(request, 'administracao/whatsapp/dashboard.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def accounts_list(request):
     """
     Lista de contas WhatsApp
@@ -658,8 +656,7 @@ def webhook(request, account_id):
     return HttpResponse(status=405)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def webhook_debug(request, account_id):
     """
     View para debug do webhook - mostra informações da conta e testa conectividade
@@ -716,8 +713,7 @@ def webhook_debug(request, account_id):
     return render(request, 'administracao/whatsapp/webhook_debug.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def test_webhook(request, account_id):
     """
@@ -792,8 +788,7 @@ def test_webhook(request, account_id):
 
 # ==================== VIEWS DE TEMPLATES ====================
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def templates_list(request, account_id):
     """
     Lista de templates de uma conta
@@ -850,8 +845,7 @@ def templates_list(request, account_id):
     return render(request, 'administracao/whatsapp/templates_list.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def template_create_modal(request):
     """
     Modal para criar template
@@ -883,8 +877,7 @@ def template_create_modal(request):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def template_edit_modal(request, template_id):
     """
     Modal para editar template
@@ -920,8 +913,7 @@ def template_edit_modal(request, template_id):
         })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())  
+@administracao_required  
 def template_delete_modal(request, template_id):
     """
     Modal para excluir template
@@ -944,8 +936,7 @@ def template_delete_modal(request, template_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def template_preview_modal(request, template_id):
     """
     Modal para prévia do template
@@ -989,8 +980,7 @@ def template_preview_modal(request, template_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_http_methods(["POST"])
 def template_submit_approval(request, template_id):
     """
@@ -1059,8 +1049,7 @@ def template_submit_approval(request, template_id):
     )
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def api_permissions_test(request, account_id):
     """
     Testa as permissões da API do WhatsApp para uma conta
@@ -1089,8 +1078,7 @@ def api_permissions_test(request, account_id):
         }, status=500)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_http_methods(["POST"])
 def template_check_status(request, template_id):
     """
@@ -1150,8 +1138,7 @@ def template_check_status(request, template_id):
     )
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def contacts_list(request, account_id):
     """
     Lista de contatos de uma conta
@@ -1192,8 +1179,7 @@ def contacts_list(request, account_id):
     return render(request, 'administracao/whatsapp/contacts_list.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def messages_list(request):
     """
     Lista de todas as mensagens
@@ -1259,8 +1245,7 @@ def messages_list(request):
     return render(request, 'administracao/whatsapp/messages_list.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def account_create_modal(request):
     """
     Modal para criar nova conta WhatsApp
@@ -1283,8 +1268,7 @@ def account_create_modal(request):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def account_edit_modal(request, account_id):
     """
     Modal para editar conta WhatsApp
@@ -1310,8 +1294,7 @@ def account_edit_modal(request, account_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def account_delete_modal(request, account_id):
     """
     Modal para excluir conta WhatsApp
@@ -1363,8 +1346,7 @@ def account_delete_modal(request, account_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def account_test_modal(request, account_id):
     """
     Modal para testar conectividade da conta WhatsApp
@@ -1434,8 +1416,7 @@ def account_test_modal(request, account_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def bulk_send_modal(request, account_id):
     """
     Modal para envio de mensagens em massa
@@ -1473,8 +1454,7 @@ def bulk_send_modal(request, account_id):
     return render(request, 'administracao/whatsapp/modals/bulk_send.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def load_recipients(request):
     """
     Carrega interface de seleção de destinatários baseado no tipo
@@ -1540,8 +1520,7 @@ def load_recipients(request):
     return render(request, template_name, context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def filter_recipients(request):
     """
     Filtra destinatários com os mesmos parâmetros do load_recipients
@@ -1549,8 +1528,7 @@ def filter_recipients(request):
     return load_recipients(request)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def template_preview(request):
     """
     Carrega prévia do template selecionado
@@ -1573,8 +1551,7 @@ def template_preview(request):
     return render(request, 'administracao/whatsapp/partials/template_preview.html', context)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def update_count(request):
     """
@@ -1590,8 +1567,7 @@ def update_count(request):
     return HttpResponse(str(count))
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def select_all_recipients(request):
     """
@@ -1603,8 +1579,7 @@ def select_all_recipients(request):
     return load_recipients(request)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def clear_selection(request):
     """
@@ -1614,8 +1589,7 @@ def clear_selection(request):
     return load_recipients(request)
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def bulk_send_process(request, account_id):
     """
@@ -1748,8 +1722,7 @@ def bulk_send_process(request, account_id):
     })
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def count_selected(request):
     """
     Retorna a contagem de destinatários selecionados
@@ -1758,8 +1731,7 @@ def count_selected(request):
     return HttpResponse(f"{len(selected)} selecionados")
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 @require_POST
 def update_preview(request):
     """

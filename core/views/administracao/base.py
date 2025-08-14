@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group
 from core.models import Usuario, Pessoa
+from core.decorators import administracao_required
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Administração').exists())
+@administracao_required
 def home(request):
     """
     View principal do painel de administracao

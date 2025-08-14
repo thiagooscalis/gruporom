@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
@@ -8,15 +7,10 @@ from django.http import HttpResponse
 from core.models import Caravana
 from core.forms.caravana import CaravanaForm
 from core.choices import TIPO_CARAVANA_CHOICES
+from core.decorators import operacional_required
 
 
-def is_operacional(user):
-    """Verifica se o usuário pertence ao grupo Operacional"""
-    return user.groups.filter(name='Operacional').exists()
-
-
-@login_required
-@user_passes_test(is_operacional)
+@operacional_required
 def caravanas_lista(request):
     """Listagem de caravanas com busca e paginação"""
     search = request.GET.get('search', '')
@@ -75,8 +69,7 @@ def caravanas_lista(request):
     return render(request, 'operacional/caravanas/lista.html', context)
 
 
-@login_required
-@user_passes_test(is_operacional)
+@operacional_required
 def caravana_criar_modal(request):
     """Cria nova caravana via modal"""
     if request.method == 'POST':
@@ -90,19 +83,25 @@ def caravana_criar_modal(request):
             response['HX-Trigger'] = 'caravanaCreated'
             response['HX-Refresh'] = 'true'
             return response
+        else:
+            # Retorna apenas o conteúdo do modal com erros
+            return render(request, 'operacional/caravanas/modal_form_content.html', {
+                'form': form,
+                'titulo': 'Nova Caravana',
+                'action_url': request.path,
+            })
     else:
         form = CaravanaForm(user=request.user)
     
+    # Retorna o modal completo no GET inicial
     return render(request, 'operacional/caravanas/modal_form.html', {
         'form': form,
         'titulo': 'Nova Caravana',
         'action_url': request.path,
-        'modal_id': 'caravanaModal',
     })
 
 
-@login_required
-@user_passes_test(is_operacional)
+@operacional_required
 def caravana_editar_modal(request, pk):
     """Edita caravana existente via modal"""
     caravana = get_object_or_404(Caravana, pk=pk)
@@ -118,9 +117,18 @@ def caravana_editar_modal(request, pk):
             response['HX-Trigger'] = 'caravanaUpdated'
             response['HX-Refresh'] = 'true'
             return response
+        else:
+            # Retorna apenas o conteúdo do modal com erros
+            return render(request, 'operacional/caravanas/modal_form_content.html', {
+                'form': form,
+                'caravana': caravana,
+                'titulo': f'Editar Caravana: {caravana.nome}',
+                'action_url': request.path,
+            })
     else:
         form = CaravanaForm(instance=caravana, user=request.user)
     
+    # Retorna o modal completo no GET inicial
     return render(request, 'operacional/caravanas/modal_form.html', {
         'form': form,
         'caravana': caravana,
@@ -129,8 +137,7 @@ def caravana_editar_modal(request, pk):
     })
 
 
-@login_required
-@user_passes_test(is_operacional)
+@operacional_required
 def caravana_excluir_modal(request, pk):
     """Exclui caravana via modal de confirmação"""
     caravana = get_object_or_404(Caravana, pk=pk)
@@ -154,8 +161,7 @@ def caravana_excluir_modal(request, pk):
     })
 
 
-@login_required
-@user_passes_test(is_operacional)
+@operacional_required
 def caravana_detalhes(request, pk):
     """Visualiza detalhes completos da caravana"""
     caravana = get_object_or_404(

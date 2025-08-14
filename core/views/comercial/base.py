@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import comercial_required
 
 
-@login_required
-@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@comercial_required
 def home(request):
     """
     View principal da área comercial
