@@ -450,6 +450,12 @@ def send_message(request):
     )
     
     try:
+        # Adiciona prefixo com área de acesso e nome do usuário
+        area_nome = "COMERCIAL"  # Área comercial
+        usuario_nome = request.user.pessoa.nome if hasattr(request.user, 'pessoa') and request.user.pessoa else request.user.username
+        prefixo = f"[{area_nome}] - {usuario_nome}\n"
+        mensagem_completa = prefixo + message_text.strip()
+        
         # 1. Salva mensagem no banco primeiro com status 'sending'
         message = WhatsAppMessage.objects.create(
             account=conversation.account,
@@ -457,7 +463,7 @@ def send_message(request):
             conversation=conversation,
             direction='outbound',
             message_type='text',
-            content=message_text.strip(),
+            content=mensagem_completa,
             timestamp=timezone.now(),
             status='sending',  # Status inicial
             sent_by=request.user
@@ -475,7 +481,7 @@ def send_message(request):
             # Envia mensagem
             api_response = api.send_text_message(
                 to=to_number,
-                message=message_text.strip()
+                message=mensagem_completa
             )
             
             # 3. Se API retornou sucesso, atualiza status e wamid
@@ -1285,8 +1291,13 @@ def send_template(request):
         if template.footer_text:
             template_content.append(f"_{template.footer_text}_")
         
+        # Adiciona prefixo com área de acesso e nome do usuário
+        area_nome = "COMERCIAL"  # Área comercial
+        usuario_nome = request.user.pessoa.nome if hasattr(request.user, 'pessoa') and request.user.pessoa else request.user.username
+        prefixo = f"[{area_nome}] - {usuario_nome}\n"
+        
         # Junta tudo com quebras de linha
-        final_content = '\n\n'.join(template_content)
+        final_content = prefixo + '\n\n'.join(template_content)
         
         # Envia template via WhatsApp API
         from django.db import transaction
