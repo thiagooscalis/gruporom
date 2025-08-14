@@ -12,95 +12,111 @@ class WhatsAppAccountForm(forms.ModelForm):
     """
     Formulário para criar/editar contas WhatsApp
     """
-    
+
     class Meta:
         model = WhatsAppAccount
         fields = [
-            'name',
-            'phone_number',
-            'phone_number_id',
-            'business_account_id',
-            'app_id',
-            'app_secret',
-            'access_token',
-            'webhook_verify_token',
-            'responsavel',
-            'status',
-            'is_active',
+            "name",
+            "phone_number",
+            "phone_number_id",
+            "business_account_id",
+            "app_id",
+            "app_secret",
+            "access_token",
+            "webhook_verify_token",
+            "responsavel",
+            "status",
+            "is_active",
         ]
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ex: Grupo ROM - Atendimento'
-            }),
-            'phone_number': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '+5511999999999',
-                'pattern': r'\+[1-9]\d{1,14}',
-                'title': 'Número no formato internacional (+5511999999999)'
-            }),
-            'phone_number_id': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '123456789012345'
-            }),
-            'business_account_id': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '987654321098765'
-            }),
-            'app_id': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '1234567890123456'
-            }),
-            'app_secret': forms.PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Chave secreta do aplicativo Facebook'
-            }),
-            'access_token': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Token de acesso permanente da API do WhatsApp Business'
-            }),
-            'webhook_verify_token': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Token para verificação do webhook'
-            }),
-            'responsavel': forms.Select(attrs={
-                'class': 'form-select'
-            }),
-            'status': forms.Select(attrs={
-                'class': 'form-select'
-            }),
-            'is_active': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ex: Grupo ROM - Atendimento",
+                }
+            ),
+            "phone_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "+5511999999999",
+                    "pattern": r"\+[1-9]\d{1,14}",
+                    "title": "Número no formato internacional (+5511999999999)",
+                }
+            ),
+            "phone_number_id": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "123456789012345",
+                }
+            ),
+            "business_account_id": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "987654321098765",
+                }
+            ),
+            "app_id": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "1234567890123456",
+                }
+            ),
+            "app_secret": forms.PasswordInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Chave secreta do aplicativo Facebook",
+                }
+            ),
+            "access_token": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Token de acesso permanente da API do WhatsApp Business",
+                }
+            ),
+            "webhook_verify_token": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Token para verificação do webhook",
+                }
+            ),
+            "responsavel": forms.Select(attrs={"class": "form-select"}),
+            "status": forms.Select(attrs={"class": "form-select"}),
+            "is_active": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}
+            ),
         }
         help_texts = {
-            'name': 'Nome identificador da conta para uso interno',
-            'phone_number': 'Número no formato internacional (+5511999999999)',
-            'phone_number_id': 'ID do número obtido na configuração da API',
-            'business_account_id': 'ID da conta de negócios do WhatsApp',
-            'app_id': 'ID do aplicativo criado no Facebook for Developers',
-            'app_secret': 'Chave secreta do aplicativo (App Secret)',
-            'access_token': 'Token permanente gerado no Facebook for Developers',
-            'webhook_verify_token': 'Token personalizado para verificação do webhook',
-            'responsavel': 'Usuário responsável pela conta',
-            'status': 'Status atual da conta na API do WhatsApp',
-            'is_active': 'Desmarque para desativar temporariamente a conta',
+            "name": "Nome identificador da conta para uso interno",
+            "phone_number": "Número no formato internacional (+5511999999999)",
+            "phone_number_id": "ID do número obtido na configuração da API",
+            "business_account_id": "ID da conta de negócios do WhatsApp",
+            "app_id": "ID do aplicativo criado no Facebook for Developers",
+            "app_secret": "Chave secreta do aplicativo (App Secret)",
+            "access_token": "Token permanente gerado no Facebook for Developers",
+            "webhook_verify_token": "Token personalizado para verificação do webhook",
+            "responsavel": "Usuário responsável pela conta",
+            "status": "Status atual da conta na API do WhatsApp",
+            "is_active": "Desmarque para desativar temporariamente a conta",
         }
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Filtra apenas usuários ativos para responsavel
-        self.fields['responsavel'].queryset = Usuario.objects.filter(is_active=True)
-        
+        self.fields["responsavel"].queryset = Usuario.objects.filter(
+            is_active=True
+        )
+
         # Se estiver editando, oculta os valores sensíveis para segurança
         if self.instance and self.instance.pk:
             # Não mostra o app_secret atual (PasswordInput já oculta)
-            self.fields['app_secret'].widget.attrs['placeholder'] = 'Digite apenas para alterar'
-            self.fields['app_secret'].required = False
-            self.initial['app_secret'] = ''  # Limpa o valor inicial
-            
+            self.fields["app_secret"].widget.attrs[
+                "placeholder"
+            ] = "Digite apenas para alterar"
+            self.fields["app_secret"].required = False
+            self.initial["app_secret"] = ""  # Limpa o valor inicial
+
             # Mascara parcialmente o access_token
             if self.instance.access_token:
                 # Mostra apenas os primeiros e últimos caracteres
@@ -109,122 +125,147 @@ class WhatsAppAccountForm(forms.ModelForm):
                     masked = f"{token[:10]}...{token[-10:]}"
                 else:
                     masked = "***"
-                self.fields['access_token'].widget.attrs['placeholder'] = f'Token atual: {masked} (Digite apenas para alterar)'
-                self.fields['access_token'].required = False
-                self.initial['access_token'] = ''  # Limpa o valor inicial
-            
+                self.fields["access_token"].widget.attrs[
+                    "placeholder"
+                ] = f"Token atual: {masked} (Digite apenas para alterar)"
+                self.fields["access_token"].required = False
+                self.initial["access_token"] = ""  # Limpa o valor inicial
+
             # Oculta o webhook_verify_token
             if self.instance.webhook_verify_token:
-                self.fields['webhook_verify_token'].widget.attrs['placeholder'] = 'Token configurado (Digite apenas para alterar)'
-                self.fields['webhook_verify_token'].required = False
-                self.initial['webhook_verify_token'] = ''  # Limpa o valor inicial
-        
+                self.fields["webhook_verify_token"].widget.attrs[
+                    "placeholder"
+                ] = "Token configurado (Digite apenas para alterar)"
+                self.fields["webhook_verify_token"].required = False
+                self.initial["webhook_verify_token"] = (
+                    ""  # Limpa o valor inicial
+                )
+
         # Configuração do Crispy Forms
         self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_class = 'needs-validation'
-        self.helper.attrs = {'novalidate': True}
-        
+        self.helper.form_method = "post"
+        self.helper.form_class = "needs-validation"
+        self.helper.attrs = {"novalidate": True}
+
         self.helper.layout = Layout(
             Row(
-                Column('name', css_class='col-md-8'),
-                Column('is_active', css_class='col-md-4 d-flex align-items-center justify-content-center'),
+                Column("name", css_class="col-md-8"),
+                Column(
+                    "is_active",
+                    css_class="col-md-4 d-flex align-items-center justify-content-center",
+                ),
             ),
             Row(
-                Column('phone_number', css_class='col-md-6'),
-                Column('status', css_class='col-md-6'),
+                Column("phone_number", css_class="col-md-6"),
+                Column("status", css_class="col-md-6"),
             ),
             Row(
-                Column('phone_number_id', css_class='col-md-6'),
-                Column('business_account_id', css_class='col-md-6'),
+                Column("phone_number_id", css_class="col-md-6"),
+                Column("business_account_id", css_class="col-md-6"),
             ),
             Row(
-                Column('app_id', css_class='col-md-6'),
-                Column('app_secret', css_class='col-md-6'),
+                Column("app_id", css_class="col-md-6"),
+                Column("app_secret", css_class="col-md-6"),
             ),
-            'access_token',
+            "access_token",
             Row(
-                Column('webhook_verify_token', css_class='col-md-8'),
-                Column('responsavel', css_class='col-md-4'),
+                Column("webhook_verify_token", css_class="col-md-8"),
+                Column("responsavel", css_class="col-md-4"),
             ),
         )
-    
+
     def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number')
+        phone_number = self.cleaned_data.get("phone_number")
         if phone_number:
             # Remove espaços e caracteres especiais, exceto +
-            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
-            
+            phone_number = "".join(
+                c for c in phone_number if c.isdigit() or c == "+"
+            )
+
             # Valida formato internacional
-            if not phone_number.startswith('+'):
-                raise forms.ValidationError('Número deve começar com +')
-            
+            if not phone_number.startswith("+"):
+                raise forms.ValidationError("Número deve começar com +")
+
             if len(phone_number) < 8 or len(phone_number) > 16:
-                raise forms.ValidationError('Número deve ter entre 8 e 16 dígitos')
-        
+                raise forms.ValidationError(
+                    "Número deve ter entre 8 e 16 dígitos"
+                )
+
         return phone_number
-    
+
     def clean_access_token(self):
-        access_token = self.cleaned_data.get('access_token')
+        access_token = self.cleaned_data.get("access_token")
         if access_token:
             access_token = access_token.strip()
             if len(access_token) < 50:
-                raise forms.ValidationError('Token de acesso parece ser muito curto')
+                raise forms.ValidationError(
+                    "Token de acesso parece ser muito curto"
+                )
         return access_token
-    
+
     def clean(self):
         cleaned_data = super().clean()
-        
+
         # Validações adicionais
-        phone_number = cleaned_data.get('phone_number')
-        phone_number_id = cleaned_data.get('phone_number_id')
-        
+        phone_number = cleaned_data.get("phone_number")
+        phone_number_id = cleaned_data.get("phone_number_id")
+
         if phone_number and phone_number_id:
             # Verifica se já existe outra conta com o mesmo número
             existing_account = WhatsAppAccount.objects.filter(
                 phone_number=phone_number
             ).exclude(pk=self.instance.pk if self.instance else None)
-            
+
             if existing_account.exists():
-                raise forms.ValidationError({
-                    'phone_number': 'Já existe uma conta com este número de telefone'
-                })
-            
+                raise forms.ValidationError(
+                    {
+                        "phone_number": "Já existe uma conta com este número de telefone"
+                    }
+                )
+
             # Verifica phone_number_id único
             existing_phone_id = WhatsAppAccount.objects.filter(
                 phone_number_id=phone_number_id
             ).exclude(pk=self.instance.pk if self.instance else None)
-            
+
             if existing_phone_id.exists():
-                raise forms.ValidationError({
-                    'phone_number_id': 'Já existe uma conta com este Phone Number ID'
-                })
-        
+                raise forms.ValidationError(
+                    {
+                        "phone_number_id": "Já existe uma conta com este Phone Number ID"
+                    }
+                )
+
         return cleaned_data
-    
+
     def save(self, commit=True):
         """
         Sobrescreve o save para não atualizar campos sensíveis se estiverem vazios
         """
         instance = super().save(commit=False)
-        
+
         # Se estiver editando e os campos sensíveis estiverem vazios, mantém os valores atuais
         if self.instance.pk:
-            if not self.cleaned_data.get('app_secret'):
+            if not self.cleaned_data.get("app_secret"):
                 # Mantém o valor atual do banco
-                instance.app_secret = WhatsAppAccount.objects.get(pk=self.instance.pk).app_secret
-            
-            if not self.cleaned_data.get('access_token'):
+                instance.app_secret = WhatsAppAccount.objects.get(
+                    pk=self.instance.pk
+                ).app_secret
+
+            if not self.cleaned_data.get("access_token"):
                 # Mantém o valor atual do banco
-                instance.access_token = WhatsAppAccount.objects.get(pk=self.instance.pk).access_token
-            
-            if not self.cleaned_data.get('webhook_verify_token'):
+                instance.access_token = WhatsAppAccount.objects.get(
+                    pk=self.instance.pk
+                ).access_token
+
+            if not self.cleaned_data.get("webhook_verify_token"):
                 # Mantém o valor atual do banco
-                instance.webhook_verify_token = WhatsAppAccount.objects.get(pk=self.instance.pk).webhook_verify_token
-        
+                instance.webhook_verify_token = WhatsAppAccount.objects.get(
+                    pk=self.instance.pk
+                ).webhook_verify_token
+
         if commit:
             instance.save()
-        
+
         return instance
 
 
@@ -232,65 +273,76 @@ class WhatsAppAccountTestForm(forms.Form):
     """
     Formulário para testar conectividade da conta WhatsApp usando templates
     """
-    
+
     test_phone_number = forms.CharField(
-        label='Número para Teste',
+        label="Número para Teste",
         max_length=20,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '+5511999999999',
-            'pattern': r'\+[1-9]\d{1,14}'
-        }),
-        help_text='Número no formato internacional para enviar mensagem de teste'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "+5511999999999",
+                "pattern": r"\+[1-9]\d{1,14}",
+            }
+        ),
+        help_text="Número no formato internacional para enviar mensagem de teste",
     )
-    
+
     template = forms.ModelChoiceField(
         queryset=WhatsAppTemplate.objects.none(),
-        label='Template de Mensagem',
-        widget=forms.Select(attrs={
-            'class': 'form-select'
-        }),
-        help_text='Selecione um template aprovado para enviar',
-        empty_label='Selecione um template...'
+        label="Template de Mensagem",
+        widget=forms.Select(attrs={"class": "form-select"}),
+        help_text="Selecione um template aprovado para enviar",
+        empty_label="Selecione um template...",
     )
-    
+
     # Campos dinâmicos para variáveis do template serão adicionados via JavaScript
-    
+
     def __init__(self, *args, **kwargs):
-        self.account = kwargs.pop('account', None)
+        self.account = kwargs.pop("account", None)
         super().__init__(*args, **kwargs)
-        
+
         # Filtra apenas templates aprovados da conta
         if self.account:
-            self.fields['template'].queryset = WhatsAppTemplate.objects.filter(
-                account=self.account,
-                status='approved',
-                is_active=True
+            self.fields["template"].queryset = WhatsAppTemplate.objects.filter(
+                account=self.account, status="approved", is_active=True
             )
-        
+
         self.helper = FormHelper()
-        self.helper.form_method = 'post'
+        self.helper.form_method = "post"
         self.helper.layout = Layout(
-            'test_phone_number',
-            'template',
+            "test_phone_number",
+            "template",
             FormActions(
-                Submit('test_connection', 'Enviar Teste', css_class='btn btn-warning'),
-                Button('cancel', 'Cancelar', css_class='btn btn-secondary', onclick='$("#testModal").modal("hide");')
-            )
+                Submit(
+                    "test_connection",
+                    "Enviar Teste",
+                    css_class="btn btn-warning",
+                ),
+                Button(
+                    "cancel",
+                    "Cancelar",
+                    css_class="btn btn-secondary",
+                    onclick='$("#testModal").modal("hide");',
+                ),
+            ),
         )
-    
+
     def clean_test_phone_number(self):
-        phone_number = self.cleaned_data.get('test_phone_number')
+        phone_number = self.cleaned_data.get("test_phone_number")
         if phone_number:
             # Remove espaços e caracteres especiais, exceto +
-            phone_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
-            
-            if not phone_number.startswith('+'):
-                raise forms.ValidationError('Número deve começar com +')
-            
+            phone_number = "".join(
+                c for c in phone_number if c.isdigit() or c == "+"
+            )
+
+            if not phone_number.startswith("+"):
+                raise forms.ValidationError("Número deve começar com +")
+
             if len(phone_number) < 8 or len(phone_number) > 16:
-                raise forms.ValidationError('Número deve ter entre 8 e 16 dígitos')
-        
+                raise forms.ValidationError(
+                    "Número deve ter entre 8 e 16 dígitos"
+                )
+
         return phone_number
 
 
@@ -298,340 +350,432 @@ class WhatsAppTemplateForm(forms.ModelForm):
     """
     Formulário para criar/editar templates do WhatsApp
     """
-    
+
     # Campos dinâmicos para exemplos de variáveis
     variable_1 = forms.CharField(
         required=False,
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Exemplo: João Silva'
-        }),
-        label='Exemplo para {{1}}'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Exemplo: João Silva",
+            }
+        ),
+        label="Exemplo para {{1}}",
     )
-    
+
     variable_2 = forms.CharField(
         required=False,
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Exemplo: Grupo ROM'
-        }),
-        label='Exemplo para {{2}}'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Exemplo: Grupo ROM",
+            }
+        ),
+        label="Exemplo para {{2}}",
     )
-    
+
     variable_3 = forms.CharField(
         required=False,
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Exemplo: 12345'
-        }),
-        label='Exemplo para {{3}}'
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Exemplo: 12345"}
+        ),
+        label="Exemplo para {{3}}",
     )
-    
+
     variable_4 = forms.CharField(
         required=False,
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Exemplo: 10/01/2025'
-        }),
-        label='Exemplo para {{4}}'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Exemplo: 10/01/2025",
+            }
+        ),
+        label="Exemplo para {{4}}",
     )
-    
+
     variable_5 = forms.CharField(
         required=False,
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Exemplo: 14:30'
-        }),
-        label='Exemplo para {{5}}'
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Exemplo: 14:30"}
+        ),
+        label="Exemplo para {{5}}",
     )
-    
+
     class Meta:
         model = WhatsAppTemplate
         fields = [
-            'account',
-            'name',
-            'display_name',
-            'category',
-            'language',
-            'header_text',
-            'body_text',
-            'footer_text',
-            'has_buttons',
-            'is_active',
+            "account",
+            "name",
+            "display_name",
+            "category",
+            "language",
+            "header_text",
+            "body_text",
+            "footer_text",
+            "has_buttons",
+            "is_active",
         ]
         widgets = {
-            'account': forms.Select(attrs={
-                'class': 'form-select'
-            }),
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'exemplo_template_promocao',
-                'pattern': r'^[a-z0-9_]+$',
-                'title': 'Apenas letras minúsculas, números e underscore'
-            }),
-            'display_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Template de Promoção'
-            }),
-            'category': forms.Select(attrs={
-                'class': 'form-select'
-            }),
-            'language': forms.Select(attrs={
-                'class': 'form-select'
-            }),
-            'header_text': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Cabeçalho do template (máx. 60 caracteres)',
-                'maxlength': 60
-            }),
-            'body_text': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 5,
-                'placeholder': 'Olá {{1}}! Temos uma oferta especial para você: {{2}}',
-                'maxlength': 1024
-            }),
-            'footer_text': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Rodapé do template (máx. 60 caracteres)',
-                'maxlength': 60
-            }),
-            'has_buttons': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
-            'is_active': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
+            "account": forms.Select(attrs={"class": "form-select"}),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "exemplo_template_promocao",
+                    "pattern": r"^[a-z0-9_]+$",
+                    "title": "Apenas letras minúsculas, números e underscore",
+                }
+            ),
+            "display_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Template de Promoção",
+                }
+            ),
+            "category": forms.Select(attrs={"class": "form-select"}),
+            "language": forms.Select(attrs={"class": "form-select"}),
+            "header_text": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Cabeçalho do template (máx. 60 caracteres)",
+                    "maxlength": 60,
+                }
+            ),
+            "body_text": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 5,
+                    "placeholder": "Olá {{1}}! Temos uma oferta especial para você: {{2}}",
+                    "maxlength": 1024,
+                }
+            ),
+            "footer_text": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Rodapé do template (máx. 60 caracteres)",
+                    "maxlength": 60,
+                }
+            ),
+            "has_buttons": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}
+            ),
+            "is_active": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}
+            ),
         }
         help_texts = {
-            'name': 'Nome técnico do template (apenas letras minúsculas, números e _)',
-            'display_name': 'Nome amigável para exibição na interface',
-            'category': 'Categoria do template conforme WhatsApp Business API',
-            'language': 'Idioma do template',
-            'header_text': 'Texto do cabeçalho (opcional, máximo 60 caracteres)',
-            'body_text': 'Texto principal. Use {{1}}, {{2}}, etc. para variáveis',
-            'footer_text': 'Texto do rodapé (opcional, máximo 60 caracteres)',
-            'has_buttons': 'Marque se o template terá botões de ação',
-            'is_active': 'Template ativo para uso'
+            "name": "Nome técnico do template (apenas letras minúsculas, números e _)",
+            "display_name": "Nome amigável para exibição na interface",
+            "category": "Categoria do template conforme WhatsApp Business API",
+            "language": "Idioma do template",
+            "header_text": "Texto do cabeçalho (opcional, máximo 60 caracteres)",
+            "body_text": "Texto principal. Use {{1}}, {{2}}, etc. para variáveis",
+            "footer_text": "Texto do rodapé (opcional, máximo 60 caracteres)",
+            "has_buttons": "Marque se o template terá botões de ação",
+            "is_active": "Template ativo para uso",
         }
-    
+
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        
+
         # Filtra apenas contas ativas
-        self.fields['account'].queryset = WhatsAppAccount.objects.filter(is_active=True)
-        
+        self.fields["account"].queryset = WhatsAppAccount.objects.filter(
+            is_active=True
+        )
+
         # Se for edição, desabilita campos que não podem ser alterados após aprovação
-        if self.instance and self.instance.pk and self.instance.status == 'approved':
-            self.fields['name'].widget.attrs['readonly'] = True
-            self.fields['category'].widget.attrs['disabled'] = True
-            self.fields['language'].widget.attrs['disabled'] = True
-        
+        if (
+            self.instance
+            and self.instance.pk
+            and self.instance.status == "approved"
+        ):
+            self.fields["name"].widget.attrs["readonly"] = True
+            self.fields["category"].widget.attrs["disabled"] = True
+            self.fields["language"].widget.attrs["disabled"] = True
+
         # Configuração do Crispy Forms
         self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_class = 'needs-validation'
-        self.helper.attrs = {'novalidate': True}
-        
+        self.helper.form_method = "post"
+        self.helper.form_class = "needs-validation"
+        self.helper.attrs = {"novalidate": True}
+
         self.helper.layout = Layout(
             Row(
-                Column('account', css_class='col-md-6'),
-                Column('category', css_class='col-md-6'),
+                Column("account", css_class="col-md-6"),
+                Column("category", css_class="col-md-6"),
             ),
             Row(
-                Column('name', css_class='col-md-6'),
-                Column('language', css_class='col-md-6'),
+                Column("name", css_class="col-md-6"),
+                Column("language", css_class="col-md-6"),
             ),
-            'display_name',
-            'header_text',
-            'body_text',
-            'footer_text',
+            "display_name",
+            "header_text",
+            "body_text",
+            "footer_text",
             # Seção de exemplos de variáveis
-            HTML('<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'),
+            HTML(
+                '<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'
+            ),
             HTML('<div id="variable-examples-section">'),
             Row(
-                Column('variable_1', css_class='col-md-6 variable-field', css_id='field-variable-1'),
-                Column('variable_2', css_class='col-md-6 variable-field', css_id='field-variable-2'),
+                Column(
+                    "variable_1",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-1",
+                ),
+                Column(
+                    "variable_2",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-2",
+                ),
             ),
             Row(
-                Column('variable_3', css_class='col-md-6 variable-field', css_id='field-variable-3'),
-                Column('variable_4', css_class='col-md-6 variable-field', css_id='field-variable-4'),
+                Column(
+                    "variable_3",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-3",
+                ),
+                Column(
+                    "variable_4",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-4",
+                ),
             ),
             Row(
-                Column('variable_5', css_class='col-md-6 variable-field', css_id='field-variable-5'),
+                Column(
+                    "variable_5",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-5",
+                ),
             ),
-            HTML('</div>'),
-            HTML('<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'),
+            HTML("</div>"),
+            HTML(
+                '<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'
+            ),
             Row(
-                Column('has_buttons', css_class='col-md-6 d-flex align-items-center'),
-                Column('is_active', css_class='col-md-6 d-flex align-items-center'),
+                Column(
+                    "has_buttons",
+                    css_class="col-md-6 d-flex align-items-center",
+                ),
+                Column(
+                    "is_active", css_class="col-md-6 d-flex align-items-center"
+                ),
             ),
         )
-    
+
     def clean_name(self):
-        name = self.cleaned_data.get('name')
+        name = self.cleaned_data.get("name")
         if name:
             name = name.lower().strip()
-            
+
             # Valida formato
             import re
-            if not re.match(r'^[a-z0-9_]+$', name):
+
+            if not re.match(r"^[a-z0-9_]+$", name):
                 raise forms.ValidationError(
-                    'Nome deve conter apenas letras minúsculas, números e underscore'
+                    "Nome deve conter apenas letras minúsculas, números e underscore"
                 )
-            
+
             # Valida comprimento
             if len(name) < 3:
-                raise forms.ValidationError('Nome deve ter pelo menos 3 caracteres')
-            
+                raise forms.ValidationError(
+                    "Nome deve ter pelo menos 3 caracteres"
+                )
+
             if len(name) > 512:
-                raise forms.ValidationError('Nome deve ter no máximo 512 caracteres')
-            
+                raise forms.ValidationError(
+                    "Nome deve ter no máximo 512 caracteres"
+                )
+
             # Verifica unicidade por conta e idioma
-            account = self.cleaned_data.get('account')
-            language = self.cleaned_data.get('language')
-            
+            account = self.cleaned_data.get("account")
+            language = self.cleaned_data.get("language")
+
             if account and language:
                 existing = WhatsAppTemplate.objects.filter(
-                    account=account,
-                    name=name,
-                    language=language
+                    account=account, name=name, language=language
                 ).exclude(pk=self.instance.pk if self.instance else None)
-                
+
                 if existing.exists():
                     raise forms.ValidationError(
-                        'Já existe um template com este nome nesta conta e idioma'
+                        "Já existe um template com este nome nesta conta e idioma"
                     )
-        
+
         return name
-    
+
     def clean_body_text(self):
-        body_text = self.cleaned_data.get('body_text')
+        body_text = self.cleaned_data.get("body_text")
         if body_text:
             body_text = body_text.strip()
-            
+
             # Valida variáveis
             import re
-            variables = re.findall(r'\{\{(\d+)\}\}', body_text)
-            
+
+            variables = re.findall(r"\{\{(\d+)\}\}", body_text)
+
             if variables:
                 # Converte para inteiros e ordena
                 var_numbers = sorted([int(v) for v in variables])
-                
+
                 # Verifica se são sequenciais começando de 1
                 if var_numbers != list(range(1, len(var_numbers) + 1)):
                     raise forms.ValidationError(
-                        'Variáveis devem ser sequenciais começando de {{1}}. '
+                        "Variáveis devem ser sequenciais começando de {{1}}. "
                         f'Encontradas: {", ".join([f"{{{{{v}}}}}" for v in var_numbers])}'
                     )
-                
+
                 # Limite de variáveis
                 if len(var_numbers) > 10:
-                    raise forms.ValidationError('Máximo de 10 variáveis permitidas')
-        
+                    raise forms.ValidationError(
+                        "Máximo de 10 variáveis permitidas"
+                    )
+
         return body_text
-    
+
     def clean_header_text(self):
-        header_text = self.cleaned_data.get('header_text')
+        header_text = self.cleaned_data.get("header_text")
         if header_text:
             header_text = header_text.strip()
             if len(header_text) > 60:
-                raise forms.ValidationError('Cabeçalho deve ter no máximo 60 caracteres')
+                raise forms.ValidationError(
+                    "Cabeçalho deve ter no máximo 60 caracteres"
+                )
         return header_text
-    
+
     def clean_footer_text(self):
-        footer_text = self.cleaned_data.get('footer_text')
+        footer_text = self.cleaned_data.get("footer_text")
         if footer_text:
             footer_text = footer_text.strip()
             if len(footer_text) > 60:
-                raise forms.ValidationError('Rodapé deve ter no máximo 60 caracteres')
+                raise forms.ValidationError(
+                    "Rodapé deve ter no máximo 60 caracteres"
+                )
         return footer_text
-    
+
     def save(self, commit=True):
         template = super().save(commit=False)
-        
+
         # Define o usuário criador
         if not template.pk and self.user:
             template.criado_por = self.user
-        
+
         # Salva exemplos das variáveis se fornecidos
         examples = {}
         for i in range(1, 6):  # variáveis 1 a 5
-            var_value = self.cleaned_data.get(f'variable_{i}')
+            var_value = self.cleaned_data.get(f"variable_{i}")
             if var_value and var_value.strip():
                 examples[str(i)] = var_value.strip()
-        
+
         if examples:
             template.variables_examples = examples
-        
+
         if commit:
             template.save()
-        
+
         return template
-    
+
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        
+
         # Filtra apenas contas ativas
-        self.fields['account'].queryset = WhatsAppAccount.objects.filter(is_active=True)
-        
+        self.fields["account"].queryset = WhatsAppAccount.objects.filter(
+            is_active=True
+        )
+
         # Se for edição, desabilita campos que não podem ser alterados após aprovação
-        if self.instance and self.instance.pk and self.instance.status == 'approved':
-            self.fields['name'].widget.attrs['readonly'] = True
-            self.fields['category'].widget.attrs['disabled'] = True
-            self.fields['language'].widget.attrs['disabled'] = True
-        
+        if (
+            self.instance
+            and self.instance.pk
+            and self.instance.status == "approved"
+        ):
+            self.fields["name"].widget.attrs["readonly"] = True
+            self.fields["category"].widget.attrs["disabled"] = True
+            self.fields["language"].widget.attrs["disabled"] = True
+
         # Se está editando, preenche os campos de variáveis
-        if self.instance and self.instance.pk and self.instance.variables_examples:
+        if (
+            self.instance
+            and self.instance.pk
+            and self.instance.variables_examples
+        ):
             for var_num, example in self.instance.variables_examples.items():
-                field_name = f'variable_{var_num}'
+                field_name = f"variable_{var_num}"
                 if field_name in self.fields:
                     self.fields[field_name].initial = example
-        
+
         # Configuração do Crispy Forms
         self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_class = 'needs-validation'
-        self.helper.attrs = {'novalidate': True}
-        
+        self.helper.form_method = "post"
+        self.helper.form_class = "needs-validation"
+        self.helper.attrs = {"novalidate": True}
+
         self.helper.layout = Layout(
             Row(
-                Column('account', css_class='col-md-6'),
-                Column('category', css_class='col-md-6'),
+                Column("account", css_class="col-md-6"),
+                Column("category", css_class="col-md-6"),
             ),
             Row(
-                Column('name', css_class='col-md-6'),
-                Column('language', css_class='col-md-6'),
+                Column("name", css_class="col-md-6"),
+                Column("language", css_class="col-md-6"),
             ),
-            'display_name',
-            'header_text',
-            'body_text',
-            'footer_text',
+            "display_name",
+            "header_text",
+            "body_text",
+            "footer_text",
             # Seção de exemplos de variáveis
-            HTML('<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'),
+            HTML(
+                '<hr><h6 class="text-muted mb-3"><i class="fas fa-tags me-2"></i>Exemplos das Variáveis</h6>'
+            ),
             HTML('<div id="variable-examples-section">'),
             Row(
-                Column('variable_1', css_class='col-md-6 variable-field', css_id='field-variable-1'),
-                Column('variable_2', css_class='col-md-6 variable-field', css_id='field-variable-2'),
+                Column(
+                    "variable_1",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-1",
+                ),
+                Column(
+                    "variable_2",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-2",
+                ),
             ),
             Row(
-                Column('variable_3', css_class='col-md-6 variable-field', css_id='field-variable-3'),
-                Column('variable_4', css_class='col-md-6 variable-field', css_id='field-variable-4'),
+                Column(
+                    "variable_3",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-3",
+                ),
+                Column(
+                    "variable_4",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-4",
+                ),
             ),
             Row(
-                Column('variable_5', css_class='col-md-6 variable-field', css_id='field-variable-5'),
+                Column(
+                    "variable_5",
+                    css_class="col-md-6 variable-field",
+                    css_id="field-variable-5",
+                ),
             ),
-            HTML('</div>'),
-            HTML('<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'),
+            HTML("</div>"),
+            HTML(
+                '<small class="text-muted">💡 Preencha apenas os exemplos das variáveis que você usar no template ({{1}}, {{2}}, etc.)</small>'
+            ),
             Row(
-                Column('has_buttons', css_class='col-md-6 d-flex align-items-center'),
-                Column('is_active', css_class='col-md-6 d-flex align-items-center'),
+                Column(
+                    "has_buttons",
+                    css_class="col-md-6 d-flex align-items-center",
+                ),
+                Column(
+                    "is_active", css_class="col-md-6 d-flex align-items-center"
+                ),
             ),
         )
 
@@ -640,123 +784,135 @@ class NovoContatoForm(forms.Form):
     """
     Formulário para criar novo contato e iniciar conversa WhatsApp
     """
+
     nome = forms.CharField(
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Ex: João Silva'
-        }),
-        label='Nome do Contato'
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Ex: João Silva"}
+        ),
+        label="Nome do Contato",
     )
-    
+
     ddi = forms.CharField(
         max_length=3,
-        initial='55',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '55',
-            'maxlength': '3',
-            'pattern': '[0-9]+'
-        }),
-        label='DDI',
-        help_text='Brasil: 55'
+        initial="55",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "55",
+                "maxlength": "3",
+                "pattern": "[0-9]+",
+            }
+        ),
+        label="DDI",
+        help_text="Brasil: 55",
     )
-    
+
     ddd = forms.CharField(
         max_length=2,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '11',
-            'maxlength': '2',
-            'pattern': '[0-9]{2}'
-        }),
-        label='DDD'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "11",
+                "maxlength": "2",
+                "pattern": "[0-9]{2}",
+            }
+        ),
+        label="DDD",
     )
-    
+
     telefone = forms.CharField(
         max_length=15,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control telefone-mask',
-            'placeholder': '90000-0000 ou 0000-0000'
-        }),
-        label='Telefone',
-        help_text='Digite apenas números'
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control telefone-mask",
+                "placeholder": "90000-0000 ou 0000-0000",
+            }
+        ),
+        label="Telefone",
+        help_text="Digite apenas números",
     )
-    
+
     template_id = forms.ModelChoiceField(
         queryset=WhatsAppTemplate.objects.filter(
-            status='approved',
-            is_active=True
-        ).select_related('account').order_by('account__name', 'name'),
-        empty_label='Selecione um template...',
-        widget=forms.Select(attrs={
-            'class': 'form-select',
-            'onchange': 'showTemplatePreview(this)'
-        }),
-        label='Template a Enviar'
+            status="approved", is_active=True
+        )
+        .select_related("account")
+        .order_by("account__name", "name"),
+        empty_label="Selecione um template...",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+                "onchange": "showTemplatePreview(this)",
+            }
+        ),
+        label="Template a Enviar",
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Personaliza as opções do template para mostrar a conta
-        templates = WhatsAppTemplate.objects.filter(
-            status='approved',
-            is_active=True
-        ).select_related('account').order_by('account__name', 'name')
-        
+        templates = (
+            WhatsAppTemplate.objects.filter(status="approved", is_active=True)
+            .select_related("account")
+            .order_by("account__name", "name")
+        )
+
         # Cria lista de choices personalizada
-        choices = [('', 'Selecione um template...')]
+        choices = [("", "Selecione um template...")]
         for template in templates:
             # Adiciona dados extras aos templates para JavaScript
-            param_count = len(re.findall(r'\{\{(\d+)\}\}', template.body_text or ''))
+            param_count = len(
+                re.findall(r"\{\{(\d+)\}\}", template.body_text or "")
+            )
             template._param_count = param_count
-            
+
             # Formato: "Template Name - Conta"
             label = f"{template.name} - {template.account.name}"
             choices.append((template.pk, label))
-        
-        self.fields['template_id'].choices = choices
-    
+
+        self.fields["template_id"].choices = choices
+
     def clean_telefone(self):
-        telefone = self.cleaned_data['telefone']
+        telefone = self.cleaned_data["telefone"]
         # Remove caracteres não numéricos
-        telefone_limpo = re.sub(r'\D', '', telefone)
-        
+        telefone_limpo = re.sub(r"\D", "", telefone)
+
         # Valida se tem pelo menos 8 dígitos (fixo) ou 9 (celular)
         if len(telefone_limpo) < 8 or len(telefone_limpo) > 9:
-            raise ValidationError('Telefone deve ter 8 ou 9 dígitos.')
-        
+            raise ValidationError("Telefone deve ter 8 ou 9 dígitos.")
+
         return telefone_limpo
-    
+
     def clean_ddi(self):
-        ddi = self.cleaned_data['ddi']
+        ddi = self.cleaned_data["ddi"]
         if not ddi.isdigit():
-            raise ValidationError('DDI deve conter apenas números.')
+            raise ValidationError("DDI deve conter apenas números.")
         return ddi
-    
+
     def clean_ddd(self):
-        ddd = self.cleaned_data['ddd']
+        ddd = self.cleaned_data["ddd"]
         if not ddd.isdigit() or len(ddd) != 2:
-            raise ValidationError('DDD deve ter exatamente 2 dígitos.')
+            raise ValidationError("DDD deve ter exatamente 2 dígitos.")
         return ddd
-    
+
     def get_phone_number(self):
         """Retorna número completo formatado"""
         if self.is_valid():
-            ddi = self.cleaned_data['ddi']
-            ddd = self.cleaned_data['ddd']
-            telefone = self.cleaned_data['telefone']
+            ddi = self.cleaned_data["ddi"]
+            ddd = self.cleaned_data["ddd"]
+            telefone = self.cleaned_data["telefone"]
             return f"+{ddi}{ddd}{telefone}"
         return None
-    
+
     def get_template_params(self):
         """Extrai parâmetros do template do POST data"""
         params = {}
-        if hasattr(self, 'data'):
+        if hasattr(self, "data"):
             for key, value in self.data.items():
-                if key.startswith('param_') and value:
-                    param_num = key.replace('param_', '')
+                if key.startswith("param_") and value:
+                    param_num = key.replace("param_", "")
                     if param_num.isdigit():
                         params[int(param_num)] = value
         return params

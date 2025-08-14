@@ -95,15 +95,30 @@ function applyPhoneMask(telefoneInput, ddiInput) {
     if (!telefoneInput) return;
     
     function updateMask() {
-        const ddi = ddiInput ? ddiInput.value : '55';
+        // Obter valor do DDI e garantir que seja número
+        const ddiValue = ddiInput ? ddiInput.value.trim() : '55';
+        
+        // Tentar converter para número, com tratamento de erro
+        let ddi;
+        try {
+            ddi = parseInt(ddiValue, 10);
+            // Verificar se é um número válido
+            if (isNaN(ddi)) {
+                ddi = 0; // Valor padrão se não for número
+            }
+        } catch (e) {
+            ddi = 0; // Valor padrão em caso de erro
+        }
         
         // Destruir máscara anterior se existir
         if (telefoneInput._imask) {
             telefoneInput._imask.destroy();
+            delete telefoneInput._imask;
         }
         
-        if (ddi === '55') {
-            // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx) sem DDD
+        // Aplicar máscara apenas se DDI for 55 (Brasil)
+        if (ddi === 55) {
+            // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx) SEM DDD
             telefoneInput._imask = IMask(telefoneInput, {
                 mask: [
                     {
@@ -116,11 +131,15 @@ function applyPhoneMask(telefoneInput, ddiInput) {
                         startsWith: '',
                         country: 'Brasil'
                     }
-                ]
+                ],
+                lazy: false
             });
         } else {
-            // Outros países: sem máscara
+            // Outros países: remove máscara e permite entrada livre
             telefoneInput._imask = null;
+            // Remove qualquer formatação existente
+            const cleanValue = telefoneInput.value.replace(/\D/g, '');
+            telefoneInput.value = cleanValue;
         }
     }
     
@@ -131,6 +150,7 @@ function applyPhoneMask(telefoneInput, ddiInput) {
     if (ddiInput) {
         ddiInput.addEventListener('input', updateMask);
         ddiInput.addEventListener('change', updateMask);
+        ddiInput.addEventListener('blur', updateMask);
     }
 }
 
