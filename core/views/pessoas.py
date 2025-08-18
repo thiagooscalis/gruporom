@@ -41,7 +41,10 @@ def buscar_pessoas(request, area):
         .order_by("nome")[:20]
     )  # Limita a 20 resultados
 
-    context = {"pessoas": pessoas, "query": query}
+    # Obter field_id da URL se fornecido
+    field_id = request.GET.get("field_id", "")
+    
+    context = {"pessoas": pessoas, "query": query, "field_id": field_id}
 
     return render(request, "components/pessoas_autocomplete.html", context)
 
@@ -78,6 +81,9 @@ def buscar_pessoas_para_edicao(request, area):
         .order_by("nome")[:20]
     )
 
-    context = {"pessoas": pessoas, "query": query}
+    # Obter field_id da URL se fornecido
+    field_id = request.GET.get("field_id", "")
+    
+    context = {"pessoas": pessoas, "query": query, "field_id": field_id}
 
     return render(request, "components/pessoas_autocomplete.html", context)

@@ -48,8 +48,14 @@
                     <option value="{{ empresa.id }}" {% if empresa.id|stringformat:"s" == data.empresa %}selected{% endif %}>
                         {{ empresa.nome }}
                     </option>
+                {% empty %}
+                    <option value="">Nenhuma empresa encontrada</option>
                 {% endfor %}
             </select>
+            <!-- Debug info -->
+            {% if settings.DEBUG %}
+                <small class="text-muted">Debug: {{ empresas.count }} empresa(s) carregada(s)</small>
+            {% endif %}
         </div>
         <div class="col-md-6 mb-3">
             <label for="tipo" class="form-label">Tipo *</label>

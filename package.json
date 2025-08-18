@@ -3,18 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "node_modules/.bin/parcel build ./core/assets/app.js ./core/assets/style.scss --dist-dir=./core/static"
+    "build": "node_modules/.bin/parcel build ./core/assets/app.js --dist-dir=./core/static"
   },
   "keywords": [],
   "author": "Thiago Martins",
   "private": true,
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^7.0.0",
     "@parcel/transformer-sass": "^2.15.4",
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.7",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.21",
     "htmx.org": "^2.0.6",
     "imask": "^7.6.1",
-    "parcel": "^2.15.4"
+    "parcel": "^2.15.4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.9",
+    "heroicons": "^2.2.0"
   }
 }

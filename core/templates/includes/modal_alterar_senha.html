@@ -1,16 +1,58 @@
-<!-- Modal de Alterar Senha -->
-<div class="modal fade" id="modalAlterarSenha" tabindex="-1" aria-labelledby="modalAlterarSenhaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAlterarSenhaLabel">Alterar Senha</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+<!-- Modal de Alterar Senha com Alpine.js -->
+<div x-data="{ openPassword: false }" 
+     x-show="openPassword"
+     x-on:open-password-modal.window="openPassword = true"
+     x-on:close-password-modal.window="openPassword = false"
+     x-on:keydown.escape.window="openPassword = false"
+     class="fixed inset-0 z-50 overflow-y-auto"
+     style="display: none;"
+     x-cloak>
+    
+    <!-- Backdrop -->
+    <div x-show="openPassword"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="openPassword = false"
+         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
+    
+    <!-- Modal Container -->
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div x-show="openPassword"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             @click.stop
+             class="relative w-full max-w-md transform overflow-hidden rounded-lg bg-white shadow-xl">
+            
+            <!-- Modal Header -->
+            <div class="bg-blue-600 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-white flex items-center">
+                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 112 2m2 0a2 2 0 01-2 2m-2-2a2 2 0 00-2 2m-2-2a2 2 0 00-2-2m-2 0a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2m-6 4v6m0 0v2a2 2 0 002 2h6a2 2 0 002-2v-2m-6 0h6"></path>
+                        </svg>
+                        Alterar Senha
+                    </h3>
+                    <button @click="openPassword = false"
+                            class="rounded-lg p-1 text-blue-200 hover:bg-blue-700 hover:text-white focus:outline-none">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="modal-body" id="modalAlterarSenhaBody">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Carregando...</span>
-                    </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6" id="modalAlterarSenhaBody">
+                <div class="flex justify-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                 </div>
             </div>
         </div>

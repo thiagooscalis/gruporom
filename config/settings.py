@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
-    "crispy_bootstrap5",
+    "crispy_tailwind",
     "channels",
 ]
 
@@ -223,9 +223,9 @@ LOGIN_EXEMPT_URLS = [
     r"^/inclusive/termos/",  # Página de termos de serviço da Inclusive Travel
 ]
 
-# Crispy Forms
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+# Crispy Forms Configuration
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 
 # Channels Configuration

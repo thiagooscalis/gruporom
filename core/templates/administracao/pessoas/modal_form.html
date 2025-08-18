@@ -1,231 +1,245 @@
 {% load crispy_forms_tags %}
 
-<div class="modal fade" id="pessoaModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nova Pessoa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+<div x-data="{ 
+        showModal: true,
+        empresaGruporom: false,
+        init() {
+            // Auto-focus no primeiro input
+            this.$nextTick(() => {
+                this.$refs.firstInput?.focus();
+            });
+        }
+     }" 
+     x-show="showModal"
+     x-on:keydown.escape.window="showModal = false"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     class="fixed inset-0 z-50 overflow-y-auto">
+    
+    <!-- Backdrop -->
+    <div x-show="showModal"
+         @click="showModal = false"
+         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
+    
+    <!-- Modal Container -->
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div x-show="showModal"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             @click.stop
+             class="relative w-full max-w-4xl transform overflow-hidden rounded-lg bg-white shadow-xl max-h-[90vh] overflow-y-auto">
+            
+            <!-- Modal Header -->
+            <div class="bg-blue-600 px-6 py-4 sticky top-0 z-10">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-white flex items-center">
+                        <!-- Heroicon: user-plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                        </svg>
+                        Nova Pessoa
+                    </h3>
+                    <button @click="showModal = false"
+                            class="rounded-lg p-1 text-blue-200 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20">
+                        <!-- Heroicon: x-mark -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <form hx-post="{% url 'administracao:pessoas_criar' %}" hx-target="#modal-body-content" hx-swap="outerHTML" id="formPessoa" enctype="multipart/form-data">
+            
+            <!-- Modal Body -->
+            <form hx-post="{% url 'administracao:pessoas_criar' %}" 
+                  hx-target="#modal-body-content" 
+                  hx-swap="outerHTML" 
+                  id="formPessoa" 
+                  enctype="multipart/form-data"
+                  class="bg-white">
                 {% csrf_token %}
-                <div class="modal-body" id="modal-body-content">
-                    <div class="row">
-                        <!-- ========== CAMPOS OBRIGATÓRIOS ========== -->
-                        <div class="col-12">
-                            <h6 class="text-primary mb-3">
-                                <i class="fas fa-asterisk me-2"></i>Dados Obrigatórios
-                            </h6>
+                <div class="p-6 space-y-8" id="modal-body-content">
+                    <!-- ========== CAMPOS OBRIGATÓRIOS ========== -->
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-blue-600 flex items-center">
+                                <!-- Heroicon: exclamation-circle (solid) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                </svg>
+                                Dados Obrigatórios
+                            </h3>
                         </div>
                         
-                        <!-- Nome (obrigatório) -->
-                        <div class="col-md-12 mb-3">
-                            {{ form.nome|as_crispy_field }}
-                        </div>
-                        
-                        <!-- Documento (obrigatório) -->
-                        <div class="col-md-6 mb-3">
-                            {{ form.tipo_doc|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.doc|as_crispy_field }}
-                        </div>
-                        
-                        <!-- Email Principal (obrigatório) -->
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Email Principal <span class="text-danger">*</span></label>
-                            {{ form.email1|as_crispy_field }}
-                        </div>
-                        
-                        <!-- Telefone Principal (obrigatório) -->
-                        <div class="col-12 mb-3">
-                            <label class="form-label">Telefone Principal <span class="text-danger">*</span></label>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    {{ form.ddi1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-8">
-                                    {{ form.telefone1|as_crispy_field }}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Nome (obrigatório) -->
+                            <div class="md:col-span-2">
+                                {{ form.nome|as_crispy_field }}
+                            </div>
+                            
+                            <!-- Documento (obrigatório) -->
+                            <div>
+                                {{ form.tipo_doc|as_crispy_field }}
+                            </div>
+                            <div>
+                                {{ form.doc|as_crispy_field }}
+                            </div>
+                            
+                            <!-- Email Principal (obrigatório) -->
+                            <div class="md:col-span-2">
+                                {{ form.email1|as_crispy_field }}
+                            </div>
+                            
+                            <!-- Telefone Principal (obrigatório) -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Telefone Principal <span class="text-red-500">*</span>
+                                </label>
+                                <div class="grid grid-cols-12 gap-2">
+                                    <div class="col-span-2">
+                                        {{ form.ddi1|as_crispy_field }}
+                                    </div>
+                                    <div class="col-span-2">
+                                        {{ form.ddd1|as_crispy_field }}
+                                    </div>
+                                    <div class="col-span-8">
+                                        {{ form.telefone1|as_crispy_field }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Botão Salvar Rápido após campos obrigatórios -->
-                        <div class="col-12 mb-3">
-                            <div class="alert alert-info d-flex justify-content-between align-items-center">
-                                <div>
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    <span>Você já pode salvar com apenas os dados obrigatórios preenchidos</span>
+                        <!-- Botão Salvar Rápido -->
+                        <div class="mt-6 bg-blue-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-blue-700">
+                                    <!-- Heroicon: information-circle (solid) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="text-sm">Você já pode salvar com apenas os dados obrigatórios</span>
                                 </div>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-check me-2"></i>Salvar Agora
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                                    <!-- Heroicon: check -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                    Salvar Agora
                                 </button>
                             </div>
                         </div>
+                    </div>
                         
-                        <!-- ========== DADOS PESSOAIS (OPCIONAIS) ========== -->
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">
-                                <i class="fas fa-user me-2"></i>Dados Pessoais
-                            </h6>
+                    <!-- ========== DADOS PESSOAIS (OPCIONAIS) ========== -->
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-600 flex items-center">
+                                <!-- Heroicon: user -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                                Dados Pessoais (Opcional)
+                            </h3>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            {{ form.nascimento|as_crispy_field }}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                {{ form.nascimento|as_crispy_field }}
+                            </div>
+                            <div>
+                                {{ form.sexo|as_crispy_field }}
+                            </div>
+                            <div class="md:col-span-2">
+                                {{ form.funcao|as_crispy_field }}
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.sexo|as_crispy_field }}
+                    </div>
+                        
+                    <!-- ========== CONTATOS ADICIONAIS (OPCIONAIS) ========== -->
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-600 flex items-center">
+                                <!-- Heroicon: phone -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                </svg>
+                                Contatos Adicionais (Opcional)
+                            </h3>
                         </div>
                         
-                        <div class="col-md-12 mb-3">
-                            {{ form.funcao|as_crispy_field }}
-                        </div>
-                        
-                        <!-- ========== CONTATOS ADICIONAIS (OPCIONAIS) ========== -->
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">
-                                <i class="fas fa-address-book me-2"></i>Contatos Adicionais
-                            </h6>
-                        </div>
-                        
-                        <!-- Telefones Adicionais -->
-                        <div class="col-12 mb-3">
-                            <label class="form-label text-muted">Telefones Adicionais</label>
-                            
-                            <!-- Telefone 2 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi2|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd2|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone2|as_crispy_field }}
+                        <div class="space-y-4">
+                            <!-- Telefone 2 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefone Adicional 2</label>
+                                <div class="grid grid-cols-12 gap-2">
+                                    <div class="col-span-2">
+                                        {{ form.ddi2|as_crispy_field }}
+                                    </div>
+                                    <div class="col-span-2">
+                                        {{ form.ddd2|as_crispy_field }}
+                                    </div>
+                                    <div class="col-span-8">
+                                        {{ form.telefone2|as_crispy_field }}
+                                    </div>
                                 </div>
                             </div>
                             
-                            <!-- Telefone 3 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi3|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd3|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone3|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Emails Adicionais -->
-                        <div class="col-12 mb-3">
-                            <label class="form-label text-muted">Emails Adicionais</label>
-                            
-                            <!-- Email 2 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email2|as_crispy_field }}
-                                </div>
+                            <!-- Email 2 -->
+                            <div>
+                                {{ form.email2|as_crispy_field }}
                             </div>
                             
-                            <!-- Email 3 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email3|as_crispy_field }}
-                                </div>
+                            <!-- Email 3 -->
+                            <div>
+                                {{ form.email3|as_crispy_field }}
                             </div>
                         </div>
-                        
-                        <!-- ========== ENDEREÇO (OPCIONAL) ========== -->
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">
-                                <i class="fas fa-map-marker-alt me-2"></i>Endereço
-                            </h6>
+                    </div>
+                    
+                    <!-- ========== EMPRESA (OPCIONAL) ========== -->
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-600 flex items-center">
+                                <!-- Heroicon: building-office -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                                Dados Empresariais (Opcional)
+                            </h3>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            {{ form.endereco|as_crispy_field }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.numero|as_crispy_field }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.complemento|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            {{ form.bairro|as_crispy_field }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.cidade|as_crispy_field }}
-                        </div>
-                        <div class="col-md-1 mb-3">
-                            {{ form.estado|as_crispy_field }}
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            {{ form.cep|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-12 mb-3">
-                            {{ form.pais|as_crispy_field }}
-                        </div>
-                        
-                        <!-- ========== PASSAPORTE (OPCIONAL) ========== -->
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">
-                                <i class="fas fa-passport me-2"></i>Dados do Passaporte
-                            </h6>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_numero|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_validade|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_nome|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_copia|as_crispy_field }}
-                        </div>
-                        
-                        <!-- ========== EMPRESA (OPCIONAL) ========== -->
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">
-                                <i class="fas fa-building me-2"></i>Dados Empresariais
-                            </h6>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="form-check">
-                                {{ form.empresa_gruporom }}
-                                <label class="form-check-label" for="{{ form.empresa_gruporom.id_for_label }}">
-                                    {{ form.empresa_gruporom.label }}
-                                </label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                {{ form.empresa_gruporom|as_crispy_field }}
                             </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3" id="tipo-empresa-field" style="display: none;">
-                            {{ form.tipo_empresa|as_crispy_field }}
+                            <div x-show="empresaGruporom" x-transition>
+                                {{ form.tipo_empresa|as_crispy_field }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-2"></i>Salvar
+                
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 sticky bottom-0">
+                    <button type="button" 
+                            @click="showModal = false"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" 
+                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 inline-flex items-center transition-colors">
+                        <!-- Heroicon: arrow-down-tray -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Salvar
                     </button>
                 </div>
             </form>
@@ -234,130 +248,97 @@
 </div>
 
 <script>
-    // Inicializa o modal do Bootstrap quando carregado via HTMX
-    (function() {
-        const modalElement = document.getElementById('pessoaModal');
-        if (modalElement && window.bootstrap) {
-            const modal = new window.bootstrap.Modal(modalElement);
+(function() {
+    // Auto-remove modal do DOM quando fechar
+    const modalContainer = document.querySelector('[x-data*="showModal"]');
+    if (modalContainer) {
+        // Escutar eventos de sucesso do HTMX
+        document.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.xhr.getResponseHeader('HX-Redirect')) {
+                // Fechar modal em caso de redirect
+                modalContainer.__x.$data.showModal = false;
+                setTimeout(() => modalContainer.remove(), 300);
+                return;
+            }
             
-            // Remove os elementos do DOM quando o modal for fechado
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.remove();
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) backdrop.remove();
-            });
-            
-            // Escutar submissão bem-sucedida do formulário
-            const form = modalElement.querySelector('#formPessoa');
-            if (form) {
-                modalElement.addEventListener('htmx:afterRequest', function(evt) {
-                    // Se o response contém HX-Redirect, fechar modal
-                    if (evt.detail.xhr.getResponseHeader('HX-Redirect')) {
-                        modal.hide();
+            // Tratar resposta JSON de sucesso
+            if (evt.detail.xhr.status === 200) {
+                try {
+                    const response = JSON.parse(evt.detail.xhr.responseText);
+                    if (response.success && response.pessoa) {
+                        // Salvar dados da pessoa criada para callback
+                        localStorage.setItem('novaPessoaCriada', JSON.stringify({
+                            id: response.pessoa.id,
+                            nome: response.pessoa.nome,
+                            doc: response.pessoa.doc
+                        }));
+                        
+                        // Fechar modal
+                        modalContainer.__x.$data.showModal = false;
+                        setTimeout(() => modalContainer.remove(), 300);
                         return;
                     }
-                    
-                    // Callback logic para modal de usuários (mantido para compatibilidade)
-                    if (evt.detail.xhr.status === 200) {
-                        try {
-                            const response = JSON.parse(evt.detail.xhr.responseText);
-                            if (response.success && response.pessoa) {
-                                // Salvar dados da pessoa criada para o callback
-                                localStorage.setItem('novaPessoaCriada', JSON.stringify({
-                                    id: response.pessoa.id,
-                                    nome: response.pessoa.nome,
-                                    doc: response.pessoa.doc
-                                }));
-                                
-                                // Fechar modal
-                                modal.hide();
-                                return;
-                            }
-                        } catch (e) {
-                            // Se não for JSON, continuar com o comportamento padrão
+                } catch (e) {
+                    // Continuar com comportamento padrão se não for JSON
+                }
+            }
+        });
+        
+        // Remover do DOM quando modal fechar
+        modalContainer.addEventListener('transitionend', function() {
+            if (!modalContainer.__x.$data.showModal) {
+                modalContainer.remove();
+            }
+        });
+    }
+    
+    // ===== MÁSCARAS DE TELEFONE DINÂMICAS COM IMASK =====
+    function aplicarMascaraTelefone(telefoneInput, ddiInput) {
+        if (!window.IMask || !telefoneInput) return;
+        
+        function updateMask() {
+            const ddi = ddiInput ? ddiInput.value : '55';
+            
+            // Destruir máscara anterior se existir
+            if (telefoneInput._imask) {
+                telefoneInput._imask.destroy();
+            }
+            
+            if (ddi === '55') {
+                // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
+                telefoneInput._imask = IMask(telefoneInput, {
+                    mask: [
+                        {
+                            mask: '00000-0000',
+                            startsWith: '9',
+                            country: 'Brasil'
+                        },
+                        {
+                            mask: '0000-0000',
+                            startsWith: '',
+                            country: 'Brasil'
                         }
-                    }
+                    ]
                 });
-            }
-            
-            // Mostra o modal imediatamente
-            modal.show();
-        }
-        
-        // Controlar visibilidade do campo tipo_empresa baseado no checkbox empresa_gruporom
-        const empresaGruporomCheckbox = document.getElementById('{{ form.empresa_gruporom.id_for_label }}');
-        const tipoEmpresaField = document.getElementById('tipo-empresa-field');
-        
-        if (empresaGruporomCheckbox && tipoEmpresaField) {
-            // Função para mostrar/ocultar campo
-            function toggleTipoEmpresa() {
-                if (empresaGruporomCheckbox.checked) {
-                    tipoEmpresaField.style.display = 'block';
-                } else {
-                    tipoEmpresaField.style.display = 'none';
-                    // Limpar seleção quando ocultar
-                    const tipoEmpresaSelect = tipoEmpresaField.querySelector('select');
-                    if (tipoEmpresaSelect) {
-                        tipoEmpresaSelect.value = '';
-                    }
-                }
-            }
-            
-            // Verificar estado inicial
-            toggleTipoEmpresa();
-            
-            // Escutar mudanças no checkbox
-            empresaGruporomCheckbox.addEventListener('change', toggleTipoEmpresa);
-        }
-        
-        // ===== MÁSCARAS DE TELEFONE DINÂMICAS =====
-        function aplicarMascaraTelefone(telefoneInput, ddiInput) {
-            if (!window.IMask || !telefoneInput) return;
-            
-            function updateMask() {
-                const ddi = ddiInput ? ddiInput.value : '55';
-                
-                // Destruir máscara anterior se existir
-                if (telefoneInput._imask) {
-                    telefoneInput._imask.destroy();
-                }
-                
-                if (ddi === '55') {
-                    // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
-                    telefoneInput._imask = IMask(telefoneInput, {
-                        mask: [
-                            {
-                                mask: '00000-0000',
-                                startsWith: '9',
-                                country: 'Brasil'
-                            },
-                            {
-                                mask: '0000-0000',
-                                startsWith: '',
-                                country: 'Brasil'
-                            }
-                        ]
-                    });
-                } else {
-                    // Outros países: sem máscara
-                    telefoneInput._imask = null;
-                }
-            }
-            
-            // Aplicar máscara inicial
-            updateMask();
-            
-            // Escutar mudanças no DDI
-            if (ddiInput) {
-                ddiInput.addEventListener('input', updateMask);
-                ddiInput.addEventListener('change', updateMask);
+            } else {
+                // Outros países: sem máscara específica
+                telefoneInput._imask = null;
             }
         }
         
-        // Aplicar máscaras nos campos de telefone
-        aplicarMascaraTelefone(document.getElementById('id_telefone1'), document.getElementById('id_ddi1'));
-        aplicarMascaraTelefone(document.getElementById('id_telefone2'), document.getElementById('id_ddi2'));
-        aplicarMascaraTelefone(document.getElementById('id_telefone3'), document.getElementById('id_ddi3'));
+        // Aplicar máscara inicial
+        updateMask();
         
-    })();
+        // Escutar mudanças no DDI
+        if (ddiInput) {
+            ddiInput.addEventListener('input', updateMask);
+            ddiInput.addEventListener('change', updateMask);
+        }
+    }
+    
+    // Aplicar máscaras nos campos de telefone
+    aplicarMascaraTelefone(document.getElementById('id_telefone1'), document.getElementById('id_ddi1'));
+    aplicarMascaraTelefone(document.getElementById('id_telefone2'), document.getElementById('id_ddi2'));
+    aplicarMascaraTelefone(document.getElementById('id_telefone3'), document.getElementById('id_ddi3'));
+})();
 </script>

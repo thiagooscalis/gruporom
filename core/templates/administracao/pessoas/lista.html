@@ -1,59 +1,70 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 {% load core_tags %}
 
 {% block title %}Pessoas - Administração{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Pessoas' %}
-            
-            <!-- Busca e Filtros -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="get" class="row g-3" 
-                          hx-get="{% url 'administracao:pessoas_lista' %}"
-                          hx-target="#pessoas-lista"
-                          hx-swap="outerHTML"
-                          hx-push-url="true"
-                          hx-trigger="submit">
-                        <div class="col-md-7">
-                            <input type="text" name="search" class="form-control" 
-                                   placeholder="Buscar por nome, CPF/CNPJ ou email..." 
-                                   value="{{ search }}">
-                        </div>
-                        <div class="col-md-3">
-                            <select name="tipo" class="form-select">
-                                <option value="">Todos os Tipos</option>
-                                <option value="pf" {% if tipo_filter == 'pf' %}selected{% endif %}>Pessoa Física</option>
-                                <option value="pj" {% if tipo_filter == 'pj' %}selected{% endif %}>Pessoa Jurídica</option>
-                                <option value="gruporom" {% if tipo_filter == 'gruporom' %}selected{% endif %}>Empresa Grupo ROM</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-secondary w-100">
-                                <i class="fas fa-search me-2"></i>Buscar
-                            </button>
-                        </div>
-                    </form>
+<div class="w-full">
+    {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Pessoas' %}
+    
+    <!-- Busca e Filtros -->
+    <div class="bg-white rounded-lg shadow-sm border mb-6">
+        <div class="p-6">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4" 
+                  hx-get="{% url 'administracao:pessoas_lista' %}"
+                  hx-target="#pessoas-lista"
+                  hx-swap="outerHTML"
+                  hx-push-url="true"
+                  hx-trigger="submit, change from:select"
+                  hx-include="this"
+                  hx-indicator="#search-indicator">
+                <div class="md:col-span-7">
+                    <input type="text" name="search" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" 
+                           placeholder="Buscar por nome, CPF/CNPJ ou email..." 
+                           value="{{ search }}">
                 </div>
-            </div>
-            
-            <!-- Listagem (via partial com HTMX) -->
-            {% include 'administracao/pessoas/partial_lista.html' %}
+                <div class="md:col-span-3">
+                    <select name="tipo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="">Todos os Tipos</option>
+                        <option value="pf" {% if tipo_filter == 'pf' %}selected{% endif %}>Pessoa Física</option>
+                        <option value="pj" {% if tipo_filter == 'pj' %}selected{% endif %}>Pessoa Jurídica</option>
+                        <option value="gruporom" {% if tipo_filter == 'gruporom' %}selected{% endif %}>Empresa Grupo ROM</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <button type="submit" class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors flex items-center justify-center">
+                        <span class="htmx-indicator" id="search-indicator">
+                            <svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Buscando...
+                        </span>
+                        <span class="htmx-indicator-none">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            Buscar
+                        </span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+    
+    <!-- Listagem (via partial com HTMX) -->
+    {% include 'administracao/pessoas/partial_lista.html' %}
 </div>
 
 <!-- Floating Action Button -->
-<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
-   style="width: 56px; height: 56px;"
-   hx-get="{% url 'administracao:pessoas_nova_modal' %}"
-   hx-target="body"
-   hx-swap="beforeend"
-   title="Nova Pessoa">
-    <i class="fas fa-plus text-white"></i>
-</a>
+<button class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg transition-colors flex items-center justify-center z-40"
+        hx-get="{% url 'administracao:pessoas_nova_modal' %}"
+        hx-target="body"
+        hx-swap="beforeend"
+        title="Nova Pessoa">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    </svg>
+</button>
 {% endblock %}

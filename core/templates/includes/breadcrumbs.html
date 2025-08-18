@@ -1,8 +1,26 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+<nav class="flex mb-6" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
         {% if prev_page and prev_url %}
-        <li class="breadcrumb-item"><a href="{{ prev_url }}">{{ prev_page }}</a></li>
+        <li class="inline-flex items-center">
+            <a href="{{ prev_url }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0L2.586 11H9a1 1 0 110 2H2.586l3.707 3.707a1 1 0 01-1.414 1.414l-5.5-5.5a1 1 0 010-1.414l5.5-5.5a1 1 0 011.414 1.414L2.586 9H9a1 1 0 110 2H2.586z" clip-rule="evenodd"></path>
+                </svg>
+                {{ prev_page }}
+            </a>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ cur_page }}</span>
+            </div>
+        </li>
+        {% else %}
+        <li>
+            <span class="text-sm font-medium text-gray-500">{{ cur_page }}</span>
+        </li>
         {% endif %}
-        <li class="breadcrumb-item active" aria-current="page">{{ cur_page }}</li>
     </ol>
 </nav>

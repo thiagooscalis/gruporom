@@ -2,53 +2,70 @@
 
 <!-- Linhas adicionais para "Carregar mais" -->
 {% for pessoa in page_obj %}
-<tr>
-    <td>{{ pessoa.nome }}</td>
-    <td>{{ pessoa.doc|doc|default:"-" }}</td>
-    <td>{{ pessoa.email|default:"-" }}</td>
-    <td>{{ pessoa.telefone|fone|default:"-" }}</td>
-    <td class="text-center">
+<tr class="hover:bg-gray-50">
+    <td class="py-3 px-4 text-gray-900">{{ pessoa.nome }}</td>
+    <td class="py-3 px-4 text-gray-600">{{ pessoa.doc|doc|default:"-" }}</td>
+    <td class="py-3 px-4 text-gray-600">{{ pessoa.email|default:"-" }}</td>
+    <td class="py-3 px-4 text-gray-600">{{ pessoa.telefone|fone|default:"-" }}</td>
+    <td class="py-3 px-4 text-center">
         {% if pessoa.empresa_gruporom %}
-            <span class="badge bg-warning text-dark">Grupo ROM</span>
+            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Grupo ROM</span>
         {% elif pessoa.tipo_pessoa == 'FISICA' %}
-            <span class="badge bg-info">PF</span>
+            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">PF</span>
         {% else %}
-            <span class="badge bg-success">PJ</span>
+            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">PJ</span>
         {% endif %}
     </td>
-    <td class="text-center">
+    <td class="py-3 px-4 text-center">
         {% if pessoa.foto %}
-            <i class="fas fa-check text-success" title="Possui foto"></i>
+            <svg class="w-4 h-4 text-green-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Possui foto">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
         {% else %}
-            <i class="fas fa-times text-danger" title="Sem foto"></i>
+            <svg class="w-4 h-4 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Sem foto">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
         {% endif %}
     </td>
-    <td class="text-center">
+    <td class="py-3 px-4 text-center">
         {% if pessoa.passaporte_numero and pessoa.passaporte_validade and pessoa.passaporte_nome %}
-            <i class="fas fa-check text-success" title="Passaporte completo"></i>
+            <svg class="w-4 h-4 text-green-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte completo">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
         {% else %}
-            <i class="fas fa-times text-danger" title="Passaporte incompleto"></i>
+            <svg class="w-4 h-4 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte incompleto">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
         {% endif %}
     </td>
-    <td>
-        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
-                hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
-                hx-target="body"
-                hx-swap="beforeend">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" title="Upload Foto"
-                hx-get="{% url 'administracao:pessoas_foto_modal' pessoa.pk %}"
-                hx-target="body"
-                hx-swap="beforeend">
-            <i class="fas fa-camera"></i>
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
-                hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"
-                hx-target="body"
-                hx-swap="beforeend">
-            <i class="fas fa-trash"></i>
-        </button>
+    <td class="py-3 px-4">
+        <div class="flex justify-center space-x-1">
+            <button type="button" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" title="Editar"
+                    hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+            </button>
+            <button type="button" class="p-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors" title="Upload Foto"
+                    hx-get="{% url 'administracao:pessoas_foto_modal' pessoa.pk %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </button>
+            <button type="button" class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors" title="Excluir"
+                    hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+            </button>
+        </div>
     </td>
 </tr>
 {% endfor %}
@@ -57,17 +74,27 @@
 {% if page_obj.has_next %}
 <script>
 // Atualizar o botão existente
-document.querySelector('#carregar-mais-container button').setAttribute('hx-get', 
-    '{% url "administracao:pessoas_lista" %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_filter %}&tipo={{ tipo_filter }}{% endif %}&load_more=1'
-);
-document.querySelector('#carregar-mais-container button').innerHTML = 
-    '<i class="fas fa-plus me-2"></i>Carregar mais ({{ restantes }} restantes)';
-// Re-processar HTMX
-htmx.process(document.querySelector('#carregar-mais-container'));
+const loadMoreBtn = document.querySelector('#carregar-mais-container button');
+if (loadMoreBtn) {
+    loadMoreBtn.setAttribute('hx-get', 
+        '{% url "administracao:pessoas_lista" %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_filter %}&tipo={{ tipo_filter }}{% endif %}&load_more=1'
+    );
+    loadMoreBtn.innerHTML = `
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Carregar mais ({{ restantes }} restantes)
+    `;
+    // Re-processar HTMX
+    htmx.process(loadMoreBtn);
+}
 </script>
 {% else %}
 <script>
 // Remover botão se não há mais páginas
-document.querySelector('#carregar-mais-container').remove();
+const loadMoreContainer = document.querySelector('#carregar-mais-container');
+if (loadMoreContainer) {
+    loadMoreContainer.remove();
+}
 </script>
 {% endif %}

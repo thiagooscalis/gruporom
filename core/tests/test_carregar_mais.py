@@ -40,8 +40,8 @@ class CarregarMaisTest(TestCase):
         self.assertTemplateUsed(response, 'administracao/pessoas/partial_linhas.html')
         # Não deve ter cabeçalho da tabela
         self.assertNotContains(response, '<thead>')
-        # Deve ter apenas as linhas <tr>
-        self.assertContains(response, '<tr>')
+        # Deve ter apenas as linhas <tr> (com classes Tailwind)
+        self.assertContains(response, '<tr class="hover:bg-gray-50">')
         
     def test_carregar_mais_sem_load_more_retorna_tabela_completa(self):
         """Testa se requisição HTMX sem load_more retorna tabela completa"""
@@ -54,7 +54,7 @@ class CarregarMaisTest(TestCase):
         # Deve usar template parcial completo
         self.assertTemplateUsed(response, 'administracao/pessoas/partial_lista.html')
         # Deve ter cabeçalho da tabela
-        self.assertContains(response, '<thead>')
+        self.assertContains(response, '<thead class="border-b border-gray-200">')
         
     def test_ultima_pagina_nao_mostra_botao_carregar_mais(self):
         """Testa se a última página não mostra o botão carregar mais"""

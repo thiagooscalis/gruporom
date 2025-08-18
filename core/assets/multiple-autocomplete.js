@@ -36,17 +36,26 @@ class MultipleAutocompleteField {
     }
     
     bindEvents() {
+        console.log('🔗 Vinculando eventos para:', this.searchInput.id);
+        
         // Mostrar/esconder resultados baseado no foco e conteúdo
         this.searchInput.addEventListener('focus', () => {
+            console.log('👁️ Focus no campo, valor:', this.searchInput.value);
             if (this.searchInput.value.length >= 2) {
                 this.showResults();
             }
         });
 
-        this.searchInput.addEventListener('input', () => {
-            if (this.searchInput.value.length >= 2) {
+        this.searchInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            console.log('⌨️ Input event - valor:', value, 'length:', value.length);
+            
+            if (value.length >= 2) {
+                console.log('📤 Mostrando container para HTMX');
                 this.showResults();
+                // HTMX será disparado automaticamente pelo hx-trigger="keyup changed delay:500ms"
             } else {
+                console.log('🚫 Valor muito curto, escondendo resultados');
                 this.hideResults();
             }
         });
@@ -59,10 +68,11 @@ class MultipleAutocompleteField {
             }
         });
 
-        // Delegação de evento para clique nos itens
+        // Delegação de evento para clique nos itens (buscar em todo o container)
         this.resultsContainer.addEventListener('click', (e) => {
             const item = e.target.closest('.autocomplete-item');
             if (item && item.dataset.pessoaId) {
+                console.log('🎯 Item clicado:', item.dataset.pessoaNome);
                 this.selectItem(item);
             }
         });
@@ -93,11 +103,26 @@ class MultipleAutocompleteField {
     }
     
     showResults() {
+        console.log('👀 Mostrando resultados');
+        console.log('👀 Container atual display:', this.resultsContainer.style.display);
+        console.log('👀 Container parent:', this.resultsContainer.parentElement?.id);
         this.resultsContainer.style.display = 'block';
+        
+        // Se o resultsContainer é o inner content, mostrar o parent também
+        if (this.resultsContainer.id && this.resultsContainer.id.endsWith('_results_content')) {
+            const parentContainer = this.resultsContainer.parentElement;
+            if (parentContainer) {
+                console.log('👀 Mostrando container pai também:', parentContainer.id);
+                parentContainer.style.display = 'block';
+            }
+        }
+        
         this.isOpen = true;
+        console.log('👀 Resultados mostrados, display:', this.resultsContainer.style.display);
     }
     
     hideResults() {
+        console.log('🫥 Escondendo resultados');
         this.resultsContainer.style.display = 'none';
         this.isOpen = false;
     }

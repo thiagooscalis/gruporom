@@ -1,7 +1,7 @@
 # Projeto Grupo ROM - Sistema Empresarial Completo
 
 ## Resumo do Projeto
-Sistema web Django para gerenciamento empresarial completo com autenticação baseada em grupos, interface responsiva Bootstrap 5, módulos CRUD funcionais para gestão de pessoas, colaboradores, fornecedores, câmbio e WhatsApp Business integrado. Sistema inclui máscaras de entrada inteligentes, modais HTMX, autocomplete avançado e segurança robusta.
+Sistema web Django para gerenciamento empresarial completo com autenticação baseada em grupos, interface responsiva Tailwind CSS, módulos CRUD funcionais para gestão de pessoas, colaboradores, fornecedores, câmbio e WhatsApp Business integrado. Sistema inclui máscaras de entrada inteligentes, modais HTMX, autocomplete avançado, Alpine.js para interatividade e segurança robusta.
 
 ## Estrutura do Projeto Atual
 
@@ -14,10 +14,10 @@ gruporom/
 │   └── wsgi.py
 ├── core/
 │   ├── assets/
-│   │   ├── app.js           # Bootstrap, HTMX, FontAwesome, Máscaras
+│   │   ├── app.js           # Alpine.js, HTMX, Máscaras
 │   │   ├── autocomplete.js  # Sistema de autocomplete reutilizável
 │   │   ├── masks.js         # Máscaras de entrada (CPF, CNPJ, Passaporte, Telefone)
-│   │   └── style.scss       # Bootstrap customizado (cor primária: #d3a156)
+│   │   └── tailwind.css     # Tailwind CSS com configurações customizadas
 │   ├── choices.py           # Choices centralizados (TIPO_DOC, SEXO)
 │   ├── managers/
 │   │   └── usuario.py       # UsuarioManager customizado
@@ -50,23 +50,24 @@ gruporom/
 │       ├── base.py          # RedirectToGroupView
 │       └── administracao/
 │           └── base.py      # Views da administração
-├── static/                  # Assets compilados (Bootstrap, FontAwesome)
+├── static/                  # Assets compilados (Tailwind CSS, Heroicons)
 └── package.json            # Dependências Node.js
 ```
 
 ### 🎨 Frontend e Styling
-- **Framework CSS**: Bootstrap 5 com cor primária personalizada (#d3a156 - cor do logo)
-- **Ícones**: FontAwesome 7 (importado via CSS)
-- **Build**: Parcel.js para compilação de assets
+- **Framework CSS**: Tailwind CSS com classes utilitárias e componentes customizados
+- **JavaScript Reativo**: Alpine.js para interatividade e gerenciamento de estado
+- **Ícones**: Heroicons (SVG inline otimizado)
+- **Build**: Parcel.js para compilação de assets + PostCSS para Tailwind
 - **Máscaras**: IMask para CPF, CNPJ, Passaporte (multi-formato), Telefone e CEP
 - **Autocomplete**: Sistema AJAX reutilizável para busca de pessoas
 - **Paginação Moderna**: Sistema "Carregar mais" com HTMX (20 itens/página)
 - **Responsividade**: 
-  - Desktop: Sidebar fixa (#333333) + conteúdo principal
-  - Mobile: Offcanvas sidebar + botão hamburger
-- **Modais**: Sistema HTMX para operações CRUD sem reload
+  - Desktop: Sidebar fixa com Tailwind classes + conteúdo principal
+  - Mobile: Sidebar responsiva com Alpine.js + botão hamburger
+- **Modais**: Sistema HTMX + Alpine.js para operações CRUD sem reload
 - **Template Tags**: Customizadas para moeda, telefone e documentos
-- **⚠️ IMPORTANTE**: Sempre usar componentes Bootstrap (modais, dropdowns, offcanvas, etc.) e HTMX para interações. JavaScript customizado deve ser usado apenas em último caso quando não há solução via Bootstrap/HTMX
+- **⚠️ IMPORTANTE**: Sempre usar componentes Tailwind + Alpine.js para interações. HTMX para requisições assíncronas
 
 ### 🔐 Autenticação e Autorização
 - **Modelo de Usuário Customizado**: `Usuario` (AbstractBaseUser + PermissionsMixin)
@@ -142,7 +143,7 @@ gruporom/
 - [x] Breadcrumbs de navegação em todas as páginas
 - [x] Floating action buttons com estilo consistente (texto branco)
 - [x] Sistema de mensagens e alertas integrado
-- [x] Tema customizado (#d3a156) com Bootstrap 5
+- [x] Tema customizado com Tailwind CSS (cor primária: #d3a156)
 - [x] Componentes modais para todas as operações CRUD
 - [x] Sistema de mensagens e alertas
 - [x] Breadcrumbs de navegação
@@ -428,7 +429,7 @@ DJANGO_SETTINGS_MODULE=core.test_settings uv run pytest -x
 ### Performance e UX
 - **Paginação Moderna**: Sistema "Carregar mais" com HTMX em todas as listagens
 - **Busca Otimizada**: Índices Q() para múltiplos campos
-- **Asset Bundling**: CSS/JS otimizados via Parcel
+- **Asset Bundling**: CSS/JS otimizados via Parcel + PostCSS
 - **Cache de Templates**: Rendering otimizado
 
 ### 📋 Área Promotor
@@ -497,8 +498,9 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 14/08/2025  
+**Última atualização**: 18/08/2025  
 **Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna, janela 24h automática e multi-área operacional  
+**Stack Frontend**: Tailwind CSS + Alpine.js + HTMX + Heroicons  
 **Módulos**: 23 modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Funcao, Cambio, Pais, WhatsApp [6 models], Turismo [15 models]), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, validação inteligente de telefones, UX otimizada
 
 ## 🆕 Últimas Atualizações
@@ -586,3 +588,13 @@ if request.headers.get('HX-Request'):
   - Mock responses para WhatsApp API em modo DEBUG
   - Simulação realística de envio de mensagens e templates
   - Logs coloridos e informativos para debug
+
+### Dezembro 2024 - Migração para Tailwind CSS + Alpine.js
+- **🎨 Novo Stack Frontend**: Migração completa de Bootstrap 5 + FontAwesome para Tailwind CSS + Alpine.js + Heroicons
+- **⚡ Performance Melhorada**: CSS utilitário com purge automático, apenas classes utilizadas
+- **🔧 Interatividade Moderna**: Alpine.js para componentes reativos sem framework pesado
+- **🎯 Developer Experience**: Classes utilitárias intuitivas, componentes reutilizáveis
+- **📦 Build Otimizado**: PostCSS integrado para processamento eficiente do Tailwind
+- **🎨 Design System**: Mantida cor primária #d3a156 com classes customizadas Tailwind
+- **📱 Responsividade Aprimorada**: Sistema de breakpoints do Tailwind (sm, md, lg, xl, 2xl)
+- **🚀 Componentes Alpine**: Modais, dropdowns, sidebars com x-data e x-show

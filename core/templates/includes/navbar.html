@@ -1,16 +1,9 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <span class="navbar-brand">
+<!-- Navbar with TailwindCSS -->
+<nav class="bg-gray-800 text-white p-4 lg:hidden">
+    <div class="flex justify-between items-center">
+        <span class="font-semibold">
             {{ user.groups.first.name }}
         </span>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Navbar vazia por enquanto -->
-        </div>
+        <!-- Mobile menu trigger handled by offcanvas component -->
     </div>
 </nav>

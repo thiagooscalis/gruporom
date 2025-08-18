@@ -28,16 +28,14 @@
     
     <div class="row">
         <div class="col-12 mb-3">
-            <label for="lideres" class="form-label">Selecionar Líderes Existentes</label>
-            <select class="form-select tom-select-field" id="lideres" name="lideres" multiple 
-                    data-placeholder="Selecione líderes..."
+            <span style="background: red; color: white; padding: 5px; font-weight: bold;">🧪 TESTE - Template correto carregado!</span>
+            <label for="lideres_promotor" class="form-label">Selecionar Líderes Existentes</label>
+            <select class="form-select tom-select-field" id="lideres_promotor" name="lideres" multiple 
+                    data-placeholder="Digite nome ou documento para buscar..."
                     data-search-placeholder="Digite nome ou documento..."
-                    data-no-results-text="Nenhum líder encontrado">
-                {% for pessoa in pessoas %}
-                    <option value="{{ pessoa.id }}" {% if pessoa.id|stringformat:"s" in data.lideres %}selected{% endif %}>
-                        {{ pessoa.nome }}{% if pessoa.doc %} - {{ pessoa.doc }}{% endif %}{% if pessoa.celular %} - {{ pessoa.celular }}{% endif %}
-                    </option>
-                {% endfor %}
+                    data-no-results-text="Nenhum líder encontrado"
+                    data-no-autocomplete="true">
+                <!-- Opções serão carregadas dinamicamente via AJAX -->
             </select>
             <small class="form-text text-muted">Selecione líderes já cadastrados no sistema</small>
         </div>

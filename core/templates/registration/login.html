@@ -6,42 +6,27 @@
 {% block header %}Acesso ao Sistema{% endblock %}
 
 {% block content %}
-    <form method="post" class="needs-validation" novalidate>
+    <form method="post">
         {% csrf_token %}
         
-        <div class="mb-4">
+        <div class="space-y-4">
             {{ form|crispy }}
         </div>
         
-        <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-lg">
-                <i class="fas fa-sign-in-alt me-2"></i>Entrar
+        <div class="mt-6">
+            <button type="submit" class="w-full flex justify-center items-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                <!-- Heroicon: arrow-right-on-rectangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                Entrar
             </button>
         </div>
         
-        <div class="text-center mt-4">
-            <small class="text-muted">
+        <div class="text-center mt-6">
+            <p class="text-sm text-gray-600">
                 Problemas para acessar? Entre em contato com o administrador.
-            </small>
+            </p>
         </div>
     </form>
-
-    <script>
-        // Bootstrap form validation
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
 {% endblock %}

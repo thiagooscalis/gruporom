@@ -45,48 +45,26 @@ class PessoaForm(forms.ModelForm):
             "tipo_empresa",
         ]
         widgets = {
-            "nome": forms.TextInput(attrs={"class": "form-control"}),
-            "tipo_doc": forms.Select(attrs={"class": "form-select"}),
-            "doc": forms.TextInput(attrs={"class": "form-control"}),
             "nascimento": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"},
+                attrs={"type": "date"},
                 format="%Y-%m-%d",
             ),
-            "sexo": forms.Select(attrs={"class": "form-select"}),
-            "funcao": forms.Select(attrs={"class": "form-select"}),
-            "email1": forms.EmailInput(attrs={"class": "form-control"}),
-            "email2": forms.EmailInput(attrs={"class": "form-control"}),
-            "email3": forms.EmailInput(attrs={"class": "form-control"}),
-            "ddi1": forms.TextInput(attrs={"class": "form-control", "placeholder": "55"}),
-            "ddd1": forms.TextInput(attrs={"class": "form-control", "placeholder": "11"}),
-            "telefone1": forms.TextInput(attrs={"class": "form-control"}),
-            "ddi2": forms.TextInput(attrs={"class": "form-control", "placeholder": "55"}),
-            "ddd2": forms.TextInput(attrs={"class": "form-control", "placeholder": "11"}),
-            "telefone2": forms.TextInput(attrs={"class": "form-control"}),
-            "ddi3": forms.TextInput(attrs={"class": "form-control", "placeholder": "55"}),
-            "ddd3": forms.TextInput(attrs={"class": "form-control", "placeholder": "11"}),
-            "telefone3": forms.TextInput(attrs={"class": "form-control"}),
-            "passaporte_numero": forms.TextInput(attrs={"class": "form-control"}),
+            "ddi1": forms.TextInput(attrs={"placeholder": "55"}),
+            "ddd1": forms.TextInput(attrs={"placeholder": "11"}),
+            "ddi2": forms.TextInput(attrs={"placeholder": "55"}),
+            "ddd2": forms.TextInput(attrs={"placeholder": "11"}),
+            "ddi3": forms.TextInput(attrs={"placeholder": "55"}),
+            "ddd3": forms.TextInput(attrs={"placeholder": "11"}),
             "passaporte_validade": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"},
+                attrs={"type": "date"},
                 format="%Y-%m-%d",
             ),
-            "passaporte_copia": forms.FileInput(attrs={"class": "form-control"}),
-            "passaporte_nome": forms.TextInput(attrs={"class": "form-control"}),
-            "endereco": forms.TextInput(attrs={"class": "form-control"}),
-            "numero": forms.TextInput(attrs={"class": "form-control"}),
-            "complemento": forms.TextInput(attrs={"class": "form-control"}),
-            "bairro": forms.TextInput(attrs={"class": "form-control"}),
-            "cidade": forms.TextInput(attrs={"class": "form-control"}),
             "estado": forms.TextInput(
-                attrs={"class": "form-control", "maxlength": "2"}
+                attrs={"maxlength": "2"}
             ),
-            "pais": forms.Select(attrs={"class": "form-select"}),
-            "cep": forms.TextInput(attrs={"class": "form-control"}),
             "empresa_gruporom": forms.CheckboxInput(
-                attrs={"class": "form-check-input"}
+                attrs={"x-model": "empresaGruporom"}
             ),
-            "tipo_empresa": forms.Select(attrs={"class": "form-select"}),
         }
         labels = {
             "tipo_doc": "Tipo de Documento",

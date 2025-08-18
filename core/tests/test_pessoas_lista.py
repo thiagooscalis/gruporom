@@ -24,10 +24,10 @@ class PessoasListaTest(TestCase):
         response = self.client.get(reverse('administracao:pessoas_lista'))
         
         self.assertEqual(response.status_code, 200)
-        # Verifica badges
-        self.assertContains(response, 'badge bg-info">PF</span>')
-        self.assertContains(response, 'badge bg-success">PJ</span>')
-        self.assertContains(response, 'badge bg-warning text-dark">Grupo ROM</span>')
+        # Verifica badges (Tailwind CSS)
+        self.assertContains(response, 'bg-blue-100 text-blue-800">PF</span>')
+        self.assertContains(response, 'bg-green-100 text-green-800">PJ</span>')
+        self.assertContains(response, 'bg-yellow-100 text-yellow-800">Grupo ROM</span>')
         
     def test_filtro_pessoa_fisica(self):
         """Testa filtro de Pessoa Física"""

@@ -101,14 +101,107 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <script>
-// Inicializar Tom-Select quando conteúdo HTMX for carregado
+// BLOQUEIO GLOBAL: Desativar qualquer autocomplete na área promotor
+window.DISABLE_AUTOCOMPLETE = true;
+
+// Verificar se TomSelect carregou corretamente
+console.log('TomSelect disponível:', typeof TomSelect !== 'undefined');
+
+// BLOQUEIO SUPER AGRESSIVO: Interceptar e remover qualquer script com DEBUG
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+            if (node.nodeName === 'SCRIPT') {
+                const scriptContent = node.textContent || node.innerText;
+                if (scriptContent.includes('[DEBUG]') || 
+                    scriptContent.includes('Ocultando resultados') ||
+                    scriptContent.includes('Input event') ||
+                    scriptContent.includes('buscar-pessoas')) {
+                    console.log('[REMOVED] Script com DEBUG removido:', scriptContent.substring(0, 100));
+                    node.remove();
+                }
+            }
+        });
+    });
+});
+
+// Observar mudanças no DOM
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// Interceptar console.log para bloquear logs de DEBUG
+const originalConsoleLog = console.log;
+console.log = function(...args) {
+    const message = args.join(' ');
+    if (message.includes('[DEBUG]')) {
+        return; // Bloquear log
+    }
+    return originalConsoleLog.apply(this, args);
+};
+
+// Sobrescrever fetch para bloquear requisições de autocomplete
+const originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    // Bloquear requisições para buscar-pessoas
+    if (typeof url === 'string' && url.includes('buscar-pessoas')) {
+        console.log('[BLOCKED] Autocomplete fetch bloqueado:', url);
+        return Promise.reject(new Error('Autocomplete bloqueado na área promotor'));
+    }
+    return originalFetch.apply(this, arguments);
+};
+
+// Bloquear addEventListener em elementos input
+const originalAddEventListener = Element.prototype.addEventListener;
+Element.prototype.addEventListener = function(type, listener, options) {
+    // Bloquear event listeners de input em campos select/input na área promotor
+    if (type === 'input' && (this.tagName === 'SELECT' || this.tagName === 'INPUT') && 
+        this.classList.contains('tom-select-field')) {
+        console.log('[BLOCKED] Event listener input bloqueado para:', this.id || this.name);
+        return; // Não adicionar o listener
+    }
+    return originalAddEventListener.apply(this, arguments);
+};
+</script>
+<script>
+// Destruir Tom-Select antes de trocar conteúdo HTMX
+document.addEventListener('htmx:beforeSwap', function(e) {
+    // Buscar campos TomSelect no container que será substituído
+    const tomSelectFields = e.detail.target.querySelectorAll('.tom-select-field');
+    tomSelectFields.forEach(function(element) {
+        if (element.tomselect) {
+            console.log('TomSelect - Destruindo antes do swap:', element.id || element.name);
+            element.tomselect.destroy();
+        }
+    });
+});
+
+// Inicializar Tom-Select quando conteúdo HTMX for carregado - VERSÃO SIMPLES
 document.addEventListener('htmx:afterSwap', function(e) {
-    initTomSelectFields(e.detail.target);
+    console.log('HTMX afterSwap - inicializando TomSelect simples');
+    setTimeout(function() {
+        initSimpleTomSelect();
+    }, 100); // Pequeno delay para garantir que o DOM está pronto
 });
 
 // Função para inicializar campos Tom-Select
 function initTomSelectFields(container = document) {
-    container.querySelectorAll('.tom-select-field:not([data-tom-initialized])').forEach(function(element) {
+    // Buscar todos os campos tom-select, incluindo os já inicializados que podem ter perdido o TomSelect
+    const fields = container.querySelectorAll('.tom-select-field');
+    console.log('TomSelect - Verificando', fields.length, 'campos');
+    
+    fields.forEach(function(element) {
+        // Se já tem TomSelect ativo, pular
+        if (element.tomselect) {
+            console.log('TomSelect - Campo já ativo:', element.id || element.name);
+            return;
+        }
+        
+        // Remover marcador de inicialização se existir (pode ter sido destruído)
+        element.removeAttribute('data-tom-initialized');
+        
+        console.log('TomSelect - Inicializando campo:', element.id || element.name, 'options:', element.options.length);
         const isMultiple = element.multiple || element.dataset.multiple === 'true';
         const isSingle = element.dataset.single === 'true' || !isMultiple;
         
@@ -141,17 +234,180 @@ function initTomSelectFields(container = document) {
             };
         }
         
-        const tomSelect = new TomSelect(element, config);
-        tomSelect.wrapper.classList.add('tom-select-bootstrap');
-        
-        element.setAttribute('data-tom-initialized', 'true');
+        try {
+            const tomSelect = new TomSelect(element, config);
+            tomSelect.wrapper.classList.add('tom-select-bootstrap');
+            console.log('TomSelect - Inicializado com sucesso:', element.id || element.name);
+            
+            element.setAttribute('data-tom-initialized', 'true');
+        } catch (error) {
+            console.error('TomSelect - Erro ao inicializar:', element.id || element.name, error);
+        }
     });
 }
 
-// Inicializar na primeira carga
+// Função para proteger campos TomSelect de outros JavaScripts
+function protectTomSelectFields(container = document) {
+    const tomSelectFields = container.querySelectorAll('.tom-select-field');
+    tomSelectFields.forEach(function(element) {
+        console.log('Protegendo campo TomSelect:', element.id || element.name);
+        
+        // Remover todos os event listeners de input/focus existentes
+        const newElement = element.cloneNode(true);
+        element.parentNode.replaceChild(newElement, element);
+        
+        // Reimplantar apenas o TomSelect se ainda não existe
+        if (!newElement.tomselect) {
+            initSingleTomSelect(newElement);
+        }
+    });
+}
+
+// Função para inicializar um único campo TomSelect
+function initSingleTomSelect(element) {
+    const isMultiple = element.multiple || element.dataset.multiple === 'true';
+    const isSingle = element.dataset.single === 'true' || !isMultiple;
+    
+    const config = {
+        plugins: isMultiple ? ['remove_button', 'clear_button'] : ['clear_button'],
+        persist: false,
+        createOnBlur: false,
+        placeholder: element.dataset.placeholder || 'Selecione...',
+        searchField: ['text', 'value'],
+        sortField: [{field: 'text', direction: 'asc'}],
+        render: {
+            no_results: function(data, escape) {
+                return '<div class="no-results">' + escape(element.dataset.noResultsText || 'Nenhum resultado encontrado') + '</div>';
+            }
+        }
+    };
+    
+    // Configurações específicas por tipo
+    if (isMultiple) {
+        config.onItemAdd = function(value, item) {
+            this.setTextboxValue('');
+            this.refreshState();
+        };
+    }
+    
+    if (isSingle) {
+        config.onItemAdd = function(value, item) {
+            this.close();
+        };
+    }
+    
+    try {
+        const tomSelect = new TomSelect(element, config);
+        tomSelect.wrapper.classList.add('tom-select-bootstrap');
+        console.log('TomSelect - Protegido e inicializado:', element.id || element.name);
+        element.setAttribute('data-tom-initialized', 'true');
+        return tomSelect;
+    } catch (error) {
+        console.error('TomSelect - Erro ao proteger e inicializar:', element.id || element.name, error);
+        return null;
+    }
+}
+
+// Inicializar na primeira carga - VERSÃO SIMPLES
 document.addEventListener('DOMContentLoaded', function() {
-    initTomSelectFields();
+    console.log('DOM loaded - inicializando TomSelect simples');
+    initSimpleTomSelect();
 });
+
+// Função simples e direta para TomSelect
+function initSimpleTomSelect() {
+    console.log('--- INICIANDO DIAGNÓSTICO TOMSELECT ---');
+    
+    // Verificar se TomSelect está disponível
+    if (typeof TomSelect === 'undefined') {
+        console.error('❌ TomSelect não está carregado!');
+        return;
+    }
+    console.log('✅ TomSelect disponível');
+    
+    // Buscar campo de líderes especificamente
+    console.log('🔍 Procurando campo lideres_promotor...');
+    const lideresField = document.getElementById('lideres_promotor');
+    if (!lideresField) {
+        console.error('❌ Campo lideres_promotor não encontrado');
+        console.log('🔍 Campos disponíveis com "lideres":', 
+            Array.from(document.querySelectorAll('[id*="lideres"], [name*="lideres"]')).map(el => el.id || el.name));
+        return;
+    }
+    
+    console.log('✅ Campo encontrado:', lideresField);
+    console.log('📊 Opções disponíveis:', lideresField.options.length);
+    console.log('🏷️ Classes:', Array.from(lideresField.classList));
+    console.log('🆔 ID:', lideresField.id);
+    console.log('📝 Name:', lideresField.name);
+    
+    try {
+        const tomSelect = new TomSelect(lideresField, {
+            plugins: ['remove_button', 'clear_button'],
+            persist: false,
+            placeholder: 'Selecione líderes...',
+            searchField: ['text', 'value'],
+            valueField: 'id',
+            labelField: 'text',
+            load: function(query, callback) {
+                if (!query.length || query.length < 2) return callback();
+                
+                console.log('🔍 Buscando por:', query);
+                
+                const url = `/promotor/buscar-pessoas/?q=${encodeURIComponent(query)}`;
+                fetch(url)
+                    .then(response => {
+                        console.log('📡 Response status:', response.status);
+                        return response.text();
+                    })
+                    .then(html => {
+                        console.log('📄 HTML recebido:', html.substring(0, 200));
+                        
+                        // Parse do HTML para extrair pessoas
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        
+                        const pessoas = [];
+                        const items = tempDiv.querySelectorAll('.autocomplete-item');
+                        
+                        items.forEach(item => {
+                            pessoas.push({
+                                id: item.dataset.pessoaId,
+                                text: `${item.dataset.pessoaNome}${item.dataset.pessoaDoc ? ' - ' + item.dataset.pessoaDoc : ''}`
+                            });
+                        });
+                        
+                        console.log('👥 Pessoas encontradas:', pessoas.length);
+                        callback(pessoas);
+                    })
+                    .catch(error => {
+                        console.error('❌ Erro na busca:', error);
+                        callback();
+                    });
+            },
+            render: {
+                no_results: function(data, escape) {
+                    return '<div class="no-results">Nenhum líder encontrado</div>';
+                }
+            },
+            onItemAdd: function(value, item) {
+                console.log('✅ Item adicionado:', value);
+                this.setTextboxValue('');
+                this.refreshState();
+            }
+        });
+        
+        console.log('🎉 TomSelect inicializado com sucesso!');
+        console.log('🔧 TomSelect instance:', tomSelect);
+        console.log('--- FIM DIAGNÓSTICO ---');
+        return tomSelect;
+        
+    } catch (error) {
+        console.error('❌ ERRO ao inicializar TomSelect:', error);
+        console.error('📋 Stack:', error.stack);
+        console.log('--- FIM DIAGNÓSTICO (COM ERRO) ---');
+    }
+}
 
 // Função para lidar com resposta da criação de pessoa
 function handleNovaPersonaResponse(event) {
@@ -160,7 +416,8 @@ function handleNovaPersonaResponse(event) {
     
     if (response.success) {
         // Adicionar nova pessoa ao Tom-Select de líderes
-        const lideresSelect = document.getElementById('lideres');
+        const lideresSelect = document.getElementById('lideres_promotor') || 
+                              document.querySelector('select[name="lideres"].tom-select-field');
         if (lideresSelect && lideresSelect.tomselect) {
             // Adicionar nova opção
             lideresSelect.tomselect.addOption({

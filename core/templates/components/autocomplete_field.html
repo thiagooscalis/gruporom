@@ -1,147 +1,228 @@
-{% load crispy_forms_tags %}
-
 <!-- Campo de autocomplete reutilizável -->
-<div class="position-relative">
+<div x-data="autocompleteField({
+    searchUrl: '{{ search_url }}',
+    searchFieldId: '{{ search_field.id_for_label }}',
+    hiddenFieldId: '{{ hidden_field.id_for_label }}',
+    selectedLabel: '{{ selected_label|default:"Item selecionado:" }}',
+    initialValue: {% if initial_value %}'{{ initial_value.nome }} ({{ initial_value.doc }})'{% else %}null{% endif %},
+    initialId: {% if initial_value %}{{ initial_value.id }}{% else %}null{% endif %}
+})" class="relative">
+    
     <!-- Campo de busca visível -->
-    <div class="mb-3">
-        <label class="form-label">{{ search_field.label }}</label>
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">{{ search_field.label }}</label>
         {{ search_field }}
+        
+        <!-- Erros do campo hidden -->
         {% if hidden_field.errors %}
-            <div class="invalid-feedback d-block">
+            <div class="mt-2 text-sm text-red-600">
                 {% for error in hidden_field.errors %}
-                    {{ error }}
+                    <p>{{ error }}</p>
                 {% endfor %}
             </div>
         {% endif %}
+        
+        <!-- Erros do campo de busca -->
         {% if search_field.errors %}
-            <div class="invalid-feedback d-block">
+            <div class="mt-2 text-sm text-red-600">
                 {% for error in search_field.errors %}
-                    {{ error }}
+                    <p>{{ error }}</p>
                 {% endfor %}
             </div>
         {% endif %}
-        <div class="form-text">{{ hidden_field.help_text }}</div>
+        
+        <!-- Help text -->
+        {% if hidden_field.help_text %}
+            <p class="mt-2 text-sm text-gray-500">{{ hidden_field.help_text }}</p>
+        {% endif %}
     </div>
     
     <!-- Campo hidden para ID -->
     {{ hidden_field }}
     
     <!-- Container para resultados do autocomplete -->
-    <div id="{{ search_field.id_for_label }}-autocomplete-results" 
-         class="autocomplete-results border rounded bg-white position-absolute w-100 shadow-sm"
-         style="display: none; z-index: 1000; max-height: 300px; overflow-y: auto;">
+    <div x-show="showResults && results.length > 0" 
+         x-transition:enter="transition ease-out duration-100"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+         @click.outside="showResults = false">
+        
+        <template x-for="(result, index) in results" :key="index">
+            <div class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100 transition-colors"
+                 @click="selectResult(result)">
+                <div class="flex items-center">
+                    <span class="font-normal block truncate" x-text="result.nome"></span>
+                </div>
+                <span class="text-gray-500 absolute inset-y-0 right-0 flex items-center pr-4">
+                    <span class="text-sm" x-text="result.doc"></span>
+                </span>
+            </div>
+        </template>
+        
+        <!-- Loading state -->
+        <div x-show="loading" class="py-2 pl-3 pr-9 text-gray-500">
+            <div class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Buscando...
+            </div>
+        </div>
+        
+        <!-- No results -->
+        <div x-show="!loading && showResults && results.length === 0 && searchQuery.length >= 2" 
+             class="py-2 pl-3 pr-9 text-gray-500">
+            Nenhum resultado encontrado
+        </div>
     </div>
     
     <!-- Pessoa selecionada -->
-    <div id="{{ search_field.id_for_label }}-selecionada" class="mt-2" style="display: none;">
-        <div class="alert alert-success d-flex justify-content-between align-items-center">
-            <div>
-                <i class="fas fa-check-circle me-2"></i>
-                <strong>{{ selected_label|default:"Item selecionado:" }}</strong>
-                <span id="{{ search_field.id_for_label }}-nome-selecionado"></span>
+    <div x-show="selectedItem" x-transition class="mt-3">
+        <div class="bg-green-50 border border-green-200 rounded-md p-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <!-- Heroicon: check-circle -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-green-500 mr-2">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <div>
+                    <span class="font-medium text-green-800">{{ selected_label|default:"Item selecionado:" }}</span>
+                    <span class="text-green-700" x-text="selectedItem"></span>
+                </div>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-danger autocomplete-clear-btn">
-                <i class="fas fa-times"></i>
+            <button type="button" 
+                    @click="clearSelection()"
+                    class="text-green-500 hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-md p-1">
+                <!-- Heroicon: x-mark -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
     </div>
 </div>
 
 <script>
-    // Inicializa autocomplete para este campo específico
-    (function() {
-        const searchInput = document.getElementById('{{ search_field.id_for_label }}');
-        const hiddenInput = document.getElementById('{{ hidden_field.id_for_label }}');
-        const resultsContainer = document.getElementById('{{ search_field.id_for_label }}-autocomplete-results');
-        const selectedDisplay = document.getElementById('{{ search_field.id_for_label }}-selecionada');
-        const selectedText = document.getElementById('{{ search_field.id_for_label }}-nome-selecionado');
-        const clearButton = selectedDisplay?.querySelector('.autocomplete-clear-btn');
+// Alpine.js component para autocomplete
+function autocompleteField(config) {
+    return {
+        searchQuery: '',
+        results: [],
+        showResults: false,
+        loading: false,
+        selectedItem: null,
+        selectedId: null,
+        debounceTimer: null,
         
-        // Implementação manual de autocomplete
-        let debounceTimer;
-        
-        function fetchAutocomplete(query) {
-            console.log('[DEBUG] Fazendo fetch manual para:', query);
+        init() {
+            // Configurar valor inicial se fornecido
+            if (config.initialValue && config.initialId) {
+                this.selectedItem = config.initialValue;
+                this.selectedId = config.initialId;
+                this.updateHiddenField(config.initialId);
+            }
             
-            const url = new URL('{{ search_url }}', window.location.origin);
-            url.searchParams.set('q', query);
-            url.searchParams.set('all', 'true');
-            
-            console.log('[DEBUG] URL da requisição:', url.toString());
-            
-            fetch(url)
-                .then(response => {
-                    console.log('[DEBUG] Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    console.log('[DEBUG] HTML recebido:', html.substring(0, 200));
-                    resultsContainer.innerHTML = html;
-                    resultsContainer.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('[DEBUG] Erro no fetch:', error);
-                    resultsContainer.style.display = 'none';
+            // Configurar o input de busca
+            const searchInput = document.getElementById(config.searchFieldId);
+            if (searchInput) {
+                // Adicionar classes Tailwind ao input
+                searchInput.className = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm';
+                
+                searchInput.addEventListener('input', (e) => {
+                    this.searchQuery = e.target.value;
+                    this.onSearchInput();
                 });
-        }
+                
+                searchInput.addEventListener('focus', () => {
+                    if (this.searchQuery.length >= 2 && this.results.length > 0) {
+                        this.showResults = true;
+                    }
+                });
+            }
+        },
         
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim();
-            console.log('[DEBUG] Input event - query:', query, 'length:', query.length);
+        onSearchInput() {
+            clearTimeout(this.debounceTimer);
             
-            clearTimeout(debounceTimer);
-            
-            if (query.length < 2) {
-                console.log('[DEBUG] Query muito curta, ocultando resultados');
-                resultsContainer.style.display = 'none';
+            if (this.searchQuery.length < 2) {
+                this.showResults = false;
+                this.results = [];
                 return;
             }
             
-            debounceTimer = setTimeout(() => {
-                fetchAutocomplete(query);
-            }, 500);
-        });
+            this.debounceTimer = setTimeout(() => {
+                this.fetchResults();
+            }, 300);
+        },
         
-        // Ocultar resultados ao clicar fora (com delay para permitir cliques nos resultados)
-        document.addEventListener('click', function(evt) {
-            if (!searchInput.contains(evt.target) && !resultsContainer.contains(evt.target)) {
-                setTimeout(() => {
-                    console.log('[DEBUG] Ocultando resultados - clique fora');
-                    resultsContainer.style.display = 'none';
-                }, 100);
-            }
-        });
-        
-        // Mostrar resultados quando o campo ganha foco (se já tem conteúdo)
-        searchInput.addEventListener('focus', function() {
-            const query = searchInput.value.trim();
-            if (query.length >= 2 && resultsContainer.children.length > 0) {
-                console.log('[DEBUG] Mostrando resultados existentes no focus');
-                resultsContainer.style.display = 'block';
-            }
-        });
-        
-        if (searchInput && hiddenInput && resultsContainer && window.AutocompleteField) {
-            const autocomplete = new AutocompleteField({
-                searchInput: searchInput,
-                hiddenInput: hiddenInput,
-                resultsContainer: resultsContainer,
-                selectedDisplay: selectedDisplay,
-                selectedText: selectedText,
-                clearButton: clearButton
-            });
+        async fetchResults() {
+            this.loading = true;
+            this.showResults = true;
             
-            // Sobrescreve as funções globais para compatibilidade
-            window.selecionarPessoa = function(pessoaId, pessoaNome, pessoaDoc) {
-                autocomplete.defaultOnSelect(pessoaId, pessoaNome, pessoaDoc);
-            };
+            try {
+                const url = new URL(config.searchUrl, window.location.origin);
+                url.searchParams.set('q', this.searchQuery);
+                url.searchParams.set('format', 'json');
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro na busca');
+                
+                const data = await response.json();
+                this.results = data.results || [];
+            } catch (error) {
+                console.error('Erro no autocomplete:', error);
+                this.results = [];
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        selectResult(result) {
+            this.selectedItem = `${result.nome} (${result.doc})`;
+            this.selectedId = result.id;
+            this.searchQuery = '';
+            this.showResults = false;
+            this.results = [];
             
-            window.limparSelecaoPessoa = function() {
-                autocomplete.clearSelection();
-            };
+            // Limpar o campo de busca
+            const searchInput = document.getElementById(config.searchFieldId);
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            // Atualizar campo hidden
+            this.updateHiddenField(result.id);
+        },
+        
+        clearSelection() {
+            this.selectedItem = null;
+            this.selectedId = null;
+            this.searchQuery = '';
+            this.showResults = false;
+            this.results = [];
+            
+            // Limpar campos
+            const searchInput = document.getElementById(config.searchFieldId);
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            this.updateHiddenField('');
+        },
+        
+        updateHiddenField(value) {
+            const hiddenInput = document.getElementById(config.hiddenFieldId);
+            if (hiddenInput) {
+                hiddenInput.value = value;
+                
+                // Disparar evento change para formulários que dependem disso
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         }
-    })();
+    }
+}
 </script>

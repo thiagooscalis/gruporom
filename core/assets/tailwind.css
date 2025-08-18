@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Custom theme variables */
+@theme {
+  --color-primary: #d3a156;
+  --color-sidebar: #333333;
+}

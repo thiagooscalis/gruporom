@@ -7,7 +7,7 @@
          style="cursor: pointer;"
          onmouseover="this.style.backgroundColor='#f8f9fa'"
          onmouseout="this.style.backgroundColor='white'"
-         onclick="selecionarPessoa('{{ pessoa.pk }}', '{{ pessoa.nome|escapejs }}', '{{ pessoa.doc|escapejs }}')">
+         onclick="selectMultipleItem('{{ field_id }}', '{{ pessoa.pk }}', '{{ pessoa.nome|escapejs }}', '{{ pessoa.doc|escapejs }}')">
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <strong>{{ pessoa.nome }}</strong>

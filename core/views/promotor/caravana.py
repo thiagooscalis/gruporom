@@ -142,8 +142,14 @@ def get_step_context(request, step):
     }
     
     if step == 1:
+        empresas = Pessoa.objects.filter(empresa_gruporom=True, tipo_empresa='Turismo').order_by('nome')
+        # Debug: Log empresas carregadas
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Empresas carregadas para o step 1: {list(empresas.values_list('nome', flat=True))}")
+        
         context.update({
-            'empresas': Pessoa.objects.filter(empresa_gruporom=True, tipo_empresa='Turismo').order_by('nome'),
+            'empresas': empresas,
             'paises': Pais.objects.all().order_by('nome'),
             'aeroportos': Aeroporto.objects.select_related('cidade__pais').order_by('nome'),
             'tipos': [

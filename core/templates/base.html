@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Grupo ROM{% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
-    <link href="{% static 'style.css' %}" rel="stylesheet">
     <link href="{% static 'app.css' %}" rel="stylesheet">
+    <script src="{% static 'app.js' %}" defer></script>
     {% block extra_css %}{% endblock %}
 </head>
-<body{% if hide_padding %} class="h-100"{% endif %}>
+<body class="bg-gray-50{% if hide_padding %} h-screen{% endif %}">
     {% include 'includes/aside.html' %}
-    <main id="main"{% if hide_padding %} class="h-100 d-flex flex-column"{% endif %}>
+    <main id="main" class="lg:ml-64{% if hide_padding %} h-full flex flex-col{% endif %}">
         {% include 'includes/navbar.html' %}
-        <div class="{% if not hide_padding %}p-3{% endif %}{% if hide_padding %} flex-fill{% endif %}">
+        <div class="{% if not hide_padding %}p-4{% endif %}{% if hide_padding %} flex-1{% endif %}">
             {% if not hide_messages %}
                 {% include 'includes/messages.html' %}
             {% endif %}
@@ -35,7 +35,6 @@
     <!-- Modals -->
     {% block modals %}{% endblock %}
     
-    <script src="{% static 'app.js' %}"></script>
     
     <!-- Configuração HTMX para CSRF -->
     <script>

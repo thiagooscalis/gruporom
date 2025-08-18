@@ -1,85 +1,98 @@
 <div id="lista-container">
-    <div class="card">
-        <div class="card-body">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div class="p-6">
             {% if page_obj %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>Nome</th>
-                                <th>Empresa</th>
-                                <th>Tipo</th>
-                                <th>Promotor</th>
-                                <th>Líderes</th>
-                                <th>Data Contrato</th>
-                                <th>Repasse</th>
-                                <th>Quantidade</th>
-                                <th width="120">Ações</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empresa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Promotor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Líderes</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Contrato</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Repasse</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="caravanas-tbody">
+                        <tbody id="caravanas-tbody" class="bg-white divide-y divide-gray-200">
                             {% for caravana in page_obj %}
-                                <tr>
-                                    <td>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{% url 'operacional:caravana_detalhes' caravana.pk %}" 
-                                           class="text-decoration-none">
-                                            <strong>{{ caravana.nome }}</strong>
+                                           class="text-blue-600 hover:text-blue-800 font-medium">
+                                            {{ caravana.nome }}
                                         </a>
                                     </td>
-                                    <td>{{ caravana.empresa.nome|default:"-" }}</td>
-                                    <td>
-                                        <span class="badge bg-info">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ caravana.empresa.nome|default:"-" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                             {{ caravana.get_tipo_display }}
                                         </span>
                                     </td>
-                                    <td>{{ caravana.promotor.nome|default:"-" }}</td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ caravana.promotor.nome|default:"-" }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">
                                         {% for lider in caravana.lideres.all|slice:":2" %}
                                             {{ lider.nome }}{% if not forloop.last %}, {% endif %}
                                         {% empty %}
-                                            -
+                                            <span class="text-gray-400">-</span>
                                         {% endfor %}
                                         {% if caravana.total_lideres > 2 %}
-                                            <small class="text-muted">+{{ caravana.total_lideres|add:"-2" }}</small>
+                                            <span class="text-gray-500 text-xs">+{{ caravana.total_lideres|add:"-2" }}</span>
                                         {% endif %}
                                     </td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ caravana.data_contrato|date:"d/m/Y"|default:"-" }}
                                     </td>
-                                    <td>
-                                        <span class="badge bg-success">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             R$ {{ caravana.repasse_valor|floatformat:2 }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-primary">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                                             {{ caravana.quantidade }} pax
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button type="button" 
-                                                class="btn btn-sm btn-outline-primary"
+                                                class="text-blue-600 hover:text-blue-900 mr-2"
                                                 hx-get="{% url 'operacional:caravana_editar' caravana.pk %}"
-                                                hx-target="#modalContainer"
+                                                hx-target="#caravanaModalContainer"
                                                 hx-trigger="click"
                                                 title="Editar">
-                                            <i class="fas fa-edit"></i>
+                                            <!-- Heroicon: pencil -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                            </svg>
                                         </button>
                                         <button type="button" 
-                                                class="btn btn-sm btn-outline-danger"
+                                                class="text-red-600 hover:text-red-900"
                                                 hx-get="{% url 'operacional:caravana_excluir' caravana.pk %}"
-                                                hx-target="#modalContainer"
+                                                hx-target="#caravanaModalContainer"
                                                 hx-trigger="click"
                                                 title="Excluir">
-                                            <i class="fas fa-trash"></i>
+                                            <!-- Heroicon: trash -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>
                                         </button>
                                     </td>
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="9" class="text-center py-4">
-                                        <i class="fas fa-bus fa-3x text-muted mb-3"></i>
-                                        <p class="text-muted">Nenhuma caravana encontrada.</p>
+                                    <td colspan="9" class="px-6 py-12 text-center">
+                                        <!-- Heroicon: truck (large) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                                        </svg>
+                                        <p class="text-gray-500">Nenhuma caravana encontrada.</p>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -89,19 +102,22 @@
 
                 <!-- Botão Carregar Mais -->
                 {% if page_obj.has_next %}
-                    <div class="text-center mt-3">
-                        <button class="btn btn-outline-primary"
+                    <div class="text-center mt-6">
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                                 hx-get="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status_filter }}&tipo={{ tipo_filter }}&load_more=1"
                                 hx-target="#caravanas-tbody"
                                 hx-swap="beforeend"
                                 hx-indicator="#loading-indicator">
-                            <i class="fas fa-plus-circle me-2"></i>
+                            <!-- Heroicon: plus-circle -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             Carregar mais ({{ restantes }} restantes)
                         </button>
                     </div>
                 {% endif %}
             {% else %}
-                <p class="text-center">Nenhuma caravana encontrada.</p>
+                <p class="text-center text-gray-500">Nenhuma caravana encontrada.</p>
             {% endif %}
         </div>
     </div>
