@@ -34,6 +34,9 @@ gruporom/
 │   │   └── seed.py          # Command para executar seeders
 │   ├── templates/
 │   │   ├── base.html        # Template base com navbar e sidebar
+│   │   ├── components/      # Componentes reutilizáveis
+│   │   │   ├── modal_form_base.html    # Modal base para cadastro/edição
+│   │   │   └── modal_delete_base.html  # Modal base para exclusão
 │   │   ├── includes/
 │   │   │   └── aside.html   # Sidebar responsivo (desktop/mobile offcanvas)
 │   │   ├── registration/
@@ -66,6 +69,7 @@ gruporom/
   - Desktop: Sidebar fixa com Tailwind classes + conteúdo principal
   - Mobile: Sidebar responsiva com Alpine.js + botão hamburger
 - **Modais**: Sistema HTMX + Alpine.js para operações CRUD sem reload
+- **Componentes Base**: Modais reutilizáveis padronizados (`modal_form_base.html`, `modal_delete_base.html`)
 - **Template Tags**: Customizadas para moeda, telefone e documentos
 - **⚠️ IMPORTANTE**: Sempre usar componentes Tailwind + Alpine.js para interações. HTMX para requisições assíncronas
 
@@ -261,17 +265,18 @@ gruporom/
 - [x] Configurações de segurança robustas (CSRF, HSTS, CSP)
 - [x] Interface administrativa Django restrita
 
-## 🚀 Status Atual: Sistema Empresarial Completo com WhatsApp Business e Mídias
+## 🚀 Status Atual: Sistema Empresarial Completo com Design System Unificado
 
 **O projeto está em estado PRODUTIVO COMPLETO** com:
 - **4 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo) + Promotor (caravanas)
+- **Design System Completo**: Tailwind CSS v4 + Alpine.js + Heroicons + Cores da marca Grupo ROM (#d3a156)
 - **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial) + **Mídias integradas** + **Janela 24h**
 - **Sistema de mídias robusto**: Imagens, vídeos, áudios e documentos com S3 e fallback
 - **Sistema de turismo empresarial**: 15 models interconectados para gestão completa
 - **Sistema de conversas avançado**: Webhook → Fila → Atribuição → Chat individual → **Verificação 24h** → **Templates automáticos**
+- **Interface Moderna**: Modais redesenhados, formulários com crispy_tailwind, botões otimizados
 - **247 testes implementados**: Sistema de testes robusto com InMemoryStorage e cobertura completa
-- **UX profissional** com botão scroll, modais inteligentes e layout otimizado
-- **Segurança robusta** com criptografia de campos sensíveis e **arquitetura escalável**
+- **UX profissional** com navegação intuitiva, alinhamentos perfeitos e **arquitetura escalável**
 
 ## 🔮 Próximas Expansões Sugeridas
 
@@ -491,6 +496,88 @@ if request.headers.get('HX-Request'):
 - ✅ **Auto-hide**: Botão desaparece na última página
 - ✅ **Mobile UX**: Experiência otimizada para dispositivos móveis
 
+### 🧩 Componentes de Modal Padronizados
+
+**Localização**: `/core/templates/components/`
+
+#### 1. Modal de Formulário (Cadastro/Edição)
+
+**Arquivo**: `modal_form_base.html`
+
+```django
+{% extends "components/modal_form_base.html" %}
+
+{% block modal_title %}
+<svg class="w-6 h-6 mr-2">...</svg>
+Título do Modal
+{% endblock %}
+
+{% block form_attributes %}hx-post="{% url 'minha_url' %}" hx-target="#form-content"{% endblock %}
+
+{% block modal_content %}
+<div id="form-content">
+    <!-- Seu formulário aqui -->
+</div>
+{% endblock %}
+```
+
+**Blocks Disponíveis:**
+- `modal_size`: Tamanho (padrão: `max-w-4xl`)
+- `modal_height`: Altura (padrão: `max-h-[90vh] overflow-y-auto`)
+- `modal_title`: Título + ícone opcional
+- `form_attributes`: Atributos HTMX/form
+- `modal_content`: Conteúdo do formulário
+- `modal_footer`: Footer customizado (padrão: Cancelar + Salvar)
+
+#### 2. Modal de Exclusão
+
+**Arquivo**: `modal_delete_base.html`
+
+```django
+{% extends "components/modal_delete_base.html" %}
+
+{% block confirmation_question %}Excluir este item?{% endblock %}
+
+{% block item_details %}
+<div class="bg-gray-50 border rounded-lg p-4 mb-4 space-y-3">
+    <div class="flex justify-between">
+        <span class="text-sm text-gray-600">Nome:</span>
+        <span class="font-semibold">{{ objeto.nome }}</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block delete_button %}
+<form hx-post="{% url 'excluir_url' objeto.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
+        Sim, Excluir
+    </button>
+</form>
+{% endblock %}
+```
+
+**Blocks Disponíveis:**
+- `modal_size`: Tamanho (padrão: `max-w-md`)
+- `confirmation_question`: Pergunta de confirmação
+- `item_details`: Detalhes do item
+- `warning_messages`: Avisos/erros específicos
+- `delete_button`: Botão de exclusão customizado
+
+#### Funcionalidades Automáticas:
+- ✅ **Alpine.js**: Função `close()` + transições suaves
+- ✅ **Eventos**: ESC, clique fora, botão X
+- ✅ **Responsividade**: Design adaptativo mobile/desktop
+- ✅ **Acessibilidade**: Focus trap, screen reader friendly
+- ✅ **HTMX Integration**: Compatível com requisições HTMX
+- ✅ **Remoção DOM**: Limpeza automática após fechamento
+
+#### Vantagens:
+- **DRY**: Evita código duplicado
+- **Consistência**: Interface uniforme
+- **Manutenibilidade**: Mudanças centralizadas
+- **Performance**: Menor bundle size
+
 ### Estrutura de URLs Escalável
 - URLs organizadas por módulo com namespaces
 - Padrão RESTful para operações CRUD
@@ -498,12 +585,36 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 18/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna, janela 24h automática e multi-área operacional  
-**Stack Frontend**: Tailwind CSS + Alpine.js + HTMX + Heroicons  
-**Módulos**: 23 modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Funcao, Cambio, Pais, WhatsApp [6 models], Turismo [15 models]), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, validação inteligente de telefones, UX otimizada
+**Última atualização**: 19/08/2025  
+**Status**: Sistema empresarial completo com design system unificado, WhatsApp Business integrado, interface moderna e UX otimizada  
+**Stack Frontend**: Tailwind CSS v4 + Alpine.js + HTMX + Heroicons + Design System Grupo ROM  
+**Módulos**: 23 modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Funcao, Cambio, Pais, WhatsApp [6 models], Turismo [15 models])  
+**Interface**: Design system completo, modais redesenhados, formulários crispy_tailwind, botões alinhados, cores da marca (#d3a156)
 
 ## 🆕 Últimas Atualizações
+
+### Janeiro 2025 - Design System Completo e Interface Otimizada
+- **🎨 Design System Unificado**: Sistema completo baseado nas cores oficiais da marca Grupo ROM
+  - Paleta primária extraída do logo: #d3a156 (dourado principal), #965915 (escuro), #f9e7a1 (claro)
+  - Paleta cinza profissional: slate-50 a slate-900 para interface limpa
+  - Cores semânticas: success, warning, danger, info com tons consistentes
+- **⚡ Tailwind CSS v4.1.12**: Migração completa com @theme directive para cores customizadas
+- **🔧 Componentes Modais Redesenhados**: 
+  - Modal base com backdrop blur (`bg-black/50 backdrop-blur-sm`)
+  - Animações suaves com Alpine.js (`x-transition` effects)
+  - Headers com cores primárias da marca
+  - Formulários integrados com crispy_tailwind
+- **📋 Páginas Administrativas Otimizadas**:
+  - Pessoas e Usuários com design system aplicado
+  - Formulários de busca com botão limpar (ícone lixeira)
+  - Botões perfeitamente alinhados e responsivos
+  - Paginação moderna "Carregar mais" com HTMX
+- **🖼️ Modal de Upload de Foto**: Convertido para Alpine.js + design system
+- **🎯 UX Melhorada**:
+  - Busca manual (não automática) com botão dedicado
+  - Botão limpar filtros com href direto
+  - Alinhamento perfeito de textos e ícones
+  - Responsividade otimizada para mobile e desktop
 
 ### Agosto 2025 - Sistema de Países e Seeds Otimizados
 - **🌍 Base de Dados Completa**: 193 países com nomes em português e códigos ISO-2
@@ -598,3 +709,127 @@ if request.headers.get('HX-Request'):
 - **🎨 Design System**: Mantida cor primária #d3a156 com classes customizadas Tailwind
 - **📱 Responsividade Aprimorada**: Sistema de breakpoints do Tailwind (sm, md, lg, xl, 2xl)
 - **🚀 Componentes Alpine**: Modais, dropdowns, sidebars com x-data e x-show
+
+### Agosto 2025 - Sistema de Componentes Modais Reutilizáveis
+- **🧩 Arquitetura de Componentes**: Criação de modais base padronizados para reutilização
+- **📁 Diretório `/components/`**: Componentes organizados em diretório dedicado
+- **🔧 Modal Form Base** (`modal_form_base.html`): Componente reutilizável para modais de cadastro/edição
+- **❌ Modal Delete Base** (`modal_delete_base.html`): Componente padronizado para modais de exclusão
+- **🎨 Sistema de Blocos Django**: Uso extensivo de `{% block %}` para customização
+- **⚡ Alpine.js Integrado**: Controle de estado e animações com componente centralizado
+- **📋 Refatoração Completa**: Modais de usuários convertidos para usar os novos componentes
+
+## 📚 Guia de Uso dos Componentes Modais
+
+### 🛠️ Como Usar o Modal Form Base
+
+**Arquivo**: `/core/templates/components/modal_form_base.html`
+
+**Exemplo de Uso**:
+```django
+{% extends "components/modal_form_base.html" %}
+
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.764z" />
+</svg>
+Novo Usuário
+{% endblock %}
+
+{% block form_attributes %}hx-post="{% url 'administracao:usuarios_criar' %}" hx-target="#form-content" hx-swap="innerHTML"{% endblock %}
+
+{% block modal_content %}
+<div id="form-content">
+    {% include 'administracao/usuarios/form_content.html' %}
+</div>
+{% endblock %}
+```
+
+**Blocos Disponíveis**:
+- `modal_title`: Título do modal (pode incluir ícones SVG)
+- `form_attributes`: Atributos do formulário (HTMX, action, etc.)
+- `modal_content`: Conteúdo principal do modal
+- `modal_footer`: Botões de ação (padrão: Cancelar + Salvar)
+- `modal_size`: Tamanho do modal (padrão: `max-w-4xl`)
+- `modal_height`: Altura do modal (padrão: `max-h-[90vh] overflow-y-auto`)
+
+### ❌ Como Usar o Modal Delete Base
+
+**Arquivo**: `/core/templates/components/modal_delete_base.html`
+
+**Exemplo de Uso**:
+```django
+{% extends "components/modal_delete_base.html" %}
+
+{% block confirmation_question %}Você tem certeza que deseja excluir este usuário?{% endblock %}
+
+{% block item_details %}
+<div class="bg-gray-50 border rounded-lg p-4 mb-4 space-y-3">
+    <div class="flex justify-between">
+        <span class="text-sm text-gray-600">Usuário:</span>
+        <span class="font-semibold text-gray-900">{{ usuario.username }}</span>
+    </div>
+    <div class="flex justify-between">
+        <span class="text-sm text-gray-600">Nome:</span>
+        <span class="text-gray-900">{{ usuario.pessoa.nome }}</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block delete_button %}
+<form style="display: inline;" hx-post="{% url 'administracao:usuarios_excluir' usuario.pk %}" hx-target="body" hx-swap="beforeend">
+    {% csrf_token %}
+    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+        </svg>
+        Sim, Excluir
+    </button>
+</form>
+{% endblock %}
+```
+
+**Blocos Disponíveis**:
+- `confirmation_question`: Pergunta de confirmação
+- `item_details`: Detalhes do item a ser excluído
+- `warning_messages`: Mensagens de aviso ou erro
+- `delete_button`: Botão de exclusão (pode incluir formulário HTMX)
+- `modal_size`: Tamanho do modal (padrão: `max-w-md`)
+- `header_bg`: Cor de fundo do cabeçalho (padrão: `bg-red-600`)
+- `icon_bg`: Cor de fundo do ícone (padrão: `bg-red-100`)
+
+### 🎯 Benefícios dos Componentes
+
+1. **🔄 Reutilização de Código**: Elimina duplicação de HTML e CSS
+2. **🎨 Consistência Visual**: Padroniza aparência dos modais em todo o sistema
+3. **⚡ Manutenibilidade**: Alterações centralizadas afetam todos os modais
+4. **🛠️ Facilidade de Uso**: Apenas `{% extends %}` e `{% block %}` para customizar
+5. **🔧 Flexibilidade**: Blocos permitem customização específica quando necessário
+6. **📱 Responsividade**: Componentes já incluem design responsivo
+7. **♿ Acessibilidade**: Inclui suporte a teclado (ESC) e navegação por tab
+
+### 📋 Padrão de Implementação
+
+**Para novos modais, sempre:**
+
+1. **Escolha o componente base** apropriado (`modal_form_base.html` ou `modal_delete_base.html`)
+2. **Crie o template** estendendo o componente: `{% extends "components/modal_form_base.html" %}`
+3. **Customize os blocos** necessários com seu conteúdo específico
+4. **Mantenha o padrão HTMX** para requisições assíncronas
+5. **Use classes Tailwind** para estilização adicional
+6. **Teste a responsividade** em diferentes dispositivos
+
+**Exemplo de estrutura de arquivos**:
+```
+templates/
+├── components/
+│   ├── modal_form_base.html     # ✅ Componente base para forms
+│   └── modal_delete_base.html   # ✅ Componente base para exclusão
+├── administracao/
+│   └── usuarios/
+│       ├── modal_form.html      # ✅ Extende modal_form_base
+│       ├── modal_delete.html    # ✅ Extende modal_delete_base
+│       └── form_content.html    # ✅ Conteúdo específico do form
+```
+
+Este sistema de componentes modais está agora **documentado e pronto para expansão** em outras áreas do sistema!

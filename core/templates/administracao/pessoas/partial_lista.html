@@ -1,64 +1,64 @@
 {% load core_tags %}
 
 <!-- Listagem -->
-<div class="bg-white rounded-lg shadow-sm border" id="pessoas-lista">
+<div class="bg-white rounded-lg shadow-md border border-slate-200" id="pessoas-lista">
     <div class="p-6">
         {% if page_obj %}
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="border-b border-gray-200">
+                <thead class="border-b border-slate-200 bg-slate-50">
                     <tr>
-                        <th class="text-left py-3 px-4 font-medium text-gray-700">Nome</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-700">CPF/CNPJ</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-700">Email</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-700">Telefone</th>
-                        <th class="text-center py-3 px-4 font-medium text-gray-700">Tipo</th>
-                        <th class="text-center py-3 px-4 font-medium text-gray-700 w-20" title="Possui Foto">Foto</th>
-                        <th class="text-center py-3 px-4 font-medium text-gray-700 w-20" title="Dados do Passaporte">Passaporte</th>
-                        <th class="text-center py-3 px-4 font-medium text-gray-700 w-36">Ações</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Nome</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">CPF/CNPJ</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Email</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Telefone</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Tipo</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs w-20" title="Possui Foto">Foto</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs w-20" title="Dados do Passaporte">Passaporte</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs w-36">Ações</th>
                     </tr>
                 </thead>
-                <tbody id="pessoas-tbody" class="divide-y divide-gray-200">
+                <tbody id="pessoas-tbody" class="divide-y divide-slate-200">
                     {% for pessoa in page_obj %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-4 text-gray-900">{{ pessoa.nome }}</td>
-                        <td class="py-3 px-4 text-gray-600">{{ pessoa.doc|doc|default:"-" }}</td>
-                        <td class="py-3 px-4 text-gray-600">{{ pessoa.email|default:"-" }}</td>
-                        <td class="py-3 px-4 text-gray-600">{{ pessoa.telefone|fone|default:"-" }}</td>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-4 text-slate-900 font-medium">{{ pessoa.nome }}</td>
+                        <td class="py-3 px-4 text-slate-600 text-sm">{{ pessoa.doc|doc|default:"-" }}</td>
+                        <td class="py-3 px-4 text-slate-600 text-sm">{{ pessoa.email|default:"-" }}</td>
+                        <td class="py-3 px-4 text-slate-600 text-sm">{{ pessoa.telefone|fone|default:"-" }}</td>
                         <td class="py-3 px-4 text-center">
                             {% if pessoa.empresa_gruporom %}
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Grupo ROM</span>
+                                <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-primary-100 text-primary-800">Grupo ROM</span>
                             {% elif pessoa.tipo_pessoa == 'FISICA' %}
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">PF</span>
+                                <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-info-100 text-info-800">PF</span>
                             {% else %}
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">PJ</span>
+                                <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-success-100 text-success-800">PJ</span>
                             {% endif %}
                         </td>
                         <td class="py-3 px-4 text-center">
                             {% if pessoa.foto %}
-                                <svg class="w-4 h-4 text-green-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Possui foto">
+                                <svg class="w-4 h-4 text-success-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Possui foto">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
                             {% else %}
-                                <svg class="w-4 h-4 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Sem foto">
+                                <svg class="w-4 h-4 text-danger-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Sem foto">
                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                 </svg>
                             {% endif %}
                         </td>
                         <td class="py-3 px-4 text-center">
                             {% if pessoa.passaporte_numero and pessoa.passaporte_validade and pessoa.passaporte_nome %}
-                                <svg class="w-4 h-4 text-green-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte completo">
+                                <svg class="w-4 h-4 text-success-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte completo">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
                             {% else %}
-                                <svg class="w-4 h-4 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte incompleto">
+                                <svg class="w-4 h-4 text-danger-500 mx-auto" fill="currentColor" viewBox="0 0 20 20" title="Passaporte incompleto">
                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                 </svg>
                             {% endif %}
                         </td>
                         <td class="py-3 px-4">
                             <div class="flex justify-center space-x-1">
-                                <button type="button" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" title="Editar"
+                                <button type="button" class="p-1.5 text-primary-600 hover:text-primary-800 hover:bg-primary-50 rounded transition-colors" title="Editar"
                                         hx-get="{% url 'administracao:pessoas_editar_modal' pessoa.pk %}"
                                         hx-target="body"
                                         hx-swap="beforeend">
@@ -66,7 +66,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                     </svg>
                                 </button>
-                                <button type="button" class="p-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors" title="Upload Foto"
+                                <button type="button" class="p-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded transition-colors" title="Upload Foto"
                                         hx-get="{% url 'administracao:pessoas_foto_modal' pessoa.pk %}"
                                         hx-target="body"
                                         hx-swap="beforeend">
@@ -75,7 +75,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
                                 </button>
-                                <button type="button" class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors" title="Excluir"
+                                <button type="button" class="p-1.5 text-danger-600 hover:text-danger-800 hover:bg-danger-50 rounded transition-colors" title="Excluir"
                                         hx-get="{% url 'administracao:pessoas_excluir_modal' pessoa.pk %}"
                                         hx-target="body"
                                         hx-swap="beforeend">
@@ -88,8 +88,8 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="py-12 text-center text-gray-500">
-                            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <td colspan="8" class="py-12 text-center text-slate-500">
+                            <svg class="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
                             Nenhuma pessoa encontrada
@@ -103,7 +103,7 @@
         <!-- Botão Carregar Mais -->
         {% if page_obj.has_next %}
         <div class="text-center mt-6" id="carregar-mais-container">
-            <button type="button" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-md transition-colors inline-flex items-center"
+            <button type="button" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm"
                     hx-get="{% url 'administracao:pessoas_lista' %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_filter %}&tipo={{ tipo_filter }}{% endif %}&load_more=1"
                     hx-target="#pessoas-tbody"
                     hx-swap="beforeend">
@@ -116,10 +116,10 @@
         {% endif %}
         {% else %}
         <div class="text-center py-12">
-            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            <svg class="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 515.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
-            <p class="text-gray-500">Nenhuma pessoa cadastrada.</p>
+            <p class="text-slate-500">Nenhuma pessoa cadastrada.</p>
         </div>
         {% endif %}
     </div>

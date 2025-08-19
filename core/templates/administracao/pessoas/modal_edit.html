@@ -1,311 +1,252 @@
+{% extends "components/modal_form_base.html" %}
+{% load crispy_forms_tags %}
 
-<div class="modal fade" id="pessoaEditModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar Pessoa - {{ pessoa.nome }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+{% block header_bg %}bg-primary-600{% endblock %}
+{% block header_text_color %}text-white{% endblock %}
+{% block close_button_color %}text-primary-200 hover:text-white{% endblock %}
+
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+</svg>
+Editar Pessoa - {{ pessoa.nome }}
+{% endblock %}
+
+{% block form_attributes %}hx-post="{% url 'administracao:pessoas_atualizar' pessoa.pk %}" hx-target="#modal-body-content" hx-swap="outerHTML" enctype="multipart/form-data"{% endblock %}
+
+{% block modal_content %}
+<div id="modal-body-content">
+    <div x-data="{ empresaGruporom: {{ form.empresa_gruporom.value|yesno:'true,false' }} }">
+        <div class="px-6 py-4 space-y-6">
+        <!-- Dados Básicos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+                {{ form.nome|as_crispy_field }}
             </div>
-            <form hx-post="{% url 'administracao:pessoas_atualizar' pessoa.pk %}" hx-target="#pessoaEditModal" hx-swap="outerHTML" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            {{ form.nome|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.tipo_doc|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.doc|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.nascimento|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.sexo|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-12 mb-3">
-                            {{ form.funcao|as_crispy_field }}
-                        </div>
-                        
-                        <!-- Telefones -->
-                        <div class="col-12 mb-3">
-                            <h6 class="text-muted mb-3">Telefones</h6>
-                            
-                            <!-- Telefone 1 (obrigatório) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <span class="badge bg-primary">Principal</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Telefone 2 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi2|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd2|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone2|as_crispy_field }}
-                                </div>
-                            </div>
-                            
-                            <!-- Telefone 3 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-2">
-                                    {{ form.ddi3|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2">
-                                    {{ form.ddd3|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form.telefone3|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Emails -->
-                        <div class="col-12 mb-3">
-                            <h6 class="text-muted mb-3">Emails</h6>
-                            
-                            <!-- Email 1 (obrigatório) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email1|as_crispy_field }}
-                                </div>
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <span class="badge bg-primary">Principal</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Email 2 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email2|as_crispy_field }}
-                                </div>
-                            </div>
-                            
-                            <!-- Email 3 (opcional) -->
-                            <div class="row mb-2">
-                                <div class="col-md-10">
-                                    {{ form.email3|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">Dados do Passaporte</h6>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_numero|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_validade|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_nome|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.passaporte_copia|as_crispy_field }}
-                            
-                            {% if pessoa.passaporte_copia %}
-                                <div class="mt-2">
-                                    <small class="text-muted">Arquivo atual:</small>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <a href="{{ pessoa.passaporte_copia.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-download me-1"></i>Baixar Cópia
-                                        </a>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remover_passaporte_copia" id="remover_passaporte_copia">
-                                            <label class="form-check-label text-danger" for="remover_passaporte_copia">
-                                                <small>Remover arquivo</small>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-12">
-                            <hr class="my-3">
-                            <h6 class="text-muted mb-3">Endereço</h6>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            {{ form.endereco|as_crispy_field }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.numero|as_crispy_field }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.complemento|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            {{ form.bairro|as_crispy_field }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.cidade|as_crispy_field }}
-                        </div>
-                        <div class="col-md-1 mb-3">
-                            {{ form.estado|as_crispy_field }}
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            {{ form.cep|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-md-12 mb-3">
-                            {{ form.pais|as_crispy_field }}
-                        </div>
-                        
-                        <div class="col-12">
-                            <hr class="my-3">
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="form-check">
-                                {{ form.empresa_gruporom }}
-                                <label class="form-check-label" for="{{ form.empresa_gruporom.id_for_label }}">
-                                    {{ form.empresa_gruporom.label }}
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3" id="tipo-empresa-field-edit" {% if not form.empresa_gruporom.value %}style="display: none;"{% endif %}>
-                            {{ form.tipo_empresa|as_crispy_field }}
-                        </div>
+            
+            <div>
+                {{ form.tipo_doc|as_crispy_field }}
+            </div>
+            <div>
+                {{ form.doc|as_crispy_field }}
+            </div>
+            
+            <div>
+                {{ form.nascimento|as_crispy_field }}
+            </div>
+            <div>
+                {{ form.sexo|as_crispy_field }}
+            </div>
+            
+            <div class="md:col-span-2">
+                {{ form.funcao|as_crispy_field }}
+            </div>
+        </div>
+
+        <!-- Telefones -->
+        <div class="border-t border-slate-200 pt-6">
+            <h3 class="text-lg font-medium text-slate-900 mb-4">Telefones</h3>
+            
+            <!-- Telefone 1 (Principal) -->
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-3 mb-4">
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddi1.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddi1.label }}</label>
+                    {{ form.ddi1 }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddd1.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddd1.label }}</label>
+                    {{ form.ddd1 }}
+                </div>
+                <div class="md:col-span-6">
+                    <label for="{{ form.telefone1.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.telefone1.label }}</label>
+                    {{ form.telefone1 }}
+                </div>
+                <div class="md:col-span-2 flex items-end">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">Principal</span>
+                </div>
+            </div>
+            
+            <!-- Telefone 2 (Opcional) -->
+            <div class="grid grid-cols-2 md:grid-cols-10 gap-3 mb-4">
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddi2.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddi2.label }}</label>
+                    {{ form.ddi2 }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddd2.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddd2.label }}</label>
+                    {{ form.ddd2 }}
+                </div>
+                <div class="md:col-span-6">
+                    <label for="{{ form.telefone2.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.telefone2.label }}</label>
+                    {{ form.telefone2 }}
+                </div>
+            </div>
+            
+            <!-- Telefone 3 (Opcional) -->
+            <div class="grid grid-cols-2 md:grid-cols-10 gap-3">
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddi3.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddi3.label }}</label>
+                    {{ form.ddi3 }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.ddd3.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.ddd3.label }}</label>
+                    {{ form.ddd3 }}
+                </div>
+                <div class="md:col-span-6">
+                    <label for="{{ form.telefone3.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.telefone3.label }}</label>
+                    {{ form.telefone3 }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Emails -->
+        <div class="border-t border-slate-200 pt-6">
+            <h3 class="text-lg font-medium text-slate-900 mb-4">Emails</h3>
+            
+            <div class="space-y-4">
+                <!-- Email 1 (Principal) -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <div class="md:col-span-10">
+                        <label for="{{ form.email1.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.email1.label }}</label>
+                        {{ form.email1 }}
+                    </div>
+                    <div class="md:col-span-2 flex items-end">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">Principal</span>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-2"></i>Atualizar
-                    </button>
+                
+                <!-- Email 2 (Opcional) -->
+                <div>
+                    <label for="{{ form.email2.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.email2.label }}</label>
+                    {{ form.email2 }}
                 </div>
-            </form>
+                
+                <!-- Email 3 (Opcional) -->
+                <div>
+                    <label for="{{ form.email3.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.email3.label }}</label>
+                    {{ form.email3 }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Dados do Passaporte -->
+        <div class="border-t border-slate-200 pt-6">
+            <h3 class="text-lg font-medium text-slate-900 mb-4">Dados do Passaporte</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ form.passaporte_numero.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.passaporte_numero.label }}</label>
+                    {{ form.passaporte_numero }}
+                </div>
+                <div>
+                    <label for="{{ form.passaporte_validade.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.passaporte_validade.label }}</label>
+                    {{ form.passaporte_validade }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.passaporte_nome.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.passaporte_nome.label }}</label>
+                    {{ form.passaporte_nome }}
+                </div>
+                <div>
+                    <label for="{{ form.passaporte_copia.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.passaporte_copia.label }}</label>
+                    {{ form.passaporte_copia }}
+                    
+                    {% if pessoa.passaporte_copia %}
+                    <div class="mt-2 flex items-center gap-3">
+                        <a href="{{ pessoa.passaporte_copia.url }}" target="_blank" class="text-primary-600 hover:text-primary-800 text-sm font-medium inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Baixar Cópia
+                        </a>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="remover_passaporte_copia" class="rounded border-slate-300 text-danger-600 focus:ring-danger-500">
+                            <span class="ml-2 text-sm text-danger-600">Remover arquivo</span>
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Endereço -->
+        <div class="border-t border-slate-200 pt-6">
+            <h3 class="text-lg font-medium text-slate-900 mb-4">Endereço</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-6">
+                    <label for="{{ form.endereco.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.endereco.label }}</label>
+                    {{ form.endereco }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.numero.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.numero.label }}</label>
+                    {{ form.numero }}
+                </div>
+                <div class="md:col-span-4">
+                    <label for="{{ form.complemento.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.complemento.label }}</label>
+                    {{ form.complemento }}
+                </div>
+                
+                <div class="md:col-span-4">
+                    <label for="{{ form.bairro.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.bairro.label }}</label>
+                    {{ form.bairro }}
+                </div>
+                <div class="md:col-span-4">
+                    <label for="{{ form.cidade.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.cidade.label }}</label>
+                    {{ form.cidade }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.estado.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.estado.label }}</label>
+                    {{ form.estado }}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.cep.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.cep.label }}</label>
+                    {{ form.cep }}
+                </div>
+                
+                <div class="md:col-span-12">
+                    <label for="{{ form.pais.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.pais.label }}</label>
+                    {{ form.pais }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Empresa Grupo ROM -->
+        <div class="border-t border-slate-200 pt-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" 
+                               x-model="empresaGruporom"
+                               name="{{ form.empresa_gruporom.html_name }}" 
+                               class="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                               {% if form.empresa_gruporom.value %}checked{% endif %}>
+                        <span class="ml-2 text-sm font-medium text-slate-700">{{ form.empresa_gruporom.label }}</span>
+                    </label>
+                </div>
+                
+                <div x-show="empresaGruporom" x-transition>
+                    <label for="{{ form.tipo_empresa.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.tipo_empresa.label }}</label>
+                    {{ form.tipo_empresa }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
+</div>
+{% endblock %}
 
-<script>
-    // Inicializa o modal do Bootstrap quando carregado via HTMX
-    (function() {
-        const modalElement = document.getElementById('pessoaEditModal');
-        if (modalElement && window.bootstrap) {
-            const modal = new window.bootstrap.Modal(modalElement);
-            
-            // Remove os elementos do DOM quando o modal for fechado
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.remove();
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) backdrop.remove();
-            });
-            
-            // Interceptar submissão do formulário para debug
-            const form = modalElement.querySelector('form');
-            if (form) {
-                modalElement.addEventListener('htmx:afterRequest', function(evt) {
-                    // Se o response contém HX-Redirect, não reabrir modal
-                    if (evt.detail.xhr.getResponseHeader('HX-Redirect')) {
-                        modal.hide();
-                        return;
-                    }
-                });
-            }
-            
-            // Mostra o modal imediatamente
-            modal.show();
-        }
-        
-        // Controlar visibilidade do campo tipo_empresa baseado no checkbox empresa_gruporom
-        const empresaGruporomCheckbox = document.getElementById('{{ form.empresa_gruporom.id_for_label }}');
-        const tipoEmpresaField = document.getElementById('tipo-empresa-field-edit');
-        
-        if (empresaGruporomCheckbox && tipoEmpresaField) {
-            // Função para mostrar/ocultar campo
-            function toggleTipoEmpresa() {
-                if (empresaGruporomCheckbox.checked) {
-                    tipoEmpresaField.style.display = 'block';
-                } else {
-                    tipoEmpresaField.style.display = 'none';
-                    // Limpar seleção quando ocultar
-                    const tipoEmpresaSelect = tipoEmpresaField.querySelector('select');
-                    if (tipoEmpresaSelect) {
-                        tipoEmpresaSelect.value = '';
-                    }
-                }
-            }
-            
-            // Escutar mudanças no checkbox
-            empresaGruporomCheckbox.addEventListener('change', toggleTipoEmpresa);
-        }
-        
-        // ===== MÁSCARAS DE TELEFONE DINÂMICAS =====
-        function aplicarMascaraTelefone(telefoneInput, ddiInput) {
-            if (!window.IMask || !telefoneInput) return;
-            
-            function updateMask() {
-                const ddi = ddiInput ? ddiInput.value : '55';
-                
-                // Destruir máscara anterior se existir
-                if (telefoneInput._imask) {
-                    telefoneInput._imask.destroy();
-                }
-                
-                if (ddi === '55') {
-                    // Brasil: celular (9xxxx-xxxx) ou fixo (xxxx-xxxx)
-                    telefoneInput._imask = IMask(telefoneInput, {
-                        mask: [
-                            {
-                                mask: '00000-0000',
-                                startsWith: '9',
-                                country: 'Brasil'
-                            },
-                            {
-                                mask: '0000-0000',
-                                startsWith: '',
-                                country: 'Brasil'
-                            }
-                        ]
-                    });
-                } else {
-                    // Outros países: sem máscara
-                    telefoneInput._imask = null;
-                }
-            }
-            
-            // Aplicar máscara inicial
-            updateMask();
-            
-            // Escutar mudanças no DDI
-            if (ddiInput) {
-                ddiInput.addEventListener('input', updateMask);
-                ddiInput.addEventListener('change', updateMask);
-            }
-        }
-        
-        // Aplicar máscaras nos campos de telefone
-        aplicarMascaraTelefone(document.getElementById('id_telefone1'), document.getElementById('id_ddi1'));
-        aplicarMascaraTelefone(document.getElementById('id_telefone2'), document.getElementById('id_ddi2'));
-        aplicarMascaraTelefone(document.getElementById('id_telefone3'), document.getElementById('id_ddi3'));
-        
-    })();
-</script>
+{% block modal_footer %}
+<button type="button" 
+        class="px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
+        @click="close()">
+    Cancelar
+</button>
+<button type="submit" 
+        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors flex items-center">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    Atualizar
+</button>
+{% endblock %}

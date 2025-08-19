@@ -8,44 +8,51 @@
     {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Pessoas' %}
     
     <!-- Busca e Filtros -->
-    <div class="bg-white rounded-lg shadow-sm border mb-6">
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 mb-6">
         <div class="p-6">
             <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4" 
                   hx-get="{% url 'administracao:pessoas_lista' %}"
                   hx-target="#pessoas-lista"
                   hx-swap="outerHTML"
                   hx-push-url="true"
-                  hx-trigger="submit, change from:select"
+                  hx-trigger="submit"
                   hx-include="this"
                   hx-indicator="#search-indicator">
                 <div class="md:col-span-7">
                     <input type="text" name="search" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
                            placeholder="Buscar por nome, CPF/CNPJ ou email..." 
                            value="{{ search }}">
                 </div>
                 <div class="md:col-span-3">
-                    <select name="tipo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                    <select name="tipo" class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         <option value="">Todos os Tipos</option>
                         <option value="pf" {% if tipo_filter == 'pf' %}selected{% endif %}>Pessoa Física</option>
                         <option value="pj" {% if tipo_filter == 'pj' %}selected{% endif %}>Pessoa Jurídica</option>
                         <option value="gruporom" {% if tipo_filter == 'gruporom' %}selected{% endif %}>Empresa Grupo ROM</option>
                     </select>
                 </div>
-                <div class="md:col-span-2">
-                    <button type="submit" class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors flex items-center justify-center">
-                        <span class="htmx-indicator" id="search-indicator">
-                            <svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24">
+                <div class="md:col-span-2 flex gap-1 items-stretch">
+                    <a href="{% url 'administracao:pessoas_lista' %}"
+                       class="w-10 h-10 bg-slate-500 hover:bg-slate-600 text-white rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md"
+                       title="Limpar filtros">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
+                    <button type="submit" class="flex-1 h-10 bg-primary-600 hover:bg-primary-700 text-white px-3 rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md text-sm font-medium">
+                        <span class="htmx-indicator flex items-center justify-center" id="search-indicator">
+                            <svg class="animate-spin w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Buscando...
+                            <span class="hidden sm:inline">Buscando...</span>
                         </span>
-                        <span class="htmx-indicator-none">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="htmx-indicator-none flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
-                            Buscar
+                            <span class="hidden sm:inline">Buscar</span>
                         </span>
                     </button>
                 </div>
@@ -58,7 +65,7 @@
 </div>
 
 <!-- Floating Action Button -->
-<button class="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg transition-colors flex items-center justify-center z-40"
+<button class="fixed bottom-6 right-6 bg-primary-600 hover:bg-primary-700 text-white w-14 h-14 rounded-full shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-700/30 transition-all flex items-center justify-center z-40"
         hx-get="{% url 'administracao:pessoas_nova_modal' %}"
         hx-target="body"
         hx-swap="beforeend"

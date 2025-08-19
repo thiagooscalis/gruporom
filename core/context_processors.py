@@ -42,7 +42,7 @@ def dados_globais(request):
     area = None
     tipos_empresa_usuario = []
     
-    if request.user.is_authenticated:
+    if hasattr(request, 'user') and request.user and request.user.is_authenticated:
         try:
             for group in request.user.groups.all():
                 group_slug = slugify(group.name)

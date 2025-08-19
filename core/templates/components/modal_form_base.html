@@ -1,0 +1,83 @@
+<!-- Modal Form Base Component -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50" 
+     x-data="{ 
+         show: false,
+         init() {
+             this.$nextTick(() => {
+                 this.show = true;
+             });
+         },
+         close() {
+             this.show = false;
+             setTimeout(() => {
+                 $el.remove();
+             }, 300);
+         }
+     }" 
+     x-init="init()"
+     x-show="show" 
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     @keydown.escape="close()"
+     @click.self="close()"
+     @close-modal="close()">
+    
+    <!-- Modal Dialog -->
+    <div class="bg-white rounded-lg shadow-xl {% block modal_size %}max-w-4xl{% endblock %} w-full mx-4 {% block modal_height %}max-h-[90vh] overflow-y-auto{% endblock %}"
+         @click.stop
+         x-show="show"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform scale-95"
+         x-transition:enter-end="opacity-100 transform scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform scale-100"
+         x-transition:leave-end="opacity-0 transform scale-95">
+        
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 {% block header_bg %}{% endblock %}">
+            <h3 class="text-lg font-semibold {% block header_text_color %}text-slate-900{% endblock %} flex items-center">
+                {% block header_icon %}{% endblock %}
+                {% block modal_title %}Modal Title{% endblock %}
+            </h3>
+            <button type="button" 
+                    @click="close()"
+                    class="{% block close_button_color %}text-slate-400 hover:text-slate-500{% endblock %} focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Modal Form -->
+        <form {% block form_attributes %}{% endblock %}>
+            {% csrf_token %}
+            {% block modal_content %}
+            <div class="px-6 py-4">
+                <p class="text-gray-600">Content goes here...</p>
+            </div>
+            {% endblock %}
+            
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end px-6 py-4 border-t border-slate-200 space-x-3">
+                {% block modal_footer %}
+                <button type="button" 
+                        class="px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
+                        @click="close()">
+                    Cancelar
+                </button>
+                <button type="submit" 
+                        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                    </svg>
+                    Salvar
+                </button>
+                {% endblock %}
+            </div>
+        </form>
+    </div>
+</div>

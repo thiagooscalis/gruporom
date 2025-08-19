@@ -1,75 +1,101 @@
-<div class="modal-header">
-    <h5 class="modal-title text-danger">
-        <i class="fas fa-exclamation-triangle me-2"></i>{{ title }}
-    </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-</div>
+{% extends "components/modal_delete_base.html" %}
 
-<div class="modal-body">
-    <div class="alert alert-warning d-flex align-items-center">
-        <i class="fas fa-exclamation-triangle me-3"></i>
-        <div>
-            <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+{% block modal_title %}{{ title }}{% endblock %}
+
+{% block confirmation_question %}Você tem certeza que deseja excluir este turno?{% endblock %}
+
+{% block item_details %}
+<div class="bg-gray-50 border rounded-lg p-4 mb-4 space-y-3">
+    <div class="flex justify-between">
+        <span class="text-sm text-gray-600">Nome:</span>
+        <span class="font-semibold text-gray-900">{{ turno.nome }}</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex justify-between">
+            <span class="text-sm text-gray-600">Horário:</span>
+            <span class="text-gray-900">{{ turno.inicio|time:"H:i" }} - {{ turno.fim|time:"H:i" }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-sm text-gray-600">Duração:</span>
+            <span class="text-gray-900">{{ turno.duracao_horas|floatformat:1 }}h</span>
         </div>
     </div>
     
-    <p class="mb-3">Você tem certeza que deseja excluir o turno:</p>
-    
-    <div class="card bg-light">
-        <div class="card-body">
-            <h6 class="card-title mb-2">{{ turno.nome }}</h6>
-            <div class="row">
-                <div class="col-sm-6">
-                    <small class="text-muted">Horário:</small><br>
-                    <span class="fw-bold">{{ turno.inicio|time:"H:i" }} - {{ turno.fim|time:"H:i" }}</span>
-                </div>
-                <div class="col-sm-6">
-                    <small class="text-muted">Duração:</small><br>
-                    <span class="fw-bold">{{ turno.duracao_horas|floatformat:1 }}h</span>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-sm-6">
-                    <small class="text-muted">Tipo:</small><br>
-                    {% if turno.eh_noturno %}
-                        <span class="badge bg-dark">
-                            <i class="fas fa-moon me-1"></i>Noturno
-                        </span>
-                    {% else %}
-                        <span class="badge bg-warning text-dark">
-                            <i class="fas fa-sun me-1"></i>Diurno
-                        </span>
-                    {% endif %}
-                </div>
-                <div class="col-sm-6">
-                    <small class="text-muted">Status:</small><br>
-                    {% if turno.ativo %}
-                        <span class="badge bg-success">Ativo</span>
-                    {% else %}
-                        <span class="badge bg-secondary">Inativo</span>
-                    {% endif %}
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex justify-between">
+            <span class="text-sm text-gray-600">Tipo:</span>
+            {% if turno.eh_noturno %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-white">
+                    Noturno
+                </span>
+            {% else %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    Diurno
+                </span>
+            {% endif %}
+        </div>
+        <div class="flex justify-between">
+            <span class="text-sm text-gray-600">Status:</span>
+            {% if turno.ativo %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Ativo</span>
+            {% else %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Inativo</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block warning_messages %}
+{% if error %}
+<div class="bg-red-50 border border-red-200 rounded-md p-4">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+        </div>
+        <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+                Erro:
+            </h3>
+            <div class="mt-2 text-sm text-red-700">
+                <p>{{ error }}</p>
             </div>
         </div>
     </div>
-    
-    {% if error %}
-        <div class="alert alert-danger mt-3">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+</div>
+{% else %}
+<div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-yellow-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
         </div>
-    {% endif %}
+        <div class="ml-3">
+            <h3 class="text-sm font-medium text-yellow-800">
+                Atenção:
+            </h3>
+            <div class="mt-2 text-sm text-yellow-700">
+                <p>Esta ação não pode ser desfeita. O turno será removido permanentemente do sistema.</p>
+            </div>
+        </div>
+    </div>
 </div>
+{% endif %}
+{% endblock %}
 
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-    <form method="post" 
-          hx-post="{% url action_url turno.id %}"
-          hx-target="#modalTurno .modal-content" 
-          hx-swap="innerHTML"
-          class="d-inline">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">
-            <i class="fas fa-trash me-2"></i>Sim, excluir turno
-        </button>
-    </form>
-</div>
+{% block delete_button %}
+<form hx-post="{% url action_url turno.id %}" hx-target="body" hx-swap="beforeend" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" 
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+        </svg>
+        Sim, excluir turno
+    </button>
+</form>
+{% endblock %}

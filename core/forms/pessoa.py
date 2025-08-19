@@ -1,12 +1,43 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.core.exceptions import ValidationError
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field
 from core.models import Pessoa, Pais
 from core.choices import TIPO_EMPRESA_CHOICES
 from core.utils.validators import validate_documento_pessoa, limpar_documento
 
 
 class PessoaForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        
+        # Adicionar classes Tailwind CSS para todos os campos
+        for field_name, field in self.fields.items():
+            # Classes base para todos os inputs
+            base_classes = "w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            
+            # Adicionar classes específicas baseadas no tipo de widget
+            if isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs['class'] = "rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                # Manter o x-model para o campo empresa_gruporom
+                if field_name == 'empresa_gruporom':
+                    field.widget.attrs['x-model'] = 'empresaGruporom'
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs['class'] = base_classes
+            elif isinstance(field.widget, forms.DateInput):
+                field.widget.attrs['class'] = base_classes
+            else:
+                field.widget.attrs['class'] = base_classes
+                
+            # Adicionar placeholders existentes
+            if field_name in ['ddi1', 'ddi2', 'ddi3']:
+                field.widget.attrs['placeholder'] = '55'
+            elif field_name in ['ddd1', 'ddd2', 'ddd3']:
+                field.widget.attrs['placeholder'] = '11'
     
     class Meta:
         model = Pessoa

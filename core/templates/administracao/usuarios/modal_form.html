@@ -1,40 +1,22 @@
 
-<div class="modal fade" id="usuarioModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Novo Usuário</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <form hx-post="{% url 'administracao:usuarios_criar' %}" hx-target="#form-content" hx-swap="innerHTML">
-                <div id="form-content">
-                    {% include 'administracao/usuarios/form_content.html' %}
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+{% extends "components/modal_form_base.html" %}
 
-<script>
-    // Inicializa o modal do Bootstrap quando carregado via HTMX
-    (function() {
-        const modalElement = document.getElementById('usuarioModal');
-        if (modalElement && window.bootstrap) {
-            // Verifica se já existe um modal aberto
-            const existingModal = window.bootstrap.Modal.getInstance(modalElement);
-            const modal = existingModal || new window.bootstrap.Modal(modalElement);
-            
-            // Remove os elementos do DOM quando o modal for fechado
-            if (!existingModal) {
-                modalElement.addEventListener('hidden.bs.modal', function() {
-                    modalElement.remove();
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) backdrop.remove();
-                });
-            }
-            
-            // Mostra o modal imediatamente
-            modal.show();
-        }
-    })();
-</script>
+{% block header_bg %}bg-primary-600{% endblock %}
+{% block header_text_color %}text-white{% endblock %}
+{% block close_button_color %}text-primary-200 hover:text-white{% endblock %}
+
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.764z" />
+</svg>
+Novo Usuário
+{% endblock %}
+
+{% block form_attributes %}hx-post="{% url 'administracao:usuarios_criar' %}" hx-target="#form-content" hx-swap="innerHTML"{% endblock %}
+
+{% block modal_content %}
+<div id="form-content">
+    {% include 'administracao/usuarios/form_content.html' %}
+</div>
+{% endblock %}
+

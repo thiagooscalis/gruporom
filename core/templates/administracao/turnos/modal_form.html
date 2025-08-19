@@ -1,57 +1,66 @@
 
-<div class="modal-header">
-    <h5 class="modal-title">{{ title }}</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-</div>
+{% extends "components/modal_form_base.html" %}
 
-<form method="post" 
-      {% if turno_id %}
-          hx-post="{% url action_url turno_id %}"
-      {% else %}
-          hx-post="{% url action_url %}"
-      {% endif %}
-      hx-target="#modalTurno .modal-content" 
-      hx-swap="innerHTML">
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+</svg>
+{{ title }}
+{% endblock %}
+
+{% block modal_size %}max-w-lg{% endblock %}
+
+{% block form_attributes %}hx-post="{% if turno_id %}{% url action_url turno_id %}{% else %}{% url action_url %}{% endif %}" hx-target="body" hx-swap="beforeend"{% endblock %}
+
+{% block modal_content %}
+<div class="px-6 py-4 space-y-4">
     {% csrf_token %}
     
-    <div class="modal-body">
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
+    {% if form.non_field_errors %}
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div class="text-red-800">
                 {{ form.non_field_errors }}
             </div>
+        </div>
+    {% endif %}
+    
+    <!-- Nome -->
+    <div>
+        <label for="{{ form.nome.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.nome.label }}</label>
+        <input type="text" id="{{ form.nome.id_for_label }}" name="{{ form.nome.name }}" value="{{ form.nome.value|default:'' }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        {% if form.nome.errors %}
+            <div class="mt-2 text-sm text-red-600">
+                {% for error in form.nome.errors %}{{ error }}{% endfor %}
+            </div>
         {% endif %}
-        
-        <div class="row">
-            <div class="col-12">
-                {{ form.nome|as_crispy_field }}
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                {{ form.inicio|as_crispy_field }}
-            </div>
-            <div class="col-md-6">
-                {{ form.fim|as_crispy_field }}
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-12">
-                <div class="form-check">
-                    {{ form.ativo }}
-                    <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
-                        {{ form.ativo.label }}
-                    </label>
+    </div>
+    
+    <!-- Horários -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label for="{{ form.inicio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.inicio.label }}</label>
+            <input type="time" id="{{ form.inicio.id_for_label }}" name="{{ form.inicio.name }}" value="{{ form.inicio.value|default:'' }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            {% if form.inicio.errors %}
+                <div class="mt-2 text-sm text-red-600">
+                    {% for error in form.inicio.errors %}{{ error }}{% endfor %}
                 </div>
-            </div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="{{ form.fim.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.fim.label }}</label>
+            <input type="time" id="{{ form.fim.id_for_label }}" name="{{ form.fim.name }}" value="{{ form.fim.value|default:'' }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            {% if form.fim.errors %}
+                <div class="mt-2 text-sm text-red-600">
+                    {% for error in form.fim.errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-save me-2"></i>Salvar
-        </button>
+    <!-- Ativo -->
+    <div class="flex items-center">
+        <input type="checkbox" id="{{ form.ativo.id_for_label }}" name="{{ form.ativo.name }}" {% if form.ativo.value %}checked{% endif %} class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+        <label for="{{ form.ativo.id_for_label }}" class="ml-3 block text-sm font-medium text-gray-700">{{ form.ativo.label }}</label>
     </div>
-</form>
+</div>
+{% endblock %}

@@ -2,132 +2,108 @@
 
 {% block title %}Administracao - Grupo ROM{% endblock %}
 
-{% block sidebar_menu %}
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-        <a class="nav-link active" href="">
-            <i class="fas fa-home me-2"></i>Inicio
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-users me-2"></i>Usuarios
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-address-book me-2"></i>Pessoas
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-layer-group me-2"></i>Grupos
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-cog me-2"></i>Configuracoes
-        </a>
-    </li>
-</ul>
-{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        {% include 'includes/breadcrumbs.html' with cur_page='Administração' %}
-    </div>
+<div class="mb-4">
+    {% include 'includes/breadcrumbs.html' with cur_page='Administração' %}
 </div>
 
 <!-- Resumo Executivo -->
-<div class="row g-4 mb-4">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Estatísticas Principais -->
-    <div class="col-lg-8">
-        <div class="row g-4">
+    <div class="lg:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Usuários -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-users text-primary fa-2x"></i>
-                        </div>
-                        <h3 class="text-primary mb-1">{{ total_usuarios|default:0 }}</h3>
-                        <p class="text-muted mb-0">Usuários Ativos</p>
-                        <a href="{% url 'administracao:usuarios_lista' %}" class="btn btn-outline-primary btn-sm mt-2">
-                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
-                        </a>
-                    </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-100 text-blue-600 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
                 </div>
+                <h3 class="text-2xl font-bold text-blue-600 mb-1">{{ total_usuarios|default:0 }}</h3>
+                <p class="text-gray-600 mb-3">Usuários Ativos</p>
+                <a href="{% url 'administracao:usuarios_lista' %}" class="inline-flex items-center px-3 py-1 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors">
+                    <span class="mr-1">Gerenciar</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
             </div>
 
             <!-- Pessoas -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-address-book text-success fa-2x"></i>
-                        </div>
-                        <h3 class="text-success mb-1">{{ total_pessoas|default:0 }}</h3>
-                        <p class="text-muted mb-0">Pessoas Cadastradas</p>
-                        <a href="{% url 'administracao:pessoas_lista' %}" class="btn btn-outline-success btn-sm mt-2">
-                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
-                        </a>
-                    </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-green-100 text-green-600 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
                 </div>
+                <h3 class="text-2xl font-bold text-green-600 mb-1">{{ total_pessoas|default:0 }}</h3>
+                <p class="text-gray-600 mb-3">Pessoas Cadastradas</p>
+                <a href="{% url 'administracao:pessoas_lista' %}" class="inline-flex items-center px-3 py-1 text-sm border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors">
+                    <span class="mr-1">Gerenciar</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
             </div>
 
             <!-- Fornecedores -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-truck text-warning fa-2x"></i>
-                        </div>
-                        <h3 class="text-warning mb-1">{{ total_fornecedores|default:0 }}</h3>
-                        <p class="text-muted mb-0">Fornecedores</p>
-                        <a href="{% url 'administracao:fornecedores_lista' %}" class="btn btn-outline-warning btn-sm mt-2">
-                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
-                        </a>
-                    </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-yellow-100 text-yellow-600 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                    </svg>
                 </div>
+                <h3 class="text-2xl font-bold text-yellow-600 mb-1">{{ total_fornecedores|default:0 }}</h3>
+                <p class="text-gray-600 mb-3">Fornecedores</p>
+                <a href="{% url 'administracao:fornecedores_lista' %}" class="inline-flex items-center px-3 py-1 text-sm border border-yellow-600 text-yellow-600 rounded hover:bg-yellow-50 transition-colors">
+                    <span class="mr-1">Gerenciar</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
             </div>
 
             <!-- Colaboradores -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-user-tie text-info fa-2x"></i>
-                        </div>
-                        <h3 class="text-info mb-1">{{ total_colaboradores|default:0 }}</h3>
-                        <p class="text-muted mb-0">Colaboradores</p>
-                        <a href="{% url 'administracao:colaboradores_lista' %}" class="btn btn-outline-info btn-sm mt-2">
-                            <i class="fas fa-arrow-right me-1"></i>Gerenciar
-                        </a>
-                    </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-cyan-100 text-cyan-600 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                    </svg>
                 </div>
+                <h3 class="text-2xl font-bold text-cyan-600 mb-1">{{ total_colaboradores|default:0 }}</h3>
+                <p class="text-gray-600 mb-3">Colaboradores</p>
+                <a href="{% url 'administracao:colaboradores_lista' %}" class="inline-flex items-center px-3 py-1 text-sm border border-cyan-600 text-cyan-600 rounded hover:bg-cyan-50 transition-colors">
+                    <span class="mr-1">Gerenciar</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
 
     <!-- Informações do Sistema -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-header bg-transparent border-0">
-                <h6 class="mb-0">
-                    <i class="fas fa-info-circle me-2 text-muted"></i>
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h6 class="flex items-center text-gray-700 font-semibold">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-gray-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                    </svg>
                     Informações do Sistema
                 </h6>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 <!-- Usuário Logado -->
-                <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
-                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                        <i class="fas fa-user text-white"></i>
+                <div class="flex items-center mb-4 p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
                     </div>
                     <div>
-                        <div class="fw-bold">{{ user.pessoa.nome|default:user.username }}</div>
-                        <small class="text-muted">
+                        <div class="font-semibold text-gray-800">{{ user.pessoa.nome|default:user.username }}</div>
+                        <small class="text-gray-600">
                             {% for group in user.groups.all %}{{ group.name }}{% empty %}Usuário{% endfor %}
                         </small>
                     </div>
@@ -135,46 +111,59 @@
 
                 <!-- Câmbio do Dia -->
                 {% if dolar_hoje %}
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">
-                            <i class="fas fa-dollar-sign me-1"></i>Dólar Hoje
+                <div class="mb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Dólar Hoje
                         </span>
-                        <span class="fw-bold text-success">R$ {{ dolar_hoje|floatformat:4 }}</span>
+                        <span class="font-bold text-green-600">R$ {{ dolar_hoje|floatformat:4 }}</span>
                     </div>
                 </div>
                 {% endif %}
 
                 <!-- Status Sistema -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">
-                            <i class="fas fa-server me-1"></i>Sistema
+                <div class="mb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" />
+                            </svg>
+                            Sistema
                         </span>
-                        <span class="text-success">
-                            <i class="fas fa-check-circle me-1"></i>Online
+                        <span class="flex items-center text-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Online
                         </span>
                     </div>
                 </div>
 
                 <!-- Último Acesso -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">
-                            <i class="fas fa-clock me-1"></i>Último Acesso
+                <div class="mb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Último Acesso
                         </span>
-                        <small class="text-muted">{{ user.last_login|date:"d/m/Y H:i"|default:"Primeiro acesso" }}</small>
+                        <small class="text-gray-600">{{ user.last_login|date:"d/m/Y H:i"|default:"Primeiro acesso" }}</small>
                     </div>
                 </div>
 
-                <hr class="my-3">
+                <hr class="my-4 border-gray-200">
 
                 <!-- Acesso Rápido WhatsApp -->
-                <div class="d-grid">
-                    <a href="{% url 'administracao:whatsapp:dashboard' %}" class="btn btn-success">
-                        <i class="fab fa-whatsapp me-2"></i>WhatsApp Business
-                    </a>
-                </div>
+                <a href="{% url 'administracao:whatsapp:dashboard' %}" class="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c.01-4.54 3.7-8.23 8.25-8.23M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.12.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.24-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.51.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.47-.01Z"/>
+                    </svg>
+                    WhatsApp Business
+                </a>
             </div>
         </div>
     </div>

@@ -3,159 +3,73 @@
 {% block title %}Usuários - Administração{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Usuários' %}
-            
-            <!-- Busca -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="get" class="row g-3">
-                        <div class="col-md-10">
-                            <input type="text" name="search" class="form-control" 
-                                   placeholder="Buscar por nome de usuário, nome da pessoa ou email..." 
-                                   value="{{ search }}">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-secondary w-100">
-                                <i class="fas fa-search me-2"></i>Buscar
-                            </button>
-                        </div>
-                    </form>
+<div class="w-full">
+    {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Usuários' %}
+    
+    <!-- Busca e Filtros -->
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 mb-6">
+        <div class="p-6">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4" 
+                  hx-get="{% url 'administracao:usuarios_lista' %}"
+                  hx-target="#usuarios-lista"
+                  hx-swap="outerHTML"
+                  hx-push-url="true"
+                  hx-trigger="submit"
+                  hx-include="this"
+                  hx-indicator="#search-indicator">
+                <div class="md:col-span-7">
+                    <input type="text" name="search" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
+                           placeholder="Buscar por nome de usuário, nome da pessoa ou email..." 
+                           value="{{ search }}">
                 </div>
-            </div>
-            
-            <!-- Listagem -->
-            <div class="card">
-                <div class="card-body">
-                    {% if page_obj %}
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Usuário</th>
-                                    <th>Nome da Pessoa</th>
-                                    <th>Email</th>
-                                    <th>Grupos</th>
-                                    <th>Empresas</th>
-                                    <th class="text-center">Status</th>
-                                    <th width="120">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for usuario in page_obj %}
-                                <tr>
-                                    <td>
-                                        <strong>{{ usuario.username }}</strong>
-                                    </td>
-                                    <td>{{ usuario.pessoa.nome }}</td>
-                                    <td>{{ usuario.pessoa.email|default:"-" }}</td>
-                                    <td>
-                                        {% for group in usuario.groups.all %}
-                                            <span class="badge bg-secondary me-1">{{ group.name }}</span>
-                                        {% empty %}
-                                            <span class="text-muted">Nenhum grupo</span>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for empresa in usuario.empresas.all %}
-                                            <div class="small">{{ empresa.nome }}</div>
-                                        {% empty %}
-                                            <span class="text-muted">Nenhuma empresa</span>
-                                        {% endfor %}
-                                    </td>
-                                    <td class="text-center">
-                                        {% if usuario.is_active %}
-                                            <span class="badge bg-success">Ativo</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Inativo</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
-                                                hx-get="{% url 'administracao:usuarios_editar_modal' usuario.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
-                                                hx-get="{% url 'administracao:usuarios_excluir_modal' usuario.pk %}"
-                                                hx-target="body"
-                                                hx-swap="beforeend">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="7" class="text-center text-muted py-4">
-                                        Nenhum usuário encontrado
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Paginação -->
-                    {% if page_obj.has_other_pages %}
-                    <nav aria-label="Paginação" class="mt-4">
-                        <ul class="pagination justify-content-center">
-                            {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
-                            </li>
-                            {% endif %}
-                            
-                            {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                <li class="page-item active">
-                                    <span class="page-link">{{ num }}</span>
-                                </li>
-                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    {% endif %}
-                    {% else %}
-                    <p class="text-center text-muted">Nenhum usuário cadastrado.</p>
-                    {% endif %}
+                <div class="md:col-span-3">
+                    <select name="status" class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="">Todos os Status</option>
+                        <option value="ativo" {% if status_filter == 'ativo' %}selected{% endif %}>Ativo</option>
+                        <option value="inativo" {% if status_filter == 'inativo' %}selected{% endif %}>Inativo</option>
+                    </select>
                 </div>
-            </div>
+                <div class="md:col-span-2 flex gap-1 items-stretch">
+                    <a href="{% url 'administracao:usuarios_lista' %}"
+                       class="w-10 h-10 bg-slate-500 hover:bg-slate-600 text-white rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md"
+                       title="Limpar filtros">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
+                    <button type="submit" class="flex-1 h-10 bg-primary-600 hover:bg-primary-700 text-white px-3 rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md text-sm font-medium">
+                        <span class="htmx-indicator flex items-center justify-center" id="search-indicator">
+                            <svg class="animate-spin w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Buscando...</span>
+                        </span>
+                        <span class="htmx-indicator-none flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Buscar</span>
+                        </span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+    
+    <!-- Listagem (via partial com HTMX) -->
+    {% include 'administracao/usuarios/partial_lista.html' %}
 </div>
 
 <!-- Floating Action Button -->
-<a href="#" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center"
-   style="width: 56px; height: 56px;"
-   hx-get="{% url 'administracao:usuarios_novo_modal' %}"
-   hx-target="body"
-   hx-swap="beforeend"
-   title="Novo Usuário">
-    <i class="fas fa-plus text-white"></i>
-</a>
+<button class="fixed bottom-6 right-6 bg-primary-600 hover:bg-primary-700 text-white w-14 h-14 rounded-full shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-700/30 transition-all flex items-center justify-center z-40"
+        hx-get="{% url 'administracao:usuarios_novo_modal' %}"
+        hx-target="body"
+        hx-swap="beforeend"
+        title="Novo Usuário">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    </svg>
+</button>
 {% endblock %}

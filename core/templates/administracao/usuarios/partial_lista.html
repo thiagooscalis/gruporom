@@ -1,0 +1,107 @@
+<!-- Listagem -->
+<div class="bg-white rounded-lg shadow-md border border-slate-200" id="usuarios-lista">
+    <div class="p-6">
+        {% if page_obj %}
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="border-b border-slate-200 bg-slate-50">
+                    <tr>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Usuário</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Nome da Pessoa</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Email</th>
+                        <th class="text-left py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Grupos</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs">Status</th>
+                        <th class="text-center py-3 px-4 font-medium text-slate-500 uppercase tracking-wider text-xs w-36">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="usuarios-tbody" class="divide-y divide-slate-200">
+                    {% for usuario in page_obj %}
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-4 text-slate-900 font-medium">{{ usuario.username }}</td>
+                        <td class="py-3 px-4 text-slate-600 text-sm">{{ usuario.pessoa.nome }}</td>
+                        <td class="py-3 px-4 text-slate-600 text-sm">{{ usuario.pessoa.email1|default:"-" }}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex flex-wrap gap-1">
+                                {% for group in usuario.groups.all %}
+                                    {% if group.name == 'Administração' %}
+                                        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-primary-100 text-primary-800">{{ group.name }}</span>
+                                    {% elif group.name == 'Comercial' %}
+                                        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-info-100 text-info-800">{{ group.name }}</span>
+                                    {% elif group.name == 'Operacional' %}
+                                        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-success-100 text-success-800">{{ group.name }}</span>
+                                    {% elif group.name == 'Promotor' %}
+                                        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-warning-100 text-warning-800">{{ group.name }}</span>
+                                    {% else %}
+                                        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-slate-100 text-slate-800">{{ group.name }}</span>
+                                    {% endif %}
+                                {% empty %}
+                                    <span class="text-sm text-slate-500">Nenhum grupo</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            {% if usuario.is_active %}
+                                <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-success-100 text-success-800">Ativo</span>
+                            {% else %}
+                                <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-danger-100 text-danger-800">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4">
+                            <div class="flex justify-center space-x-1">
+                                <button type="button" class="p-1.5 text-primary-600 hover:text-primary-800 hover:bg-primary-50 rounded transition-colors" title="Editar"
+                                        hx-get="{% url 'administracao:usuarios_editar_modal' usuario.pk %}"
+                                        hx-target="body"
+                                        hx-swap="beforeend">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="p-1.5 text-danger-600 hover:text-danger-800 hover:bg-danger-50 rounded transition-colors" title="Excluir"
+                                        hx-get="{% url 'administracao:usuarios_excluir_modal' usuario.pk %}"
+                                        hx-target="body"
+                                        hx-swap="beforeend">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="py-12 text-center text-slate-500">
+                            <svg class="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                            </svg>
+                            Nenhum usuário encontrado
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Botão Carregar Mais -->
+        {% if page_obj.has_next %}
+        <div class="text-center mt-6" id="carregar-mais-container">
+            <button type="button" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm"
+                    hx-get="{% url 'administracao:usuarios_lista' %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}&load_more=1"
+                    hx-target="#usuarios-tbody"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Carregar mais ({{ restantes }} restantes)
+            </button>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+            </svg>
+            <p class="text-slate-500">Nenhum usuário cadastrado.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

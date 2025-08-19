@@ -1,225 +1,255 @@
 
-<div class="modal fade" id="usuarioEditModal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="true" data-bs-keyboard="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar Usuário - {{ usuario.username }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+{% extends "components/modal_form_base.html" %}
+
+{% block header_bg %}bg-primary-600{% endblock %}
+{% block header_text_color %}text-white{% endblock %}
+{% block close_button_color %}text-primary-200 hover:text-white{% endblock %}
+
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+</svg>
+Editar Usuário - {{ usuario.username }}
+{% endblock %}
+
+{% block form_attributes %}hx-post="{% url 'administracao:usuarios_atualizar' usuario.pk %}" hx-target="#modal-body-content" hx-swap="outerHTML" enctype="multipart/form-data"{% endblock %}
+
+{% block modal_content %}
+<div class="px-6 py-4 space-y-6">
+    <!-- Seção: Dados da Pessoa -->
+    <div>
+        <h3 class="text-lg font-medium text-primary-600 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            Pessoa Vinculada
+        </h3>
+        
+        <!-- Campo hidden para ID do usuário -->
+        <input type="hidden" name="usuario_id" value="{{ usuario.pk }}">
+        
+        <div class="flex gap-3 items-start">
+            <div class="flex-grow">
+                {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_edicao_url selected_label="Pessoa selecionada:" include_params=usuario_id_param %}
             </div>
-            <form hx-post="{% url 'administracao:usuarios_atualizar' usuario.pk %}" hx-target="#usuarioEditModal" hx-swap="outerHTML">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <!-- Seção: Dados da Pessoa -->
-                    <div class="card border-0 bg-light mb-4">
-                        <div class="card-header bg-transparent border-0 pb-0">
-                            <h6 class="text-primary mb-0">
-                                <i class="fas fa-user me-2"></i>Pessoa Vinculada
-                            </h6>
-                        </div>
-                        <div class="card-body pt-2">
-                            <!-- Campo hidden para ID do usuário (usado na busca de pessoas) -->
-                            <input type="hidden" id="usuario-id-{{ usuario.pk }}" name="usuario_id" value="{{ usuario.pk }}">
-                            
-                            <div class="d-flex gap-2 align-items-start">
-                                <div class="flex-grow-1">
-                                    {% include 'components/autocomplete_field.html' with search_field=form.pessoa_search hidden_field=form.pessoa search_url=buscar_pessoas_edicao_url selected_label="Pessoa selecionada:" include_params=usuario_id_param %}
-                                </div>
-                                <div style="margin-top: 2rem;">
-                                    <button type="button" class="btn btn-outline-success" 
-                                            onclick="abrirModalPessoaEdicao()"
-                                            title="Criar Nova Pessoa">
-                                        <i class="fas fa-user-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seção: Credenciais de Acesso -->
-                    <div class="card border-0 bg-light mb-4">
-                        <div class="card-header bg-transparent border-0 pb-0">
-                            <h6 class="text-primary mb-0">
-                                <i class="fas fa-key me-2"></i>Credenciais de Acesso
-                            </h6>
-                        </div>
-                        <div class="card-body pt-2">
-                            <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    {{ form.username|as_crispy_field }}
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    {{ form.password|as_crispy_field }}
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    {{ form.password_confirm|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seção: Configurações do Usuário -->
-                    <div class="card border-0 bg-light mb-4">
-                        <div class="card-header bg-transparent border-0 pb-0">
-                            <h6 class="text-primary mb-0">
-                                <i class="fas fa-cog me-2"></i>Configurações
-                            </h6>
-                            {% if e_proprio_usuario %}
-                            <small class="text-warning">
-                                <i class="fas fa-exclamation-triangle me-1"></i>
-                                Algumas opções estão desabilitadas pois você está editando seu próprio usuário
-                            </small>
-                            {% endif %}
-                        </div>
-                        <div class="card-body pt-2">
-                            <div class="form-check form-switch mb-3">
-                                {{ form.is_active }}
-                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
-                                    <strong>{{ form.is_active.label }}</strong>
-                                    <small class="d-block text-muted">
-                                        {% if e_proprio_usuario %}
-                                            {{ form.is_active.help_text }}
-                                        {% else %}
-                                            Usuário pode fazer login no sistema
-                                        {% endif %}
-                                    </small>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check form-switch">
-                                {{ form.gerente_comercial }}
-                                <label class="form-check-label" for="{{ form.gerente_comercial.id_for_label }}">
-                                    <strong>{{ form.gerente_comercial.label }}</strong>
-                                    <small class="d-block text-muted">
-                                        <i class="fas fa-shield-alt text-warning me-1"></i>
-                                        Acesso à página WhatsApp Geral
-                                    </small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seção: Grupos de Acesso -->
-                    <div class="card border-0 bg-light mb-4">
-                        <div class="card-header bg-transparent border-0 pb-0">
-                            <h6 class="text-primary mb-0">
-                                <i class="fas fa-users me-2"></i>Grupos de Acesso
-                            </h6>
-                            <small class="text-muted">Selecione os grupos que definem as permissões do usuário</small>
-                        </div>
-                        <div class="card-body pt-2">
-                            {% if form.groups %}
-                            <div class="row">
-                                {% for choice in form.groups %}
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check form-check-lg p-3 border rounded bg-white">
-                                        {{ choice.tag }}
-                                        <label class="form-check-label w-100" for="{{ choice.id_for_label }}">
-                                            <strong class="d-block">{{ choice.choice_label }}</strong>
-                                            <small class="text-muted">Acesso à área {{ choice.choice_label|lower }}</small>
-                                        </label>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Nenhum grupo disponível. Crie grupos no Django Admin primeiro.
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Seção: Empresas do Grupo ROM -->
-                    <div class="card border-0 bg-light">
-                        <div class="card-header bg-transparent border-0 pb-0">
-                            <h6 class="text-warning mb-0">
-                                <i class="fas fa-building me-2"></i>Empresas do Grupo ROM
-                            </h6>
-                            <small class="text-muted">Selecione as empresas que o usuário pode acessar no sistema operacional</small>
-                        </div>
-                        <div class="card-body pt-2">
-                            {% if form.empresas.errors %}
-                                <div class="alert alert-danger">
-                                    {% for error in form.empresas.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            {% if form.empresas %}
-                            <div class="row">
-                                {% for choice in form.empresas %}
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check form-check-lg p-3 border rounded bg-white">
-                                        {{ choice.tag }}
-                                        <label class="form-check-label w-100" for="{{ choice.id_for_label }}">
-                                            <strong class="d-block">{{ choice.choice_label }}</strong>
-                                            <small class="text-muted">Tipo: {{ choice.choice_label|cut:"ROM " }}</small>
-                                        </label>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Nenhuma empresa do Grupo ROM cadastrada. Configure primeiro as empresas.
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-2"></i>Atualizar
-                    </button>
-                </div>
-            </form>
+            <div class="pt-7">
+                <button type="button" 
+                        class="px-3 py-2 bg-success-600 hover:bg-success-700 text-white rounded-md transition-colors flex items-center"
+                        onclick="abrirModalPessoaEdicao()"
+                        title="Criar Nova Pessoa">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.764z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Inicializa o modal do Bootstrap quando carregado via HTMX
-    (function() {
-        const modalElement = document.getElementById('usuarioEditModal');
-        if (modalElement && window.bootstrap) {
-            const modal = new window.bootstrap.Modal(modalElement);
-            
-            // Remove os elementos do DOM quando o modal for fechado
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.remove();
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) backdrop.remove();
-            });
-            
-            // Mostra o modal imediatamente
-            modal.show();
-        }
-    })();
-    
-    // Função simples para abrir modal de pessoa no contexto de edição
-    function abrirModalPessoaEdicao() {
-        // Marcar que veio do modal de edição
-        sessionStorage.setItem('origemModalPessoa', 'editar');
+    <!-- Seção: Credenciais de Acesso -->
+    <div class="border-t border-slate-200 pt-6">
+        <h3 class="text-lg font-medium text-slate-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2m8 0V7a2 2 0 00-2-2H9a2 2 0 00-2 2v2m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v0"/>
+            </svg>
+            Credenciais de Acesso
+        </h3>
         
-        // Fechar modal de edição de usuário
-        const usuarioModal = document.getElementById('usuarioEditModal');
-        if (usuarioModal) {
-            const modalInstance = bootstrap.Modal.getInstance(usuarioModal);
-            if (modalInstance) {
-                modalInstance.hide();
-            }
-        }
+        <div class="space-y-4">
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.username.label }}</label>
+                {{ form.username }}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.password.label }}</label>
+                    {{ form.password }}
+                </div>
+                <div>
+                    <label for="{{ form.password_confirm.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-2">{{ form.password_confirm.label }}</label>
+                    {{ form.password_confirm }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Configurações do Usuário -->
+    <div class="border-t border-slate-200 pt-6">
+        <h3 class="text-lg font-medium text-slate-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Configurações
+        </h3>
         
-        // Aguardar fechamento e abrir modal de pessoa
-        setTimeout(() => {
-            htmx.ajax('GET', '{% url "administracao:pessoas_nova_modal_simples" %}', {
-                target: 'body',
-                swap: 'beforeend'
-            });
-        }, 300);
-    }
-</script>
+        {% if e_proprio_usuario %}
+        <div class="bg-warning-50 border border-warning-200 rounded-lg p-3 mb-4">
+            <div class="flex">
+                <svg class="w-5 h-5 text-warning-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <p class="text-sm text-warning-800">
+                        Algumas opções estão desabilitadas pois você está editando seu próprio usuário
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="space-y-4">
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    {{ form.is_active }}
+                </div>
+                <div class="ml-3">
+                    <label for="{{ form.is_active.id_for_label }}" class="font-medium text-slate-700">
+                        {{ form.is_active.label }}
+                    </label>
+                    <p class="text-sm text-slate-500">
+                        {% if e_proprio_usuario %}
+                            {{ form.is_active.help_text }}
+                        {% else %}
+                            Usuário pode fazer login no sistema
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    {{ form.gerente_comercial }}
+                </div>
+                <div class="ml-3">
+                    <label for="{{ form.gerente_comercial.id_for_label }}" class="font-medium text-slate-700">
+                        {{ form.gerente_comercial.label }}
+                    </label>
+                    <p class="text-sm text-slate-500 flex items-center">
+                        <svg class="w-4 h-4 text-warning-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Acesso à página WhatsApp Geral
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Grupos de Acesso -->
+    <div class="border-t border-slate-200 pt-6">
+        <h3 class="text-lg font-medium text-slate-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            Grupos de Acesso
+        </h3>
+        <p class="text-sm text-slate-600 mb-4">Selecione os grupos que definem as permissões do usuário</p>
+        
+        {% if form.groups %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for choice in form.groups %}
+            <div class="bg-white border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-start">
+                    <div class="flex items-center h-5 mt-1">
+                        {{ choice.tag }}
+                    </div>
+                    <div class="ml-3">
+                        <label for="{{ choice.id_for_label }}" class="font-medium text-slate-700 cursor-pointer">
+                            {{ choice.choice_label }}
+                        </label>
+                        <p class="text-sm text-slate-500">
+                            Acesso à área {{ choice.choice_label|lower }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-info-50 border border-info-200 rounded-lg p-4">
+            <div class="flex">
+                <svg class="w-5 h-5 text-info-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <p class="text-sm text-info-800">
+                        Nenhum grupo disponível. Crie grupos no Django Admin primeiro.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Seção: Empresas do Grupo ROM -->
+    <div class="border-t border-slate-200 pt-6">
+        <h3 class="text-lg font-medium text-slate-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Empresas do Grupo ROM
+        </h3>
+        <p class="text-sm text-slate-600 mb-4">Selecione as empresas que o usuário pode acessar no sistema operacional</p>
+        
+        {% if form.empresas.errors %}
+        <div class="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-4">
+            {% for error in form.empresas.errors %}
+                <p class="text-sm text-danger-800">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if form.empresas %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for choice in form.empresas %}
+            <div class="bg-white border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-start">
+                    <div class="flex items-center h-5 mt-1">
+                        {{ choice.tag }}
+                    </div>
+                    <div class="ml-3">
+                        <label for="{{ choice.id_for_label }}" class="font-medium text-slate-700 cursor-pointer">
+                            {{ choice.choice_label }}
+                        </label>
+                        <p class="text-sm text-slate-500">
+                            Tipo: {{ choice.choice_label|cut:"ROM " }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-info-50 border border-info-200 rounded-lg p-4">
+            <div class="flex">
+                <svg class="w-5 h-5 text-info-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <p class="text-sm text-info-800">
+                        Nenhuma empresa do Grupo ROM cadastrada. Configure primeiro as empresas.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block modal_footer %}
+<button type="button" 
+        class="px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
+        @click="$dispatch('close-modal')">
+    Cancelar
+</button>
+<button type="submit" 
+        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors flex items-center">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    Atualizar
+</button>
+{% endblock %}
+

@@ -1,7 +1,128 @@
 @import "tailwindcss";
 
-/* Custom theme variables */
 @theme {
+  /* ================================
+     GRUPO ROM DESIGN SYSTEM
+     Cores customizadas baseadas no logo oficial
+     ================================ */
+
+  /* Paleta Principal - Baseada no Logo Grupo ROM */
+  --color-primary-50: #fdfcf7;   /* Muito claro - backgrounds sutis */
+  --color-primary-100: #faf6eb;  /* Claro - hover states */
+  --color-primary-200: #f4ebd2;  /* Cards, containers */
+  --color-primary-300: #ecdab3;  /* Borders, dividers */
+  --color-primary-400: #e0c785;  /* Disabled states */
+  --color-primary-500: #d3a156;  /* Principal - cor do logo */
+  --color-primary-600: #c8944a;  /* Hover - botões primários */
+  --color-primary-700: #b5803c;  /* Active - botões primários */
+  --color-primary-800: #965915;  /* Escuro - do gradiente logo */
+  --color-primary-900: #7a4811;  /* Muito escuro - textos */
+  --color-primary-950: #4a2b0a;  /* Ultra escuro */
+
+  /* Estados Semânticos */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-500: #22c55e;  /* Verde padrão */
+  --color-success-600: #16a34a;  /* Hover */
+  --color-success-700: #15803d;  /* Active */
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;  /* Amarelo padrão */
+  --color-warning-600: #d97706;  /* Hover */
+  --color-warning-700: #b45309;  /* Active */
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;  /* Vermelho padrão */
+  --color-danger-600: #dc2626;  /* Hover */
+  --color-danger-700: #b91c1c;  /* Active */
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-500: #3b82f6;  /* Azul padrão */
+  --color-info-600: #2563eb;  /* Hover */
+  --color-info-700: #1d4ed8;  /* Active */
+}
+
+/* ================================
+   CSS Custom Properties para compatibilidade
+   ================================ */
+:root {
+  /* Cores Principais - Do Logo */
   --color-primary: #d3a156;
-  --color-sidebar: #333333;
+  --color-primary-light: #f9e7a1;
+  --color-primary-dark: #965915;
+  
+  /* Cinza Chumbo - Profissional */
+  --color-sidebar: #334155;
+  --color-chumbo: #334155;
+  --color-chumbo-light: #64748b;
+  --color-chumbo-dark: #1e293b;
+  
+  /* Estados Semânticos */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Backgrounds */
+  --bg-primary: #fdfcf7;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+}
+
+/* ================================
+   CLASSES UTILITÁRIAS CUSTOMIZADAS
+   ================================ */
+
+/* Gradient baseado no logo */
+.bg-gradient-rom {
+  background: linear-gradient(135deg, #965915 0%, #ddb14b 71%, #f9e7a1 100%);
+}
+
+/* Utility para texto com cor do logo */
+.text-grupo-rom {
+  color: var(--color-primary);
+}
+
+/* Sidebar - Cinza Chumbo */
+.sidebar-bg {
+  background-color: var(--color-sidebar);
+}
+
+/* ================================
+   RESPONSIVE HELPERS
+   ================================ */
+
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* ================================
+   PRINT STYLES
+   ================================ */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
 }
