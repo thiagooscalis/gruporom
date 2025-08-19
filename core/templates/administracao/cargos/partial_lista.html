@@ -1,0 +1,62 @@
+<div id="cargos-container" class="bg-white rounded-lg shadow-md border border-slate-200">
+    {% if page_obj %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Cargo
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Empresa
+                    </th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="cargos-tbody" class="divide-y divide-slate-200">
+                {% include 'administracao/cargos/partial_linhas.html' %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Botão Carregar Mais -->
+    {% if page_obj.has_next %}
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-200">
+        <button hx-get="{% url 'administracao:cargos_lista' %}?page={{ page_obj.next_page_number }}&load_more=1{% if search %}&search={{ search }}{% endif %}"
+                hx-target="#cargos-tbody" 
+                hx-swap="beforeend"
+                class="w-full flex items-center justify-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Carregar mais ({{ restantes }} restantes)
+        </button>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-slate-900">Nenhum cargo cadastrado</h3>
+        <p class="mt-1 text-sm text-slate-500">Comece criando um novo cargo.</p>
+        <div class="mt-6">
+            <button type="button" 
+                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    hx-get="{% url 'administracao:cargos_novo_modal' %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Novo Cargo
+            </button>
+        </div>
+    </div>
+    {% endif %}
+</div>

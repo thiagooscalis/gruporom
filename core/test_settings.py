@@ -42,3 +42,6 @@ LOGGING = {
     },
 }
 
+# Permitir testserver para testes manuais
+ALLOWED_HOSTS = ['*']
+

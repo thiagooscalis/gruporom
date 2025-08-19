@@ -5,44 +5,44 @@
 {% block confirmation_question %}Tem certeza que deseja excluir este fornecedor?{% endblock %}
 
 {% block item_details %}
-<div class="bg-gray-50 border rounded-lg p-4 mb-4 space-y-3">
+<div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4 space-y-3">
     <div class="flex justify-between">
-        <span class="text-sm text-gray-600">Nome:</span>
-        <span class="font-semibold text-gray-900">{{ fornecedor.pessoa.nome }}</span>
+        <span class="text-sm text-slate-600">Nome:</span>
+        <span class="font-semibold text-slate-900">{{ fornecedor.pessoa.nome }}</span>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex justify-between">
-            <span class="text-sm text-gray-600">{{ fornecedor.pessoa.get_tipo_doc_display }}:</span>
-            <span class="text-gray-900">{{ fornecedor.pessoa.doc|default:"-" }}</span>
+            <span class="text-sm text-slate-600">{{ fornecedor.pessoa.get_tipo_doc_display }}:</span>
+            <span class="text-slate-900">{{ fornecedor.pessoa.doc|default:"-" }}</span>
         </div>
         <div class="flex justify-between">
-            <span class="text-sm text-gray-600">Email:</span>
-            <span class="text-gray-900">{{ fornecedor.pessoa.email1|default:"-" }}</span>
+            <span class="text-sm text-slate-600">Email:</span>
+            <span class="text-slate-900">{{ fornecedor.pessoa.email1|default:"-" }}</span>
         </div>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex justify-between">
-            <span class="text-sm text-gray-600">Tipo de Empresa:</span>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ fornecedor.tipo_empresa }}</span>
+            <span class="text-sm text-slate-600">Tipo de Empresa:</span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-100 text-info-800">{{ fornecedor.tipo_empresa }}</span>
         </div>
         <div class="flex justify-between">
-            <span class="text-sm text-gray-600">Empresa Grupo ROM:</span>
+            <span class="text-sm text-slate-600">Empresa Grupo ROM:</span>
             {% if fornecedor.pessoa.empresa_gruporom %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Sim</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">Sim</span>
             {% else %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Não</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Não</span>
             {% endif %}
         </div>
     </div>
     
     {% if fornecedor.empresas.exists %}
     <div class="space-y-2">
-        <span class="text-sm text-gray-600">Empresas Associadas:</span>
+        <span class="text-sm text-slate-600">Empresas Associadas:</span>
         <div class="flex flex-wrap gap-1">
             {% for empresa in fornecedor.empresas.all %}
-                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">{{ empresa.nome }}</span>
+                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-info-100 text-info-800">{{ empresa.nome }}</span>
             {% endfor %}
         </div>
     </div>
@@ -52,36 +52,36 @@
 
 {% block warning_messages %}
 {% if error %}
-<div class="bg-red-50 border border-red-200 rounded-md p-4">
+<div class="bg-danger-50 border border-danger-200 rounded-md p-4">
     <div class="flex">
         <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-danger-400">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
         </div>
         <div class="ml-3">
-            <h3 class="text-sm font-medium text-red-800">
+            <h3 class="text-sm font-medium text-danger-800">
                 Erro:
             </h3>
-            <div class="mt-2 text-sm text-red-700">
+            <div class="mt-2 text-sm text-danger-700">
                 <p>{{ error }}</p>
             </div>
         </div>
     </div>
 </div>
 {% else %}
-<div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+<div class="bg-warning-50 border border-warning-200 rounded-md p-4">
     <div class="flex">
         <div class="flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-yellow-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning-400">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
         </svg>
     </div>
     <div class="ml-3">
-        <h3 class="text-sm font-medium text-yellow-800">
+        <h3 class="text-sm font-medium text-warning-800">
             Atenção:
         </h3>
-        <div class="mt-2 text-sm text-yellow-700">
+        <div class="mt-2 text-sm text-warning-700">
             <p>Esta ação não pode ser desfeita. O fornecedor será removido permanentemente do sistema.</p>
         </div>
     </div>
@@ -93,7 +93,7 @@
 <form hx-post="{% url action_url fornecedor.id %}" hx-target="body" hx-swap="beforeend" style="display: inline;">
     {% csrf_token %}
     <button type="submit" 
-            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center">
+            class="px-4 py-2 bg-danger-600 hover:bg-danger-700 text-white rounded-md transition-colors flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
         </svg>

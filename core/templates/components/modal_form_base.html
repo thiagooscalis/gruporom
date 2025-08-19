@@ -52,32 +52,11 @@
             </button>
         </div>
         
-        <!-- Modal Form -->
-        <form {% block form_attributes %}{% endblock %}>
-            {% csrf_token %}
-            {% block modal_content %}
-            <div class="px-6 py-4">
-                <p class="text-gray-600">Content goes here...</p>
-            </div>
-            {% endblock %}
-            
-            <!-- Modal Footer -->
-            <div class="flex items-center justify-end px-6 py-4 border-t border-slate-200 space-x-3">
-                {% block modal_footer %}
-                <button type="button" 
-                        class="px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors"
-                        @click="close()">
-                    Cancelar
-                </button>
-                <button type="submit" 
-                        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                    </svg>
-                    Salvar
-                </button>
-                {% endblock %}
-            </div>
-        </form>
+        <!-- Modal Content - Form will be inside here -->
+        {% block modal_content %}
+        <div class="px-6 py-4">
+            <p class="text-gray-600">Content goes here...</p>
+        </div>
+        {% endblock %}
     </div>
 </div>

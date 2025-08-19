@@ -25,9 +25,9 @@ class PessoasListaTest(TestCase):
         
         self.assertEqual(response.status_code, 200)
         # Verifica badges (Tailwind CSS)
-        self.assertContains(response, 'bg-blue-100 text-blue-800">PF</span>')
-        self.assertContains(response, 'bg-green-100 text-green-800">PJ</span>')
-        self.assertContains(response, 'bg-yellow-100 text-yellow-800">Grupo ROM</span>')
+        self.assertContains(response, 'bg-info-100 text-info-800">PF</span>')
+        self.assertContains(response, 'bg-success-100 text-success-800">PJ</span>')
+        self.assertContains(response, 'bg-primary-100 text-primary-800">Grupo ROM</span>')
         
     def test_filtro_pessoa_fisica(self):
         """Testa filtro de Pessoa Física"""
@@ -121,6 +121,6 @@ class PessoasListaTest(TestCase):
         self.assertGreater(rom_index, 0, "ROM Turismo não encontrado")
         
         # Procurar pelo badge após o nome
-        badge_section = content[rom_index:rom_index+500]
+        badge_section = content[rom_index:rom_index+1000]
         self.assertIn('Grupo ROM', badge_section)
         self.assertNotIn('>PJ<', badge_section)

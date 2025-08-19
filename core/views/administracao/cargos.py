@@ -12,8 +12,10 @@ from core.forms import CargoForm
 
 @login_required
 def lista(request):
-    """Lista todos os cargos com busca e paginação"""
+    """Lista todos os cargos com busca e paginação moderna"""
     search = request.GET.get('search', '')
+    page_number = request.GET.get('page', 1)
+    load_more = request.GET.get('load_more')
     
     cargos = Cargo.objects.select_related('empresa').all()
     
@@ -23,15 +25,23 @@ def lista(request):
             Q(empresa__nome__icontains=search)
         )
     
-    paginator = Paginator(cargos, 25)
-    page_number = request.GET.get('page')
+    # Paginação com 20 itens por página
+    paginator = Paginator(cargos, 20)
     page_obj = paginator.get_page(page_number)
     
     context = {
         'page_obj': page_obj,
         'search': search,
+        'restantes': page_obj.paginator.count - page_obj.end_index() if page_obj else 0,
         'area': 'administracao'
     }
+    
+    # HTMX Detection
+    if request.headers.get('HX-Request'):
+        if load_more:
+            return render(request, 'administracao/cargos/partial_linhas.html', context)
+        else:
+            return render(request, 'administracao/cargos/partial_lista.html', context)
     
     return render(request, 'administracao/cargos/lista.html', context)
 
@@ -54,24 +64,33 @@ def criar(request):
         form = CargoForm(request.POST)
         if form.is_valid():
             try:
-                cargo = form.save()
+                from django.db import transaction
+                with transaction.atomic():
+                    cargo = form.save()
+                
                 messages.success(request, f'Cargo "{cargo.nome}" criado com sucesso!')
                 
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalCargo'));
-                        if (modal) modal.hide();
-                        window.location.reload();
+                        // Fechar modal Alpine.js
+                        const modal = document.querySelector('[x-data]');
+                        if (modal && modal.__x) {
+                            modal.__x.$data.close();
+                        } else {
+                            // Fallback para remoção direta
+                            document.querySelector('.fixed.inset-0.bg-black')?.remove();
+                        }
+                        // Recarregar container da listagem via HTMX
+                        htmx.ajax('GET', '/administracao/cargos/', '#cargos-container');
                     </script>
                 """)
             except Exception as e:
                 form.add_error(None, f'Erro ao salvar: {str(e)}')
         
-        # Retorna formulário com erros
-        return render(request, 'administracao/cargos/modal_form.html', {
+        # Retorna formulário com wrapper para HTMX
+        return render(request, 'administracao/cargos/form_with_wrapper.html', {
             'form': form,
-            'title': 'Novo Cargo',
             'action_url': 'administracao:cargos_criar'
         })
     
@@ -100,24 +119,33 @@ def atualizar(request, pk):
         form = CargoForm(request.POST, instance=cargo)
         if form.is_valid():
             try:
-                cargo = form.save()
+                from django.db import transaction
+                with transaction.atomic():
+                    cargo = form.save()
+                
                 messages.success(request, f'Cargo "{cargo.nome}" atualizado com sucesso!')
                 
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalCargo'));
-                        if (modal) modal.hide();
-                        window.location.reload();
+                        // Fechar modal Alpine.js
+                        const modal = document.querySelector('[x-data]');
+                        if (modal && modal.__x) {
+                            modal.__x.$data.close();
+                        } else {
+                            // Fallback para remoção direta
+                            document.querySelector('.fixed.inset-0.bg-black')?.remove();
+                        }
+                        // Recarregar container da listagem via HTMX
+                        htmx.ajax('GET', '/administracao/cargos/', '#cargos-container');
                     </script>
                 """)
             except Exception as e:
                 form.add_error(None, f'Erro ao salvar: {str(e)}')
         
-        # Retorna formulário com erros
-        return render(request, 'administracao/cargos/modal_form.html', {
+        # Retorna formulário com wrapper para HTMX
+        return render(request, 'administracao/cargos/form_with_wrapper.html', {
             'form': form,
-            'title': f'Editar Cargo - {cargo.nome}',
             'action_url': 'administracao:cargos_atualizar',
             'cargo_id': cargo.id
         })
@@ -150,9 +178,16 @@ def excluir(request, pk):
             # Retorna script para fechar modal e recarregar página
             return HttpResponse("""
                 <script>
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalCargo'));
-                    if (modal) modal.hide();
-                    window.location.reload();
+                    // Fechar modal Alpine.js
+                    const modal = document.querySelector('[x-data]');
+                    if (modal && modal.__x) {
+                        modal.__x.$data.close();
+                    } else {
+                        // Fallback para remoção direta
+                        document.querySelector('.fixed.inset-0.bg-black')?.remove();
+                    }
+                    // Recarregar container da listagem via HTMX
+                    htmx.ajax('GET', '/administracao/cargos/', '#cargos-container');
                 </script>
             """)
         except Exception as e:

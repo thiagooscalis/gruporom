@@ -11,8 +11,10 @@ from core.forms import FornecedorForm
 
 @login_required
 def lista(request):
-    """Lista todos os fornecedores com busca e paginação"""
+    """Lista todos os fornecedores com busca e paginação moderna"""
     search = request.GET.get('search', '')
+    page_number = request.GET.get('page', 1)
+    load_more = request.GET.get('load_more')
     
     fornecedores = Fornecedor.objects.select_related('pessoa').all()
     
@@ -20,19 +22,27 @@ def lista(request):
         fornecedores = fornecedores.filter(
             Q(pessoa__nome__icontains=search) |
             Q(pessoa__doc__icontains=search) |
-            Q(pessoa__email__icontains=search) |
+            Q(pessoa__email1__icontains=search) |
             Q(tipo_empresa__icontains=search)
         )
     
-    paginator = Paginator(fornecedores, 25)
-    page_number = request.GET.get('page')
+    # Paginação com 20 itens por página
+    paginator = Paginator(fornecedores, 20)
     page_obj = paginator.get_page(page_number)
     
     context = {
         'page_obj': page_obj,
         'search': search,
+        'restantes': page_obj.paginator.count - page_obj.end_index() if page_obj else 0,
         'area': 'administracao'
     }
+    
+    # HTMX Detection
+    if request.headers.get('HX-Request'):
+        if load_more:
+            return render(request, 'administracao/fornecedores/partial_linhas.html', context)
+        else:
+            return render(request, 'administracao/fornecedores/partial_lista.html', context)
     
     return render(request, 'administracao/fornecedores/lista.html', context)
 
@@ -44,8 +54,7 @@ def novo_modal(request):
     return render(request, 'administracao/fornecedores/modal_form.html', {
         'form': form,
         'title': 'Novo Fornecedor',
-        'action_url': 'administracao:fornecedores_criar',
-        'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}) + '?all=true'
+        'action_url': 'administracao:fornecedores_criar'
     })
 
 
@@ -65,18 +74,20 @@ def criar(request):
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        window.modalUtils.closeAndReload('modalFornecedor');
+                        // Fechar modal Alpine.js e recarregar listagem
+                        document.querySelector('.modal-backdrop')?.remove();
+                        document.querySelector('[x-data]')?.$el?.remove();
+                        // Recarregar container da listagem via HTMX
+                        htmx.ajax('GET', '/administracao/fornecedores/', '#fornecedores-container');
                     </script>
                 """)
             except Exception as e:
                 form.add_error(None, f'Erro ao salvar: {str(e)}')
         
-        # Retorna formulário com erros
-        return render(request, 'administracao/fornecedores/modal_form.html', {
+        # Retorna formulário com wrapper para HTMX
+        return render(request, 'administracao/fornecedores/form_with_wrapper.html', {
             'form': form,
-            'title': 'Novo Fornecedor',
-            'action_url': 'administracao:fornecedores_criar',
-            'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}) + '?all=true'
+            'action_url': 'administracao:fornecedores_criar'
         })
     
     return redirect('administracao:fornecedores_lista')
@@ -107,9 +118,11 @@ def excluir(request, pk):
             # Retorna script para fechar modal e recarregar página
             return HttpResponse("""
                 <script>
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalFornecedor'));
-                    if (modal) modal.hide();
-                    window.location.reload();
+                    // Fechar modal Alpine.js e recarregar listagem
+                    document.querySelector('.modal-backdrop')?.remove();
+                    document.querySelector('[x-data]')?.$el?.remove();
+                    // Recarregar container da listagem via HTMX
+                    htmx.ajax('GET', '/administracao/fornecedores/', '#fornecedores-container');
                 </script>
             """)
         except Exception as e:
@@ -134,7 +147,6 @@ def editar_modal(request, pk):
         'title': f'Editar Fornecedor - {fornecedor.pessoa.nome}',
         'action_url': 'administracao:fornecedores_atualizar',
         'fornecedor_id': fornecedor.id,
-        'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}) + '?all=true'
     })
 
 
@@ -156,19 +168,21 @@ def atualizar(request, pk):
                 # Retorna script para fechar modal e recarregar página
                 return HttpResponse("""
                     <script>
-                        window.modalUtils.closeAndReload('modalFornecedor');
+                        // Fechar modal Alpine.js e recarregar listagem
+                        document.querySelector('.modal-backdrop')?.remove();
+                        document.querySelector('[x-data]')?.$el?.remove();
+                        // Recarregar container da listagem via HTMX
+                        htmx.ajax('GET', '/administracao/fornecedores/', '#fornecedores-container');
                     </script>
                 """)
             except Exception as e:
                 form.add_error(None, f'Erro ao salvar: {str(e)}')
         
-        # Retorna formulário com erros
-        return render(request, 'administracao/fornecedores/modal_form.html', {
+        # Retorna formulário com wrapper para HTMX
+        return render(request, 'administracao/fornecedores/form_with_wrapper.html', {
             'form': form,
-            'title': f'Editar Fornecedor - {fornecedor.pessoa.nome}',
             'action_url': 'administracao:fornecedores_atualizar',
-            'fornecedor_id': fornecedor.id,
-            'buscar_pessoas_url': reverse('buscar_pessoas', kwargs={'area': 'administracao'}) + '?all=true'
+            'fornecedor_id': fornecedor.id
         })
     
     return redirect('administracao:fornecedores_lista')

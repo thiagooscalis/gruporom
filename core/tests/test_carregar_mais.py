@@ -54,7 +54,7 @@ class CarregarMaisTest(TestCase):
         # Deve usar template parcial completo
         self.assertTemplateUsed(response, 'administracao/pessoas/partial_lista.html')
         # Deve ter cabeçalho da tabela
-        self.assertContains(response, '<thead class="border-b border-gray-200">')
+        self.assertContains(response, '<thead class="border-b border-slate-200 bg-slate-50">')
         
     def test_ultima_pagina_nao_mostra_botao_carregar_mais(self):
         """Testa se a última página não mostra o botão carregar mais"""

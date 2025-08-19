@@ -9,11 +9,15 @@ class CargoForm(forms.ModelForm):
         fields = ['nome', 'empresa', 'ativo']
         widgets = {
             'nome': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
                 'placeholder': 'Digite o nome do cargo...'
             }),
-            'empresa': forms.Select(attrs={'class': 'form-select'}),
-            'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'empresa': forms.Select(attrs={
+                'class': 'mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+            }),
+            'ativo': forms.CheckboxInput(attrs={
+                'class': 'h-4 w-4 text-primary-600 focus:ring-primary-500 border-slate-300 rounded'
+            }),
         }
         labels = {
             'nome': 'Nome do Cargo',

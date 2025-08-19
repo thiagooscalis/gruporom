@@ -1,0 +1,69 @@
+{% load core_tags %}
+
+<!-- Linhas adicionais para "Carregar mais" -->
+{% for fornecedor in page_obj %}
+<tr class="hover:bg-slate-50 transition-colors">
+    <td class="py-3 px-4 text-slate-900 font-medium">{{ fornecedor.pessoa.nome }}</td>
+    <td class="py-3 px-4 text-slate-600 text-sm">{{ fornecedor.pessoa.doc|doc|default:"-" }}</td>
+    <td class="py-3 px-4 text-slate-600 text-sm">{{ fornecedor.pessoa.email1|default:"-" }}</td>
+    <td class="py-3 px-4">
+        <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-info-100 text-info-800">{{ fornecedor.tipo_empresa }}</span>
+    </td>
+    <td class="py-3 px-4 text-center">
+        {% if fornecedor.pessoa.empresa_gruporom %}
+            <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-success-100 text-success-800">Sim</span>
+        {% else %}
+            <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full bg-slate-100 text-slate-800">Não</span>
+        {% endif %}
+    </td>
+    <td class="py-3 px-4">
+        <div class="flex justify-center space-x-1">
+            <button type="button" class="p-1.5 text-primary-600 hover:text-primary-800 hover:bg-primary-50 rounded transition-colors" title="Editar"
+                    hx-get="{% url 'administracao:fornecedores_editar_modal' fornecedor.id %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+            </button>
+            <button type="button" class="p-1.5 text-danger-600 hover:text-danger-800 hover:bg-danger-50 rounded transition-colors" title="Excluir"
+                    hx-get="{% url 'administracao:fornecedores_excluir_modal' fornecedor.id %}"
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+            </button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+
+<!-- Atualizar botão Carregar Mais -->
+{% if page_obj.has_next %}
+<script>
+// Atualizar o botão existente
+const loadMoreBtn = document.querySelector('#carregar-mais-container button');
+if (loadMoreBtn) {
+    loadMoreBtn.setAttribute('hx-get', 
+        '{% url "administracao:fornecedores_lista" %}?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}&load_more=1'
+    );
+    loadMoreBtn.innerHTML = `
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Carregar mais ({{ restantes }} restantes)
+    `;
+    // Re-processar HTMX
+    htmx.process(loadMoreBtn);
+}
+</script>
+{% else %}
+<script>
+// Remover botão se não há mais páginas
+const loadMoreContainer = document.querySelector('#carregar-mais-container');
+if (loadMoreContainer) {
+    loadMoreContainer.remove();
+}
+</script>
+{% endif %}

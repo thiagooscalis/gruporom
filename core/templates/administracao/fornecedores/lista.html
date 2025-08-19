@@ -1,166 +1,66 @@
 {% extends "base.html" %}
+{% load core_tags %}
 
 {% block title %}Fornecedores - Administração{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Fornecedores' %}
+<div class="flex-1 space-y-6">
+    {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Fornecedores' %}
+    
+    <!-- Header com busca e ações -->
+    <div class="bg-white rounded-lg shadow-md border border-slate-200">
+        <div class="p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Fornecedores</h1>
+                    <p class="text-sm text-slate-600">Gerencie os fornecedores da empresa</p>
+                </div>
+                <button type="button" 
+                        class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm"
+                        hx-get="{% url 'administracao:fornecedores_novo_modal' %}"
+                        hx-target="body"
+                        hx-swap="beforeend">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Novo Fornecedor
+                </button>
+            </div>
             
             <!-- Busca -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="get" class="row g-3">
-                        <div class="col-md-10">
-                            <input type="text" name="search" class="form-control" 
-                                   placeholder="Buscar por nome, CPF/CNPJ, email ou tipo de empresa..." 
-                                   value="{{ search }}">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-secondary w-100">
-                                <i class="fas fa-search me-2"></i>Buscar
-                            </button>
-                        </div>
-                    </form>
+            <form method="get" hx-get="{% url 'administracao:fornecedores_lista' %}" hx-target="#fornecedores-container" hx-swap="outerHTML" hx-push-url="true" hx-trigger="submit" class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1">
+                    <input type="text" 
+                           name="search" 
+                           class="w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 placeholder-slate-400" 
+                           placeholder="Buscar por nome, CPF/CNPJ, email ou tipo de empresa..." 
+                           value="{{ search }}">
                 </div>
-            </div>
-            
-            <!-- Listagem -->
-            <div class="card">
-                <div class="card-body">
-                    {% if page_obj %}
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>CPF/CNPJ</th>
-                                    <th>Email</th>
-                                    <th>Tipo de Empresa</th>
-                                    <th class="text-center">Empresa Grupo ROM</th>
-                                    <th width="120">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for fornecedor in page_obj %}
-                                <tr>
-                                    <td>{{ fornecedor.pessoa.nome }}</td>
-                                    <td>{{ fornecedor.pessoa.doc|default:"-" }}</td>
-                                    <td>{{ fornecedor.pessoa.email|default:"-" }}</td>
-                                    <td>
-                                        <span class="badge bg-info">{{ fornecedor.tipo_empresa }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        {% if fornecedor.pessoa.empresa_gruporom %}
-                                            <span class="badge bg-success">Sim</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Não</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-primary" title="Editar"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalFornecedor"
-                                                hx-get="{% url 'administracao:fornecedores_editar_modal' fornecedor.id %}"
-                                                hx-target="#modalFornecedor .modal-content"
-                                                hx-swap="innerHTML">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalFornecedor"
-                                                hx-get="{% url 'administracao:fornecedores_excluir_modal' fornecedor.id %}"
-                                                hx-target="#modalFornecedor .modal-content"
-                                                hx-swap="innerHTML">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
-                                        Nenhum fornecedor encontrado
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Paginação -->
-                    {% if page_obj.has_other_pages %}
-                    <nav aria-label="Paginação" class="mt-4">
-                        <ul class="pagination justify-content-center">
-                            {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
-                            </li>
-                            {% endif %}
-                            
-                            {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                <li class="page-item active">
-                                    <span class="page-link">{{ num }}</span>
-                                </li>
-                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    {% endif %}
-                    {% else %}
-                    <p class="text-center text-muted">Nenhum fornecedor cadastrado.</p>
+                <div class="flex gap-2">
+                    <button type="submit" 
+                            class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Buscar
+                    </button>
+                    {% if search %}
+                    <a href="{% url 'administracao:fornecedores_lista' %}" 
+                       class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md transition-colors inline-flex items-center border border-slate-300">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Limpar
+                    </a>
                     {% endif %}
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-</div>
 
-<!-- Floating Action Button -->
-<button type="button" class="btn btn-primary rounded-circle fixed-br d-flex align-items-center justify-content-center" 
-        style="width: 56px; height: 56px;"
-        data-bs-toggle="modal" 
-        data-bs-target="#modalFornecedor"
-        hx-get="{% url 'administracao:fornecedores_novo_modal' %}"
-        hx-target="#modalFornecedor .modal-content"
-        hx-swap="innerHTML"
-        title="Novo Fornecedor">
-    <i class="fas fa-plus text-white"></i>
-</button>
-
-<!-- Modal Container -->
-<div class="modal fade" id="modalFornecedor" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Carregando...</span>
-                </div>
-            </div>
-        </div>
+    <!-- Container para listagem HTMX -->
+    <div id="fornecedores-container">
+        {% include 'administracao/fornecedores/partial_lista.html' %}
     </div>
 </div>
 {% endblock %}

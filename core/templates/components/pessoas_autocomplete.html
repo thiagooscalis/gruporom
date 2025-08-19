@@ -1,27 +1,22 @@
 {% if pessoas %}
     {% for pessoa in pessoas %}
-    <div class="autocomplete-item p-2 border-bottom" 
+    <div class="cursor-pointer hover:bg-slate-50 px-3 py-2 border-b border-gray-200 last:border-b-0" 
          data-pessoa-id="{{ pessoa.pk }}" 
          data-pessoa-nome="{{ pessoa.nome }}"
-         data-pessoa-doc="{{ pessoa.doc }}"
-         style="cursor: pointer;"
-         onmouseover="this.style.backgroundColor='#f8f9fa'"
-         onmouseout="this.style.backgroundColor='white'"
-         onclick="selectMultipleItem('{{ field_id }}', '{{ pessoa.pk }}', '{{ pessoa.nome|escapejs }}', '{{ pessoa.doc|escapejs }}')">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <strong>{{ pessoa.nome }}</strong>
-                <br>
-                <small class="text-muted">
+         data-pessoa-doc="{{ pessoa.doc }}">
+        <div class="flex justify-between items-center">
+            <div class="flex-1">
+                <div class="font-medium text-slate-900">{{ pessoa.nome }}</div>
+                <div class="text-sm text-slate-600">
                     {{ pessoa.get_tipo_doc_display }}: {{ pessoa.doc }}
                     {% if pessoa.email1 %} | {{ pessoa.email1 }}{% endif %}
-                </small>
+                </div>
             </div>
-            <div class="text-end">
+            <div class="flex-shrink-0 ml-3">
                 {% if pessoa.tipo_empresa %}
-                    <span class="badge bg-success">{{ pessoa.tipo_empresa }}</span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-success-100 text-success-800">{{ pessoa.tipo_empresa }}</span>
                 {% else %}
-                    <span class="badge bg-info">Pessoa Física</span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-info-100 text-info-800">Pessoa Física</span>
                 {% endif %}
             </div>
         </div>
@@ -29,14 +24,18 @@
     {% endfor %}
 {% else %}
     {% if query %}
-    <div class="autocomplete-item p-3 text-center text-muted">
-        <i class="fas fa-search me-2"></i>
-        Nenhuma pessoa encontrada para "{{ query }}"
+    <div class="px-3 py-4 text-center text-slate-500">
+        <svg class="w-5 h-5 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <div class="text-sm">Nenhuma pessoa encontrada para "{{ query }}"</div>
     </div>
     {% else %}
-    <div class="autocomplete-item p-3 text-center text-muted">
-        <i class="fas fa-keyboard me-2"></i>
-        Digite pelo menos 2 caracteres para buscar
+    <div class="px-3 py-4 text-center text-slate-500">
+        <svg class="w-5 h-5 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        </svg>
+        <div class="text-sm">Digite pelo menos 2 caracteres para buscar</div>
     </div>
     {% endif %}
 {% endif %}

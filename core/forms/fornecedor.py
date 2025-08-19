@@ -1,31 +1,23 @@
 from django import forms
+from django.urls import reverse
 from core.models import Fornecedor, Pessoa
 from core.choices import TIPO_EMPRESA_CHOICES
+from core.fields import AutocompleteField
 
 
 class FornecedorForm(forms.ModelForm):
-    # Campo para seleção de pessoa com autocomplete
-    pessoa = forms.ModelChoiceField(
-        queryset=Pessoa.objects.none(),  # Vazio por padrão
-        required=True,
-        widget=forms.HiddenInput(),
+    # Campo de autocomplete customizado
+    pessoa = AutocompleteField(
+        queryset=Pessoa.objects.all(),
+        search_url=None,  # Será definido no __init__
+        search_placeholder="Digite o nome, documento ou email da pessoa...",
+        selected_label="Pessoa selecionada:",
         label="Pessoa"
-    )
-    
-    # Campo de busca para autocomplete
-    pessoa_search = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Digite o nome, documento ou email da pessoa...',
-            'autocomplete': 'off'
-        }),
-        label="Buscar Pessoa"
     )
 
     class Meta:
         model = Fornecedor
-        fields = ['pessoa', 'pessoa_search', 'tipo_empresa', 'empresas']
+        fields = ['pessoa', 'tipo_empresa', 'empresas']
         widgets = {
             'tipo_empresa': forms.Select(attrs={'class': 'form-select'}),
             'empresas': forms.CheckboxSelectMultiple()
@@ -38,10 +30,9 @@ class FornecedorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Se for edição, pré-preenche o campo de busca e pessoa selecionada
-        if self.instance.pk:
-            self.fields['pessoa'].queryset = Pessoa.objects.filter(pk=self.instance.pessoa.pk)
-            self.fields['pessoa_search'].initial = f"{self.instance.pessoa.nome} - {self.instance.pessoa.doc}"
+        # Configurar URL de busca para o autocomplete
+        search_url = reverse('buscar_pessoas', kwargs={'area': 'administracao'}) + '?all=true'
+        self.fields['pessoa'].widget.search_url = search_url
         
         # Filtrar apenas empresas do Grupo ROM
         self.fields['empresas'].queryset = Pessoa.objects.filter(
@@ -50,16 +41,12 @@ class FornecedorForm(forms.ModelForm):
 
     def clean_pessoa(self):
         """Valida o campo pessoa"""
-        pessoa_id = self.data.get('pessoa')
-        if pessoa_id:
-            try:
-                pessoa = Pessoa.objects.get(pk=pessoa_id)
-                # Verifica se a pessoa já é fornecedor (exceto no caso de edição)
-                if hasattr(pessoa, 'fornecedor') and (not self.instance.pk or pessoa.fornecedor.pk != self.instance.pk):
-                    raise forms.ValidationError("Esta pessoa já é um fornecedor.")
-                return pessoa
-            except Pessoa.DoesNotExist:
-                raise forms.ValidationError("Pessoa inválida.")
+        pessoa = self.cleaned_data.get('pessoa')
+        if pessoa:
+            # Verifica se a pessoa já é fornecedor (exceto no caso de edição)
+            if hasattr(pessoa, 'fornecedor') and (not self.instance.pk or pessoa.fornecedor.pk != self.instance.pk):
+                raise forms.ValidationError("Esta pessoa já é um fornecedor.")
+            return pessoa
         else:
             raise forms.ValidationError("Selecione uma pessoa.")
 
