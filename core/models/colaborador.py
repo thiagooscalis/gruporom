@@ -89,7 +89,7 @@ class Colaborador(models.Model):
     @property
     def documento(self):
         """Retorna o documento da pessoa do colaborador"""
-        return self.pessoa.documento
+        return self.pessoa.doc
     
     @property
     def empresa(self):

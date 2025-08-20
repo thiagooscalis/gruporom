@@ -299,3 +299,221 @@ class NotaModelTest(TestCase):
         str_nota = str(nota)
         self.assertTrue(str_nota.startswith('João Silva: Esta é uma nota de teste muito longa que será'))
         self.assertTrue(str_nota.endswith('...'))
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class PessoaModelTest(TestCase):
+    
+    def test_create_pessoa_fisica(self):
+        pessoa = PessoaFactory(tipo_doc='CPF')
+        self.assertEqual(pessoa.tipo_doc, 'CPF')
+        self.assertIsNotNone(pessoa.nome)
+        self.assertIsNotNone(pessoa.doc)
+    
+    def test_create_pessoa_juridica(self):
+        pessoa = PessoaJuridicaFactory()
+        self.assertEqual(pessoa.tipo_doc, 'CNPJ')
+        self.assertIsNotNone(pessoa.nome)
+        self.assertIsNotNone(pessoa.doc)
+    
+    def test_str_representation(self):
+        pessoa = PessoaFactory(nome='João Silva')
+        self.assertEqual(str(pessoa), 'João Silva')
+    
+    def test_tipo_pessoa_property(self):
+        pessoa_cpf = PessoaFactory(tipo_doc='CPF')
+        self.assertEqual(pessoa_cpf.tipo_pessoa, 'FISICA')
+        
+        pessoa_cnpj = PessoaJuridicaFactory()
+        self.assertEqual(pessoa_cnpj.tipo_pessoa, 'JURIDICA')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class UsuarioModelTest(TestCase):
+    
+    def test_create_usuario(self):
+        usuario = UsuarioFactory()
+        self.assertIsNotNone(usuario.username)
+        self.assertIsNotNone(usuario.pessoa)
+        self.assertTrue(usuario.is_active)
+    
+    def test_superusuario(self):
+        usuario = SuperUsuarioFactory()
+        self.assertTrue(usuario.is_superuser)
+        self.assertTrue(usuario.is_staff)
+    
+    def test_str_representation(self):
+        usuario = UsuarioFactory(username='joao.silva')
+        self.assertEqual(str(usuario), 'joao.silva')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class CambioModelTest(TestCase):
+    
+    def test_create_cambio(self):
+        cambio = CambioFactory()
+        self.assertIsNotNone(cambio.data)
+        self.assertIsNotNone(cambio.valor)
+    
+    def test_str_representation(self):
+        from decimal import Decimal
+        from datetime import date
+        cambio = CambioFactory(data=date(2024, 1, 15), valor=Decimal('5.45'))
+        self.assertEqual(str(cambio), 'USD/BRL 15/01/2024: R$ 5.45')
+    
+    def test_obter_cambio(self):
+        from core.models import Cambio
+        from datetime import date
+        cambio = CambioFactory(data=date.today())
+        resultado = Cambio.obter_cambio(date.today())
+        self.assertIsNotNone(resultado)
+        self.assertEqual(resultado.data, date.today())
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class CargoModelTest(TestCase):
+    
+    def test_create_cargo(self):
+        cargo = CargoFactory()
+        self.assertIsNotNone(cargo.nome)
+        self.assertIsNotNone(cargo.empresa)
+        self.assertTrue(cargo.ativo)
+    
+    def test_str_representation(self):
+        from core.factories import EmpresaGrupoROMFactory
+        empresa = EmpresaGrupoROMFactory(nome='ROM Turismo')
+        cargo = CargoFactory(nome='Gerente', empresa=empresa)
+        self.assertEqual(str(cargo), 'Gerente - ROM Turismo')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class ColaboradorModelTest(TestCase):
+    
+    def test_create_colaborador(self):
+        colaborador = ColaboradorFactory()
+        self.assertIsNotNone(colaborador.pessoa)
+        self.assertIsNotNone(colaborador.cargo)
+        self.assertIsNotNone(colaborador.salario)
+        self.assertIsNotNone(colaborador.data_admissao)
+        self.assertTrue(colaborador.ativo)
+    
+    def test_esta_ativo_property(self):
+        colaborador_ativo = ColaboradorFactory(ativo=True, data_demissao=None)
+        self.assertTrue(colaborador_ativo.esta_ativo)
+        
+        from datetime import date
+        colaborador_demitido = ColaboradorFactory(ativo=True, data_demissao=date.today())
+        self.assertFalse(colaborador_demitido.esta_ativo)
+    
+    def test_str_representation(self):
+        pessoa = PessoaFactory(nome='João Silva')
+        cargo = CargoFactory(nome='Vendedor')
+        colaborador = ColaboradorFactory(pessoa=pessoa, cargo=cargo)
+        self.assertEqual(str(colaborador), 'João Silva - Vendedor')
+    
+    def test_comissao_validation(self):
+        from django.core.exceptions import ValidationError
+        from decimal import Decimal
+        colaborador = ColaboradorFactory.build(comissao=Decimal('150.00'))
+        with self.assertRaises(ValidationError):
+            colaborador.full_clean()
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class FornecedorModelTest(TestCase):
+    
+    def test_create_fornecedor(self):
+        fornecedor = FornecedorFactory()
+        self.assertIsNotNone(fornecedor.pessoa)
+        self.assertIsNotNone(fornecedor.tipo_empresa)
+        self.assertEqual(fornecedor.pessoa.tipo_doc, 'CNPJ')
+    
+    def test_str_representation(self):
+        pessoa = PessoaJuridicaFactory(nome='Empresa ABC')
+        fornecedor = FornecedorFactory(pessoa=pessoa, tipo_empresa='Tecnologia')
+        self.assertEqual(str(fornecedor), 'Empresa ABC - Tecnologia')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class FuncaoModelTest(TestCase):
+    
+    def test_create_funcao(self):
+        funcao = FuncaoFactory()
+        self.assertIsNotNone(funcao.masculino)
+        self.assertIsNotNone(funcao.feminino)
+        self.assertIsNotNone(funcao.abreviacao_masculino)
+        self.assertIsNotNone(funcao.abreviacao_feminino)
+    
+    def test_get_funcao_por_sexo(self):
+        funcao = FuncaoFactory(masculino='Diretor', feminino='Diretora')
+        self.assertEqual(funcao.get_funcao_por_sexo('Masculino'), 'Diretor')
+        self.assertEqual(funcao.get_funcao_por_sexo('Feminino'), 'Diretora')
+    
+    def test_str_representation(self):
+        funcao = FuncaoFactory(masculino='Diretor', feminino='Diretora')
+        self.assertEqual(str(funcao), 'Diretor / Diretora')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class TurnoModelTest(TestCase):
+    
+    def test_create_turno(self):
+        turno = TurnoFactory()
+        self.assertIsNotNone(turno.nome)
+        self.assertIsNotNone(turno.inicio)
+        self.assertIsNotNone(turno.fim)
+        self.assertTrue(turno.ativo)
+    
+    def test_duracao_horas(self):
+        from datetime import time
+        turno = TurnoFactory(inicio=time(8, 0), fim=time(12, 0))
+        self.assertEqual(turno.duracao_horas, 4.0)
+        
+        # Turno noturno
+        turno_noturno = TurnoFactory(inicio=time(22, 0), fim=time(6, 0))
+        self.assertEqual(turno_noturno.duracao_horas, 8.0)
+    
+    def test_eh_noturno(self):
+        from datetime import time
+        turno_diurno = TurnoFactory(inicio=time(8, 0), fim=time(17, 0))
+        self.assertFalse(turno_diurno.eh_noturno)
+        
+        turno_noturno = TurnoFactory(inicio=time(22, 0), fim=time(6, 0))
+        self.assertTrue(turno_noturno.eh_noturno)
+    
+    def test_str_representation(self):
+        from datetime import time
+        turno = TurnoFactory(nome='Manhã', inicio=time(8, 0), fim=time(12, 0))
+        self.assertEqual(str(turno), 'Manhã (08:00 - 12:00)')
+
+
+@override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())
+class WhatsAppModelTest(TestCase):
+    
+    def test_create_whatsapp_account(self):
+        account = WhatsAppAccountFactory()
+        self.assertIsNotNone(account.name)
+        self.assertIsNotNone(account.phone_number_id)
+        self.assertIsNotNone(account.business_account_id)
+        self.assertTrue(account.is_active)
+    
+    def test_create_whatsapp_template(self):
+        template = WhatsAppTemplateFactory()
+        self.assertIsNotNone(template.name)
+        self.assertIsNotNone(template.account)
+        self.assertIsNotNone(template.category)
+        self.assertIsNotNone(template.language)
+    
+    def test_create_whatsapp_conversation(self):
+        conversation = WhatsAppConversationFactory()
+        self.assertIsNotNone(conversation.account)
+        self.assertIsNotNone(conversation.contact)
+        self.assertIsNotNone(conversation.status)
+        self.assertIsNotNone(conversation.criado_em)
+    
+    def test_whatsapp_message(self):
+        message = WhatsAppMessageFactory()
+        self.assertIsNotNone(message.conversation)
+        self.assertIsNotNone(message.wamid)
+        self.assertIsNotNone(message.direction)
+        self.assertIsNotNone(message.timestamp)

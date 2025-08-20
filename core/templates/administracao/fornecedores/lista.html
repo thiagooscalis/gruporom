@@ -4,63 +4,68 @@
 {% block title %}Fornecedores - Administração{% endblock %}
 
 {% block content %}
-<div class="flex-1 space-y-6">
+<div class="w-full">
     {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='Fornecedores' %}
     
-    <!-- Header com busca e ações -->
-    <div class="bg-white rounded-lg shadow-md border border-slate-200">
+    <!-- Busca e Filtros -->
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 mb-6">
         <div class="p-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold text-slate-900">Fornecedores</h1>
-                    <p class="text-sm text-slate-600">Gerencie os fornecedores da empresa</p>
-                </div>
-                <button type="button" 
-                        class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm"
-                        hx-get="{% url 'administracao:fornecedores_novo_modal' %}"
-                        hx-target="body"
-                        hx-swap="beforeend">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Novo Fornecedor
-                </button>
-            </div>
-            
-            <!-- Busca -->
-            <form method="get" hx-get="{% url 'administracao:fornecedores_lista' %}" hx-target="#fornecedores-container" hx-swap="outerHTML" hx-push-url="true" hx-trigger="submit" class="flex flex-col sm:flex-row gap-3">
-                <div class="flex-1">
-                    <input type="text" 
-                           name="search" 
-                           class="w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 placeholder-slate-400" 
+            <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4" 
+                  hx-get="{% url 'administracao:fornecedores_lista' %}"
+                  hx-target="#fornecedores-container"
+                  hx-swap="outerHTML"
+                  hx-push-url="true"
+                  hx-trigger="submit"
+                  hx-include="this"
+                  hx-indicator="#search-indicator">
+                <div class="md:col-span-10">
+                    <input type="text" name="search" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
                            placeholder="Buscar por nome, CPF/CNPJ, email ou tipo de empresa..." 
                            value="{{ search }}">
                 </div>
-                <div class="flex gap-2">
-                    <button type="submit" 
-                            class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center shadow-sm">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                <div class="md:col-span-2 flex gap-1 items-stretch">
+                    <a href="{% url 'administracao:fornecedores_lista' %}"
+                       class="w-10 h-10 bg-slate-500 hover:bg-slate-600 text-white rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md"
+                       title="Limpar filtros">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/>
                         </svg>
-                        Buscar
-                    </button>
-                    {% if search %}
-                    <a href="{% url 'administracao:fornecedores_lista' %}" 
-                       class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md transition-colors inline-flex items-center border border-slate-300">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        Limpar
                     </a>
-                    {% endif %}
+                    <button type="submit" class="flex-1 h-10 bg-primary-600 hover:bg-primary-700 text-white px-3 rounded-md transition-colors flex items-center justify-center shadow-sm hover:shadow-md text-sm font-medium">
+                        <span class="htmx-indicator flex items-center justify-center" id="search-indicator">
+                            <svg class="animate-spin w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Buscando...</span>
+                        </span>
+                        <span class="htmx-indicator-none flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Buscar</span>
+                        </span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-
+    
     <!-- Container para listagem HTMX -->
     <div id="fornecedores-container">
         {% include 'administracao/fornecedores/partial_lista.html' %}
     </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fixed bottom-6 right-6 bg-primary-600 hover:bg-primary-700 text-white w-14 h-14 rounded-full shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-700/30 transition-all flex items-center justify-center z-40"
+        hx-get="{% url 'administracao:fornecedores_novo_modal' %}"
+        hx-target="body"
+        hx-swap="beforeend"
+        title="Novo Fornecedor">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    </svg>
+</button>
 {% endblock %}

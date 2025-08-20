@@ -1,0 +1,45 @@
+<!-- Componente de Card de Área -->
+<!-- 
+Uso: {% include 'components/area_card.html' with group=group request=request %}
+
+Parâmetros:
+- group: Objeto Group do Django (obrigatório)
+- request: Request object para verificar área atual (obrigatório)
+-->
+
+{% load core_tags %}
+
+<a href="{% url group.name|area_url %}" class="group block">
+    <div class="relative rounded-lg border-2 p-6 text-center transition-all hover:shadow-lg
+                {% if group.name|slugify in request.path %}
+                    border-primary bg-primary/5
+                {% else %}
+                    border-gray-200 hover:border-primary/50 bg-white
+                {% endif %}">
+        
+        <!-- Ícone da área -->
+        <div class="mb-3 flex justify-center">
+            {% if group.name|slugify in request.path %}
+                {% include 'components/area_icon.html' with area_name=group.name icon_class='h-12 w-12 text-primary' %}
+            {% else %}
+                {% include 'components/area_icon.html' with area_name=group.name icon_class='h-12 w-12 text-gray-500 group-hover:text-primary' %}
+            {% endif %}
+        </div>
+        
+        <!-- Nome da área -->
+        <h6 class="text-sm font-semibold 
+                   {% if group.name|slugify in request.path %}text-primary{% else %}text-gray-900{% endif %}">
+            {{ group.name }}
+        </h6>
+        
+        <!-- Indicador de área atual -->
+        {% if group.name|slugify in request.path %}
+        <div class="mt-2 flex items-center justify-center text-xs text-primary">
+            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path>
+            </svg>
+            Área atual
+        </div>
+        {% endif %}
+    </div>
+</a>
