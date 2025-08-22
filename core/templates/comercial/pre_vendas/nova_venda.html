@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% include 'includes/breadcrumbs.html' with cur_page='Nova Venda' %}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+        <p class="text-gray-600 mt-1">Selecione o tipo de produto ou serviço para iniciar uma nova venda</p>
+    </div>
+</div>
+
+<!-- Cards de Produtos/Serviços -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <!-- Card Caravanas -->
+    <a href="{% url 'comercial:caravanas_ativas' %}" class="group bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-primary/30 transition-all duration-200 p-6">
+        <div class="flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-lg mb-4 group-hover:bg-primary/20 transition-colors">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m0-3.75A2.625 2.625 0 014.5 8.25v1.5m0 0V12m0-3.75h1.125c.621 0 1.125.504 1.125 1.125v3.75m0 0V12m0 0h7.5m0 0V8.625c0-.621.504-1.125 1.125-1.125H21m0 3.75v3.75m0 0v.375c0 .621-.504 1.125-1.125 1.125H19.5"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">Caravana</h3>
+        <p class="text-gray-600 text-sm mb-4">Venda de pacotes de viagem em caravanas para destinos nacionais e internacionais</p>
+        <div class="flex items-center text-primary text-sm font-medium">
+            <span>Selecionar caravana</span>
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+            </svg>
+        </div>
+    </a>
+
+    <!-- Card Voos (desabilitado temporariamente) -->
+    <div class="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 opacity-50">
+        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 text-gray-400 rounded-lg mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-500 mb-2">Voos</h3>
+        <p class="text-gray-500 text-sm mb-4">Venda de passagens aéreas individuais e pacotes de voo</p>
+        <div class="flex items-center text-gray-400 text-sm">
+            <span>Em breve</span>
+        </div>
+    </div>
+
+    <!-- Card Hotéis (desabilitado temporariamente) -->
+    <div class="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 opacity-50">
+        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 text-gray-400 rounded-lg mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-500 mb-2">Hotéis</h3>
+        <p class="text-gray-500 text-sm mb-4">Reserva de hospedagem em hotéis e pousadas</p>
+        <div class="flex items-center text-gray-400 text-sm">
+            <span>Em breve</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Estatísticas Rápidas -->
+<div class="mt-12">
+    <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+        </svg>
+        Resumo de Vendas
+    </h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg p-6 text-center border border-gray-200">
+            <h4 class="text-2xl font-bold text-primary mb-1">0</h4>
+            <p class="text-sm text-gray-600">Vendas Hoje</p>
+        </div>
+        <div class="bg-white rounded-lg p-6 text-center border border-gray-200">
+            <h4 class="text-2xl font-bold text-green-600 mb-1">0</h4>
+            <p class="text-sm text-gray-600">Vendas Este Mês</p>
+        </div>
+        <div class="bg-white rounded-lg p-6 text-center border border-gray-200">
+            <h4 class="text-2xl font-bold text-blue-600 mb-1">R$ 0,00</h4>
+            <p class="text-sm text-gray-600">Faturamento Mensal</p>
+        </div>
+        <div class="bg-white rounded-lg p-6 text-center border border-gray-200">
+            <h4 class="text-2xl font-bold text-primary mb-1">0</h4>
+            <p class="text-sm text-gray-600">Orçamentos Pendentes</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

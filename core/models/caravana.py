@@ -33,9 +33,7 @@ class Caravana(models.Model):
         max_length=20, choices=TIPO_CARAVANA_CHOICES, verbose_name="Tipo"
     )
     link = models.URLField(blank=True, null=True, verbose_name="Link")
-    destaque_site = models.IntegerField(
-        default=0, verbose_name="Destaque no Site"
-    )
+    destaque_site = models.IntegerField(default=0, verbose_name="Destaque no Site")
     repasse_valor = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Valor do Repasse"
     )
@@ -62,9 +60,7 @@ class Caravana(models.Model):
         null=True,
         verbose_name="Banner Mobile",
     )
-    quantidade = models.PositiveIntegerField(
-        verbose_name="Quantidade de Passageiros"
-    )
+    quantidade = models.PositiveIntegerField(verbose_name="Quantidade de Passageiros")
     free_economica = models.PositiveIntegerField(
         default=0, verbose_name="Free Econômica"
     )
@@ -73,6 +69,7 @@ class Caravana(models.Model):
     )
     data_contrato = models.DateField(verbose_name="Data do Contrato")
     ativo = models.BooleanField(default=False, verbose_name="Ativo")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Caravana"

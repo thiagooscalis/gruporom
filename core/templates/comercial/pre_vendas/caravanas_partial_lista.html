@@ -1,0 +1,66 @@
+{% load static %}
+
+{% if caravanas %}
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Caravana
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Empresa
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Promotor
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Líderes
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Passageiros
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Data Saída
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="caravanas-tbody" class="bg-white divide-y divide-gray-200">
+                {% include 'comercial/pre_vendas/caravanas_partial_linhas.html' %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Paginação -->
+    {% if caravanas.has_next %}
+    <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
+        <button class="w-full text-center py-2 px-4 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                hx-get="{% url 'comercial:caravanas_ativas' %}?page={{ caravanas.next_page_number }}{% if search %}&search={{ search }}{% endif %}&load_more=1"
+                hx-target="#caravanas-tbody"
+                hx-swap="beforeend">
+            Carregar mais caravanas
+        </button>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <div class="max-w-md mx-auto">
+        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma caravana encontrada</h3>
+        <p class="text-gray-500">
+            {% if search %}
+                Não encontramos caravanas com o termo "{{ search }}".
+            {% else %}
+                Não há caravanas ativas no momento.
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endif %}

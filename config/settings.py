@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     "channels",
 ]
 
+# Django Debug Toolbar (apenas em desenvolvimento)
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -54,6 +58,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# Django Debug Toolbar middleware (apenas em desenvolvimento)
+if DEBUG:
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "config.urls"
 
@@ -520,3 +528,38 @@ CACHES = {
         "TIMEOUT": 300,
     }
 }
+
+# ==========================================
+# DJANGO DEBUG TOOLBAR SETTINGS
+# ==========================================
+
+if DEBUG:
+    # IPs que podem acessar o debug toolbar
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "localhost",
+    ]
+    
+    # Configurações do Debug Toolbar
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
+        "HIDE_DJANGO_SQL": False,
+        "SHOW_TEMPLATE_CONTEXT": True,
+        "ENABLE_STACKTRACES": True,
+    }
+    
+    # Panels do Debug Toolbar
+    DEBUG_TOOLBAR_PANELS = [
+        "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+    ]
