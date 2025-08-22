@@ -1,192 +1,251 @@
 {% extends "base.html" %}
-{% load static %}
 
-{% block title %}WhatsApp - Contas e Templates{% endblock %}
+{% block title %}WhatsApp Business - Administração{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='WhatsApp' %}
-        </div>
+<div class="w-full">
+    {% include 'includes/breadcrumbs.html' with prev_page='Administração' prev_url='/administracao/' cur_page='WhatsApp Business' %}
+    
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+            <svg class="w-8 h-8 mr-3 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.085z"/>
+            </svg>
+            WhatsApp Business
+        </h1>
+        <p class="text-gray-600 mt-2">Configuração de contas e templates de mensagem</p>
     </div>
 
-    <!-- Contas WhatsApp - Cards Quadrados -->
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">
-                <i class="fas fa-phone me-2"></i>
+    <!-- Contas WhatsApp -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
                 Contas WhatsApp
-            </h4>
-            <button type="button" class="btn btn-success" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#modalWhatsAppAccount"
+            </h2>
+            <button type="button" 
+                    class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors shadow-sm hover:shadow-md"
+                    @click="openModal('modalWhatsAppAccount')"
                     hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
-                    hx-target="#modalWhatsAppAccount .modal-content"
-                    hx-swap="innerHTML">
-                <i class="fas fa-plus me-2"></i>Nova Conta
+                    hx-target="#modalWhatsAppAccount .bg-white"
+                    hx-swap="innerHTML"
+                    hx-trigger="click">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Nova Conta
             </button>
         </div>
         
         {% if active_accounts %}
-            <div class="row g-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {% for account in active_accounts %}
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body d-flex flex-column text-center p-4">
-                            <!-- Ícone -->
-                            <div class="mb-3">
-                                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center" 
-                                     style="width: 60px; height: 60px;">
-                                    <i class="fab fa-whatsapp text-white fa-2x"></i>
-                                </div>
-                            </div>
-                            
-                            <!-- Informações -->
-                            <h6 class="card-title mb-2">{{ account.name }}</h6>
-                            <p class="card-text text-muted small mb-3">{{ account.display_phone }}</p>
-                            
-                            <!-- Status -->
-                            <div class="mb-3">
-                                <span class="badge bg-{% if account.status == 'active' %}success{% else %}warning{% endif %} rounded-pill">
-                                    {{ account.get_status_display }}
-                                </span>
-                            </div>
-                            
-                            <!-- Ações -->
-                            <div class="mt-auto">
-                                <div class="btn-group w-100" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalWhatsAppAccount"
-                                            hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
-                                            hx-target="#modalWhatsAppAccount .modal-content"
-                                            hx-swap="innerHTML"
-                                            title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-success" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalBulkSend"
-                                            hx-get="{% url 'administracao:whatsapp:bulk_send_modal' account.id %}"
-                                            hx-target="#modalBulkSend .modal-content"
-                                            hx-swap="innerHTML"
-                                            title="Envio em Massa">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                    <!-- Ícone -->
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 text-green-600 rounded-full mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.085z"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Informações -->
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ account.name }}</h3>
+                    <p class="text-sm text-gray-600 mb-4">{{ account.display_phone }}</p>
+                    
+                    <!-- Status -->
+                    <div class="mb-4">
+                        {% if account.status == 'active' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                {{ account.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                {{ account.get_status_display }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Ações -->
+                    <div class="flex gap-2">
+                        <button type="button" 
+                                class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                                hx-get="{% url 'administracao:whatsapp:account_edit_modal' account.id %}"
+                                hx-target="#modalWhatsAppAccount"
+                                hx-swap="innerHTML"
+                                onclick="openModal('modalWhatsAppAccount')"
+                                title="Editar">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Editar
+                        </button>
+                        <button type="button" 
+                                class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                                hx-get="{% url 'administracao:whatsapp:bulk_send_modal' account.id %}"
+                                hx-target="#modalBulkSend"
+                                hx-swap="innerHTML"
+                                onclick="openModal('modalBulkSend')"
+                                title="Envio em Massa">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                            Enviar
+                        </button>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="row">
-                <div class="col-12">
-                    <div class="card border-2 border-dashed border-secondary">
-                        <div class="card-body text-center py-5">
-                            <i class="fas fa-phone fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted mb-3">Nenhuma conta configurada</h5>
-                            <p class="text-muted mb-4">Configure sua primeira conta WhatsApp Business para começar.</p>
-                            <button type="button" class="btn btn-success btn-lg" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#modalWhatsAppAccount"
-                                    hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
-                                    hx-target="#modalWhatsAppAccount .modal-content"
-                                    hx-swap="innerHTML">
-                                <i class="fas fa-plus me-2"></i>Adicionar Primeira Conta
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-white rounded-lg shadow-sm border-2 border-dashed border-gray-300 p-12 text-center">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhuma conta configurada</h3>
+                <p class="text-gray-600 mb-6">Configure sua primeira conta WhatsApp Business para começar a enviar mensagens.</p>
+                <button type="button" 
+                        class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors shadow-sm hover:shadow-md"
+                        @click="openModal('modalWhatsAppAccount')"
+                        hx-get="{% url 'administracao:whatsapp:account_create_modal' %}"
+                        hx-target="#modalWhatsAppAccount .bg-white"
+                        hx-swap="innerHTML"
+                        hx-trigger="click">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Adicionar Primeira Conta
+                </button>
             </div>
         {% endif %}
     </div>
 
-    <!-- Templates de Mensagem - Card Grande -->
-    <div class="mb-4">
-        <div class="card border-0 shadow-sm card-templates">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-                <h5 class="mb-0">
-                    <i class="fas fa-file-alt me-2"></i>
-                    Templates de Mensagem
-                </h5>
-                {% if active_accounts %}
-                <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
-                   class="btn btn-light btn-sm">
-                    <i class="fas fa-eye me-1"></i>Ver Todos
-                </a>
-                {% endif %}
+    <!-- Templates de Mensagem -->
+    <div class="mb-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="bg-primary-600 px-6 py-4 rounded-t-lg">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Templates de Mensagem
+                    </h2>
+                    {% if active_accounts %}
+                    <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
+                       class="inline-flex items-center px-3 py-1.5 bg-white text-primary-600 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Ver Todos
+                    </a>
+                    {% endif %}
+                </div>
             </div>
-            <div class="card-body p-0">
+            <div class="p-0">
                 {% if templates %}
-                    <div class="list-group list-group-flush">
+                    <div class="divide-y divide-gray-200">
                         {% for template in templates %}
-                        <div class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                             style="width: 40px; height: 40px; min-width: 40px;">
-                                            <i class="fas fa-file-alt text-white"></i>
+                        <div class="p-6 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center flex-1">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
                                         </div>
-                                        <div>
-                                            <h6 class="mb-1">{{ template.display_name }}</h6>
-                                            <div class="d-flex gap-2 align-items-center">
-                                                <small class="text-muted">{{ template.account.name }}</small>
-                                                <span class="badge {{ template.get_status_badge_class }} badge-sm">
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <h3 class="text-sm font-semibold text-gray-900">{{ template.display_name }}</h3>
+                                        <div class="flex items-center gap-3 mt-1">
+                                            <span class="text-sm text-gray-600">{{ template.account.name }}</span>
+                                            {% if template.status == 'approved' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                                                     {{ template.get_status_display }}
                                                 </span>
-                                                {% if template.variables_count > 0 %}
-                                                <small class="text-muted">
-                                                    <i class="fas fa-code fa-xs"></i> 
-                                                    {{ template.variables_count }} var{{ template.variables_count|pluralize:"iável,iáveis" }}
-                                                </small>
-                                                {% endif %}
-                                            </div>
+                                            {% elif template.status == 'pending' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                    {{ template.get_status_display }}
+                                                </span>
+                                            {% elif template.status == 'rejected' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                                    {{ template.get_status_display }}
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                    {{ template.get_status_display }}
+                                                </span>
+                                            {% endif %}
+                                            {% if template.variables_count > 0 %}
+                                            <span class="text-xs text-gray-500 flex items-center">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                                </svg>
+                                                {{ template.variables_count }} variável{{ template.variables_count|pluralize:"is" }}
+                                            </span>
+                                            {% endif %}
                                         </div>
-                                    </div>
-                                    {% if template.body_text %}
-                                    <p class="mb-0 text-muted small">{{ template.body_text|truncatechars:120 }}</p>
-                                    {% endif %}
-                                </div>
-                                <div class="ms-3">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button type="button" class="btn btn-outline-info"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalTemplatePreview"
-                                                hx-get="{% url 'administracao:whatsapp:template_preview_modal' template.id %}"
-                                                hx-target="#modalTemplatePreview .modal-content"
-                                                hx-swap="innerHTML"
-                                                title="Visualizar">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        {% if template.status == 'draft' %}
-                                        <button type="button" class="btn btn-outline-success" 
-                                                onclick="if(confirm('Enviar template para aprovação?')) window.location.href='{% url 'administracao:whatsapp:template_submit_approval' template.id %}'"
-                                                title="Enviar para Aprovação">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
+                                        {% if template.body_text %}
+                                        <p class="text-sm text-gray-600 mt-2">{{ template.body_text|truncatechars:120 }}</p>
                                         {% endif %}
                                     </div>
+                                </div>
+                                <div class="flex items-center gap-2 ml-4">
+                                    <button type="button" 
+                                            class="inline-flex items-center px-3 py-1.5 text-sm border border-blue-300 text-blue-700 rounded-md hover:bg-blue-50 transition-colors"
+                                            hx-get="{% url 'administracao:whatsapp:template_preview_modal' template.id %}"
+                                            hx-target="#modalTemplatePreview"
+                                            hx-swap="innerHTML"
+                                            onclick="openModal('modalTemplatePreview')"
+                                            title="Visualizar">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        Visualizar
+                                    </button>
+                                    {% if template.status == 'draft' %}
+                                    <button type="button" 
+                                            class="inline-flex items-center px-3 py-1.5 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                                            onclick="if(confirm('Enviar template para aprovação?')) window.location.href='{% url 'administracao:whatsapp:template_submit_approval' template.id %}'"
+                                            title="Enviar para Aprovação">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                        </svg>
+                                        Aprovar
+                                    </button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="p-5 text-center">
-                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted mb-3">Nenhum template criado</h5>
+                    <div class="p-12 text-center">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum template criado</h3>
                         {% if active_accounts %}
-                        <p class="text-muted mb-4">Crie templates de mensagem para envios automáticos.</p>
+                        <p class="text-gray-600 mb-6">Crie templates de mensagem para envios automáticos e em massa.</p>
                         <a href="{% url 'administracao:whatsapp:templates_list' active_accounts.0.id %}" 
-                           class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Criar Primeiro Template
+                           class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors shadow-sm hover:shadow-md">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Criar Primeiro Template
                         </a>
                         {% else %}
-                        <p class="text-muted">Configure uma conta WhatsApp primeiro para criar templates.</p>
+                        <p class="text-gray-600">Configure uma conta WhatsApp primeiro para criar templates.</p>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -194,224 +253,83 @@
         </div>
     </div>
 </div>
-
-<style>
-/* Cards quadrados para contas - apenas cards de conta terão animação */
-.card:not(.card-templates) {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:not(.card-templates):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Badge pequeno */
-.badge-sm {
-    font-size: 0.7em;
-}
-
-/* Lista de templates - remover hover se não quiser */
-.list-group-item-action:hover {
-    background-color: transparent;
-}
-</style>
 {% endblock %}
 
 {% block modals %}
 <!-- Modal para conta WhatsApp -->
-<div class="modal fade" id="modalWhatsAppAccount" tabindex="-1" aria-labelledby="modalWhatsAppAccountLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="d-flex justify-content-center align-items-center p-5">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Carregando...</span>
-                </div>
+<div id="modalWhatsAppAccount" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" x-data="{ open: false }" x-show="open" x-transition>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden" @click.stop>
+            <div class="flex items-center justify-center p-8">
+                <svg class="w-8 h-8 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-3 text-gray-600">Carregando...</span>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal para envio em massa -->
-<div class="modal fade" id="modalBulkSend" tabindex="-1" aria-labelledby="modalBulkSendLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="d-flex justify-content-center align-items-center p-5">
-                <div class="spinner-border text-success" role="status">
-                    <span class="visually-hidden">Carregando...</span>
-                </div>
+<div id="modalBulkSend" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" x-data="{ open: false }" x-show="open" x-transition>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden" @click.stop>
+            <div class="flex items-center justify-center p-8">
+                <svg class="w-8 h-8 text-green-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-3 text-gray-600">Carregando...</span>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal para preview de template -->
-<div class="modal fade" id="modalTemplatePreview" tabindex="-1" aria-labelledby="modalTemplatePreviewLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="d-flex justify-content-center align-items-center p-5">
-                <div class="spinner-border text-info" role="status">
-                    <span class="visually-hidden">Carregando...</span>
-                </div>
+<div id="modalTemplatePreview" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" x-data="{ open: false }" x-show="open" x-transition>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden" @click.stop>
+            <div class="flex items-center justify-center p-8">
+                <svg class="w-8 h-8 text-blue-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 818-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-3 text-gray-600">Carregando...</span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal com guia do Facebook -->
-<div class="modal fade" id="modalFacebookGuide" tabindex="-1" aria-labelledby="modalFacebookGuideLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalFacebookGuideLabel">
-                    <i class="fab fa-facebook text-primary me-2"></i>
-                    Como obter credenciais da API WhatsApp Business
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    Você precisará de uma conta Meta for Developers e um aplicativo configurado para usar a API do WhatsApp Business.
-                </div>
-                
-                <div class="accordion" id="guideAccordion">
-                    <!-- Passo 1 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step1">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
-                                <strong>1. Criar conta Meta for Developers</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>Acesse <a href="https://developers.facebook.com/" target="_blank" class="text-primary">developers.facebook.com</a></li>
-                                    <li>Clique em "Começar" ou "Get Started"</li>
-                                    <li>Faça login com sua conta Facebook/Meta</li>
-                                    <li>Complete o registro como desenvolvedor</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Passo 2 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step2">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
-                                <strong>2. Criar aplicativo</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>No painel do desenvolvedor, clique em "Criar App"</li>
-                                    <li>Escolha "Business" como tipo de aplicativo</li>
-                                    <li>Preencha os dados do aplicativo</li>
-                                    <li>Após criar, anote o <code>App ID</code> e <code>App Secret</code></li>
-                                </ol>
-                                <div class="alert alert-warning">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    O <strong>App Secret</strong> é sensível - mantenha-o seguro!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Passo 3 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step3">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-                                <strong>3. Configurar WhatsApp Business</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>No seu app, vá para "Adicionar Produto"</li>
-                                    <li>Encontre e adicione "WhatsApp"</li>
-                                    <li>Clique em "Configurar" no WhatsApp</li>
-                                    <li>Crie ou vincule uma conta do WhatsApp Business</li>
-                                    <li>Anote o <code>Business Account ID</code></li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Passo 4 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step4">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
-                                <strong>4. Obter Phone Number ID</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>Na configuração do WhatsApp, vá para "API Setup"</li>
-                                    <li>Você verá uma lista de números de telefone</li>
-                                    <li>Copie o <code>Phone Number ID</code> do número que deseja usar</li>
-                                    <li>Este ID é diferente do número de telefone real</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Passo 5 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step5">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
-                                <strong>5. Gerar Access Token</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>No "API Setup", clique em "Generate Access Token"</li>
-                                    <li>Copie o token gerado</li>
-                                    <li>Para produção, você precisará gerar um token permanente</li>
-                                </ol>
-                                <div class="alert alert-danger">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    <strong>Importante:</strong> Tokens temporários expiram em 24 horas. Para uso em produção, configure um token permanente.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Passo 6 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="step6">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
-                                <strong>6. Configurar Webhook</strong>
-                            </button>
-                        </h2>
-                        <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>Defina um <code>Webhook Verify Token</code> (pode ser qualquer string segura)</li>
-                                    <li>Use esse token no campo correspondente do formulário</li>
-                                    <li>Após salvar a conta, copie a URL do webhook gerada</li>
-                                    <li>No Facebook, configure essa URL e o verify token</li>
-                                </ol>
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    A URL do webhook será exibida após criar a conta.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-2"></i>Fechar
-                </button>
-                <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started" target="_blank" class="btn btn-primary">
-                    <i class="fas fa-external-link-alt me-2"></i>Documentação Oficial
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Scripts para controle de modais -->
+<script>
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal && modal.__x) {
+        modal.__x.$data.open = true;
+    } else {
+        // Fallback: show the modal directly
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal && modal.__x) {
+        modal.__x.$data.open = false;
+    } else {
+        // Fallback: hide the modal directly
+        modal.classList.add('hidden');
+    }
+}
+
+// Fecha modais com ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        ['modalWhatsAppAccount', 'modalBulkSend', 'modalTemplatePreview'].forEach(modalId => {
+            closeModal(modalId);
+        });
+    }
+});
+</script>
 {% endblock %}

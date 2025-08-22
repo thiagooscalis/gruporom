@@ -1,241 +1,151 @@
-{% load static %}
+{% extends "components/modal_form_base.html" %}
 {% load crispy_forms_tags %}
 
-<div x-data="{ 
-        showModal: true,
-        destaqueSite: false,
-        init() {
-            // Auto-focus no primeiro input
-            this.$nextTick(() => {
-                this.$refs.firstInput?.focus();
-            });
-        }
-     }" 
-     x-show="showModal"
-     x-on:keydown.escape.window="showModal = false"
-     x-transition:enter="transition ease-out duration-300"
-     x-transition:enter-start="opacity-0"
-     x-transition:enter-end="opacity-100"
-     x-transition:leave="transition ease-in duration-200"
-     x-transition:leave-start="opacity-100"
-     x-transition:leave-end="opacity-0"
-     class="fixed inset-0 z-50 overflow-y-auto">
+{% block modal_size %}max-w-6xl{% endblock %}
+
+{% block header_bg %}bg-primary-600{% endblock %}
+{% block header_text_color %}text-white{% endblock %}
+{% block close_button_color %}text-primary-200 hover:text-white{% endblock %}
+
+{% block modal_title %}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+</svg>
+{{ titulo }}
+{% endblock %}
+
+{% block form_attributes %}
+hx-post="{{ action_url }}"
+hx-target="#form-content"
+hx-swap="outerHTML"
+{% endblock %}
+
+{% block modal_content %}
+<div id="form-content">
+    {% csrf_token %}
     
-    <!-- Backdrop -->
-    <div x-show="showModal"
-         @click="showModal = false"
-         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
-    
-    <!-- Modal Container -->
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div x-show="showModal"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform scale-95"
-             x-transition:enter-end="opacity-100 transform scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform scale-100"
-             x-transition:leave-end="opacity-0 transform scale-95"
-             @click.stop
-             class="relative w-full max-w-6xl transform overflow-hidden rounded-lg bg-white shadow-xl max-h-[90vh] overflow-y-auto">
-            
-            <!-- Modal Header -->
-            <div class="bg-blue-600 px-6 py-4 sticky top-0 z-10">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-white flex items-center">
-                        <!-- Heroicon: truck -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                        </svg>
-                        {{ titulo }}
-                    </h3>
-                    <button @click="showModal = false"
-                            class="rounded-lg p-1 text-blue-200 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20">
-                        <!-- Heroicon: x-mark -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+    <!-- Modal Body -->
+    <div class="px-6 py-4 space-y-6">
+
+        <!-- Seção: Informações da Caravana -->
+        <div class="bg-gray-50 rounded-lg border">
+            <div class="px-4 py-3 border-b border-gray-200">
+                <h6 class="text-primary-600 font-semibold mb-0 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                    Informações da Caravana
+                </h6>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <div class="md:col-span-6">{{ form.nome|as_crispy_field }}</div>
+                    <div class="md:col-span-3">{{ form.empresa|as_crispy_field }}</div>
+                    <div class="md:col-span-3">{{ form.tipo|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>{{ form.promotor|as_crispy_field }}</div>
+                    <div>{{ form.data_contrato|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div>{{ form.quantidade|as_crispy_field }}</div>
+                    <div>{{ form.free_economica|as_crispy_field }}</div>
+                    <div>{{ form.free_executiva|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div>{{ form.repasse_valor|as_crispy_field }}</div>
+                    <div>{{ form.repasse_tipo|as_crispy_field }}</div>
+                    <div>{{ form.repasse_moeda|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+                    <div class="md:col-span-9">{{ form.link|as_crispy_field }}</div>
+                    <div class="md:col-span-3">
+                        <div class="flex items-center pt-8">
+                            {{ form.destaque_site }}
+                            <label for="{{ form.destaque_site.id_for_label }}" class="ml-3 block text-sm">
+                                <span class="font-medium text-gray-900">{{ form.destaque_site.label }}</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Modal Body -->
-            <form method="post" 
-                  action="{{ action_url }}"
-                  hx-post="{{ action_url }}"
-                  hx-target="#modal-body-content"
-                  hx-swap="outerHTML"
-                  id="formCaravana"
-                  class="bg-white">
-                {% csrf_token %}
-                <div class="p-6 space-y-8" id="modal-body-content">
-                    
-                    <!-- Seção: Informações da Caravana -->
-                    <div>
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-blue-600 flex items-center">
-                                <!-- Heroicon: information-circle (solid) -->
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                </svg>
-                                Informações da Caravana
-                            </h3>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                            <div class="md:col-span-6">{{ form.nome|as_crispy_field }}</div>
-                            <div class="md:col-span-3">{{ form.empresa|as_crispy_field }}</div>
-                            <div class="md:col-span-3">{{ form.tipo|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            <div>{{ form.promotor|as_crispy_field }}</div>
-                            <div>{{ form.data_contrato|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                            <div>{{ form.quantidade|as_crispy_field }}</div>
-                            <div>{{ form.free_economica|as_crispy_field }}</div>
-                            <div>{{ form.free_executiva|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                            <div>{{ form.repasse_valor|as_crispy_field }}</div>
-                            <div>{{ form.repasse_tipo|as_crispy_field }}</div>
-                            <div>{{ form.repasse_moeda|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
-                            <div class="md:col-span-9">{{ form.link|as_crispy_field }}</div>
-                            <div class="md:col-span-3">{{ form.destaque_site|as_crispy_field }}</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Divisor -->
-                    <hr class="border-gray-200">
-                    
-                    <!-- Seção: Responsável e Líderes -->
-                    <div>
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-600 flex items-center">
-                                <!-- Heroicon: users -->
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                                </svg>
-                                Responsável e Líderes
-                            </h3>
-                        </div>
-                        
-                        <!-- Autocomplete para responsável -->
-                        <div class="mb-6">
-                            {% if form.instance.pk %}
-                                {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' initial_value=form.instance.responsavel %}
-                            {% else %}
-                                {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' %}
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Autocomplete múltiplo para líderes -->
-                        <div class="mb-6">
-                            {% if form.instance.pk %}
-                                {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
-                            {% else %}
-                                {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Divisor -->
-                    <hr class="border-gray-200">
-                    
-                    <!-- Seção: Dados dos Bloqueios -->
-                    <div>
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-600 flex items-center">
-                                <!-- Heroicon: calendar-days -->
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 005.25 9h13.5a2.25 2.25 0 002.25 2.25v7.5m-9-6h.008v.008H12V12.75z" />
-                                </svg>
-                                Dados dos Bloqueios
-                            </h3>
-                            <p class="text-gray-500 text-sm mt-2">Serão criados automaticamente 3 bloqueios: Econômica, Executiva e Terrestre</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>{{ form.data_saida|as_crispy_field }}</div>
-                            <div>{{ form.taxas|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            <div>{{ form.moeda_valor|as_crispy_field }}</div>
-                            <div>{{ form.moeda_taxas|as_crispy_field }}</div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                            <div>{{ form.valor_economica|as_crispy_field }}</div>
-                            <div>{{ form.valor_executiva|as_crispy_field }}</div>
-                            <div>{{ form.valor_terrestre|as_crispy_field }}</div>
-                        </div>
-                    </div>
+        </div>
+
+        <!-- Seção: Responsável e Líderes -->
+        <div class="bg-gray-50 rounded-lg border">
+            <div class="px-4 py-3 border-b border-gray-200">
+                <h6 class="text-primary-600 font-semibold mb-0 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    Responsável e Líderes
+                </h6>
+            </div>
+            <div class="p-4">
+                <!-- Autocomplete para responsável -->
+                <div class="mb-4">
+                    {% if form.instance.pk %}
+                        {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' initial_value=form.instance.responsavel %}
+                    {% else %}
+                        {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' %}
+                    {% endif %}
                 </div>
                 
-                <!-- Modal Footer -->
-                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 sticky bottom-0">
-                    <button type="button" 
-                            @click="showModal = false"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit" 
-                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 inline-flex items-center transition-colors">
-                        <!-- Heroicon: check -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-                        Salvar
-                    </button>
+                <!-- Autocomplete múltiplo para líderes -->
+                <div>
+                    {% if form.instance.pk %}
+                        {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
+                    {% else %}
+                        {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
+                    {% endif %}
                 </div>
-            </form>
+            </div>
         </div>
+
+        <!-- Seção: Dados dos Bloqueios -->
+        <div class="bg-gray-50 rounded-lg border">
+            <div class="px-4 py-3 border-b border-gray-200">
+                <h6 class="text-primary-600 font-semibold mb-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 005.25 9h13.5a2.25 2.25 0 002.25 2.25v7.5m-9-6h.008v.008H12V12.75z" />
+                    </svg>
+                    Dados dos Bloqueios
+                </h6>
+                <p class="text-sm text-gray-600">Serão criados automaticamente 3 bloqueios: Econômica, Executiva e Terrestre</p>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>{{ form.data_saida|as_crispy_field }}</div>
+                    <div>{{ form.taxas|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>{{ form.moeda_valor|as_crispy_field }}</div>
+                    <div>{{ form.moeda_taxas|as_crispy_field }}</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div>{{ form.valor_economica|as_crispy_field }}</div>
+                    <div>{{ form.valor_executiva|as_crispy_field }}</div>
+                    <div>{{ form.valor_terrestre|as_crispy_field }}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="flex items-center justify-end px-6 py-4 border-t border-gray-200 space-x-3">
+        <button type="button"
+                @click="close()"
+                class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+            Cancelar
+        </button>
+        <button type="submit"
+                class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Salvar
+        </button>
     </div>
 </div>
-
-<script>
-(function() {
-    // Auto-remove modal do DOM quando fechar
-    const modalContainer = document.querySelector('[x-data*="showModal"]');
-    if (modalContainer) {
-        // Escutar eventos de sucesso do HTMX
-        document.addEventListener('htmx:afterRequest', function(evt) {
-            if (evt.detail.xhr.getResponseHeader('HX-Redirect')) {
-                // Fechar modal em caso de redirect
-                modalContainer.__x.$data.showModal = false;
-                setTimeout(() => modalContainer.remove(), 300);
-                return;
-            }
-            
-            // Tratar resposta JSON de sucesso
-            if (evt.detail.xhr.status === 200) {
-                try {
-                    const response = JSON.parse(evt.detail.xhr.responseText);
-                    if (response.success && response.caravana) {
-                        // Fechar modal e recarregar lista
-                        modalContainer.__x.$data.showModal = false;
-                        setTimeout(() => {
-                            modalContainer.remove();
-                            // Recarregar a lista de caravanas
-                            const listaContainer = document.querySelector('#lista-container');
-                            if (listaContainer && window.htmx) {
-                                window.htmx.trigger(listaContainer, 'htmx:load');
-                            }
-                        }, 300);
-                        return;
-                    }
-                } catch (e) {
-                    // Continuar com comportamento padrão se não for JSON
-                }
-            }
-        });
-        
-        // Remover do DOM quando modal fechar
-        modalContainer.addEventListener('transitionend', function() {
-            if (!modalContainer.__x.$data.showModal) {
-                modalContainer.remove();
-            }
-        });
-    }
-})();
-</script>
+{% endblock %}

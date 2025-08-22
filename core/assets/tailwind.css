@@ -76,6 +76,11 @@
    CLASSES UTILITÁRIAS CUSTOMIZADAS
    ================================ */
 
+/* Alpine.js x-cloak para evitar FOUC */
+[x-cloak] {
+  display: none !important;
+}
+
 /* Gradient baseado no logo */
 .bg-gradient-rom {
   background: linear-gradient(135deg, #965915 0%, #ddb14b 71%, #f9e7a1 100%);

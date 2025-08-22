@@ -1,55 +1,65 @@
 {% if pending_conversations %}
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="table-light">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th>Cliente</th>
-                    <th>Conta</th>
-                    <th>Última Mensagem</th>
-                    <th>Mensagens</th>
-                    <th>Última Atividade</th>
-                    <th>Ações</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conta</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Última Mensagem</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mensagens</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Última Atividade</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
                 {% for conversation in pending_conversations %}
-                <tr data-conversation-id="{{ conversation.id }}">
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <div class="bg-success bg-opacity-20 p-2 rounded-circle me-2">
-                                <i class="fab fa-whatsapp text-success"></i>
+                <tr data-conversation-id="{{ conversation.id }}" class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-green-100 p-2 rounded-full">
+                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.085z"/>
+                                    </svg>
+                                </div>
                             </div>
-                            <div>
-                                <strong>{{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}</strong>
-                                <br><small class="text-muted">{{ conversation.contact.phone_number }}</small>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{ conversation.contact.name|default:conversation.contact.profile_name|default:conversation.contact.phone_number }}
+                                </div>
+                                <div class="text-sm text-gray-500">{{ conversation.contact.phone_number }}</div>
                             </div>
                         </div>
                     </td>
-                    <td>{{ conversation.account.name }}</td>
-                    <td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ conversation.account.name }}</div>
+                    </td>
+                    <td class="px-6 py-4">
                         {% with last_msg=conversation.messages.last %}
                         {% if last_msg %}
-                            <div class="text-truncate" style="max-width: 200px;">
+                            <div class="text-sm text-gray-900 max-w-xs truncate">
                                 {{ last_msg.get_display_content }}
                             </div>
                         {% else %}
-                            <small class="text-muted">Sem mensagens</small>
+                            <div class="text-sm text-gray-500">Sem mensagens</div>
                         {% endif %}
                         {% endwith %}
                     </td>
-                    <td>
-                        <span class="badge bg-primary" data-message-count>{{ conversation.messages_count }}</span>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white" data-message-count>{{ conversation.messages_count }}</span>
                         {% if conversation.unread_count > 0 %}
-                            <span class="badge bg-warning ms-1">{{ conversation.unread_count }} não lidas</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 ml-1">{{ conversation.unread_count }} não lidas</span>
                         {% endif %}
                     </td>
-                    <td>
-                        <small class="text-muted">{{ conversation.last_activity|timesince }} atrás</small>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-500">{{ conversation.last_activity|timesince }} atrás</div>
                     </td>
-                    <td>
+                    <td class="px-6 py-4 whitespace-nowrap">
                         <a href="{% url 'comercial:assign_conversation' conversation.id %}" 
-                           class="btn btn-success btn-sm">
-                            <i class="fas fa-user-plus me-1"></i>
+                           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700 transition-colors">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.764z"></path>
+                            </svg>
                             Atender
                         </a>
                     </td>
@@ -59,11 +69,13 @@
         </table>
     </div>
 {% else %}
-    <div class="text-center py-5">
-        <div class="mb-3">
-            <i class="fas fa-comments text-muted fa-4x"></i>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+        <div class="mb-4">
+            <svg class="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
         </div>
-        <h5 class="text-muted">Nenhuma conversa aguardando</h5>
-        <p class="text-muted">Todas as conversas foram atendidas ou não há mensagens pendentes.</p>
+        <h5 class="text-lg font-medium text-gray-900 mb-2">Nenhuma conversa aguardando</h5>
+        <p class="text-gray-500">Todas as conversas foram atendidas ou não há mensagens pendentes.</p>
     </div>
 {% endif %}

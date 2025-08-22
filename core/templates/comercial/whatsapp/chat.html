@@ -1,1903 +1,297 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Layout do Chat */
-    .chat-container {
-        background: #f0f2f5;
-        flex: 1;
-        height: calc(100vh - 200px); /* Altura fixa baseada no viewport */
-        max-height: calc(100vh - 200px);
-        overflow: hidden;
-    }
-    
-    /* Lista de Contatos */
-    .contacts-sidebar {
-        width: 30%;
-        min-width: 300px;
-        background: white;
-        border-right: 1px solid #ddd;
-        display: flex;
-        flex-direction: column;
-        height: calc(100vh - 200px); /* Altura fixa igual ao chat-container */
-        max-height: calc(100vh - 200px);
-        overflow: hidden;
-    }
-    
-    .contacts-header {
-        padding: 15px;
-        background: #f0f2f5;
-        border-bottom: 1px solid #ddd;
-        flex-shrink: 0;
-    }
-    
-    .contacts-list {
-        flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-height: 0;
-    }
-    
-    .contact-item {
-        padding: 12px 15px;
-        border-bottom: 1px solid #f0f2f5;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    
-    .contact-item:hover {
-        background: #f5f5f5;
-    }
-    
-    .contact-item.active {
-        background: #e9f3fb;
-    }
-    
-    /* Mobile contact list improvements */
-    @media (max-width: 767.98px) {
-        .contact-item {
-            padding: 0;
-            border-bottom: none;
-        }
-        
-        .contact-item .btn {
-            border-radius: 0;
-            transition: background-color 0.2s;
-        }
-        
-        .contact-item .btn:hover {
-            background-color: #f8f9fa !important;
-        }
-        
-        .contact-item .btn:active {
-            background-color: #e9ecef !important;
-        }
-        
-        .contact-avatar {
-            width: 50px;
-            height: 50px;
-            font-size: 1.1rem;
-        }
-        
-        /* Força truncate em mobile */
-        .contact-item .btn {
-            min-width: 0;
-            max-width: 100%;
-        }
-        
-        .contact-item .flex-grow-1 {
-            min-width: 0;
-            overflow: hidden;
-        }
-    }
-    
-    .contact-avatar {
-        width: 45px;
-        height: 45px;
-        background: #25d366;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-    }
-    
-    /* Área de Conversa */
-    .chat-area {
-        background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='a' patternUnits='userSpaceOnUse' width='100' height='100'%3E%3Cpath fill='%23e5ddd5' d='M0 0h100v100H0z'/%3E%3Cpath fill='%23ddd6ce' opacity='.5' d='M0 0l50 50-50 50m50-100l50 50-50 50'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'/%3E%3C/svg%3E");
-        height: calc(100vh - 200px); /* Altura fixa independente da sidebar */
-        max-height: calc(100vh - 200px);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .chat-header {
-        padding: 15px;
-        background: #f0f2f5;
-        border-bottom: 1px solid #ddd;
-        flex-shrink: 0;
-    }
-    
-    .messages-container {
-        padding: 20px;
-        height: 0; /* Permite que flex-fill funcione corretamente */
-        min-height: 0; /* Permite que o scroll funcione */
-        overflow-y: auto;
-        overflow-x: hidden;
-        flex: 1;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .message {
-        max-width: 60%;
-        margin-bottom: 10px;
-        clear: both;
-    }
-    
-    .message-bubble {
-        padding: 8px 12px;
-        border-radius: 7px;
-        position: relative;
-        word-wrap: break-word;
-    }
-    
-    .message.inbound {
-        float: left;
-    }
-    
-    .message.inbound .message-bubble {
-        background: white;
-        border: 1px solid #ddd;
-    }
-    
-    .message.outbound {
-        float: right;
-    }
-    
-    .message.outbound .message-bubble {
-        background: #dcf8c6;
-        border: 1px solid #34b7f1;
-    }
-    
-    .message-time {
-        font-size: 11px;
-        color: #999;
-        margin-top: 2px;
-    }
-    
-    .chat-input {
-        padding: 15px;
-        background: #f0f2f5;
-        border-top: 1px solid #ddd;
-        z-index: 10;
-        flex-shrink: 0;
-        width: 100%;
-        margin-top: auto;
-    }
-
-    .chat-input-fixed {
-        padding: 15px;
-        background: #f0f2f5;
-        border-top: 1px solid #ddd;
-        z-index: 1050;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
-    
-    .status-indicator {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-left: 8px;
-        vertical-align: middle;
-    }
-    
-    .status-online {
-        background: #25d366;
-        animation: pulse 2s infinite;
-    }
-    
-    .status-offline {
-        background: #dc3545;
-    }
-    
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.5; }
-        100% { opacity: 1; }
-    }
-    
-    /* Botão flutuante para ir ao final da conversa */
-    .scroll-to-bottom {
-        position: fixed;
-        bottom: 120px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background: #25d366;
-        border: none;
-        border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        display: none;
-    }
-    
-    .scroll-to-bottom:hover {
-        background: #1ebe57;
-        transform: scale(1.1);
-        box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
-    }
-    
-    .scroll-to-bottom.show {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: bounceIn 0.3s ease;
-    }
-    
-    @keyframes bounceIn {
-        0% {
-            opacity: 0;
-            transform: scale(0.3);
-        }
-        50% {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    .new-conversations-btn {
-        position: relative;
-    }
-    
-    /* Loading indicator para busca */
-    .htmx-indicator {
-        display: none;
-    }
-    
-    .htmx-request .htmx-indicator {
-        display: inline-block;
-    }
-    
-    .htmx-request .fas.fa-search {
-        display: none;
-    }
-    
-    /* Responsividade Mobile */
-    @media (max-width: 767.98px) {
-        /* Layout viewport completo */
-        .page-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .header-section {
-            flex-shrink: 0;
-        }
-        
-        .content-section {
-            flex: 1;
-            overflow: hidden;
-        }
-        
-        .chat-container {
-            height: calc(100vh - 140px); /* Ajuste para mobile */
-            max-height: calc(100vh - 140px);
-        }
-        
-        .contacts-sidebar {
-            width: 100%;
-            min-width: auto;
-            height: calc(100vh - 140px);
-            max-height: calc(100vh - 140px);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .chat-area {
-            height: calc(100vh - 140px);
-            max-height: calc(100vh - 140px);
-        }
-        
-        /* Ajuste do botão para mobile */
-        .scroll-to-bottom {
-            bottom: 80px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            font-size: 18px;
-        }
-        
-        .contacts-header {
-            flex-shrink: 0;
-        }
-        
-        .contacts-list {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            min-height: 0;
-        }
-        
-        .message {
-            max-width: 85%;
-        }
-        
-        .messages-container {
-            padding: 10px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            flex: 1;
-            min-height: 0;
-        }
-        
-        .chat-input {
-            padding: 10px;
-            flex-shrink: 0;
-            width: 100%;
-            background: #f0f2f5;
-            border-top: 1px solid #ddd;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<!-- Container de Mensagens HTMX (fixo no topo) -->
-<div id="htmx-messages" class="position-fixed top-0 end-0 p-3" style="z-index: 1060;">
-    <!-- Mensagens HTMX aparecerão aqui -->
-</div>
-
-<div class="page-container d-flex flex-column h-100">
-    <!-- Header Section -->
-    <div class="header-section flex-shrink-0">
-        <!-- Breadcrumb -->
-        <div class="bg-white border-bottom px-3 pt-3 pb-2 d-none d-md-block">
-            {% include 'includes/breadcrumbs.html' %}
-        </div>
-
-        <!-- Header -->
-        <div class="bg-white border-bottom p-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <h4 class="mb-0 d-flex align-items-center">
-                        <i class="fab fa-whatsapp text-success me-2"></i>
-                        WhatsApp Business
-                        <span class="status-indicator status-online" id="connection-status" title="Conectado"></span>
-                    </h4>
-                </div>
-                <button class="btn btn-primary new-conversations-btn" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#newConversationsModal"
+<div class="p-6">
+    {% include 'includes/breadcrumbs.html' with prev_page='Comercial' prev_url='/comercial/' cur_page='WhatsApp' %}
+    <!-- Estatísticas e Controles -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <!-- Conversas Pendentes -->
+        <div class="bg-white rounded-lg shadow-sm p-6 flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-red-100 text-red-600 rounded-full mr-4 flex-shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-2xl font-bold text-red-600" id="pending-count">{{ pending_count|default:0 }}</h3>
+                <p class="text-gray-600 text-sm">Aguardando</p>
+                <button class="inline-flex items-center px-2 py-1 text-xs border border-red-600 text-red-600 rounded hover:bg-red-50 transition-colors mt-2"
                         hx-get="{% url 'comercial:pending_conversations' %}"
-                        hx-target="#pending-conversations-container"
+                        hx-target="#pendingModal"
                         hx-swap="innerHTML"
-                        hx-trigger="click"
-                        title="Novas Conversas">
-                    <i class="fas fa-user-plus d-md-none me-1"></i>
-                    <span class="d-none d-md-inline">Novas Conversas</span>
-                    <span class="badge ms-2" id="pending-badge"
-                          style="background-color: {% if pending_count > 0 %}#dc3545{% else %}#6c757d{% endif %}; color: white;">
-                        {{ pending_count|default:0 }}
-                    </span>
+                        onclick="openModal('pendingModal')">
+                    Ver Fila
                 </button>
             </div>
         </div>
+        
+        <!-- Minhas Conversas -->
+        <div class="bg-white rounded-lg shadow-sm p-6 flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-full mr-4 flex-shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-2xl font-bold text-primary">{{ my_conversations|default:0 }}</h3>
+                <p class="text-gray-600 text-sm">Minhas Conversas</p>
+                <a href="{% url 'comercial:whatsapp_geral' %}" class="inline-flex items-center px-2 py-1 text-xs border border-primary text-primary rounded hover:bg-primary/10 transition-colors mt-2">
+                    Gerenciar
+                </a>
+            </div>
+        </div>
+
+        <!-- Status Conexão -->
+        <div class="bg-white rounded-lg shadow-sm p-6 flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full mr-4 flex-shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-green-600" id="connection-status">Online</h3>
+                <p class="text-gray-600 text-sm">Conexão</p>
+                <button onclick="refreshConnections()" class="inline-flex items-center px-2 py-1 text-xs border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors mt-2">
+                    Atualizar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Novo Contato -->
+        <div class="bg-white rounded-lg shadow-sm p-6 flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full mr-4 flex-shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.764z"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-2xl font-bold text-blue-600">+</h3>
+                <p class="text-gray-600 text-sm">Novo Contato</p>
+                <a href="{% url 'comercial:whatsapp_novo_contato' %}" class="inline-flex items-center px-2 py-1 text-xs border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors mt-2">
+                    Cadastrar
+                </a>
+            </div>
+        </div>
     </div>
 
-    <!-- Content Section -->
-    <div class="content-section flex-fill">
-        <!-- Chat Container -->
-        <div class="chat-container d-flex h-100 overflow-hidden">
-        <!-- Sidebar de Contatos -->
-        <div class="contacts-sidebar">
-            <div class="contacts-header">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar conversa..." 
-                           name="search" 
-                           hx-get="{% url 'comercial:my_conversations' %}"
-                           hx-trigger="input changed delay:300ms"
-                           hx-target="#contacts-list"
-                           hx-indicator="#search-indicator">
-                    <span class="input-group-text" id="search-indicator">
-                        <i class="fas fa-search"></i>
-                        <i class="fas fa-spinner fa-spin htmx-indicator"></i>
-                    </span>
+    <!-- Interface de Chat -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" style="height: calc(100vh - 400px); min-height: 500px;">
+        <div class="grid grid-cols-1 lg:grid-cols-3 h-full">
+            <!-- Sidebar de Conversas -->
+            <div class="lg:col-span-1 border-r border-gray-200 flex flex-col">
+                <!-- Header da Sidebar -->
+                <div class="p-4 border-b border-gray-200 bg-gray-50">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Minhas Conversas</h3>
+                    <div class="relative">
+                        <input type="text" 
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                               placeholder="Buscar conversa..."
+                               hx-get="{% url 'comercial:my_conversations' %}"
+                               hx-trigger="input changed delay:300ms"
+                               hx-target="#conversations-list"
+                               hx-include="this"
+                               name="search">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Lista de Conversas -->
+                <div class="flex-1 overflow-y-auto" id="conversations-list"
+                     hx-get="{% url 'comercial:my_conversations' %}"
+                     hx-trigger="load">
+                    <div class="flex items-center justify-center h-32">
+                        <svg class="w-8 h-8 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="ml-3 text-gray-600">Carregando...</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="contacts-list" id="contacts-list"
-                 hx-get="{% url 'comercial:my_conversations' %}"
-                 hx-trigger="load">
-                <!-- Conversas carregadas via HTMX -->
-                <div class="text-center p-3">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <small class="d-block mt-2 text-muted">Carregando conversas...</small>
+            <!-- Área de Chat -->
+            <div class="lg:col-span-2 flex flex-col">
+                <!-- Estado Inicial -->
+                <div id="chat-area" class="flex-1 flex items-center justify-center bg-gray-50">
+                    {% if selected_conversation %}
+                        {% include 'comercial/whatsapp/partials/chat_area.html' %}
+                    {% else %}
+                        <div class="text-center">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.085z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Selecione uma conversa</h3>
+                            <p class="text-gray-600">Escolha uma conversa da lista ao lado para começar o atendimento</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-
-        <!-- Área de Chat - Desktop -->
-        <div class="chat-area d-flex flex-column flex-fill d-none d-md-flex" id="chat-area">
-            {% include 'comercial/whatsapp/partials/chat_area.html' %}
-        </div>
         </div>
     </div>
 </div>
 
-<!-- Botão flutuante para ir ao final da conversa -->
-<button class="scroll-to-bottom" id="scrollToBottom" onclick="scrollToBottomChat()" title="Ir para o final da conversa">
-    <i class="fas fa-chevron-down"></i>
+<!-- Modal de Conversas Pendentes -->
+<div id="pendingModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" x-data="{ open: false }" x-show="open" x-transition>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden" @click.stop>
+            <div class="bg-red-600 px-6 py-4 text-white">
+                <div class="flex items-center justify-between">
+                    <h5 class="text-lg font-semibold flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Conversas Aguardando Atendimento
+                    </h5>
+                    <button type="button" class="text-white hover:text-gray-200 focus:outline-none" @click="open = false">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto" id="pending-conversations-content">
+                <!-- Conteúdo carregado via HTMX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botão Flutuante para Scroll (quando em chat ativo) -->
+<button id="scrollToBottom" 
+        class="fixed bottom-6 right-6 w-12 h-12 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all z-40 hidden"
+        onclick="scrollToBottom()"
+        title="Ir para o final da conversa">
+    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
 </button>
 
-<!-- Offcanvas para Chat Mobile - Estrutura fixa -->
-<div class="offcanvas offcanvas-end d-md-none" tabindex="-1" id="mobileConversationOffcanvas" data-bs-backdrop="static" data-bs-scroll="false" style="width: 100vw;">
-    <div class="offcanvas-header">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Voltar"></button>
-        <div class="d-flex align-items-center flex-grow-1 ms-2">
-            <div class="contact-avatar me-3">?</div>
-            <div class="flex-grow-1">
-                <h6 class="mb-0">Selecione uma conversa</h6>
-                <small class="text-muted"></small>
-            </div>
-            <div class="d-flex gap-1">
-                <!-- Ações serão preenchidas -->
-            </div>
-        </div>
-    </div>
-    <div class="offcanvas-body p-0">
-        <!-- Conteúdo dinâmico será carregado aqui -->
-        <div id="mobileConversationContent">
-            <div class="d-flex flex-column h-100">
-                <div class="flex-fill d-flex align-items-center justify-content-center"
-                     style="background: url('data:image/svg+xml;utf8,<svg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'><defs><pattern id=\'a\' patternUnits=\'userSpaceOnUse\' width=\'100\' height=\'100\'><path fill=\'%23e5ddd5\' d=\'M0 0h100v100H0z\'/><path fill=\'%23ddd6ce\' opacity=\'.5\' d=\'M0 0l50 50-50 50m50-100l50 50-50 50\'/></pattern></defs><rect width=\'100%25\' height=\'100%25\' fill=\'url(%23a)\'/></svg>');">
-                    <div class="text-center">
-                        <i class="fab fa-whatsapp text-muted" style="font-size: 4rem;"></i>
-                        <h5 class="mt-3 text-muted">Selecione uma conversa</h5>
-                        <p class="text-muted">Escolha uma conversa da lista para começar</p>
-                    </div>
-                </div>
-                <div class="border-top p-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Selecione uma conversa..." disabled>
-                        <button class="btn btn-secondary" type="button" disabled>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Novas Conversas -->
-<div class="modal fade" id="newConversationsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-fullscreen-md-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-user-plus me-2"></i>
-                    <span class="d-none d-md-inline">Novas Conversas Aguardando Atendimento</span>
-                    <span class="d-md-none">Novas Conversas</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="pending-conversations-container">
-                <!-- Carregado via HTMX -->
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Data de Retorno -->
-<div class="modal fade" id="dataRetornoModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-calendar-alt me-2"></i>
-                    Definir Data de Retorno
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form id="dataRetornoForm" 
-                  hx-post="{% url 'comercial:save_data_retorno' %}"
-                  hx-target="#htmx-messages"
-                  hx-swap="beforeend">
-                <div class="modal-body">
-                    {% csrf_token %}
-                    <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}" id="dataRetornoConversationId">
-                    <div class="mb-3">
-                        <label for="dataRetorno" class="form-label">Data de Retorno <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="dataRetorno" name="data_retorno" required>
-                        <div class="form-text">Selecione quando o cliente deve ser contatado novamente.</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-calendar-check me-1"></i>
-                        Salvar Data de Retorno
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Envio de Template -->
-<div class="modal fade" id="sendTemplateModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-paper-plane me-2"></i>
-                    Enviar Template
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form id="sendTemplateForm" 
-                  hx-post="{% url 'comercial:send_template' %}"
-                  hx-target="#templateFormResult"
-                  hx-swap="innerHTML"
-                  onsubmit="return validateTemplateForm(event)">
-                <div class="modal-body">
-                    <!-- Container para resultado do HTMX -->
-                    <div id="templateFormResult"></div>
-                    
-                    {% csrf_token %}
-                    <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}" id="sendTemplateConversationId">
-                    <div class="mb-3">
-                        <label for="templateSelect" class="form-label">Selecione o Template <span class="text-danger">*</span></label>
-                        <select class="form-select" id="templateSelect" name="template_id" required
-                                hx-get="{% url 'comercial:whatsapp_preview_template' %}"
-                                hx-target="#templatePreview"
-                                hx-trigger="change"
-                                hx-include="this">
-                            <option value="">Escolha um template...</option>
-                            {% comment %}Templates serão carregados via HTMX{% endcomment %}
-                        </select>
-                    </div>
-                    <div id="templatePreview" class="mb-3">
-                        <!-- Preview do template aparecerá aqui -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-paper-plane me-1"></i>
-                        Enviar Template
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Container para Modal de Novo Contato (carregado via HTMX) -->
-<div id="modalNovoContatoContainer"
-     hx-get="{% url 'comercial:whatsapp_novo_contato' %}"
-     hx-trigger="load"
-     hx-swap="innerHTML"></div>
-
-<!-- Modal de Cadastro de Cliente -->
-<div class="modal fade" id="clientRegistrationModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-user-plus me-2"></i>
-                    Cadastrar Cliente
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="clientRegistrationForm">
-                    <div class="row">
-                        <!-- Nome -->
-                        <div class="col-md-8 mb-3">
-                            <label for="clientName" class="form-label">Nome Completo <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="clientName" name="nome" required>
-                        </div>
-                        
-                        <!-- Tipo de Documento -->
-                        <div class="col-md-4 mb-3">
-                            <label for="clientTipoDoc" class="form-label">Tipo Documento <span class="text-danger">*</span></label>
-                            <select class="form-select" id="clientTipoDoc" name="tipo_doc" required>
-                                <option value="">Selecione...</option>
-                                <option value="cpf">CPF</option>
-                                <option value="cnpj">CNPJ</option>
-                                <option value="passaporte">Passaporte</option>
-                                <option value="rg">RG</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Documento -->
-                        <div class="col-md-6 mb-3">
-                            <label for="clientDoc" class="form-label">Documento <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="clientDoc" name="doc" required>
-                        </div>
-                        
-                        <!-- Email -->
-                        <div class="col-md-6 mb-3">
-                            <label for="clientEmail" class="form-label">E-mail <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="clientEmail" name="email" required>
-                        </div>
-                        
-                        <!-- Telefone dividido -->
-                        <div class="col-md-2 mb-3">
-                            <label for="clientDdi" class="form-label">DDI <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="clientDdi" name="ddi" value="55" required>
-                        </div>
-                        
-                        <div class="col-md-2 mb-3">
-                            <label for="clientDdd" class="form-label">DDD <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="clientDdd" name="ddd" required>
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            <label for="clientTelefone" class="form-label">Telefone <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="clientTelefone" name="telefone" required>
-                        </div>
-                        
-                        <!-- CEP -->
-                        <div class="col-md-6 mb-3">
-                            <label for="clientCep" class="form-label">CEP</label>
-                            <input type="text" class="form-control" id="clientCep" name="cep">
-                        </div>
-                        
-                        <!-- Endereço -->
-                        <div class="col-md-8 mb-3">
-                            <label for="clientEndereco" class="form-label">Endereço</label>
-                            <input type="text" class="form-control" id="clientEndereco" name="endereco">
-                        </div>
-                        
-                        <!-- Número -->
-                        <div class="col-md-4 mb-3">
-                            <label for="clientNumero" class="form-label">Número</label>
-                            <input type="text" class="form-control" id="clientNumero" name="numero">
-                        </div>
-                        
-                        <!-- Complemento -->
-                        <div class="col-md-4 mb-3">
-                            <label for="clientComplemento" class="form-label">Complemento</label>
-                            <input type="text" class="form-control" id="clientComplemento" name="complemento">
-                        </div>
-                        
-                        <!-- Bairro -->
-                        <div class="col-md-4 mb-3">
-                            <label for="clientBairro" class="form-label">Bairro</label>
-                            <input type="text" class="form-control" id="clientBairro" name="bairro">
-                        </div>
-                        
-                        <!-- Cidade -->
-                        <div class="col-md-4 mb-3">
-                            <label for="clientCidade" class="form-label">Cidade</label>
-                            <input type="text" class="form-control" id="clientCidade" name="cidade">
-                        </div>
-                        
-                        <!-- Estado -->
-                        <div class="col-md-2 mb-3">
-                            <label for="clientEstado" class="form-label">UF</label>
-                            <input type="text" class="form-control" id="clientEstado" name="estado" maxlength="2">
-                        </div>
-                        
-                        <!-- País -->
-                        <div class="col-md-6 mb-3">
-                            <label for="clientPais" class="form-label">País</label>
-                            <input type="text" class="form-control" id="clientPais" name="pais" value="Brasil">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-1"></i>
-                    Cancelar
-                </button>
-                <button type="button" class="btn btn-success" onclick="saveClient()">
-                    <i class="fas fa-save me-1"></i>
-                    Cadastrar Cliente
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- Scripts -->
 <script>
-// Busca de conversas implementada com HTMX
-
-// Função não é mais necessária - botão usa HTMX diretamente
-// Mantida para compatibilidade se houver outras chamadas
-function openNewConversationsModal() {
-    const modal = new bootstrap.Modal(document.getElementById('newConversationsModal'));
-    modal.show();
-}
-
-// Atribuir conversa
-function assignConversation(conversationId) {
-    fetch(`/comercial/whatsapp/assign/${conversationId}/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Fecha modal
-            bootstrap.Modal.getInstance(document.getElementById('newConversationsModal')).hide();
-            
-            // Atualiza lista de contatos (agora a conversa aparecerá lá)
-            const contactsList = document.getElementById('contacts-list');
-            if (contactsList) {
-                htmx.trigger(contactsList, 'load');
-            }
-            
-            // Redireciona para a conversa
-            setTimeout(() => {
-                window.location.href = `/comercial/whatsapp/?conversation=${conversationId}`;
-            }, 500); // Pequeno delay para permitir atualização da lista
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para abrir modais
+    window.openModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal && modal.__x) {
+            modal.__x.$data.open = true;
         } else {
-            alert('Erro ao atribuir conversa: ' + data.message);
+            modal.classList.remove('hidden');
         }
-    })
-    .catch(error => {
-        console.error('Erro ao atribuir conversa:', error);
-        alert('Erro ao atribuir conversa.');
-    });
-}
-
-// Função para mostrar toast
-function showToast(message, type = 'info') {
-    const toastContainer = document.getElementById('htmx-messages');
-    if (!toastContainer) return;
+    };
     
-    const toastId = 'toast-' + Date.now();
-    const toastHtml = `
-        <div class="alert alert-${type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show" 
-             role="alert" id="${toastId}">
-            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    `;
+    // Função para fechar modais
+    window.closeModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal && modal.__x) {
+            modal.__x.$data.open = false;
+        } else {
+            modal.classList.add('hidden');
+        }
+    };
     
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-    
-    // Remove automaticamente após 5 segundos
-    setTimeout(() => {
-        const toast = document.getElementById(toastId);
-        if (toast) toast.remove();
-    }, 5000);
-}
-
-// Enviar mensagem com verificação de janela de 24h
-function sendMessage(event, conversationId) {
-    event.preventDefault();
-    
-    const input = document.getElementById('message-input');
-    const sendButton = event.target.querySelector('button[type="submit"]');
-    const message = input.value.trim();
-    
-    if (!message) return;
-    
-    // Primeiro verifica a janela de 24h
-    console.log('🕐 Verificando janela de 24h antes de enviar mensagem...');
-    
-    // Desabilita botão temporariamente
-    input.disabled = true;
-    sendButton.disabled = true;
-    sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    
-    fetch('/comercial/whatsapp/check-24h-window/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: `conversation_id=${conversationId}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (!data.within_24h_window) {
-            // Fora da janela de 24h - mostra toast e não envia
-            const hoursText = data.hours_since_last_message ? 
-                ` (${data.hours_since_last_message}h atrás)` : '';
-            
-            showToast(
-                `⏰ Janela de 24h expirada${hoursText}. Envie um template primeiro para reabrir a conversa.`,
-                'warning'
-            );
-            
-            console.log('❌ Fora da janela de 24h - mensagem não enviada');
-            return;
+    // Atualizar conexões
+    window.refreshConnections = function() {
+        const conversationsList = document.getElementById('conversations-list');
+        if (conversationsList) {
+            htmx.trigger(conversationsList, 'load');
         }
         
-        // Dentro da janela - pode enviar mensagem normal
-        console.log('✅ Dentro da janela de 24h - enviando mensagem...');
-        sendMessageNow(conversationId, message, input, sendButton);
-    })
-    .catch(error => {
-        console.error('Erro ao verificar janela de 24h:', error);
-        showToast('Erro ao verificar janela de 24h. Tente novamente.', 'error');
-    })
-    .finally(() => {
-        // Reabilita botão
-        input.disabled = false;
-        sendButton.disabled = false;
-        sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-        input.focus();
-    });
-}
-
-// Função separada para enviar mensagem (após verificação)
-function sendMessageNow(conversationId, message, input, sendButton) {
-    // Desabilita novamente para envio
-    input.disabled = true;
-    sendButton.disabled = true;
-    sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        // Atualizar status visual
+        updateConnectionStatus('Online');
+    };
     
-    fetch(`/comercial/whatsapp/send-message/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            conversation_id: conversationId,
-            message: message
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            input.value = '';
-            console.log(`Mensagem enviada - Status: ${data.status}, WAMID: ${data.wamid}`);
-            
-            // Força atualização das mensagens (HTMX afterSwap configurará o botão automaticamente)
-            htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversationId}/messages/`, {
-                target: '#messages-container',
-                swap: 'innerHTML'
+    // Atualizar status de conexão
+    window.updateConnectionStatus = function(status) {
+        const statusElement = document.getElementById('connection-status');
+        if (statusElement) {
+            statusElement.textContent = status;
+            statusElement.className = status === 'Online' ? 
+                'text-lg font-semibold text-green-600 mb-1' : 
+                'text-lg font-semibold text-red-600 mb-1';
+        }
+    };
+    
+    // Scroll para baixo na conversa
+    window.scrollToBottom = function() {
+        const messagesContainer = document.querySelector('#chat-area .overflow-y-auto');
+        if (messagesContainer) {
+            messagesContainer.scrollTo({
+                top: messagesContainer.scrollHeight,
+                behavior: 'smooth'
             });
-            
-        } else {
-            showToast('Erro ao enviar mensagem: ' + (data.error || data.message || 'Erro desconhecido'), 'error');
-            console.error('Erro ao enviar mensagem:', data);
         }
-    })
-    .catch(error => {
-        console.error('Erro na requisição:', error);
-        showToast('Erro de conexão ao enviar mensagem', 'error');
-    })
-    .finally(() => {
-        // Reabilita botão e input
-        input.disabled = false;
-        sendButton.disabled = false;
-        sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-        input.focus();
+    };
+    
+    // Atualizar contador de pendentes
+    window.updatePendingCount = function(count) {
+        const counter = document.getElementById('pending-count');
+        if (counter) {
+            const oldCount = parseInt(counter.textContent) || 0;
+            counter.textContent = count;
+            
+            // Efeito visual se mudou
+            if (oldCount !== count && count > oldCount) {
+                counter.classList.add('animate-pulse');
+                setTimeout(() => {
+                    counter.classList.remove('animate-pulse');
+                }, 2000);
+            }
+        }
+    };
+    
+    // ESC para fechar modais
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal('pendingModal');
+        }
     });
-}
-
-// Função finishConversation removida - conclusão será feita em outro módulo
-
-// WebSocket para notificações em tempo real
-var socket = socket || null;
-
-function connectWebSocket() {
-    const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
-    const wsPath = `${wsScheme}://${window.location.host}/ws/comercial/whatsapp/`;
     
-    console.log('🔗 Tentando conectar WebSocket:', wsPath);
-    console.log('🌐 Protocolo:', window.location.protocol);
-    console.log('🏠 Host:', window.location.host);
-    
-    try {
-        socket = new WebSocket(wsPath);
-        
-        socket.onopen = function(e) {
-            console.log('✅ WebSocket conectado com sucesso!');
-            console.log('🔍 Socket state:', socket.readyState);
-            console.log('🔍 Socket URL:', socket.url);
-            
-            // Para polling se estiver ativo
-            stopPolling();
-            
-            // Atualiza indicador de status
-            const statusIndicator = document.getElementById('connection-status');
-            if (statusIndicator) {
-                statusIndicator.className = 'status-indicator status-online';
-                statusIndicator.title = 'Conectado via WebSocket';
-            }
-            
-            // WebSocket conectado silenciosamente
-            console.log('✅ Conexão estabelecida');
-        };
-    } catch (error) {
-        console.error('❌ Erro ao criar WebSocket:', error);
-        // Se falhar na criação, usa polling
-        startPolling();
-    }
-    
-    socket.onerror = function(error) {
-        console.error('❌ Erro no WebSocket:', error);
-        console.log('🔍 Socket state no erro:', socket ? socket.readyState : 'socket is null');
-        
-        // Atualiza indicador de status
-        const statusIndicator = document.getElementById('connection-status');
-        if (statusIndicator) {
-            statusIndicator.className = 'status-indicator status-error';
-            statusIndicator.title = 'Erro na conexão WebSocket';
-        }
-        
-        console.error('❌ Erro na conexão WebSocket');
-    };
-    
-    socket.onmessage = function(event) {
-        console.log('📨 WebSocket recebeu mensagem:', event.data);
-        
-        try {
-            const data = JSON.parse(event.data);
-            console.log('📋 Dados parsados:', data);
-            console.log('🔄 Tipo de evento:', data.type);
-            
-            switch(data.type) {
-                case 'conversation_new':
-                    console.log('🆕 Nova conversa recebida:', data.conversation);
-                    // Atualiza tudo em um só evento
-                    handleNewConversation(data.conversation);
-                    if (data.pending_count !== undefined) {
-                        updatePendingCount(data.pending_count);
+    // HTMX listeners
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        // Quando chat area é atualizada
+        if (evt.detail.target.id === 'chat-area') {
+            // Auto-scroll para o final e mostra botão se necessário
+            setTimeout(() => {
+                const messagesContainer = document.querySelector('#chat-area .overflow-y-auto');
+                const scrollButton = document.getElementById('scrollToBottom');
+                
+                if (messagesContainer) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    
+                    // Mostra botão se há conteúdo suficiente para scroll
+                    if (messagesContainer.scrollHeight > messagesContainer.clientHeight) {
+                        scrollButton.classList.remove('hidden');
+                        
+                        // Listener para mostrar/esconder botão baseado no scroll
+                        messagesContainer.addEventListener('scroll', function() {
+                            const isNearBottom = messagesContainer.scrollTop + messagesContainer.clientHeight >= messagesContainer.scrollHeight - 100;
+                            if (isNearBottom) {
+                                scrollButton.classList.add('hidden');
+                            } else {
+                                scrollButton.classList.remove('hidden');
+                            }
+                        });
                     }
-                    updateModalIfOpen();
-                    console.log('📝 Nova conversa aguardando atendimento');
-                    break;
-                case 'pending_count_update':
-                    console.log('📊 Atualização de contador:', data.count);
-                    // Para outros casos que só atualizam contador
-                    updatePendingCount(data.count);
-                    updateModalIfOpen();
-                    break;
-                case 'conversation_assigned':
-                    console.log('👤 Conversa atribuída:', data.conversation);
-                    // Atualiza lista de conversas
-                    const contactsListAssigned = document.getElementById('contacts-list');
-                    if (contactsListAssigned) {
-                        htmx.trigger(contactsListAssigned, 'load');
-                    }
-                    break;
-                case 'message_received':
-                    console.log('💬 Nova mensagem recebida:', data.message);
-                    handleNewMessage(data.message, data.conversation_id);
-                    break;
-                case 'message_status_update':
-                    console.log('📋 Status de mensagem atualizado:', data.message_status);
-                    handleMessageStatusUpdate(data.message_status);
-                    break;
-                default:
-                    console.warn('⚠️ Tipo de evento desconhecido:', data.type);
-            }
-        } catch (error) {
-            console.error('❌ Erro ao processar mensagem WebSocket:', error);
-            console.error('📄 Dados brutos:', event.data);
-        }
-    };
-    
-    socket.onclose = function(e) {
-        console.log('🔴 WebSocket desconectado. Código:', e.code, 'Motivo:', e.reason);
-        
-        // Códigos de erro específicos
-        let errorMessage = '';
-        switch(e.code) {
-            case 1000:
-                errorMessage = 'Conexão fechada normalmente';
-                break;
-            case 1001:
-                errorMessage = 'Servidor desconectou';
-                break;
-            case 1006:
-                errorMessage = 'Conexão perdida inesperadamente';
-                break;
-            case 4001:
-                errorMessage = 'Usuário não autenticado';
-                break;
-            case 4003:
-                errorMessage = 'Acesso negado - usuário não é do grupo Comercial';
-                break;
-            default:
-                errorMessage = `Erro desconhecido (${e.code})`;
-        }
-        
-        console.log('💡 Motivo da desconexão:', errorMessage);
-        
-        // Atualiza indicador de status
-        const statusIndicator = document.getElementById('connection-status');
-        if (statusIndicator) {
-            statusIndicator.className = 'status-indicator status-offline';
-            statusIndicator.title = `Desconectado: ${errorMessage}`;
-        }
-        
-        // Mostra toast de erro
-        console.warn(`🔴 WebSocket desconectado: ${errorMessage}`);
-        
-        // Se WebSocket falhar, usa polling como fallback
-        startPolling();
-        
-        // Só tenta reconectar para erros recuperáveis
-        if (e.code !== 4001 && e.code !== 4003) {
-            console.log('⏳ Tentando reconectar em 10 segundos...');
-            setTimeout(connectWebSocket, 10000);
-        } else {
-            console.log('❌ Erro permanente, não tentando reconectar');
-        }
-    };
-    
-    socket.onerror = function(error) {
-        console.error('❌ Erro no WebSocket:', error);
-        console.error('❌ Erro na conexão WebSocket');
-    };
-}
-
-function handleNewConversation(conversation) {
-    // Salva a conversa ID para destacar depois da atualização
-    window.newConversationId = conversation.id;
-    
-    // Mostra notificação
-    showNotification(`Nova conversa de ${conversation.contact_name}`, conversation.message_preview);
-    
-    // Toca som de notificação (opcional)
-    playNotificationSound();
-}
-
-function handleNewMessage(message, conversation_id) {
-    // Verifica se a mensagem é da conversa atual
-    const currentUrl = new URL(window.location.href);
-    const currentConversationId = currentUrl.searchParams.get('conversation');
-    
-    if (currentConversationId && parseInt(currentConversationId) === parseInt(conversation_id)) {
-        // Se estamos visualizando essa conversa, atualiza as mensagens
-        console.log('💬 Atualizando mensagens da conversa atual');
-        
-        htmx.ajax('GET', `/comercial/whatsapp/conversation/${conversation_id}/messages/`, {
-            target: '#messages-container',
-            swap: 'innerHTML'
-        });
-    } else {
-        // Se não estamos na conversa, apenas mostra notificação
-        console.log('💬 Nova mensagem em conversa não ativa');
-        showToast(`Nova mensagem de ${message.contact_name}`, 'info');
-    }
-    
-    // Sempre atualiza a lista de conversas (para mostrar última mensagem)
-    const contactsList = document.getElementById('contacts-list');
-    if (contactsList) {
-        htmx.trigger(contactsList, 'load');
-    }
-    
-    // Toca som de notificação
-    playNotificationSound();
-}
-
-function handleMessageStatusUpdate(statusData) {
-    // Verifica se estamos visualizando a conversa da mensagem atualizada
-    const currentUrl = new URL(window.location.href);
-    const currentConversationId = currentUrl.searchParams.get('conversation');
-    
-    if (currentConversationId && parseInt(currentConversationId) === parseInt(statusData.conversation_id)) {
-        console.log(`📋 Atualizando status da mensagem ${statusData.message_id}: ${statusData.old_status} → ${statusData.new_status}`);
-        
-        // Atualiza apenas o ícone de status da mensagem específica sem recarregar tudo
-        updateMessageStatusIcon(statusData.message_id, statusData.old_status, statusData.new_status);
-    } else {
-        console.log(`📋 Status atualizado em conversa não ativa (${statusData.conversation_id})`);
-    }
-}
-
-function updateMessageStatusIcon(messageId, oldStatus, newStatus) {
-    // Busca a mensagem específica pelo data-message-id
-    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-    
-    if (messageElement) {
-        // Encontrou a mensagem específica, atualiza apenas o ícone
-        const timeElement = messageElement.querySelector('.message-time');
-        const iconElement = timeElement ? timeElement.querySelector('i') : null;
-        
-        if (iconElement) {
-            console.log(`🔄 Atualizando ícone da mensagem ${messageId}: ${oldStatus} → ${newStatus}`);
-            
-            // Remove classes antigas
-            iconElement.className = '';
-            
-            // Adiciona novas classes baseadas no status
-            if (newStatus === 'sent') {
-                iconElement.className = 'fas fa-check text-muted';
-                iconElement.title = 'Enviada';
-            } else if (newStatus === 'delivered') {
-                iconElement.className = 'fas fa-check-double text-muted';
-                iconElement.title = 'Entregue';
-            } else if (newStatus === 'read') {
-                iconElement.className = 'fas fa-check-double text-primary';
-                iconElement.title = 'Lida';
-            } else if (newStatus === 'failed') {
-                iconElement.className = 'fas fa-exclamation-triangle text-danger';
-                iconElement.title = 'Falha no envio';
-            }
-            
-            console.log('✅ Ícone de status atualizado visualmente');
-        } else {
-            console.warn(`⚠️ Ícone não encontrado para mensagem ${messageId}`);
-            // Fallback: recarrega as mensagens
-            reloadMessages();
-        }
-    } else {
-        console.warn(`⚠️ Mensagem ${messageId} não encontrada no DOM`);
-        // Fallback: recarrega as mensagens
-        reloadMessages();
-    }
-}
-
-function reloadMessages() {
-    const currentUrl = new URL(window.location.href);
-    const currentConversationId = currentUrl.searchParams.get('conversation');
-    
-    if (currentConversationId) {
-        htmx.ajax('GET', `/comercial/whatsapp/conversation/${currentConversationId}/messages/`, {
-            target: '#messages-container',
-            swap: 'innerHTML'
-        }).then(() => {
-            console.log('✅ Mensagens recarregadas');
-        });
-    }
-}
-
-function updatePendingCount(count) {
-    console.log('🔢 Atualizando contador de conversas pendentes:', count);
-    
-    const badge = document.getElementById('pending-badge');
-    if (badge) {
-        const oldCount = parseInt(badge.textContent) || 0;
-        const newCount = count || 0;
-        
-        console.log('📊 Contador: ', oldCount, '→', newCount);
-        
-        badge.textContent = newCount;
-        // Badge vermelho se > 0, cinza se = 0
-        badge.style.backgroundColor = newCount > 0 ? '#dc3545' : '#6c757d';
-        badge.style.color = 'white';
-        
-        // Efeito visual se mudou
-        if (oldCount !== newCount) {
-            badge.style.transform = 'scale(1.2)';
-            badge.style.transition = 'transform 0.2s';
-            setTimeout(() => {
-                badge.style.transform = 'scale(1)';
-            }, 200);
-        }
-        
-        console.log('✅ Contador atualizado com sucesso');
-    } else {
-        console.error('❌ Elemento #pending-badge não encontrado');
-    }
-}
-
-function updateModalIfOpen() {
-    // Atualiza modal se estiver aberto
-    const modal = document.getElementById('newConversationsModal');
-    if (modal && modal.classList.contains('show')) {
-        console.log('Modal está aberto, atualizando...');
-        const pendingContainer = document.getElementById('pending-conversations-container');
-        if (pendingContainer) {
-            // Usa htmx.ajax em vez de trigger
-            htmx.ajax('GET', '/comercial/whatsapp/pending-conversations/', {
-                target: '#pending-conversations-container',
-                swap: 'innerHTML'
-            });
-            console.log('Requisição HTMX enviada para modal');
-        } else {
-            console.log('Container pending-conversations-container não encontrado');
-        }
-    } else {
-        console.log('Modal não está aberto');
-    }
-}
-
-function showNotification(title, message) {
-    // Cria notificação visual
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification(title, {
-            body: message,
-            icon: '/static/favicon.png',
-            tag: 'whatsapp-new-conversation'
-        });
-    } else {
-        // Fallback: mostra alerta visual na página
-        const alertDiv = document.createElement('div');
-        alertDiv.className = 'alert alert-info alert-dismissible fade show position-fixed';
-        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 350px;';
-        alertDiv.innerHTML = `
-            <strong>${title}</strong><br>
-            <small>${message}</small>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        document.body.appendChild(alertDiv);
-        
-        // Remove após 5 segundos
-        setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.remove();
-            }
-        }, 5000);
-    }
-}
-
-function playNotificationSound() {
-    try {
-        // Cria um som simples usando Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
-    } catch (e) {
-        console.log('Som de notificação não suportado');
-    }
-}
-
-function highlightNewConversation(conversationId) {
-    // Procura pela conversa específica usando o data-attribute
-    const conversationElement = document.querySelector(`#pending-conversations-container [data-conversation-id="${conversationId}"]`);
-    
-    if (conversationElement) {
-        // Adiciona animação de destaque
-        conversationElement.style.border = '2px solid #28a745';
-        conversationElement.style.backgroundColor = '#f8fff9';
-        conversationElement.style.transform = 'scale(1.02)';
-        conversationElement.style.transition = 'all 0.3s ease';
-        conversationElement.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.3)';
-        
-        // Remove o destaque após 4 segundos
-        setTimeout(() => {
-            conversationElement.style.border = '';
-            conversationElement.style.backgroundColor = '';
-            conversationElement.style.transform = '';
-            conversationElement.style.boxShadow = '';
-            conversationElement.style.transition = '';
-        }, 4000);
-        
-        // Scroll suave até a conversa destacada
-        conversationElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else {
-        // Fallback: destaca a primeira conversa (mais recente)
-        const firstConversation = document.querySelector('#pending-conversations-container .list-group-item:first-child');
-        if (firstConversation) {
-            firstConversation.style.border = '2px solid #28a745';
-            firstConversation.style.backgroundColor = '#f8fff9';
-            firstConversation.style.transition = 'all 0.3s ease';
-            
-            setTimeout(() => {
-                firstConversation.style.border = '';
-                firstConversation.style.backgroundColor = '';
-                firstConversation.style.transition = '';
-            }, 3000);
-        }
-    }
-}
-
-// Fallback polling se WebSocket falhar
-var pollingInterval = pollingInterval || null;
-
-function startPolling() {
-    // Para polling anterior se existir
-    if (pollingInterval) {
-        clearInterval(pollingInterval);
-    }
-    
-    console.log('Iniciando polling como fallback...');
-    
-    // Polling do contador a cada 5 segundos
-    pollingInterval = setInterval(() => {
-        fetch('/comercial/whatsapp/pending-count/')
-            .then(response => response.json())
-            .then(data => updatePendingCount(data.count))
-            .catch(console.error);
-    }, 5000);
-}
-
-function stopPolling() {
-    if (pollingInterval) {
-        clearInterval(pollingInterval);
-        pollingInterval = null;
-        console.log('Polling interrompido');
-    }
-}
-
-
-// Listener HTMX para diversos eventos
-if (!window.htmxListenerRegistered) {
-    window.htmxListenerRegistered = true;
-    
-    document.addEventListener('htmx:afterRequest', function(event) {
-        // Específico para destacar conversas no modal
-        if (event.target.id === 'pending-conversations-container' && window.newConversationId) {
-            setTimeout(() => {
-                highlightNewConversation(window.newConversationId);
-                window.newConversationId = null; // Limpa após usar
+                }
             }, 100);
         }
         
-        // Atualiza IDs dos modais quando chat area é carregada
-        if (event.target.id === 'chat-area') {
-            updateModalConversationIds();
-            initializeChatAreaDropdowns();
+        // Quando modal de pendentes é carregado
+        if (evt.detail.target.id === 'pending-conversations-content') {
+            // Funcionalidade adicional se necessária
         }
     });
     
-    // Listener para afterSwap - mais preciso para quando conteúdo é inserido
-    document.addEventListener('htmx:afterSwap', function(event) {
-        // Configura botão de scroll quando chat area é atualizada
-        if (event.target.id === 'chat-area') {
-            console.log('🔄 HTMX afterSwap - Nova conversa carregada');
-            setupScrollButton();
-        }
-        
-        // Configura botão quando mensagens são atualizadas
-        if (event.target.id === 'messages-container') {
-            console.log('🔄 HTMX afterSwap - Mensagens atualizadas');
-            setupScrollButtonForMessages();
-        }
-    });
-}
-
-// Função para inicializar dropdowns na chat area
-function initializeChatAreaDropdowns() {
-    // Aguarda um momento para garantir que o DOM está pronto
-    setTimeout(function() {
-        if (typeof bootstrap !== 'undefined') {
-            const optionsButton = document.getElementById('optionsDropdownButton');
-            if (optionsButton) {
-                // Remove qualquer instância existente
-                const existingDropdown = bootstrap.Dropdown.getInstance(optionsButton);
-                if (existingDropdown) {
-                    existingDropdown.dispose();
-                }
-                // Cria nova instância
-                new bootstrap.Dropdown(optionsButton);
-            }
-        }
-    }, 50);
-}
-
-// Função para atualizar IDs de conversa nos modais
-function updateModalConversationIds() {
-    const chatArea = document.getElementById('chat-area');
-    if (chatArea) {
-        // Extrai o ID da conversa do formulário de envio de mensagem
-        const messageForm = chatArea.querySelector('form[onsubmit*="sendMessage"]');
-        if (messageForm) {
-            const onsubmit = messageForm.getAttribute('onsubmit');
-            const conversationIdMatch = onsubmit.match(/sendMessage\(event, (\d+)\)/);
-            if (conversationIdMatch) {
-                const conversationId = conversationIdMatch[1];
-                
-                // Atualiza campo do modal de data de retorno
-                const dataRetornoField = document.getElementById('dataRetornoConversationId');
-                if (dataRetornoField) {
-                    dataRetornoField.value = conversationId;
-                }
-                
-                // Atualiza campo do modal de template
-                const sendTemplateField = document.getElementById('sendTemplateConversationId');
-                if (sendTemplateField) {
-                    sendTemplateField.value = conversationId;
-                }
-            }
-        }
-    }
-}
-
-// Função específica para atualizar conversation_id do modal de template
-function updateTemplateModalConversationId(conversationId) {
-    console.log('🔧 Atualizando conversation_id do modal de template:', conversationId);
-    
-    const sendTemplateField = document.getElementById('sendTemplateConversationId');
-    if (sendTemplateField) {
-        sendTemplateField.value = conversationId;
-        console.log('✅ Campo sendTemplateConversationId atualizado:', sendTemplateField.value);
-    } else {
-        console.log('❌ Campo sendTemplateConversationId não encontrado!');
-    }
-    
-    // Também atualiza o campo de data de retorno
-    const dataRetornoField = document.getElementById('dataRetornoConversationId');
-    if (dataRetornoField) {
-        dataRetornoField.value = conversationId;
-        console.log('✅ Campo dataRetornoConversationId atualizado:', dataRetornoField.value);
-    }
-}
-
-// Função removida - agora usa abordagem mais simples via templates HTMX
-
-// Função para validar formulário de template antes do envio
-function validateTemplateForm(event) {
-    const conversationIdField = document.getElementById('sendTemplateConversationId');
-    const templateIdField = document.getElementById('templateSelect');
-    
-    const conversationId = conversationIdField ? conversationIdField.value : '';
-    const templateId = templateIdField ? templateIdField.value : '';
-    
-    console.log('🔍 Validando formulário de template:');
-    console.log('  - conversation_id:', conversationId);
-    console.log('  - template_id:', templateId);
-    
-    if (!conversationId || conversationId === '') {
-        alert('Erro: ID da conversa não encontrado. Por favor, recarregue a página e tente novamente.');
-        event.preventDefault();
-        return false;
-    }
-    
-    if (!templateId || templateId === '') {
-        alert('Por favor, selecione um template antes de enviar.');
-        event.preventDefault();
-        return false;
-    }
-    
-    console.log('✅ Formulário válido - enviando...');
-    return true;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Solicita permissão para notificações
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
-    }
-    
-    // Limpa formulário e preview quando modal de template é fechado
-    const sendTemplateModal = document.getElementById('sendTemplateModal');
-    if (sendTemplateModal) {
-        sendTemplateModal.addEventListener('hidden.bs.modal', function() {
-            console.log('🧹 Limpando modal de template...');
-            
-            // Limpa o formulário
-            const templateForm = document.getElementById('sendTemplateForm');
-            if (templateForm) {
-                templateForm.reset();
-            }
-            
-            // Limpa o preview
-            const templatePreview = document.getElementById('templatePreview');
-            if (templatePreview) {
-                templatePreview.innerHTML = '';
-            }
-            
-            // Limpa o select de templates (volta ao estado inicial)
-            const templateSelect = document.getElementById('templateSelect');
-            if (templateSelect) {
-                templateSelect.innerHTML = '<option value="">Escolha um template...</option>';
-            }
-            
-            console.log('✅ Modal de template limpo');
-        });
-    }
-    
-    // Conecta WebSocket apenas se não estiver conectado
-    if (!socket || socket.readyState === WebSocket.CLOSED) {
-        connectWebSocket();
-    }
-    
-    // Inicializa dropdowns da chat area na primeira carga
-    initializeChatAreaDropdowns();
-    
-    // Auto-scroll nas mensagens e configura botão de scroll
-    const messagesContainer = document.getElementById('messages-container');
-    const scrollButton = document.getElementById('scrollToBottom');
-    if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
-        // Esconde botão inicialmente (conversa inicia no final)
-        if (scrollButton) {
-            scrollButton.classList.remove('show');
-        }
-        
-        // Adiciona listener para controlar botão de scroll
-        messagesContainer.addEventListener('scroll', toggleScrollButton);
-    }
-    
-    // Pré-preencher dados do cliente quando modal abrir
-    const clientModal = document.getElementById('clientRegistrationModal');
-    if (clientModal) {
-        clientModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Botão que acionou o modal
-            
-            if (button) {
-                const contactId = button.getAttribute('data-contact-id');
-                const contactName = button.getAttribute('data-contact-name');
-                const contactPhone = button.getAttribute('data-contact-phone');
-                
-                // Pré-preenche os campos
-                document.getElementById('clientName').value = contactName || '';
-                
-                // Parse do telefone no formato +5511999999999
-                if (contactPhone) {
-                    const phoneClean = contactPhone.replace('+', '');
-                    if (phoneClean.startsWith('55')) {
-                        document.getElementById('clientDdi').value = '55';
-                        const remainder = phoneClean.substring(2);
-                        if (remainder.length >= 10) {
-                            // Celular: 11 dígitos no total (DDD + 9 dígitos)
-                            document.getElementById('clientDdd').value = remainder.substring(0, 2);
-                            document.getElementById('clientTelefone').value = remainder.substring(2);
-                        } else if (remainder.length >= 9) {
-                            // Fixo: 10 dígitos no total (DDD + 8 dígitos)
-                            document.getElementById('clientDdd').value = remainder.substring(0, 2);
-                            document.getElementById('clientTelefone').value = remainder.substring(2);
-                        }
-                    } else {
-                        // Número internacional não brasileiro
-                        document.getElementById('clientDdi').value = '';
-                        document.getElementById('clientDdd').value = '';
-                        document.getElementById('clientTelefone').value = phoneClean;
-                    }
-                }
-                
-                // Salva o ID do contato para usar no salvamento
-                clientModal.setAttribute('data-current-contact-id', contactId);
-            }
-        });
-    }
-});
-
-// Função para reproduzir áudio de teste
-function playTestAudio() {
-    try {
-        // Cria um som simples usando Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        // Som de notificação similar ao WhatsApp
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
-        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.2);
-        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
-        
-        oscillator.type = 'sine';
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
-        
-        console.log('🎵 Áudio de teste reproduzido');
-    } catch (e) {
-        console.log('❌ Erro ao reproduzir áudio:', e);
-        alert('Não foi possível reproduzir o áudio');
-    }
-}
-
-// Função para lidar com erros de vídeo
-function handleVideoError(videoElement) {
-    console.log('❌ Erro no vídeo:', videoElement);
-    try {
-        const fallback = videoElement.nextElementSibling;
-        if (fallback && fallback.classList.contains('video-error-fallback')) {
-            videoElement.style.display = 'none';
-            fallback.style.display = 'block';
-        }
-    } catch (e) {
-        console.log('Erro ao mostrar fallback:', e);
-    }
-}
-
-// Função para reproduzir vídeo de teste
-function playTestVideo() {
-    try {
-        // Simula reprodução de vídeo com visual feedback
-        const button = event.target.closest('button');
-        const originalContent = button.innerHTML;
-        
-        // Muda botão para estado "reproduzindo"
-        button.innerHTML = '<i class="fas fa-pause me-2"></i>Pausar';
-        button.classList.remove('btn-info');
-        button.classList.add('btn-warning');
-        
-        // Simula progresso do vídeo
-        let progress = 0;
-        const progressBar = button.closest('.video-modal-container').querySelector('.bg-info');
-        const duration = button.closest('.video-modal-container').querySelector('.text-light');
-        
-        const interval = setInterval(() => {
-            progress += 6.67; // 15 segundos / 15 = 6.67% por "segundo"
-            if (progressBar) {
-                progressBar.style.width = Math.min(progress, 100) + '%';
-            }
-            
-            // Atualiza tempo
-            const currentTime = Math.floor((progress / 100) * 15);
-            if (duration) {
-                duration.innerHTML = '<i class="fas fa-clock me-1"></i>' + 
-                    Math.floor(currentTime / 60) + ':' + 
-                    (currentTime % 60).toString().padStart(2, '0') + ' / 0:15';
-            }
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                // Restaura estado original
-                button.innerHTML = originalContent;
-                button.classList.remove('btn-warning');
-                button.classList.add('btn-info');
-                
-                if (progressBar) progressBar.style.width = '80%';
-                if (duration) duration.innerHTML = '<i class="fas fa-clock me-1"></i>0:15';
-            }
-        }, 1000);
-        
-        console.log('🎬 Vídeo de teste reproduzido');
-    } catch (e) {
-        console.log('❌ Erro ao reproduzir vídeo:', e);
-        alert('Não foi possível reproduzir o vídeo');
-    }
-}
-
-// Função para rolar para o final da conversa
-function scrollToBottomChat() {
-    const messagesContainer = document.getElementById('messages-container');
-    const scrollButton = document.getElementById('scrollToBottom');
-    
-    if (messagesContainer) {
-        messagesContainer.scrollTo({
-            top: messagesContainer.scrollHeight,
-            behavior: 'smooth'
-        });
-        
-        // Esconde o botão imediatamente ao clicar
-        if (scrollButton) {
-            scrollButton.classList.remove('show');
-        }
-        
-        console.log('📜 Rolando para o final da conversa e escondendo botão');
-    }
-}
-
-// Função para controlar visibilidade do botão de scroll
-function toggleScrollButton() {
-    const messagesContainer = document.getElementById('messages-container');
-    const scrollButton = document.getElementById('scrollToBottom');
-    
-    if (!messagesContainer || !scrollButton) return;
-    
-    // Verifica se há conteúdo suficiente para scroll
-    const hasScrollableContent = messagesContainer.scrollHeight > messagesContainer.clientHeight;
-    if (!hasScrollableContent) {
-        scrollButton.classList.remove('show');
-        return;
-    }
-    
-    // Calcula se está próximo do final (100px de tolerância)
-    const scrollTop = messagesContainer.scrollTop;
-    const scrollHeight = messagesContainer.scrollHeight;
-    const clientHeight = messagesContainer.clientHeight;
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    
-    // Mostra botão se estiver longe do final (mais de 100px)
-    const wasVisible = scrollButton.classList.contains('show');
-    if (distanceFromBottom > 100) {
-        if (!wasVisible) {
-            scrollButton.classList.add('show');
-            console.log('👆 Usuário subiu na conversa - mostrando botão');
-        }
-    } else {
-        if (wasVisible) {
-            scrollButton.classList.remove('show');
-            console.log('👇 Usuário chegou ao final - escondendo botão');
-        }
-    }
-}
-
-// Função para configurar botão de scroll em nova conversa (chamada via HTMX afterSwap)
-function setupScrollButton() {
-    console.log('🔧 Configurando botão de scroll para nova conversa...');
-    
-    const messagesContainer = document.getElementById('messages-container');
-    const scrollButton = document.getElementById('scrollToBottom');
-    
-    if (!messagesContainer || !scrollButton) {
-        console.log('❌ Container de mensagens ou botão não encontrado');
-        return;
-    }
-    
-    // Remove listener anterior para evitar duplicação
-    messagesContainer.removeEventListener('scroll', toggleScrollButton);
-    
-    // Adiciona novo listener
-    messagesContainer.addEventListener('scroll', toggleScrollButton);
-    
-    // O conteúdo já foi carregado pelo HTMX, não precisa de setTimeout
-    // Verifica se há conteúdo suficiente para scroll
-    const hasScrollableContent = messagesContainer.scrollHeight > messagesContainer.clientHeight;
-    
-    if (hasScrollableContent) {
-        // Se há conteúdo scrollável, vai para o final
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        console.log('📜 Nova conversa com conteúdo - scrollando para o final');
-        
-        // Verifica se deve mostrar botão (geralmente não, pois acabou de ir para o final)
-        setTimeout(toggleScrollButton, 100);
-    } else {
-        // Se não há conteúdo suficiente, apenas esconde botão
-        scrollButton.classList.remove('show');
-        console.log('📭 Nova conversa sem conteúdo suficiente para scroll');
-    }
-    
-    console.log('✅ Botão de scroll configurado para nova conversa');
-}
-
-// Função específica para quando mensagens são atualizadas (envio, recebimento, template)
-function setupScrollButtonForMessages() {
-    console.log('🔧 Configurando botão após atualização de mensagens...');
-    
-    const messagesContainer = document.getElementById('messages-container');
-    const scrollButton = document.getElementById('scrollToBottom');
-    
-    if (!messagesContainer || !scrollButton) return;
-    
-    // Reconfigura listener (pode ter sido perdido na atualização)
-    messagesContainer.removeEventListener('scroll', toggleScrollButton);
-    messagesContainer.addEventListener('scroll', toggleScrollButton);
-    
-    // Auto-scroll para o final e esconde botão
-    messagesContainer.scrollTo({
-        top: messagesContainer.scrollHeight,
-        behavior: 'smooth'
-    });
-    
-    // Esconde botão pois está indo para o final
-    scrollButton.classList.remove('show');
-    
-    console.log('✅ Mensagens atualizadas - scrollado para o final e botão escondido');
-}
-
-// Função para salvar cliente
-function saveClient() {
-    const form = document.getElementById('clientRegistrationForm');
-    const formData = new FormData(form);
-    const modal = document.getElementById('clientRegistrationModal');
-    const contactId = modal.getAttribute('data-current-contact-id');
-    
-    // Validação básica
-    const requiredFields = ['nome', 'tipo_doc', 'doc', 'email', 'ddi', 'ddd', 'telefone'];
-    let isValid = true;
-    
-    for (let field of requiredFields) {
-        const input = form.querySelector(`[name="${field}"]`);
-        if (!input.value.trim()) {
-            input.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            input.classList.remove('is-invalid');
-        }
-    }
-    
-    if (!isValid) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
-    
-    // Desabilita botão durante salvamento
-    const saveBtn = document.querySelector('[onclick="saveClient()"]');
-    const originalText = saveBtn.innerHTML;
-    saveBtn.disabled = true;
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Salvando...';
-    
-    // Adiciona o ID do contato WhatsApp
-    formData.append('whatsapp_contact_id', contactId);
-    
-    fetch('/comercial/whatsapp/register-client/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Mostra mensagem de sucesso e fecha modal
-            alert('Cliente cadastrado com sucesso!');
-            
-            // Fecha modal e atualiza a página
-            window.modalUtils.closeAndReload(modal.id);
-        } else {
-            alert('Erro ao cadastrar cliente: ' + (data.error || 'Erro desconhecido'));
-        }
-    })
-    .catch(error => {
-        console.error('Erro na requisição:', error);
-        alert('Erro de conexão ao cadastrar cliente');
-    })
-    .finally(() => {
-        // Reabilita botão
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = originalText;
-    });
-}
-
-// Listener para fechar modal via HTMX
-document.body.addEventListener('closeModal', function(event) {
-    console.log('📝 Fechando modal via HTMX trigger');
-    
-    // Aguarda 1 segundo para mostrar mensagem de sucesso
-    setTimeout(() => {
-        const modalElement = document.getElementById('modalNovoContato');
-        if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            if (modalInstance) {
-                modalInstance.hide();
-                
-                // Quando o modal fechar, recarrega o container para limpar o form
-                modalElement.addEventListener('hidden.bs.modal', function() {
-                    const container = document.getElementById('modalNovoContatoContainer');
-                    if (container) {
-                        htmx.trigger(container, 'load');
-                    }
-                }, { once: true });
-            }
-        }
-    }, 1000);
-});
-
-// Listener para atualizar conversas
-document.body.addEventListener('refreshConversations', function(event) {
-    console.log('🔄 Atualizando lista de conversas');
-    const contactsList = document.getElementById('contacts-list');
-    if (contactsList) {
-        htmx.trigger(contactsList, 'load');
-    }
-    
-    // Mostra toast de sucesso
-    if (typeof showToast === 'function') {
-        showToast('✅ Conversa criada com sucesso!', 'success');
-    }
+    // Auto-refresh de conversas pendentes a cada 30 segundos
+    setInterval(() => {
+        // Simula verificação de novas conversas
+        // Em produção, conectar com WebSocket ou polling
+        console.log('Auto-refresh de conversas...');
+    }, 30000);
 });
 </script>
 {% endblock %}

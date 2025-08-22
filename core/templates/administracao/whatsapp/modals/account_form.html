@@ -1,134 +1,229 @@
-
-<div class="modal-header">
-    <h5 class="modal-title">
-        <i class="fab fa-whatsapp text-success me-2"></i>
-        {{ title }}
-    </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Conteúdo interno do Modal de Nova/Editar Conta WhatsApp -->
+<!-- Header -->
+<div class="bg-green-600 px-6 py-4 text-white">
+    <div class="flex items-center justify-between">
+        <h5 class="text-lg font-semibold flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.085z"/>
+            </svg>
+            {{ title }}
+        </h5>
+        <button type="button" class="text-white hover:text-gray-200 focus:outline-none" onclick="closeModal('modalWhatsAppAccount')">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
 </div>
 
-<form hx-post="{{ action_url }}" hx-target="#modalWhatsAppAccount .modal-content" hx-swap="innerHTML">
+<form hx-post="{{ action_url }}" hx-target="#modalWhatsAppAccount .bg-white" hx-swap="innerHTML">
     {% csrf_token %}
-    <div class="modal-body">
+    
+    <!-- Body -->
+    <div class="p-6 max-h-[calc(90vh-140px)] overflow-y-auto">
         {% if form.non_field_errors %}
-            <div class="alert alert-danger">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
                 {% for error in form.non_field_errors %}
-                    {{ error }}
+                    <p class="text-sm">{{ error }}</p>
                 {% endfor %}
             </div>
         {% endif %}
         
         <!-- Informações Gerais -->
-        <div class="row">
-            <div class="col-md-8">
-                {{ form.name|as_crispy_field }}
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+            <div class="md:col-span-8">
+                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.name.label }}
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                {% endif %}
             </div>
-            <div class="col-md-4 d-flex align-items-center">
-                <div class="form-check form-switch">
+            <div class="md:col-span-4 flex items-end">
+                <label class="inline-flex items-center cursor-pointer">
                     {{ form.is_active }}
-                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
-                        {{ form.is_active.label }}
-                    </label>
-                </div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">{{ form.is_active.label }}</span>
+                </label>
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-md-6">
-                {{ form.phone_number|as_crispy_field }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+                <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.phone_number.label }}
+                </label>
+                {{ form.phone_number }}
+                {% if form.phone_number.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.phone_number.errors.0 }}</p>
+                {% endif %}
             </div>
-            <div class="col-md-6">
-                {{ form.status|as_crispy_field }}
+            <div>
+                <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.status.label }}
+                </label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.status.errors.0 }}</p>
+                {% endif %}
             </div>
         </div>
         
         <!-- Configurações da API -->
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-            <h6 class="mb-0">
-                <i class="fas fa-cog me-2"></i>
+        <div class="flex justify-content-between items-center border-b border-gray-200 pb-2 mb-4">
+            <h6 class="text-base font-semibold text-gray-900 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
                 Configurações da API WhatsApp
             </h6>
-            <button type="button" class="btn btn-sm btn-outline-info" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#modalFacebookGuide">
-                <i class="fas fa-question-circle me-1"></i>Como obter?
+            <button type="button" class="ml-auto px-3 py-1 text-xs bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition-colors"
+                    onclick="openModal('modalFacebookGuide')">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Como obter?
             </button>
         </div>
         
-        <div class="row">
-            <div class="col-md-6">
-                {{ form.phone_number_id|as_crispy_field }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="{{ form.phone_number_id.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.phone_number_id.label }}
+                </label>
+                {{ form.phone_number_id }}
+                {% if form.phone_number_id.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.phone_number_id.errors.0 }}</p>
+                {% endif %}
             </div>
-            <div class="col-md-6">
-                {{ form.business_account_id|as_crispy_field }}
+            <div>
+                <label for="{{ form.business_account_id.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.business_account_id.label }}
+                </label>
+                {{ form.business_account_id }}
+                {% if form.business_account_id.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.business_account_id.errors.0 }}</p>
+                {% endif %}
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-md-6">
-                {{ form.app_id|as_crispy_field }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="{{ form.app_id.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.app_id.label }}
+                </label>
+                {{ form.app_id }}
+                {% if form.app_id.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.app_id.errors.0 }}</p>
+                {% endif %}
             </div>
-            <div class="col-md-6">
-                {{ form.app_secret|as_crispy_field }}
+            <div>
+                <label for="{{ form.app_secret.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.app_secret.label }}
+                </label>
+                {{ form.app_secret }}
+                {% if form.app_secret.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.app_secret.errors.0 }}</p>
+                {% endif %}
             </div>
         </div>
         
-        {{ form.access_token|as_crispy_field }}
+        <div class="mb-4">
+            <label for="{{ form.access_token.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                {{ form.access_token.label }}
+            </label>
+            {{ form.access_token }}
+            {% if form.access_token.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.access_token.errors.0 }}</p>
+            {% endif %}
+        </div>
         
-        <div class="row">
-            <div class="col-md-8">
-                {{ form.webhook_verify_token|as_crispy_field }}
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+            <div class="md:col-span-8">
+                <label for="{{ form.webhook_verify_token.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.webhook_verify_token.label }}
+                </label>
+                {{ form.webhook_verify_token }}
+                {% if form.webhook_verify_token.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.webhook_verify_token.errors.0 }}</p>
+                {% endif %}
             </div>
-            <div class="col-md-4">
-                {{ form.responsavel|as_crispy_field }}
+            <div class="md:col-span-4">
+                <label for="{{ form.responsavel.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ form.responsavel.label }}
+                </label>
+                {{ form.responsavel }}
+                {% if form.responsavel.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.responsavel.errors.0 }}</p>
+                {% endif %}
             </div>
         </div>
         
         {% if account %}
         <!-- Informações da Conta Existente -->
-        <div class="alert alert-info">
-            <h6 class="alert-heading">
-                <i class="fas fa-info-circle me-2"></i>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h6 class="text-base font-semibold text-blue-900 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 Informações da Conta
             </h6>
-            <div class="row">
-                <div class="col-md-6">
-                    <small><strong>Criada em:</strong> {{ account.criado_em|date:"d/m/Y H:i" }}</small>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <span class="font-medium text-gray-700">Criada em:</span>
+                    <span class="text-gray-900">{{ account.criado_em|date:"d/m/Y H:i" }}</span>
                 </div>
-                <div class="col-md-6">
-                    <small><strong>Última atualização:</strong> {{ account.atualizado_em|date:"d/m/Y H:i" }}</small>
+                <div>
+                    <span class="font-medium text-gray-700">Última atualização:</span>
+                    <span class="text-gray-900">{{ account.atualizado_em|date:"d/m/Y H:i" }}</span>
                 </div>
             </div>
             {% if account.is_active %}
-                <hr class="my-2">
-                <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">URL do Webhook para configuração no Facebook:</small>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="copyWebhookUrl()">
-                        <i class="fas fa-copy"></i> Copiar URL
+                <hr class="my-3 border-blue-200">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-600 mb-2">URL do Webhook para configuração no Facebook:</p>
+                        <code id="webhookUrl" class="block p-2 bg-gray-100 rounded text-xs text-gray-800 break-all">{{ request.scheme }}://{{ request.get_host }}/webhook/whatsapp/{{ account.id }}/</code>
+                    </div>
+                    <button type="button" 
+                            class="ml-3 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors"
+                            onclick="copyWebhookUrl()">
+                        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        <span id="copyBtnText">Copiar</span>
                     </button>
                 </div>
-                <code id="webhookUrl" class="d-block mt-1 small">{{ request.scheme }}://{{ request.get_host }}/webhook/whatsapp/{{ account.id }}/</code>
             {% endif %}
         </div>
         {% endif %}
     </div>
     
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="fas fa-times me-2"></i>Cancelar
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+        <button type="button" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors flex items-center"
+                onclick="closeModal('modalWhatsAppAccount')">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Cancelar
         </button>
         {% if account %}
-            <button type="button" class="btn btn-warning me-2" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#modalTestAccount"
+            <button type="button" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors flex items-center"
                     hx-get="{% url 'administracao:whatsapp:account_test_modal' account.id %}"
-                    hx-target="#modalTestAccount .modal-content"
-                    hx-swap="innerHTML">
-                <i class="fas fa-vial me-2"></i>Testar Conexão
+                    hx-target="body"
+                    hx-swap="beforeend">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+                Testar Conexão
             </button>
         {% endif %}
-        <button type="submit" class="btn btn-success">
-            <i class="fas fa-save me-2"></i>
+        <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
             {% if account %}Atualizar{% else %}Criar{% endif %} Conta
         </button>
     </div>
@@ -138,21 +233,71 @@
 // Função para copiar URL do webhook
 function copyWebhookUrl() {
     const url = document.getElementById('webhookUrl').textContent;
+    const btnText = document.getElementById('copyBtnText');
     navigator.clipboard.writeText(url).then(() => {
-        const btn = event.target.closest('button');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check text-success"></i> Copiado!';
+        const originalText = btnText.textContent;
+        btnText.textContent = 'Copiado!';
         setTimeout(() => {
-            btn.innerHTML = originalText;
+            btnText.textContent = originalText;
         }, 2000);
     });
 }
 
+// Adicionar classes Tailwind aos campos do formulário
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        // Adicionar classes aos inputs de texto
+        const inputs = document.querySelectorAll('#modalWhatsAppAccount input[type="text"], #modalWhatsAppAccount input[type="email"], #modalWhatsAppAccount input[type="url"], #modalWhatsAppAccount textarea');
+        inputs.forEach(input => {
+            if (!input.type || input.type !== 'checkbox') {
+                input.className = 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent';
+            }
+        });
+        
+        // Adicionar classes aos selects
+        const selects = document.querySelectorAll('#modalWhatsAppAccount select');
+        selects.forEach(select => {
+            select.className = 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent';
+        });
+        
+        // Adicionar classes ao checkbox
+        const checkbox = document.querySelector('#modalWhatsAppAccount input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.className = 'w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 focus:ring-2';
+        }
+    }, 100);
+});
+
 // Evento de sucesso do HTMX para fechar modal e recarregar
 document.body.addEventListener('htmx:afterRequest', function(event) {
     if (event.detail.successful && event.detail.xhr.getResponseHeader('HX-Trigger') === 'whatsappAccountSaved') {
-        bootstrap.Modal.getInstance(document.getElementById('modalWhatsAppAccount')).hide();
+        closeModal('modalWhatsAppAccount');
         location.reload();
+    }
+});
+
+// HTMX após carregar conteúdo
+document.body.addEventListener('htmx:afterSwap', function(event) {
+    if (event.detail.target.id === 'modalWhatsAppAccount' || event.detail.target.closest('#modalWhatsAppAccount')) {
+        // Re-aplicar classes aos campos após carregamento HTMX
+        setTimeout(() => {
+            const inputs = document.querySelectorAll('#modalWhatsAppAccount input[type="text"], #modalWhatsAppAccount input[type="email"], #modalWhatsAppAccount input[type="url"], #modalWhatsAppAccount textarea');
+            inputs.forEach(input => {
+                if (!input.type || input.type !== 'checkbox') {
+                    input.className = 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent';
+                }
+            });
+            
+            const selects = document.querySelectorAll('#modalWhatsAppAccount select');
+            selects.forEach(select => {
+                select.className = 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent';
+            });
+            
+            const checkbox = document.querySelector('#modalWhatsAppAccount input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.className = 'w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 focus:ring-2';
+            }
+        }, 50);
     }
 });
 </script>

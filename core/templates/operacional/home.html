@@ -1,225 +1,231 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Dashboard Operacional - Grupo ROM{% endblock %}
+{% block title %}Área Operacional{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h3 mb-0">Dashboard Operacional</h1>
-        <p class="text-muted mb-0">Área de gestão operacional e logística</p>
-    </div>
-</div>
+{% include 'includes/breadcrumbs.html' with cur_page='Área Operacional' %}
 
-<div class="row">
-    <!-- Card de Estatísticas Gerais -->
-    <div class="col-md-3 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-cogs fa-2x text-primary"></i>
-                </div>
-                <h5 class="card-title">Operações</h5>
-                <p class="card-text text-muted">Gestão de processos operacionais</p>
+<!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Card de Caravanas -->
+        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-primary/10 text-primary rounded-full mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                </svg>
             </div>
+            <h3 class="text-2xl font-bold text-primary mb-1">{{ total_caravanas|default:0 }}</h3>
+            <p class="text-gray-600 mb-3">Caravanas</p>
+            <a href="{% url 'operacional:caravanas_lista' %}" class="inline-flex items-center px-3 py-1 text-sm border border-primary text-primary rounded hover:bg-primary/10 transition-colors">
+                <span class="mr-1">Gerenciar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Card de Bloqueios -->
+        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-info-100 text-info-600 rounded-full mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-info-600 mb-1">{{ total_bloqueios|default:0 }}</h3>
+            <p class="text-gray-600 mb-3">Bloqueios</p>
+            <a href="#" class="inline-flex items-center px-3 py-1 text-sm border border-info-600 text-info-600 rounded hover:bg-info-50 transition-colors">
+                <span class="mr-1">Gerenciar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Card de Passageiros -->
+        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-success-100 text-success-600 rounded-full mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-success-600 mb-1">{{ total_passageiros|default:0 }}</h3>
+            <p class="text-gray-600 mb-3">Passageiros</p>
+            <a href="#" class="inline-flex items-center px-3 py-1 text-sm border border-success-600 text-success-600 rounded hover:bg-success-50 transition-colors">
+                <span class="mr-1">Gerenciar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Card de Tarefas -->
+        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-warning-100 text-warning-600 rounded-full mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-warning-600 mb-1">{{ total_tarefas_pendentes|default:0 }}</h3>
+            <p class="text-gray-600 mb-3">Tarefas Pendentes</p>
+            <a href="#" class="inline-flex items-center px-3 py-1 text-sm border border-warning-600 text-warning-600 rounded hover:bg-warning-50 transition-colors">
+                <span class="mr-1">Gerenciar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </a>
         </div>
     </div>
 
-    <!-- Card de Logística -->
-    <div class="col-md-3 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-truck fa-2x text-success"></i>
-                </div>
-                <h5 class="card-title">Logística</h5>
-                <p class="card-text text-muted">Controle de transportes e entregas</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card de Fornecedores -->
-    <div class="col-md-3 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-handshake fa-2x text-warning"></i>
-                </div>
-                <h5 class="card-title">Fornecedores</h5>
-                <p class="card-text text-muted">Gestão de parceiros e fornecedores</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card de Qualidade -->
-    <div class="col-md-3 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-check-circle fa-2x text-info"></i>
-                </div>
-                <h5 class="card-title">Qualidade</h5>
-                <p class="card-text text-muted">Controle de qualidade dos serviços</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Seção de Ações Rápidas -->
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-bolt text-primary me-2"></i>
+    <!-- Ações Rápidas e Status -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Ações Rápidas -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
                     Ações Rápidas
-                </h5>
+                </h3>
             </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div>
-                                <i class="fas fa-plus-circle text-success me-2"></i>
-                                Nova Operação
-                            </div>
-                            <small class="text-muted">
-                                <i class="fas fa-arrow-right"></i>
-                            </small>
+            <div class="p-6">
+                <div class="space-y-3">
+                    <a href="{% url 'operacional:caravanas_lista' %}" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Nova Caravana
                         </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div>
-                                <i class="fas fa-clipboard-check text-info me-2"></i>
-                                Controle de Qualidade
-                            </div>
-                            <small class="text-muted">
-                                <i class="fas fa-arrow-right"></i>
-                            </small>
+                    
+                    <a href="#" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-info-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                            Novo Bloqueio
                         </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div>
-                                <i class="fas fa-truck text-warning me-2"></i>
-                                Rastreamento
-                            </div>
-                            <small class="text-muted">
-                                <i class="fas fa-arrow-right"></i>
-                            </small>
+                    
+                    <a href="#" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Relatórios
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div>
-                                <i class="fas fa-chart-bar text-primary me-2"></i>
-                                Relatórios
-                            </div>
-                            <small class="text-muted">
-                                <i class="fas fa-arrow-right"></i>
-                            </small>
-                        </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Seção de Status Operacional -->
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-line text-success me-2"></i>
+        <!-- Status Operacional -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
                     Status Operacional
-                </h5>
+                </h3>
             </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-6 mb-3">
-                        <div class="border-end">
-                            <h4 class="text-success mb-1">85%</h4>
-                            <small class="text-muted">Eficiência</small>
-                        </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="text-center p-4 bg-primary/5 rounded-lg">
+                        <h4 class="text-2xl font-bold text-primary mb-1">{{ total_caravanas|default:0 }}</h4>
+                        <p class="text-sm text-gray-600">Caravanas Ativas</p>
                     </div>
-                    <div class="col-6 mb-3">
-                        <h4 class="text-info mb-1">12</h4>
-                        <small class="text-muted">Operações Ativas</small>
+                    <div class="text-center p-4 bg-info-50 rounded-lg">
+                        <h4 class="text-2xl font-bold text-info-600 mb-1">{{ total_bloqueios|default:0 }}</h4>
+                        <p class="text-sm text-gray-600">Bloqueios</p>
                     </div>
-                    <div class="col-6">
-                        <div class="border-end">
-                            <h4 class="text-warning mb-1">3</h4>
-                            <small class="text-muted">Pendências</small>
-                        </div>
+                    <div class="text-center p-4 bg-success-50 rounded-lg">
+                        <h4 class="text-2xl font-bold text-success-600 mb-1">{{ total_passageiros|default:0 }}</h4>
+                        <p class="text-sm text-gray-600">Passageiros</p>
                     </div>
-                    <div class="col-6">
-                        <h4 class="text-primary mb-1">98%</h4>
-                        <small class="text-muted">Qualidade</small>
+                    <div class="text-center p-4 bg-warning-50 rounded-lg">
+                        <h4 class="text-2xl font-bold text-warning-600 mb-1">{{ total_tarefas_pendentes|default:0 }}</h4>
+                        <p class="text-sm text-gray-600">Tarefas Pendentes</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <!-- Seção de Atividades Recentes -->
-    <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-history text-muted me-2"></i>
-                    Atividades Recentes
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-check fa-sm"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1">Operação #12345 concluída</h6>
-                                    <p class="mb-1 text-muted">Processo finalizado com sucesso</p>
-                                </div>
+    <!-- Atividades Recentes -->
+    <div class="bg-white rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Atividades Recentes
+            </h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 w-10 h-10 bg-success-100 text-success-600 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h6 class="text-sm font-medium text-gray-900">Nova caravana criada</h6>
+                                <p class="text-sm text-gray-500">Caravana para Europa - Março 2025</p>
                             </div>
-                            <small class="text-muted">há 2 horas</small>
+                            <span class="text-sm text-gray-400">há 2 horas</span>
                         </div>
                     </div>
-                    <div class="list-group-item border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-truck fa-sm"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1">Nova entrega programada</h6>
-                                    <p class="mb-1 text-muted">Fornecedor ABC - Previsão para amanhã</p>
-                                </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 w-10 h-10 bg-info-100 text-info-600 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h6 class="text-sm font-medium text-gray-900">Bloqueio atualizado</h6>
+                                <p class="text-sm text-gray-500">Hotel confirmado para Grupo XYZ</p>
                             </div>
-                            <small class="text-muted">há 4 horas</small>
+                            <span class="text-sm text-gray-400">há 4 horas</span>
                         </div>
                     </div>
-                    <div class="list-group-item border-0 px-0">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-exclamation fa-sm"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1">Atenção requerida</h6>
-                                    <p class="mb-1 text-muted">Processo #98765 precisa de aprovação</p>
-                                </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 w-10 h-10 bg-warning-100 text-warning-600 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h6 class="text-sm font-medium text-gray-900">Atenção requerida</h6>
+                                <p class="text-sm text-gray-500">Documentação pendente para passageiro</p>
                             </div>
-                            <small class="text-muted">há 1 dia</small>
+                            <span class="text-sm text-gray-400">há 1 dia</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

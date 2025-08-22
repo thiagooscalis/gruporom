@@ -8,13 +8,12 @@
         open() { this.isOpen = true; },
         close() { this.isOpen = false; }
      }" 
-     x-show="isOpen"
      x-on:open-areas-modal.window="open()"
      x-on:close-areas-modal.window="close()"
      x-on:keydown.escape.window="close()"
+     x-cloak
      class="fixed inset-0 z-50 overflow-y-auto"
-     style="display: none;"
-     x-cloak>
+     :class="{ 'hidden': !isOpen }">
     
     <!-- Backdrop com blur (padrão do sistema) -->
     <div x-show="isOpen"
