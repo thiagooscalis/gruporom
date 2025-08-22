@@ -412,7 +412,6 @@ class ColaboradorModelTest(TestCase):
         self.assertEqual(str(colaborador), 'João Silva - Vendedor')
     
     def test_comissao_validation(self):
-        from django.core.exceptions import ValidationError
         from decimal import Decimal
         colaborador = ColaboradorFactory.build(comissao=Decimal('150.00'))
         with self.assertRaises(ValidationError):

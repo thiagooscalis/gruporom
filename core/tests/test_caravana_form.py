@@ -253,20 +253,31 @@ class CaravanaFormTest(TestCase):
         self.assertEqual(caravana_editada.quantidade, 35)
 
     def test_form_filtering_pessoas_ativas(self):
-        """Testa se o formulário filtra apenas pessoas com usuários ativos"""
+        """Testa se o formulário filtra corretamente por tipo de campo"""
         # Criar pessoa com usuário inativo
         pessoa_inativa = PessoaFactory(nome='Pessoa Inativa')
         usuario_inativo = UsuarioFactory(pessoa=pessoa_inativa, is_active=False)
         
+        # Criar pessoa sem usuário
+        pessoa_sem_usuario = PessoaFactory(nome='Pessoa Sem Usuario')
+        
         form = CaravanaForm(user=self.user)
         
-        # Verificar que pessoas com usuários ativos estão disponíveis
+        # Verificar querysets
         promotor_ids = form.fields['promotor'].queryset.values_list('id', flat=True)
         lideres_ids = form.fields['lideres'].queryset.values_list('id', flat=True)
+        responsavel_ids = form.fields['responsavel'].queryset.values_list('id', flat=True)
         
+        # Promotor: apenas pessoas com usuários ativos
         self.assertIn(self.promotor.id, promotor_ids)
-        self.assertIn(self.lider1.id, lideres_ids)
+        self.assertNotIn(pessoa_inativa.id, promotor_ids)  # usuário inativo
+        self.assertNotIn(pessoa_sem_usuario.id, promotor_ids)  # sem usuário
         
-        # Verificar que pessoa com usuário inativo NÃO está disponível
-        self.assertNotIn(pessoa_inativa.id, promotor_ids)
-        self.assertNotIn(pessoa_inativa.id, lideres_ids)
+        # Líderes e Responsável: qualquer pessoa
+        self.assertIn(self.lider1.id, lideres_ids)
+        self.assertIn(pessoa_inativa.id, lideres_ids)  # aceita usuário inativo
+        self.assertIn(pessoa_sem_usuario.id, lideres_ids)  # aceita sem usuário
+        
+        self.assertIn(self.responsavel.id, responsavel_ids)
+        self.assertIn(pessoa_inativa.id, responsavel_ids)  # aceita usuário inativo  
+        self.assertIn(pessoa_sem_usuario.id, responsavel_ids)  # aceita sem usuário

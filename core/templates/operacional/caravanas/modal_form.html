@@ -16,7 +16,7 @@
 
 {% block form_attributes %}
 hx-post="{{ action_url }}"
-hx-target="#form-content"
+hx-target="closest .fixed"
 hx-swap="outerHTML"
 {% endblock %}
 
@@ -82,22 +82,34 @@ hx-swap="outerHTML"
                 </h6>
             </div>
             <div class="p-4">
-                <!-- Autocomplete para responsável -->
-                <div class="mb-4">
-                    {% if form.instance.pk %}
-                        {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' initial_value=form.instance.responsavel %}
-                    {% else %}
-                        {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' %}
-                    {% endif %}
-                </div>
-                
-                <!-- Autocomplete múltiplo para líderes -->
-                <div>
-                    {% if form.instance.pk %}
-                        {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
-                    {% else %}
-                        {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
-                    {% endif %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Campo Responsável -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.responsavel.label }}</label>
+                        {{ form.responsavel }}
+                        {% if form.responsavel.errors %}
+                            <div class="mt-2 text-sm text-red-600">
+                                {% for error in form.responsavel.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if form.responsavel.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ form.responsavel.help_text }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Campo Líderes -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.lideres.label }}</label>
+                        {{ form.lideres }}
+                        {% if form.lideres.errors %}
+                            <div class="mt-2 text-sm text-red-600">
+                                {% for error in form.lideres.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if form.lideres.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ form.lideres.help_text }}</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

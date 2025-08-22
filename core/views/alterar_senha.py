@@ -1,8 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponse
 from core.forms import AlterarSenhaForm
 
 

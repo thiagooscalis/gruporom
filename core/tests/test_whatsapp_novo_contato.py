@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-import pytest
 from unittest.mock import patch, MagicMock
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 from core.models import (
-    Usuario, Pessoa, WhatsAppAccount, WhatsAppTemplate, 
-    WhatsAppConversation, WhatsAppContact, WhatsAppMessage
+    WhatsAppAccount, WhatsAppConversation, WhatsAppContact, WhatsAppMessage
 )
 from core.forms.whatsapp import NovoContatoForm
 from core.factories import (

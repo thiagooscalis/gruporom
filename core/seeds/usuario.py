@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 from core.models import Usuario, Pessoa
-from core.choices import TIPO_DOC_CHOICES, TIPO_EMPRESA_CHOICES
+from core.choices import TIPO_EMPRESA_CHOICES
 
 
 class UsuarioSeeder:
@@ -117,11 +117,11 @@ class UsuarioSeeder:
             admin_user.empresas.add(empresa)
             print(f"Empresa criada: {empresa.nome}")
 
-        print(f"Usuário administrador criado:")
-        print(f"Username: thiago")
-        print(f"Password: admin123")
+        print("Usuário administrador criado:")
+        print("Username: thiago")
+        print("Password: admin123")
         print(f"Email: {admin_pessoa.email1}")
-        print(f"Grupos: Administração, Comercial, Operacional")
+        print("Grupos: Administração, Comercial, Operacional")
         print(f"Empresas: {', '.join([e.nome for e in empresas])}")
 
         return admin_user

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.db.models import Q
+from django.urls import reverse
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, HTML, Div
 from core.models import Caravana, Pessoa, Bloqueio
 from core.choices import MOEDA_CHOICES
+from core.fields import AutocompleteField, MultipleAutocompleteField
 
 
 class CaravanaForm(forms.ModelForm):
@@ -12,15 +12,26 @@ class CaravanaForm(forms.ModelForm):
     Formulário para criar/editar caravanas com campos dos bloqueios
     """
     
-    # Campo para autocomplete do responsável
-    responsavel_search = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Digite o nome do responsável para buscar...'
-        }),
-        label="Buscar Responsável"
+    # Campo de autocomplete customizado para o responsável
+    responsavel = AutocompleteField(
+        queryset=Pessoa.objects.all(),
+        search_url=None,  # Será definido no __init__
+        search_placeholder="Digite o nome, documento ou email do responsável...",
+        selected_label="Responsável selecionado:",
+        label="Responsável",
+        required=False
     )
+    
+    # Campo de autocomplete múltiplo para líderes
+    lideres = MultipleAutocompleteField(
+        queryset=Pessoa.objects.all(),
+        search_url=None,  # Será definido no __init__
+        search_placeholder="Digite o nome do líder para buscar...",
+        selected_label="Líderes selecionados:",
+        label="Líderes da Caravana",
+        required=False
+    )
+    
     
     # Campo URL customizado para evitar warnings
     link = forms.URLField(
@@ -99,7 +110,6 @@ class CaravanaForm(forms.ModelForm):
         ]
         widgets = {
             'data_contrato': forms.DateInput(attrs={'type': 'date'}),
-            'lideres': forms.SelectMultiple(attrs={'size': '5'}),
             'quantidade': forms.NumberInput(attrs={'min': '1'}),
             'free_economica': forms.NumberInput(attrs={'min': '0'}),
             'free_executiva': forms.NumberInput(attrs={'min': '0'}),
@@ -111,20 +121,22 @@ class CaravanaForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Filtra apenas pessoas ativas para líderes e promotor
+        # Filtra apenas pessoas ativas para promotor (precisa ter usuário)
         pessoas_ativas = Pessoa.objects.filter(
             usuario__is_active=True
         ).distinct()
         
+        # Responsável e líderes podem ser qualquer pessoa (não precisam ter usuário)
+        todas_pessoas = Pessoa.objects.all()
+        
         self.fields['promotor'].queryset = pessoas_ativas
-        self.fields['lideres'].queryset = pessoas_ativas
+        self.fields['responsavel'].queryset = todas_pessoas
+        self.fields['lideres'].queryset = todas_pessoas
         
-        # Responsável pode ser qualquer pessoa ou empresa (quem está fechando o negócio)
-        self.fields['responsavel'].queryset = Pessoa.objects.all()
-        self.fields['responsavel'].widget = forms.HiddenInput()  # Será substituído por autocomplete
-        
-        # Remove o widget padrão do campo lideres - será substituído por autocomplete
-        self.fields['lideres'].widget = forms.MultipleHiddenInput()
+        # Configurar URLs de busca para os campos de autocomplete
+        search_url = reverse("buscar_pessoas", kwargs={"area": "operacional"}) + "?all=true"
+        self.fields['responsavel'].widget.search_url = search_url
+        self.fields['lideres'].widget.search_url = search_url
         
         # Filtra apenas empresas de turismo
         empresas_validas = Pessoa.objects.filter(
@@ -171,7 +183,7 @@ class CaravanaForm(forms.ModelForm):
         caravana = super().save(commit=commit)
         
         # Só cria os bloqueios se for uma nova caravana (não edição)
-        if commit and is_new:
+        if commit and is_new and hasattr(self, 'cleaned_data'):
             data_saida = self.cleaned_data.get('data_saida')
             valor_economica = self.cleaned_data.get('valor_economica')
             valor_executiva = self.cleaned_data.get('valor_executiva')

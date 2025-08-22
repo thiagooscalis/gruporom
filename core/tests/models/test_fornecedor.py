@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from core.models import Fornecedor, Pessoa
+from core.models import Fornecedor
 from core.choices import TIPO_EMPRESA_CHOICES
 
 

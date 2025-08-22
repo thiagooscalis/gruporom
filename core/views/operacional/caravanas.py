@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
@@ -84,8 +84,8 @@ def caravana_criar_modal(request):
             response['HX-Refresh'] = 'true'
             return response
         else:
-            # Retorna apenas o conteúdo do modal com erros
-            return render(request, 'operacional/caravanas/modal_form_content.html', {
+            # Retorna o modal completo com erros (mesmo layout do GET)
+            return render(request, 'operacional/caravanas/modal_form.html', {
                 'form': form,
                 'titulo': 'Nova Caravana',
                 'action_url': request.path,
@@ -118,8 +118,8 @@ def caravana_editar_modal(request, pk):
             response['HX-Refresh'] = 'true'
             return response
         else:
-            # Retorna apenas o conteúdo do modal com erros
-            return render(request, 'operacional/caravanas/modal_form_content.html', {
+            # Retorna o modal completo com erros (mesmo layout do GET)
+            return render(request, 'operacional/caravanas/modal_form.html', {
                 'form': form,
                 'caravana': caravana,
                 'titulo': f'Editar Caravana: {caravana.nome}',
@@ -162,13 +162,44 @@ def caravana_excluir_modal(request, pk):
 
 
 @operacional_required
+def caravana_toggle_ativo(request, pk):
+    """Alterna o status ativo/inativo da caravana via HTMX"""
+    caravana = get_object_or_404(Caravana, pk=pk)
+    
+    if request.method == 'POST':
+        caravana.ativo = not caravana.ativo
+        caravana.save()
+        
+        status_text = "ativada" if caravana.ativo else "desativada"
+        messages.success(request, f'Caravana "{caravana.nome}" {status_text} com sucesso!')
+        
+        # Retorna resposta HTMX para atualizar a lista
+        response = HttpResponse()
+        response['HX-Trigger'] = 'caravanaStatusChanged'
+        response['HX-Refresh'] = 'true'
+        return response
+    
+    # Retorna 405 para GET - essa view só aceita POST
+    return HttpResponse(status=405)
+
+
+@operacional_required
 def caravana_detalhes(request, pk):
     """Visualiza detalhes completos da caravana"""
     caravana = get_object_or_404(
         Caravana.objects.select_related(
-            'empresa', 'promotor'
+            'empresa', 'promotor', 'responsavel'
         ).prefetch_related(
-            'lideres'
+            'lideres',
+            'bloqueio_set__paises',
+            'bloqueio_set__inclusos',
+            'bloqueio_set__hoteis',
+            'bloqueio_set__passageiro_set__pessoa',
+            'bloqueio_set__voo_set__cia_aerea',
+            'bloqueio_set__voo_set__origem',
+            'bloqueio_set__voo_set__destino',
+            'bloqueio_set__diaroteiro_set',
+            'bloqueio_set__extra_set'
         ),
         pk=pk
     )
@@ -180,7 +211,11 @@ def caravana_detalhes(request, pk):
         'total_free': caravana.free_economica + caravana.free_executiva,
     }
     
+    # Buscar bloqueios com dados relacionados
+    bloqueios = caravana.bloqueio_set.all().order_by('saida')
+    
     return render(request, 'operacional/caravanas/detalhes.html', {
         'caravana': caravana,
+        'bloqueios': bloqueios,
         'stats': stats,
     })

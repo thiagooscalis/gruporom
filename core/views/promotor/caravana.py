@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from core.decorators import promotor_required
 from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponse
 from core.models import Caravana, Pessoa, Bloqueio, Pais, Aeroporto
-from core.forms.caravana_promotor import CaravanaPromotorForm
 
 
 @promotor_required

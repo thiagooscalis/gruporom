@@ -2,7 +2,7 @@
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from core.models import Cargo, Pessoa
+from core.models import Cargo
 
 
 @pytest.mark.django_db

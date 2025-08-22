@@ -84,7 +84,7 @@ class FieldEncryption:
             encrypted_bytes = base64.b64decode(encrypted_text.encode('utf-8'))
             decrypted = self.fernet.decrypt(encrypted_bytes)
             return decrypted.decode('utf-8')
-        except Exception as e:
+        except Exception:
             # Retorna o texto original se não conseguir descriptografar
             # (para compatibilidade com dados existentes)
             return encrypted_text

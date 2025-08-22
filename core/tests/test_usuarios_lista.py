@@ -51,7 +51,6 @@ class UsuariosListaTest(TestCase):
     def test_usuario_com_multiplos_grupos(self):
         """Testa usuário com múltiplos grupos"""
         # Criar mais um usuário com múltiplos grupos
-        from django.contrib.auth.models import Group
         comercial_group, _ = Group.objects.get_or_create(name='Comercial')
         operacional_group, _ = Group.objects.get_or_create(name='Operacional')
         

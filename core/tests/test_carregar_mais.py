@@ -1,9 +1,7 @@
 from django.test import TestCase, Client, override_settings
-from django.contrib.auth.models import Group
 from django.core.files.storage import InMemoryStorage
 from django.urls import reverse
 from core.factories import UsuarioAdministracaoFactory, PessoaFactory
-from core.models import Pessoa
 
 
 @override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())

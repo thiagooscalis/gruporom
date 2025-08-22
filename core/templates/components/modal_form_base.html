@@ -52,11 +52,13 @@
             </button>
         </div>
         
-        <!-- Modal Content - Form will be inside here -->
-        {% block modal_content %}
-        <div class="px-6 py-4">
-            <p class="text-gray-600">Content goes here...</p>
-        </div>
-        {% endblock %}
+        <!-- Modal Form -->
+        <form {% block form_attributes %}{% endblock %}>
+            {% block modal_content %}
+            <div class="px-6 py-4">
+                <p class="text-gray-600">Content goes here...</p>
+            </div>
+            {% endblock %}
+        </form>
     </div>
 </div>

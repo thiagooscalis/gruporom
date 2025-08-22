@@ -6,7 +6,6 @@ Remove automaticamente informações sensíveis dos logs
 
 import logging
 import re
-from typing import Any
 
 
 class SecureFormatter(logging.Formatter):
@@ -90,7 +89,6 @@ def setup_secure_logging():
     """
     Configura logging seguro para produção
     """
-    import os
     from django.conf import settings
     
     # Aplica filtros apenas em produção

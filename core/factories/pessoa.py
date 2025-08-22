@@ -1,7 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 from core.models import Pessoa
-from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES, TIPO_EMPRESA_CHOICES
+from core.choices import TIPO_EMPRESA_CHOICES
 import random
 
 

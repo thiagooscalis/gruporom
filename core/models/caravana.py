@@ -72,6 +72,7 @@ class Caravana(models.Model):
         default=0, verbose_name="Free Executiva"
     )
     data_contrato = models.DateField(verbose_name="Data do Contrato")
+    ativo = models.BooleanField(default=False, verbose_name="Ativo")
 
     class Meta:
         verbose_name = "Caravana"

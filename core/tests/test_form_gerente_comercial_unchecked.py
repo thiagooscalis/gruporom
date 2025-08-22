@@ -2,7 +2,6 @@
 """
 Testes para verificar remoção de permissões ao desmarcar gerente comercial no formulário
 """
-from django import forms
 from django.test import TestCase
 from django.contrib.auth.models import Group
 from core.models import Usuario, Pessoa

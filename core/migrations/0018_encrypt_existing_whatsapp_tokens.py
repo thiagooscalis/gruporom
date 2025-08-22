@@ -1,7 +1,5 @@
 # Generated manually
 from django.db import migrations
-from django.conf import settings
-import os
 
 
 def encrypt_existing_tokens(apps, schema_editor):

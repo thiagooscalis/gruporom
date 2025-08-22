@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.utils.text import slugify
 from django.core.exceptions import PermissionDenied
 
 

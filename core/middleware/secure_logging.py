@@ -4,7 +4,6 @@ Middleware para logging seguro de requisições
 """
 
 import json
-import logging
 from django.conf import settings
 from core.utils.secure_logger import get_secure_logger
 
@@ -51,7 +50,7 @@ class SecureLoggingMiddleware:
                 'content_type': request.content_type,
             })
         
-        logger.info(f"Requisição recebida", extra=safe_data)
+        logger.info("Requisição recebida", extra=safe_data)
     
     def _log_response(self, request, response):
         """Log seguro de respostas"""
@@ -67,7 +66,7 @@ class SecureLoggingMiddleware:
         
         # Log apenas se houver erro ou em desenvolvimento
         if response.status_code >= 400 or not self.is_production:
-            logger.info(f"Resposta enviada", extra=safe_data)
+            logger.info("Resposta enviada", extra=safe_data)
     
     def _should_log_request(self, request):
         """Determina se a requisição deve ser logada"""
@@ -119,7 +118,7 @@ class SecureLoggingMiddleware:
             'exception_message': str(exception),
         }
         
-        logger.error(f"Exceção não tratada na requisição", extra=safe_data)
+        logger.error("Exceção não tratada na requisição", extra=safe_data)
         
         # Em produção, não propaga detalhes da exceção
         if self.is_production:

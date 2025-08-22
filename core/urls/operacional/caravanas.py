@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/', caravanas.caravana_detalhes, name='caravana_detalhes'),
     path('<int:pk>/editar/', caravanas.caravana_editar_modal, name='caravana_editar'),
     path('<int:pk>/excluir/', caravanas.caravana_excluir_modal, name='caravana_excluir'),
+    path('<int:pk>/toggle-ativo/', caravanas.caravana_toggle_ativo, name='caravana_toggle_ativo'),
 ]

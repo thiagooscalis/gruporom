@@ -186,15 +186,15 @@ class FuncaoSeeder:
                     continue
         
         # Estatísticas finais
-        print(f"📊 Estatísticas do processamento:")
+        print("📊 Estatísticas do processamento:")
         print(f"   ✅ Funções criadas: {funcoes_criadas}")
         print(f"   📈 Total no sistema: {Funcao.objects.count()}")
         
         # Destacar algumas funções importantes
         if funcoes_criadas > 0:
-            print(f"⛪ Funções eclesiásticas principais disponíveis:")
-            print(f"   🙏 Pastor/Pastora, Reverendo/Reverenda")
-            print(f"   👨‍🏫 Mentor/Mentora, Professor/Professora") 
-            print(f"   👔 Presidente/Presidenta, Diretor/Diretora")
+            print("⛪ Funções eclesiásticas principais disponíveis:")
+            print("   🙏 Pastor/Pastora, Reverendo/Reverenda")
+            print("   👨‍🏫 Mentor/Mentora, Professor/Professora") 
+            print("   👔 Presidente/Presidenta, Diretor/Diretora")
         
         return funcoes_criadas

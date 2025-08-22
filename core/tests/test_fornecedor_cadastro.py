@@ -3,8 +3,7 @@ import pytest
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import Group
-from django.contrib.messages import get_messages
-from core.models import Fornecedor, Pessoa, Usuario
+from core.models import Fornecedor
 from core.choices import TIPO_EMPRESA_CHOICES
 from core.factories import PessoaFactory, EmpresaGrupoROMFactory, UsuarioFactory
 

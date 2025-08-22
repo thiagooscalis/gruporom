@@ -1,8 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
 from core.models import Turno
-from datetime import time
-import random
 
 
 class TurnoFactory(DjangoModelFactory):

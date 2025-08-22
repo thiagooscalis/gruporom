@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models.deletion import ProtectedError
 from django.urls import reverse
-from core.models import Usuario, Pessoa
+from core.models import Usuario
 from core.forms.usuario import UsuarioForm
 
 

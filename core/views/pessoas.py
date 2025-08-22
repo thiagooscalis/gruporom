@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from core.models import Pessoa, Fornecedor
+from core.models import Pessoa
 from core.decorators import group_area_required
 
 

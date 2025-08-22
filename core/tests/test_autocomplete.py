@@ -3,7 +3,6 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from core.factories import UsuarioAdministracaoFactory, PessoaFactory, UsuarioFactory
-from core.models import Pessoa
 
 
 class BuscarPessoasViewTest(TestCase):
@@ -286,7 +285,6 @@ class AutocompleteIntegrationTest(TestCase):
         
     def test_autocomplete_diferentes_areas(self):
         """Testa autocomplete em diferentes áreas"""
-        from django.contrib.auth.models import Group
         
         # Criar grupos necessários
         grupos = ['Comercial', 'Operacional']

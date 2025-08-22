@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from core.models import WhatsAppTemplate, WhatsAppAccount
+from core.models import WhatsAppTemplate
 from django.db import models
 from core.services.whatsapp_api import WhatsAppAPIService
 import logging

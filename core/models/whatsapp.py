@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from .pessoa import Pessoa
 from .usuario import Usuario
-from ..fields import EncryptedCharField, EncryptedTextField
+from ..fields import EncryptedTextField
 
 
 class WhatsAppAccount(models.Model):

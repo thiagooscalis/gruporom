@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from core.models import Caravana, Pessoa, Pais, Aeroporto
-from core.choices import TIPO_CARAVANA_CHOICES, REPASSE_TIPO_CHOICES
 from core.form_fields import PaisesMultiSelectField, PessoasMultiSelectField, AeroportoField
 
 

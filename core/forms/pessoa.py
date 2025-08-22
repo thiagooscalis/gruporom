@@ -2,10 +2,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field
-from core.models import Pessoa, Pais
-from core.choices import TIPO_EMPRESA_CHOICES
-from core.utils.validators import validate_documento_pessoa, limpar_documento
+from core.models import Pessoa
+from core.utils.validators import validate_documento_pessoa
 
 
 class PessoaForm(forms.ModelForm):

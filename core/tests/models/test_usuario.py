@@ -2,8 +2,7 @@ import pytest
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
-from core.models import Usuario, Pessoa
-from core.choices import TIPO_DOC_CHOICES
+from core.models import Usuario
 
 
 @pytest.mark.django_db

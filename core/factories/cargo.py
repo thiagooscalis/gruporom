@@ -1,7 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
 from core.models import Cargo
-from decimal import Decimal
 
 
 class CargoFactory(DjangoModelFactory):

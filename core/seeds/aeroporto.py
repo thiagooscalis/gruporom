@@ -126,7 +126,7 @@ class AeroportoSeeder:
                     continue
         
         # Estatísticas finais
-        print(f"📊 Estatísticas do processamento:")
+        print("📊 Estatísticas do processamento:")
         print(f"   ✅ Aeroportos criados: {aeroportos_criados}")
         print(f"   🏙️  Cidades criadas: {cidades_criadas}")
         print(f"   ⏭️  Aeroportos ignorados: {aeroportos_ignorados}")

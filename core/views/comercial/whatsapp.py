@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
 from core.decorators import comercial_required
-from django.contrib import messages
 from django.db.models import Q, Count
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from core.models import (
-    WhatsAppAccount, WhatsAppTemplate, WhatsAppConversation, 
+    WhatsAppTemplate, WhatsAppConversation, 
     WhatsAppMessage, WhatsAppContact
 )
 
@@ -546,7 +545,6 @@ def resend_message(request, message_id):
     """
     Reenvia uma mensagem que falhou
     """
-    from django.db import transaction
     
     # Busca a mensagem - aceita status 'failed' ou 'sending' (para casos de erro anterior)
     try:
@@ -654,7 +652,7 @@ def assign_conversation(request, conversation_id):
             }
         )
     
-    return JsonResponse({'success': True, 'message': f'Conversa atribuída com sucesso!'})
+    return JsonResponse({'success': True, 'message': 'Conversa atribuída com sucesso!'})
 
 
 @comercial_required
@@ -1212,7 +1210,7 @@ def send_template(request):
     template_id = request.POST.get('template_id')
     
     # Debug logs para rastrear problema
-    logger.info(f"🔧 send_template chamado:")
+    logger.info("🔧 send_template chamado:")
     logger.info(f"  - conversation_id: '{conversation_id}' (tipo: {type(conversation_id)})")
     logger.info(f"  - template_id: '{template_id}' (tipo: {type(template_id)})")
     logger.info(f"  - POST data: {dict(request.POST)}")

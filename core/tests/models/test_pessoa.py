@@ -1,9 +1,6 @@
 import pytest
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.utils import timezone
-from core.models import Pessoa
-from core.choices import TIPO_DOC_CHOICES, SEXO_CHOICES
 from core.factories import PessoaFactory, PessoaJuridicaFactory
 
 

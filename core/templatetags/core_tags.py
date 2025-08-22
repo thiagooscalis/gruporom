@@ -3,7 +3,7 @@ import locale
 from django import template
 from django.utils.text import slugify
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 register = template.Library()

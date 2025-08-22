@@ -2,7 +2,7 @@
 import requests
 import json
 import logging
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 from django.conf import settings
 from django.utils import timezone
 from ..models import WhatsAppAccount, WhatsAppMessage, WhatsAppContact

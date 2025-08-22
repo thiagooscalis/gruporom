@@ -1,4 +1,6 @@
 
+{% load crispy_forms_tags %}
+
 <div class="modal-content" id="modal-content-wrapper">
     <div class="modal-header">
         <h5 class="modal-title" id="caravanaModalLabel">
@@ -56,21 +58,25 @@
             <!-- Seção: Responsável e Líderes -->
             <h5 class="mb-3"><i class="fas fa-users me-2"></i>Responsável e Líderes</h5>
             
-            <!-- Autocomplete para responsável -->
+            <!-- Campo Responsável -->
             <div class="mb-3">
-                {% if form.instance.pk %}
-                    {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' initial_value=form.instance.responsavel %}
-                {% else %}
-                    {% include 'components/autocomplete_field.html' with search_field=form.responsavel_search hidden_field=form.responsavel search_url='/operacional/buscar-pessoas/?all=true' selected_label='Responsável selecionado' %}
+                <label class="form-label">{{ form.responsavel.label }}</label>
+                {{ form.responsavel }}
+                {% if form.responsavel.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.responsavel.errors %}{{ error }}{% endfor %}
+                    </div>
                 {% endif %}
             </div>
             
-            <!-- Autocomplete múltiplo para líderes -->
+            <!-- Campo Líderes -->
             <div class="mb-3">
-                {% if form.instance.pk %}
-                    {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' initial_values=form.instance.lideres.all %}
-                {% else %}
-                    {% include 'components/multiple_autocomplete_field.html' with field_id='lideres' field_name='lideres' label='Líderes da Caravana' placeholder='Digite o nome do líder para buscar...' search_url='/operacional/buscar-pessoas/?all=true' selected_label='Líderes selecionados' empty_message='Nenhum líder selecionado' %}
+                <label class="form-label">{{ form.lideres.label }}</label>
+                {{ form.lideres }}
+                {% if form.lideres.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.lideres.errors %}{{ error }}{% endfor %}
+                    </div>
                 {% endif %}
             </div>
             

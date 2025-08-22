@@ -1,8 +1,7 @@
 from django.test import TestCase, override_settings
-from django.contrib.auth.models import Group
 from django.core.files.storage import InMemoryStorage
 from core.factories import UsuarioFactory, EmpresaGrupoROMFactory
-from core.models import Usuario, Pessoa
+from core.models import Pessoa
 from core.choices import TIPO_EMPRESA_CHOICES
 
 

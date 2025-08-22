@@ -51,7 +51,8 @@ npm run dev  # Watch mode para assets
 - Suporte completo a mídias (imagem, vídeo, áudio, documento)
 
 ### 3. Operacional (`/operacional/`)
-- Gestão de caravanas e turismo
+- Gestão de caravanas e turismo com sistema de abas
+- Toggle ativo/inativo, autocomplete para responsáveis/líderes
 - 15 models interconectados (Voos, Hotéis, Bloqueios, etc)
 
 ### 4. Promotor (`/promotor/`)
@@ -131,11 +132,11 @@ if request.headers.get('HX-Request'):
 ✅ **Arquitetura escalável** pronta para novos módulos
 
 ## Últimas Atualizações (Janeiro 2025)
-- **🎯 Área Operacional**: Dashboard e página de caravanas padronizados com design system
-- **🔧 Modal de Caravanas**: Convertido para componente base reutilizável  
-- **⚡ Padding Global**: Template base padronizado com `p-6` consistente
-- **🔗 URLs**: Autocomplete usando `/operacional/buscar-pessoas/`
-- **🎨 Cores**: Design system aplicado em toda área operacional (primary #d3a156)
+- **🎯 Área Operacional**: Dashboard e caravanas com design system padronizado
+- **📋 Página de Detalhes**: Sistema de abas (Visão Geral, Detalhes, Bloqueios) com layout colapsável
+- **🔧 Autocomplete Fields**: Responsável e líderes com busca AJAX reutilizável
+- **⚡ Status de Caravanas**: Toggle ativo/inativo via HTMX, padrão inativo ao criar
+- **🎨 UX Melhorada**: Breadcrumbs, transições suaves, estados visuais claros
 
 ---
 **Última atualização**: Janeiro 2025

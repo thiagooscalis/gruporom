@@ -2,7 +2,6 @@ from django.test import TestCase, override_settings
 from django.core.files.storage import InMemoryStorage
 from core.forms.pessoa import PessoaForm
 from core.choices import TIPO_EMPRESA_CHOICES
-from core.models import Pessoa
 
 
 @override_settings(DEFAULT_FILE_STORAGE=InMemoryStorage())

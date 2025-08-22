@@ -3,7 +3,6 @@
 Command para auditar logs e identificar possíveis vazamentos de informações sensíveis
 """
 
-import os
 import re
 import glob
 from django.core.management.base import BaseCommand

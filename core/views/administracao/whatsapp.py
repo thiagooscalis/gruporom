@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from core.decorators import administracao_required
 from django.core.paginator import Paginator
-from django.db.models import Q, Count, Max
+from django.db.models import Q, Count
 from django.db import models
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST
-from django.utils.decorators import method_decorator
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json
 import logging
 
 from core.models import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate
-from core.services.whatsapp_api import WhatsAppAPIService, WhatsAppWebhookProcessor
+from core.services.whatsapp_api import WhatsAppAPIService
 from core.forms.whatsapp import WhatsAppAccountForm, WhatsAppAccountTestForm, WhatsAppTemplateForm
 
 # Logger
@@ -618,7 +617,7 @@ def webhook(request, account_id):
                 payload=payload,
                 status='pending'
             )
-            logger.info(f"Webhook adicionado à fila para processamento posterior")
+            logger.info("Webhook adicionado à fila para processamento posterior")
             
             # Processa de forma síncrona para evitar problemas com asyncio no dev server
             try:
@@ -635,7 +634,7 @@ def webhook(request, account_id):
                 for status_data in data.get('statuses', []):
                     _process_status_update_sync(account, status_data)
                 
-                logger.info(f"Webhook processado com sucesso")
+                logger.info("Webhook processado com sucesso")
             except Exception as proc_error:
                 # Se falhar o processamento imediato, não é problema
                 # pois está na fila para reprocessamento
@@ -1421,7 +1420,6 @@ def bulk_send_modal(request, account_id):
     """
     Modal para envio de mensagens em massa
     """
-    from core.models import Pessoa, Passageiro, Colaborador, Fornecedor, Usuario
     from core.models import Caravana, Cargo, Turno
     from django.contrib.auth.models import Group
     
@@ -1459,7 +1457,7 @@ def load_recipients(request):
     """
     Carrega interface de seleção de destinatários baseado no tipo
     """
-    from core.models import Pessoa, Passageiro, Colaborador, Fornecedor, Usuario
+    from core.models import Colaborador, Fornecedor, Usuario
     from core.models import Caravana, Cargo, Turno
     from django.contrib.auth.models import Group
     from django.db.models import Min, Count

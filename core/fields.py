@@ -2,7 +2,6 @@
 from django.db import models
 from django import forms
 from django.core.exceptions import ValidationError
-from django.urls import reverse
 from .utils.encryption import field_encryption
 
 
@@ -159,3 +158,48 @@ class AutocompleteField(forms.ModelChoiceField):
                 code='invalid_choice'
             )
         return value
+
+
+class MultipleAutocompleteField(forms.ModelMultipleChoiceField):
+    """
+    Campo customizado para autocomplete múltiplo usando Alpine.js + Tailwind CSS
+    
+    Similar ao AutocompleteField mas permite seleção múltipla
+    """
+    
+    def __init__(self, queryset, search_url=None, search_placeholder="Digite para buscar...", 
+                 selected_label="Itens selecionados:", min_length=2, **kwargs):
+        
+        self.search_url = search_url
+        self.search_placeholder = search_placeholder
+        self.selected_label = selected_label
+        self.min_length = min_length
+        
+        # Importar widget localmente para evitar circular import
+        from .widgets import MultipleAutocompleteWidget
+        
+        # Usar widget customizado
+        kwargs['widget'] = MultipleAutocompleteWidget(
+            search_url=search_url,
+            search_placeholder=search_placeholder,
+            selected_label=selected_label,
+            min_length=min_length
+        )
+        
+        super().__init__(queryset, **kwargs)
+    
+    def prepare_value(self, value):
+        """Prepara valor para o widget"""
+        if value is None:
+            return []
+        
+        # Se value é um QuerySet
+        if hasattr(value, '__iter__') and not isinstance(value, str):
+            return [getattr(v, 'pk') if hasattr(v, 'pk') else v for v in value]
+        
+        # Se value é um único modelo
+        if hasattr(value, 'pk'):
+            return [value.pk]
+        
+        # Se value é já uma lista de IDs
+        return value if isinstance(value, list) else [value]
