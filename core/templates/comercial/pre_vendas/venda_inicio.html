@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+{% block breadcrumb %}
+<nav class="flex mb-6 text-sm">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <li class="inline-flex items-center">
+            <a href="{% url 'comercial:dashboard' %}" class="inline-flex items-center text-gray-600 hover:text-primary">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Comercial
+            </a>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <a href="{% url 'comercial:nova_venda' %}" class="ml-1 md:ml-3 text-gray-600 hover:text-primary">Nova Venda</a>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <a href="{% url 'comercial:caravanas_ativas' %}" class="ml-1 md:ml-3 text-gray-600 hover:text-primary">Caravanas</a>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <span class="ml-1 md:ml-3 text-gray-800 font-medium">{{ bloqueio.caravana.nome }}</span>
+            </div>
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-6">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Processo de Venda</h1>
+            <p class="text-gray-600">{{ bloqueio.caravana.nome }} - {{ bloqueio.descricao }}</p>
+            <div class="flex items-center gap-4 mt-4 text-sm">
+                <span class="text-gray-500">Saída: <strong class="text-gray-700">{{ bloqueio.saida|date:"d/m/Y" }}</strong></span>
+                <span class="text-gray-500">Valor: <strong class="text-primary">{{ bloqueio.valor_convertido|moeda }}</strong></span>
+                <span class="text-gray-500">Vagas disponíveis: <strong class="text-green-600">{{ vagas_disponiveis }}</strong></span>
+            </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="flex items-center justify-between" id="progress-steps">
+                <!-- Step 1: Cliente -->
+                <div class="flex-1 relative">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-semibold">
+                            1
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    </div>
+                    <p class="text-xs mt-2 font-medium text-gray-900">Cliente</p>
+                </div>
+
+                <!-- Step 2: Passageiros -->
+                <div class="flex-1 relative">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-semibold">
+                            2
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600">Passageiros</p>
+                </div>
+
+                <!-- Step 3: Extras -->
+                <div class="flex-1 relative">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-semibold">
+                            3
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600">Extras</p>
+                </div>
+
+                <!-- Step 4: Pagamento -->
+                <div class="flex-1 relative">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-semibold">
+                            4
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600">Pagamento</p>
+                </div>
+
+                <!-- Step 5: Confirmação -->
+                <div class="relative">
+                    <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-semibold">
+                        5
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600">Confirmação</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white rounded-lg shadow-sm p-6" id="form-container">
+            <h2 class="text-lg font-semibold text-gray-900 mb-6">Dados do Cliente</h2>
+            
+            <form hx-post="{% url 'comercial:venda_detalhes' venda.id %}"
+                  hx-target="#form-container"
+                  hx-swap="innerHTML"
+                  class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="documento" class="block text-sm font-medium text-gray-700 mb-2">
+                        CPF ou CNPJ do Cliente
+                    </label>
+                    <div class="relative">
+                        <input type="text" 
+                               id="documento"
+                               name="documento"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                               placeholder="Digite o CPF ou CNPJ..."
+                               required
+                               autofocus>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9h3.75M15 12h3.75M15 15h3.75M10.5 19.5h1.5a2.25 2.25 0 002.25-2.25v-11.25a2.25 2.25 0 00-2.25-2.25h-1.5a2.25 2.25 0 00-2.25 2.25v11.25a2.25 2.25 0 002.25 2.25zM4.5 9.75H7.5M4.5 12h3M4.5 14.25H7.5"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Digite o documento para verificar se o cliente já está cadastrado
+                    </p>
+                </div>
+
+                <div class="flex justify-between pt-6 border-t">
+                    <a href="{% url 'comercial:caravana_venda' venda.bloqueio.caravana.id %}" 
+                       class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Voltar
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                        Verificar Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Aplicar máscara de CPF/CNPJ
+    const docInput = document.getElementById('documento');
+    if (docInput && window.aplicarMascaraCpfCnpj) {
+        window.aplicarMascaraCpfCnpj(docInput);
+    }
+});
+</script>
+{% endblock %}

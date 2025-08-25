@@ -21,6 +21,7 @@ from .extra import Extra
 from .tarefa import Tarefa
 from .nota import Nota
 from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate, WhatsAppConversation, WhatsAppWebhookQueue
+from .venda import VendaBase, VendaBloqueio
 
 __all__ = [
     "Pessoa",
@@ -51,4 +52,6 @@ __all__ = [
     "WhatsAppTemplate",
     "WhatsAppConversation",
     "WhatsAppWebhookQueue",
+    "VendaBase",
+    "VendaBloqueio",
 ]

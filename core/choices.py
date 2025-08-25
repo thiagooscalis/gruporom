@@ -43,3 +43,11 @@ CATEGORIA_TAREFA_CHOICES = [
     ("Terrestre", "Terrestre"),
     ("Passageiro", "Passageiro"),
 ]
+
+STATUS_VENDA_CHOICES = [
+    ("rascunho", "Rascunho"),
+    ("em_andamento", "Em Andamento"),
+    ("aguardando_pagamento", "Aguardando Pagamento"),
+    ("confirmada", "Confirmada"),
+    ("cancelada", "Cancelada"),
+]

@@ -1,0 +1,234 @@
+<h2 class="text-lg font-semibold text-gray-900 mb-6">
+    {% if cliente_existente %}
+        Cliente Encontrado - Confirme os Dados
+    {% else %}
+        Novo Cliente - Preencha os Dados
+    {% endif %}
+</h2>
+
+<form hx-post="{% url 'comercial:venda_cliente_salvar' venda.id %}"
+      hx-target="#form-container"
+      hx-swap="innerHTML"
+      class="space-y-6">
+    {% csrf_token %}
+    <input type="hidden" name="documento" value="{{ documento }}">
+    
+    <!-- Dados Básicos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
+                Nome Completo *
+            </label>
+            <input type="text" 
+                   id="nome"
+                   name="nome"
+                   value="{% if pessoa %}{{ pessoa.nome }}{% endif %}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                   required>
+        </div>
+
+        <div>
+            <label for="tipo_doc" class="block text-sm font-medium text-gray-700 mb-2">
+                Tipo de Documento *
+            </label>
+            <select id="tipo_doc"
+                    name="tipo_doc"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                    required>
+                <option value="CPF" {% if pessoa and pessoa.tipo_doc == 'CPF' %}selected{% elif documento|length == 11 %}selected{% endif %}>CPF</option>
+                <option value="CNPJ" {% if pessoa and pessoa.tipo_doc == 'CNPJ' %}selected{% elif documento|length == 14 %}selected{% endif %}>CNPJ</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Contatos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                E-mail *
+            </label>
+            <input type="email" 
+                   id="email"
+                   name="email"
+                   value="{% if pessoa %}{{ pessoa.email }}{% endif %}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                   required>
+        </div>
+
+        <div>
+            <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">
+                Telefone/WhatsApp *
+            </label>
+            <input type="tel" 
+                   id="telefone"
+                   name="telefone"
+                   value="{% if pessoa %}{{ pessoa.telefone }}{% endif %}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                   placeholder="(00) 00000-0000"
+                   required>
+        </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="border-t pt-6">
+        <h3 class="text-md font-medium text-gray-900 mb-4">Endereço</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+                <label for="cep" class="block text-sm font-medium text-gray-700 mb-2">
+                    CEP
+                </label>
+                <input type="text" 
+                       id="cep"
+                       name="cep"
+                       value="{% if pessoa %}{{ pessoa.cep }}{% endif %}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                       placeholder="00000-000"
+                       hx-post="{% url 'administracao:buscar_cep' %}"
+                       hx-trigger="blur"
+                       hx-target="#endereco-fields"
+                       hx-swap="innerHTML">
+            </div>
+
+            <div class="md:col-span-2">
+                <label for="endereco" class="block text-sm font-medium text-gray-700 mb-2">
+                    Endereço
+                </label>
+                <input type="text" 
+                       id="endereco"
+                       name="endereco"
+                       value="{% if pessoa %}{{ pessoa.endereco }}{% endif %}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+            </div>
+        </div>
+
+        <div id="endereco-fields">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="numero" class="block text-sm font-medium text-gray-700 mb-2">
+                        Número
+                    </label>
+                    <input type="text" 
+                           id="numero"
+                           name="numero"
+                           value="{% if pessoa %}{{ pessoa.numero }}{% endif %}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="complemento" class="block text-sm font-medium text-gray-700 mb-2">
+                        Complemento
+                    </label>
+                    <input type="text" 
+                           id="complemento"
+                           name="complemento"
+                           value="{% if pessoa %}{{ pessoa.complemento }}{% endif %}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="bairro" class="block text-sm font-medium text-gray-700 mb-2">
+                        Bairro
+                    </label>
+                    <input type="text" 
+                           id="bairro"
+                           name="bairro"
+                           value="{% if pessoa %}{{ pessoa.bairro }}{% endif %}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="cidade" class="block text-sm font-medium text-gray-700 mb-2">
+                        Cidade
+                    </label>
+                    <input type="text" 
+                           id="cidade"
+                           name="cidade"
+                           value="{% if pessoa %}{{ pessoa.cidade }}{% endif %}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label for="estado" class="block text-sm font-medium text-gray-700 mb-2">
+                        Estado
+                    </label>
+                    <select id="estado"
+                            name="estado"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="">Selecione...</option>
+                        <option value="AC" {% if pessoa and pessoa.estado == 'AC' %}selected{% endif %}>Acre</option>
+                        <option value="AL" {% if pessoa and pessoa.estado == 'AL' %}selected{% endif %}>Alagoas</option>
+                        <option value="AP" {% if pessoa and pessoa.estado == 'AP' %}selected{% endif %}>Amapá</option>
+                        <option value="AM" {% if pessoa and pessoa.estado == 'AM' %}selected{% endif %}>Amazonas</option>
+                        <option value="BA" {% if pessoa and pessoa.estado == 'BA' %}selected{% endif %}>Bahia</option>
+                        <option value="CE" {% if pessoa and pessoa.estado == 'CE' %}selected{% endif %}>Ceará</option>
+                        <option value="DF" {% if pessoa and pessoa.estado == 'DF' %}selected{% endif %}>Distrito Federal</option>
+                        <option value="ES" {% if pessoa and pessoa.estado == 'ES' %}selected{% endif %}>Espírito Santo</option>
+                        <option value="GO" {% if pessoa and pessoa.estado == 'GO' %}selected{% endif %}>Goiás</option>
+                        <option value="MA" {% if pessoa and pessoa.estado == 'MA' %}selected{% endif %}>Maranhão</option>
+                        <option value="MT" {% if pessoa and pessoa.estado == 'MT' %}selected{% endif %}>Mato Grosso</option>
+                        <option value="MS" {% if pessoa and pessoa.estado == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
+                        <option value="MG" {% if pessoa and pessoa.estado == 'MG' %}selected{% endif %}>Minas Gerais</option>
+                        <option value="PA" {% if pessoa and pessoa.estado == 'PA' %}selected{% endif %}>Pará</option>
+                        <option value="PB" {% if pessoa and pessoa.estado == 'PB' %}selected{% endif %}>Paraíba</option>
+                        <option value="PR" {% if pessoa and pessoa.estado == 'PR' %}selected{% endif %}>Paraná</option>
+                        <option value="PE" {% if pessoa and pessoa.estado == 'PE' %}selected{% endif %}>Pernambuco</option>
+                        <option value="PI" {% if pessoa and pessoa.estado == 'PI' %}selected{% endif %}>Piauí</option>
+                        <option value="RJ" {% if pessoa and pessoa.estado == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
+                        <option value="RN" {% if pessoa and pessoa.estado == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
+                        <option value="RS" {% if pessoa and pessoa.estado == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
+                        <option value="RO" {% if pessoa and pessoa.estado == 'RO' %}selected{% endif %}>Rondônia</option>
+                        <option value="RR" {% if pessoa and pessoa.estado == 'RR' %}selected{% endif %}>Roraima</option>
+                        <option value="SC" {% if pessoa and pessoa.estado == 'SC' %}selected{% endif %}>Santa Catarina</option>
+                        <option value="SP" {% if pessoa and pessoa.estado == 'SP' %}selected{% endif %}>São Paulo</option>
+                        <option value="SE" {% if pessoa and pessoa.estado == 'SE' %}selected{% endif %}>Sergipe</option>
+                        <option value="TO" {% if pessoa and pessoa.estado == 'TO' %}selected{% endif %}>Tocantins</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if cliente_existente %}
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex">
+            <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <p class="text-sm text-blue-800">
+                    Cliente já cadastrado no sistema. Confirme os dados acima ou faça as alterações necessárias.
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="flex justify-between pt-6 border-t">
+        <a href="{% url 'comercial:venda_detalhes' venda.id %}" 
+           class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            Voltar
+        </a>
+        <button type="submit" 
+                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+            Próximo: Passageiros
+        </button>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Aplicar máscaras
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput && window.aplicarMascaraTelefone) {
+        window.aplicarMascaraTelefone(telefoneInput);
+    }
+    
+    const cepInput = document.getElementById('cep');
+    if (cepInput && window.aplicarMascaraCep) {
+        window.aplicarMascaraCep(cepInput);
+    }
+});
+</script>
