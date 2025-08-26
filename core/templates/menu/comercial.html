@@ -7,6 +7,20 @@
 </li>
 
 <li class="nav-item">
+    <a href="{% url 'comercial:nova_venda' %}" class="nav-link {% if request.resolver_match.url_name == 'nova_venda' %}text-warning{% else %}text-light{% endif %}">
+        <i class="fas fa-plus-circle"></i>
+        <span class="ms-2">Nova Venda</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{% url 'comercial:pre_vendas_lista' %}" class="nav-link {% if request.resolver_match.url_name == 'pre_vendas_lista' %}text-warning{% else %}text-light{% endif %}">
+        <i class="fas fa-clipboard-list"></i>
+        <span class="ms-2">Pré-vendas</span>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="{% url 'comercial:whatsapp' %}" class="nav-link {% if request.resolver_match.url_name == 'whatsapp' %}text-warning{% else %}text-light{% endif %}">
         <i class="fab fa-whatsapp"></i>
         <span class="ms-2">WhatsApp</span>

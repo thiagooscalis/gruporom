@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% url 'comercial:home' as home_url %}
+{% include 'includes/breadcrumbs.html' with prev_page="Área Comercial" prev_url=home_url cur_page="Pré-vendas" %}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+        <p class="text-gray-600 mt-1">Vendas em andamento e aguardando conclusão</p>
+    </div>
+    <a href="{% url 'comercial:nova_venda' %}" 
+       class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors inline-flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"></path>
+        </svg>
+        Nova Venda
+    </a>
+</div>
+
+<!-- Estatísticas -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm">Total</p>
+                <p class="text-2xl font-bold text-gray-900">{{ total_vendas }}</p>
+            </div>
+            <div class="bg-primary/10 p-3 rounded-full">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm">Rascunho</p>
+                <p class="text-2xl font-bold text-gray-500">{{ vendas_rascunho }}</p>
+            </div>
+            <div class="bg-gray-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm">Em Andamento</p>
+                <p class="text-2xl font-bold text-blue-600">{{ vendas_andamento }}</p>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm">Aguardando Pagamento</p>
+                <p class="text-2xl font-bold text-yellow-600">{{ vendas_aguardando }}</p>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="bg-white rounded-lg p-4 mb-6 border border-gray-200">
+    <form method="get" class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1">
+            <label for="search" class="sr-only">Buscar</label>
+            <div class="relative">
+                <input type="text" name="search" id="search" value="{{ search }}"
+                       placeholder="Buscar por caravana, cliente ou número da venda..."
+                       class="w-full rounded-lg border-gray-300 pl-10 pr-3 py-2 focus:ring-primary focus:border-primary">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <select name="status" class="rounded-lg border-gray-300 focus:ring-primary focus:border-primary">
+            <option value="">Todos os Status</option>
+            <option value="rascunho" {% if status_filter == 'rascunho' %}selected{% endif %}>Rascunho</option>
+            <option value="em_andamento" {% if status_filter == 'em_andamento' %}selected{% endif %}>Em Andamento</option>
+            <option value="aguardando_pagamento" {% if status_filter == 'aguardando_pagamento' %}selected{% endif %}>Aguardando Pagamento</option>
+        </select>
+        
+        <button type="submit" 
+                class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+            Filtrar
+        </button>
+        
+        {% if search or status_filter %}
+        <a href="{% url 'comercial:pre_vendas_lista' %}" 
+           class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors text-center">
+            Limpar
+        </a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Lista de vendas -->
+<div id="vendas-lista"
+     hx-get="{% url 'comercial:pre_vendas_lista' %}"
+     hx-trigger="load"
+     hx-vals='{"search": "{{ search }}", "status": "{{ status_filter }}"}'>
+    <div class="flex justify-center py-12">
+        <svg class="animate-spin h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+    </div>
+</div>
+
+{% endblock %}

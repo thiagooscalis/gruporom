@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nova Venda{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            {% url 'comercial:home' as home_url %}
+            {% include 'includes/breadcrumbs.html' with prev_page="Área Comercial" prev_url=home_url cur_page="Nova Venda" %}
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-plus-circle me-2"></i>
+                Nova Venda
+            </h1>
+            <p class="text-muted">Selecione o tipo de venda que deseja realizar</p>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Card Caravana -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow hover-shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-bus text-primary fs-1"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">Caravana</h4>
+                    <p class="text-muted mb-4">
+                        Venda de pacotes de viagem em grupo, incluindo transporte, hospedagem e roteiro completo
+                    </p>
+                    <div class="d-grid">
+                        <a href="{% url 'comercial:caravanas_disponiveis' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Iniciar Venda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Extra de Caravana -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow hover-shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-plus-square text-success fs-1"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">Extra de Caravana</h4>
+                    <p class="text-muted mb-4">
+                        Venda de serviços adicionais para caravanas existentes, como passeios extras e upgrades
+                    </p>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-success">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Iniciar Venda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Corporativo -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow hover-shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-building text-info fs-1"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">Corporativo</h4>
+                    <p class="text-muted mb-4">
+                        Venda de viagens corporativas personalizadas para empresas, eventos e convenções
+                    </p>
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-info">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Iniciar Venda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informações Adicionais -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-light border-start border-primary border-3" role="alert">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-primary fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="alert-heading mb-1">Precisa de ajuda?</h6>
+                        <p class="mb-0 small">
+                            Cada tipo de venda possui características e processos específicos. 
+                            Selecione a opção mais adequada ao seu cliente e necessidade. 
+                            Em caso de dúvidas, consulte o manual ou entre em contato com o suporte.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-shadow {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+</style>
+{% endblock %}

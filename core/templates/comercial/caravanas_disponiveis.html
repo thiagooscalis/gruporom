@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Caravanas Disponíveis{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            {% url 'comercial:nova_venda' as nova_venda_url %}
+            {% include 'includes/breadcrumbs.html' with prev_page="Nova Venda" prev_url=nova_venda_url cur_page="Caravanas Disponíveis" %}
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-bus me-2"></i>
+                Caravanas Disponíveis
+            </h1>
+            <p class="text-muted">Selecione uma caravana para iniciar a venda</p>
+        </div>
+    </div>
+
+    {% if caravanas %}
+    <div class="row g-4">
+        {% for caravana in caravanas %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow hover-shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bus me-2"></i>
+                        {{ caravana.nome }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Empresa</small>
+                        <strong>{{ caravana.empresa.nome }}</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Data do Contrato</small>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            <span>{{ caravana.data_contrato|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+
+                    {% if caravana.lideres.exists %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Líderes</small>
+                        {% for lider in caravana.lideres.all %}
+                            <span class="badge bg-secondary me-1">{{ lider.nome }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Tipo</small>
+                        <span class="badge bg-secondary">{{ caravana.get_tipo_display }}</span>
+                    </div>
+
+                    <div class="text-center">
+                        <h6 class="mb-0">
+                            <span class="text-success">{{ caravana.passageiros_disponiveis }}</span>
+                            <span class="text-muted">/</span>
+                            <span class="text-primary">{{ caravana.quantidade }}</span>
+                        </h6>
+                        <small class="text-muted">Disponíveis/Total</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-grid">
+                        {% if caravana.passageiros_disponiveis > 0 %}
+                        <a href="{% url 'comercial:caravana_detalhes' caravana.id %}" class="btn btn-primary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Mais Detalhes
+                        </a>
+                        {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-ban me-2"></i>
+                            Esgotado
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-bus fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Nenhuma caravana disponível</h5>
+                    <p class="text-muted">
+                        Não há caravanas ativas disponíveis para venda no momento.
+                    </p>
+                    <a href="{% url 'comercial:nova_venda' %}" class="btn btn-outline-primary mt-3">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar às Opções
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Informações Adicionais -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-info border-start border-info border-3" role="alert">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-info fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="alert-heading mb-1">Como funciona a venda de caravanas?</h6>
+                        <p class="mb-0 small">
+                            Selecione uma caravana para visualizar os bloqueios disponíveis, 
+                            preços e condições. Você poderá configurar os passageiros, 
+                            extras e forma de pagamento na próxima etapa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-shadow {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.hover-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.15)!important;
+}
+</style>
+{% endblock %}
