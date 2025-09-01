@@ -1612,6 +1612,41 @@ def send_document(request):
                 except Exception as s3_check_error:
                     logger.error(f"[WHATSAPP PDF] ❌ ARQUIVO NÃO EXISTE NO S3: {s3_check_error}")
                     logger.error(f"[WHATSAPP PDF] 🔍 Tentativa de verificar: Bucket={settings.AWS_STORAGE_BUCKET_NAME}, Key={saved_path}")
+                    
+                    # NOVO: Lista o que realmente existe na pasta
+                    try:
+                        folder_prefix = saved_path.rsplit('/', 1)[0] + '/' if '/' in saved_path else ''
+                        logger.error(f"[WHATSAPP PDF] 📂 Listando pasta: {folder_prefix}")
+                        
+                        list_response = s3_client.list_objects_v2(
+                            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                            Prefix=folder_prefix,
+                            MaxKeys=20
+                        )
+                        
+                        if 'Contents' in list_response:
+                            logger.error(f"[WHATSAPP PDF] 📋 Arquivos encontrados na pasta ({len(list_response['Contents'])}):")
+                            for obj in list_response['Contents']:
+                                logger.error(f"[WHATSAPP PDF]   - {obj['Key']} ({obj['Size']} bytes)")
+                        else:
+                            logger.error(f"[WHATSAPP PDF] 📂 Pasta completamente vazia!")
+                            
+                        # Lista também a pasta raiz whatsapp para ver se está em outro lugar
+                        logger.error(f"[WHATSAPP PDF] 📂 Listando pasta raiz whatsapp...")
+                        root_response = s3_client.list_objects_v2(
+                            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                            Prefix='media/whatsapp/',
+                            MaxKeys=10
+                        )
+                        
+                        if 'Contents' in root_response:
+                            logger.error(f"[WHATSAPP PDF] 📋 Arquivos recentes em media/whatsapp/:")
+                            for obj in sorted(root_response['Contents'], key=lambda x: x['LastModified'], reverse=True)[:5]:
+                                logger.error(f"[WHATSAPP PDF]   - {obj['Key']} ({obj['LastModified']})")
+                        
+                    except Exception as list_error:
+                        logger.error(f"[WHATSAPP PDF] ❌ Erro ao listar pasta: {list_error}")
+                    
                     message.status = 'failed'
                     message.error_message = f"Arquivo não foi salvo no S3: {str(s3_check_error)}"
                     message.save()
