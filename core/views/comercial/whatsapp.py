@@ -1459,7 +1459,7 @@ def send_document_new(request):
     
     # Envio via WhatsApp
     try:
-        success = _send_pdf_whatsapp(conversation, document, signed_url, caption)
+        success = _send_pdf_whatsapp(conversation, document, signed_url, caption, request.user)
         if success:
             return render(request, 'comercial/whatsapp/partials/send_document_success.html', {
                 'message': 'PDF enviado com sucesso!',
@@ -1546,10 +1546,12 @@ def _upload_pdf_to_s3(document):
     return s3_key, signed_url
 
 
-def _send_pdf_whatsapp(conversation, document, signed_url, caption):
+def _send_pdf_whatsapp(conversation, document, signed_url, caption, request_user):
     """Método privado para envio via WhatsApp"""
     import logging
     import requests
+    import uuid
+    from django.utils import timezone
     from core.services.whatsapp_api import WhatsAppAPIService
     
     logger = logging.getLogger(__name__)
@@ -1589,7 +1591,26 @@ def _send_pdf_whatsapp(conversation, document, signed_url, caption):
         
         raise Exception(f"URL não acessível: HTTP {test_response.status_code}")
     
-    # Envio via API WhatsApp
+    # 1. CORRIGIDO: Cria mensagem no banco ANTES de enviar via API
+    message = WhatsAppMessage.objects.create(
+        wamid=f"doc_{uuid.uuid4().hex[:16]}",  # Temporário até API responder
+        account=conversation.account,
+        contact=conversation.contact,
+        conversation=conversation,
+        direction='outbound',
+        message_type='document',
+        content=caption or f"[Documento: {document.name}]",
+        media_url=signed_url,
+        media_filename=document.name,
+        media_mimetype='application/pdf',
+        status='sending',
+        timestamp=timezone.now(),
+        sent_by=request_user,
+    )
+    
+    logger.info(f"[PDF] ✅ Mensagem criada no banco: {message.id}")
+    
+    # 2. Envio via API WhatsApp
     phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
     api_service = WhatsAppAPIService(conversation.account)
     
@@ -1605,416 +1626,29 @@ def _send_pdf_whatsapp(conversation, document, signed_url, caption):
     
     logger.info(f"[PDF] 📡 Resposta API: {api_response}")
     
-    return api_response.get('success', False)
-    
-    conversation_id = request.POST.get('conversation_id')
-    if not conversation_id:
-        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-            'error': 'ID da conversa não informado'
-        })
-    
-    try:
-        conversation = get_object_or_404(
-            WhatsAppConversation.objects.select_related('account', 'contact'),
-            id=conversation_id,
-            assigned_to=request.user
-        )
-    except:
-        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-            'error': 'Conversa não encontrada'
-        })
-    
-    form = SendDocumentForm(request.POST, request.FILES)
-    
-    if not form.is_valid():
-        return render(request, 'comercial/whatsapp/partials/send_document_form.html', {
-            'form': form,
-            'conversation': conversation
-        })
-    
-    document = form.cleaned_data['document']
-    caption = form.cleaned_data.get('caption', '').strip()
-    
-    try:
-        logger.info(f"[WHATSAPP PDF] 🚀 INICIANDO PROCESSO DE UPLOAD DE PDF")
+    # 3. Atualiza mensagem baseado na resposta da API
+    if api_response.get('success'):
+        message.wamid = api_response.get('message_id', message.wamid)
+        message.status = 'sent'
+        message.save(update_fields=['wamid', 'status'])
+        logger.info(f"[PDF] ✅ Mensagem atualizada com WAMID: {message.wamid}")
         
-        # Gera nome único para o arquivo
-        import uuid
+        # 4. Atualiza última atividade da conversa
+        conversation.last_activity = timezone.now()
+        if conversation.status == 'pending':
+            conversation.status = 'in_progress'
+        conversation.save(update_fields=['last_activity', 'status'])
         
-        file_extension = '.pdf'
-        filename = f"{uuid.uuid4()}{file_extension}"
+        return True
+    else:
+        # Falha no envio - marca como falhou
+        message.status = 'failed'
+        error_msg = api_response.get('error', 'Erro desconhecido')
+        message.error_message = error_msg
+        message.save(update_fields=['status', 'error_message'])
+        logger.error(f"[PDF] ❌ Falha no envio: {error_msg}")
         
-        # Volta para pasta documents já que upload direto deve funcionar
-        now = timezone.now()
-        folder_path = f"media/whatsapp/documents/{now.year}/{now.month:02d}/{now.day:02d}/"
-        file_path = f"{folder_path}{filename}"
-        
-        logger.info(f"[WHATSAPP PDF] 📂 Salvando em: {file_path}")
-        
-        # Salva no S3 (ou storage configurado) com validação
-        logger.info(f"[WHATSAPP PDF] 💾 Salvando arquivo no S3...")
-        logger.info(f"[WHATSAPP PDF] Caminho destino: {file_path}")
-        logger.info(f"[WHATSAPP PDF] Tamanho do arquivo: {document.size} bytes")
-        
-        # NOVO: BYPASS do Django Storage - salvar direto via boto3
-        logger.info(f"[WHATSAPP PDF] 🔧 BYPASS: Salvando direto via boto3 (Django Storage falhou)")
-        
-        try:
-            import boto3
-            
-            s3_client = boto3.client(
-                's3',
-                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                region_name=settings.AWS_S3_REGION_NAME
-            )
-            
-            # Lê o conteúdo do arquivo para upload direto
-            document.seek(0)  # Volta ao início do arquivo
-            file_content = document.read()
-            
-            logger.info(f"[WHATSAPP PDF] 📄 Arquivo lido: {len(file_content)} bytes")
-            
-            # Upload direto para S3
-            s3_client.put_object(
-                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                Key=file_path,
-                Body=file_content,
-                ContentType='application/pdf',
-                ContentDisposition=f'inline; filename="{document.name}"'
-            )
-            
-            logger.info(f"[WHATSAPP PDF] ✅ Arquivo enviado direto para S3!")
-            saved_path = file_path  # Usa o caminho que definimos
-            
-            # VERIFICAÇÃO IMEDIATA: Testa se arquivo realmente chegou no S3
-            try:
-                verify_response = s3_client.head_object(
-                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                    Key=file_path
-                )
-                logger.info(f"[WHATSAPP PDF] ✅ VERIFICAÇÃO: Arquivo EXISTE no S3!")
-                logger.info(f"[WHATSAPP PDF] ✅ Tamanho confirmado: {verify_response.get('ContentLength')} bytes")
-            except Exception as verify_error:
-                logger.error(f"[WHATSAPP PDF] ❌ VERIFICAÇÃO FALHOU: {verify_error}")
-                raise Exception(f"Arquivo não chegou ao S3: {verify_error}")
-            
-        except Exception as direct_save_error:
-            logger.error(f"[WHATSAPP PDF] ❌ ERRO NO UPLOAD DIRETO: {direct_save_error}")
-            return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                'error': f'Erro ao salvar arquivo diretamente: {str(direct_save_error)}'
-            })
-        
-        # Para WhatsApp, precisamos de URL assinada temporária se bucket for privado
-        if hasattr(default_storage, 'bucket'):
-            # NOVO: Usa EXATAMENTE o mesmo método que funciona para mídias recebidas
-            # Removido parâmetros extras que podem estar causando problema
-            if hasattr(default_storage, 'connection') and hasattr(default_storage.connection.meta.client, 'generate_presigned_url'):
-                file_url = default_storage.connection.meta.client.generate_presigned_url(
-                    'get_object',
-                    Params={
-                        'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                        'Key': saved_path  # Sem parâmetros extras como ResponseContentType
-                    },
-                    ExpiresIn=3600  # 1 hora de validade
-                )
-                logger.info(f"[WHATSAPP PDF] ✅ Usando conexão Django Storage para URL assinada")
-            else:
-                # Fallback: método anterior se não tiver conexão disponível
-                import boto3
-                from botocore.client import Config
-                
-                s3_client = boto3.client(
-                    's3',
-                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                    region_name=settings.AWS_S3_REGION_NAME,
-                    config=Config(signature_version='s3v4')
-                )
-                
-                file_url = s3_client.generate_presigned_url(
-                    'get_object',
-                    Params={
-                        'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                        'Key': saved_path  # Removido parâmetros extras também aqui
-                    },
-                    ExpiresIn=3600  # 1 hora de validade
-                )
-                logger.info(f"[WHATSAPP PDF] ⚠️ Usando fallback boto3 client para URL assinada")
-                logger.info(f"[WHATSAPP PDF] 🔗 URL assinada gerada (primeiros 200 chars): {file_url[:200]}...")
-                logger.info(f"[WHATSAPP PDF] 📏 URL assinada tem {len(file_url)} caracteres")
-                
-                # NOVO: Verificação de tamanho da URL
-                if len(file_url) > 2048:
-                    logger.warning(f"[WHATSAPP PDF] ⚠️ URL muito longa! {len(file_url)} chars (limite recomendado: 2048)")
-                elif len(file_url) > 1024:
-                    logger.warning(f"[WHATSAPP PDF] ⚠️ URL longa: {len(file_url)} chars")
-                else:
-                    logger.info(f"[WHATSAPP PDF] ✅ Tamanho da URL OK: {len(file_url)} chars")
-                
-                # Mostra componentes da URL para debug
-                from urllib.parse import urlparse, parse_qs
-                parsed = urlparse(file_url)
-                query_params = parse_qs(parsed.query)
-                
-                logger.info(f"[WHATSAPP PDF] 🌐 Host: {parsed.netloc}")
-                logger.info(f"[WHATSAPP PDF] 📂 Path: {parsed.path}")
-                logger.info(f"[WHATSAPP PDF] 🔑 Query params: {len(parsed.query)} chars")
-                logger.info(f"[WHATSAPP PDF] ⏰ Expires: {query_params.get('Expires', ['N/A'])[0]}")
-                logger.info(f"[WHATSAPP PDF] 🔐 Signature: {query_params.get('Signature', ['N/A'])[0][:20] if query_params.get('Signature') else 'N/A'}...")
-        else:
-            # Storage local ou outro - usa URL padrão
-            file_url = default_storage.url(saved_path)
-            
-            # Garante que a URL seja absoluta
-            if not file_url.startswith('http'):
-                from django.contrib.sites.models import Site
-                current_site = Site.objects.get_current()
-                protocol = 'https' if not settings.DEBUG else 'http'
-                file_url = f"{protocol}://{current_site.domain}{file_url}"
-        
-        logger.info(f"[WHATSAPP PDF] ✅ Documento salvo no Django Storage")
-        logger.info(f"[WHATSAPP PDF] 📂 Caminho retornado: {saved_path}")
-        logger.info(f"[WHATSAPP PDF] 🔗 URL inicial gerada: {file_url}")
-        logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
-        logger.info(f"[WHATSAPP PDF] 🔒 URL começa com https: {file_url.startswith('https://')}")
-        
-        # Cria mensagem no banco PRIMEIRO (para poder usar get_signed_media_url)
-        message = WhatsAppMessage.objects.create(
-            wamid=f"doc_{uuid.uuid4().hex[:16]}",  # Temporário até API responder
-            account=conversation.account,
-            contact=conversation.contact,
-            conversation=conversation,
-            direction='outbound',
-            message_type='document',
-            content=caption or f"Documento: {document.name}",
-            media_url=file_url,
-            media_filename=document.name,
-            media_mimetype='application/pdf',
-            status='sending',
-            timestamp=timezone.now(),
-            sent_by=request.user,
-        )
-        
-        # NOVO: Usa o método que JÁ FUNCIONA para gerar URL assinada
-        try:
-            signed_url = message.get_signed_media_url(expires_in=3600)
-            logger.info(f"[WHATSAPP PDF] 🎯 get_signed_media_url() funcionou!")
-            logger.info(f"[WHATSAPP PDF] 🔗 URL assinada: {signed_url}")
-            logger.info(f"[WHATSAPP PDF] 📏 URL assinada tem {len(signed_url)} caracteres") 
-            file_url = signed_url  # Substitui pela URL que realmente funciona
-        except Exception as signed_error:
-            logger.error(f"[WHATSAPP PDF] ❌ Erro com get_signed_media_url: {signed_error}")
-            logger.info(f"[WHATSAPP PDF] ⚠️ Usando URL original: {file_url}")
-            # Mantém a URL original se falhar
-        
-        # Envia via API do WhatsApp
-        api_service = WhatsAppAPIService(conversation.account)
-        
-        if settings.DEBUG:
-            # Modo de desenvolvimento - simula sucesso
-            logger.info(f"MOCK: Documento enviado - {document.name}")
-            message.wamid = f"wamid_doc_{uuid.uuid4().hex}"
-            message.status = 'sent'
-            message.save()
-        else:
-            logger.info(f"[WHATSAPP PDF] 🚀 MODO PRODUÇÃO: Iniciando envio real via API")
-            # Modo produção - envia real via API
-            try:
-                # Limpa o número do telefone (remove caracteres não numéricos)
-                phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
-                
-                # Log detalhado para debug (MOVIDO PARA ANTES DA VERIFICAÇÃO S3)
-                logger.info(f"[WHATSAPP PDF] Iniciando envio...")
-                logger.info(f"[WHATSAPP PDF] Telefone: {phone_number}")
-                logger.info(f"[WHATSAPP PDF] Arquivo: {document.name}")
-                logger.info(f"[WHATSAPP PDF] Tamanho: {document.size} bytes")
-                logger.info(f"[WHATSAPP PDF] 🎯 URL COMPLETA GERADA: {file_url}")
-                logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
-                logger.info(f"[WHATSAPP PDF] 🔗 URL começa com https: {file_url.startswith('https://')}")
-                logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
-                
-                # NOVO: Verifica se arquivo realmente existe no S3 antes de testar URL
-                logger.info(f"[WHATSAPP PDF] 🔍 INICIANDO verificação se arquivo existe no S3...")
-                try:
-                    import boto3
-                    # Usa as mesmas credenciais para verificar se arquivo existe
-                    s3_client = boto3.client(
-                        's3',
-                        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                        region_name=settings.AWS_S3_REGION_NAME
-                    )
-                    
-                    # Testa se arquivo existe diretamente no S3
-                    logger.info(f"[WHATSAPP PDF] 🔍 Verificando se arquivo existe no S3...")
-                    logger.info(f"[WHATSAPP PDF] Bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
-                    logger.info(f"[WHATSAPP PDF] Key: {saved_path}")
-                    
-                    head_response = s3_client.head_object(
-                        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                        Key=saved_path
-                    )
-                    
-                    logger.info(f"[WHATSAPP PDF] ✅ Arquivo EXISTE no S3!")
-                    logger.info(f"[WHATSAPP PDF] ✅ Tamanho: {head_response.get('ContentLength')} bytes")
-                    logger.info(f"[WHATSAPP PDF] ✅ Content-Type: {head_response.get('ContentType')}")
-                    logger.info(f"[WHATSAPP PDF] ✅ Last-Modified: {head_response.get('LastModified')}")
-                    
-                except Exception as s3_check_error:
-                    logger.error(f"[WHATSAPP PDF] ❌ ARQUIVO NÃO EXISTE NO S3: {s3_check_error}")
-                    logger.error(f"[WHATSAPP PDF] 🔍 Tentativa de verificar: Bucket={settings.AWS_STORAGE_BUCKET_NAME}, Key={saved_path}")
-                    
-                    # NOVO: Lista o que realmente existe na pasta
-                    try:
-                        folder_prefix = saved_path.rsplit('/', 1)[0] + '/' if '/' in saved_path else ''
-                        logger.error(f"[WHATSAPP PDF] 📂 Listando pasta: {folder_prefix}")
-                        
-                        list_response = s3_client.list_objects_v2(
-                            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                            Prefix=folder_prefix,
-                            MaxKeys=20
-                        )
-                        
-                        if 'Contents' in list_response:
-                            logger.error(f"[WHATSAPP PDF] 📋 Arquivos encontrados na pasta ({len(list_response['Contents'])}):")
-                            for obj in list_response['Contents']:
-                                logger.error(f"[WHATSAPP PDF]   - {obj['Key']} ({obj['Size']} bytes)")
-                        else:
-                            logger.error(f"[WHATSAPP PDF] 📂 Pasta completamente vazia!")
-                            
-                        # Lista também a pasta raiz whatsapp para ver se está em outro lugar
-                        logger.error(f"[WHATSAPP PDF] 📂 Listando pasta raiz whatsapp...")
-                        root_response = s3_client.list_objects_v2(
-                            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                            Prefix='media/whatsapp/',
-                            MaxKeys=10
-                        )
-                        
-                        if 'Contents' in root_response:
-                            logger.error(f"[WHATSAPP PDF] 📋 Arquivos recentes em media/whatsapp/:")
-                            for obj in sorted(root_response['Contents'], key=lambda x: x['LastModified'], reverse=True)[:5]:
-                                logger.error(f"[WHATSAPP PDF]   - {obj['Key']} ({obj['LastModified']})")
-                        
-                    except Exception as list_error:
-                        logger.error(f"[WHATSAPP PDF] ❌ Erro ao listar pasta: {list_error}")
-                    
-                    message.status = 'failed'
-                    message.error_message = f"Arquivo não foi salvo no S3: {str(s3_check_error)}"
-                    message.save()
-                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                        'error': f'Arquivo não foi salvo corretamente: {str(s3_check_error)}'
-                    })
-                
-                # Agora testa se a URL está acessível
-                try:
-                    import requests
-                    logger.info(f"[WHATSAPP PDF] 🧪 Testando acesso à URL S3...")
-                    logger.info(f"[WHATSAPP PDF] 🔗 URL sendo testada: {file_url}")
-                    logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
-                    logger.info(f"[WHATSAPP PDF] 🔒 URL começa com https: {file_url.startswith('https://')}")
-                    
-                    test_response = requests.head(file_url, timeout=10)
-                    logger.info(f"[WHATSAPP PDF] ✅ Teste URL S3 - Status: {test_response.status_code}")
-                    logger.info(f"[WHATSAPP PDF] ✅ Headers: Content-Length={test_response.headers.get('Content-Length')}, Content-Type={test_response.headers.get('Content-Type')}")
-                    
-                    if test_response.status_code != 200:
-                        logger.error(f"[WHATSAPP PDF] ❌ URL S3 não está acessível! Status: {test_response.status_code}")
-                        message.status = 'failed'
-                        message.error_message = f"URL S3 não acessível: HTTP {test_response.status_code}"
-                        message.save()
-                        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                            'error': f'URL do arquivo não está acessível (HTTP {test_response.status_code})'
-                        })
-                        
-                except Exception as url_test_error:
-                    logger.error(f"[WHATSAPP PDF] ❌ Erro ao testar URL S3: {url_test_error}")
-                    message.status = 'failed' 
-                    message.error_message = f"Erro ao validar URL S3: {str(url_test_error)}"
-                    message.save()
-                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                        'error': f'Não foi possível validar o arquivo no S3: {str(url_test_error)}'
-                    })
-                
-                # Envia documento via API usando send_media_message
-                api_response = api_service.send_media_message(
-                    to=phone_number,
-                    media_type='document',
-                    media_url=file_url,
-                    caption=caption or None,
-                    filename=document.name  # IMPORTANTE: WhatsApp requer filename para documents
-                )
-                
-                logger.info(f"[WHATSAPP PDF] Resposta da API: {api_response}")
-                
-                if api_response.get('success'):
-                    # Sucesso na API - atualiza mensagem
-                    message.wamid = api_response['message_id']
-                    message.status = 'sent'
-                    message.save()
-                    logger.info(f"[WHATSAPP PDF] ✅ Documento enviado com sucesso!")
-                    logger.info(f"[WHATSAPP PDF] WAMID: {message.wamid}")
-                    logger.info(f"[WHATSAPP PDF] Arquivo: {document.name} -> {phone_number}")
-                else:
-                    # Falha na API
-                    error_msg = api_response.get('error', 'Erro desconhecido na API')
-                    error_details = api_response.get('error_details', {})
-                    
-                    # Mensagem de erro mais informativa
-                    if error_details:
-                        error_code = error_details.get('code', '')
-                        error_subcode = error_details.get('error_subcode', '')
-                        error_user_msg = error_details.get('error_user_msg', '')
-                        
-                        if error_user_msg:
-                            error_msg = error_user_msg
-                        
-                        logger.error(f"[WHATSAPP PDF] Falha na API - Código: {error_code}, Subcódigo: {error_subcode}")
-                    
-                    message.status = 'failed'
-                    message.error_message = error_msg
-                    message.save()
-                    
-                    logger.error(f"[WHATSAPP PDF] Erro final: {error_msg}")
-                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                        'error': error_msg,
-                        'error_details': error_details  # Passa detalhes para o template
-                    })
-                
-            except Exception as api_error:
-                logger.error(f"Erro na API WhatsApp: {api_error}")
-                message.status = 'failed'
-                message.error_message = str(api_error)
-                message.save()
-                
-                # Tenta extrair mais informações do erro
-                error_details = {}
-                if hasattr(api_error, '__dict__'):
-                    error_details = {
-                        'message': str(api_error),
-                        'type': type(api_error).__name__
-                    }
-                
-                return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                    'error': f'Erro ao enviar documento: {api_error}',
-                    'error_details': error_details
-                })
-        
-        logger.info(f"Documento PDF enviado: {document.name} para conversa {conversation_id}")
-        
-        # Retorna sucesso e atualiza área de mensagens
-        return render(request, 'comercial/whatsapp/partials/send_document_success.html', {
-            'message': message,
-            'conversation': conversation,
-            'document_name': document.name,
-            'file_size': document.size
-        })
-    
-    except Exception as e:
-        logger.error(f"Erro interno ao enviar documento: {e}")
-        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-            'error': f'Erro interno ao enviar documento: {str(e)}'
-        })
+        return False
 
 
 @login_required
