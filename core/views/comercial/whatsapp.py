@@ -1446,7 +1446,42 @@ def send_document(request):
         
         # Salva no S3 (ou storage configurado)
         saved_path = default_storage.save(file_path, document)
-        file_url = default_storage.url(saved_path)
+        
+        # Para WhatsApp, precisamos de URL assinada temporária se bucket for privado
+        if hasattr(default_storage, 'bucket'):
+            # Está usando S3 - gerar URL assinada com expiração de 1 hora
+            import boto3
+            from botocore.client import Config
+            
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_S3_REGION_NAME,
+                config=Config(signature_version='s3v4')
+            )
+            
+            # Gera URL assinada que expira em 1 hora
+            file_url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={
+                    'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                    'Key': saved_path,
+                    'ResponseContentType': 'application/pdf',
+                    'ResponseContentDisposition': f'inline; filename="{document.name}"'
+                },
+                ExpiresIn=3600  # 1 hora de validade
+            )
+        else:
+            # Storage local ou outro - usa URL padrão
+            file_url = default_storage.url(saved_path)
+            
+            # Garante que a URL seja absoluta
+            if not file_url.startswith('http'):
+                from django.contrib.sites.models import Site
+                current_site = Site.objects.get_current()
+                protocol = 'https' if not settings.DEBUG else 'http'
+                file_url = f"{protocol}://{current_site.domain}{file_url}"
         
         logger.info(f"Documento salvo: {saved_path} -> {file_url}")
         
