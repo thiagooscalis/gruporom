@@ -1433,6 +1433,8 @@ def send_document(request):
     caption = form.cleaned_data.get('caption', '').strip()
     
     try:
+        logger.info(f"[WHATSAPP PDF] 🚀 INICIANDO PROCESSO DE UPLOAD DE PDF")
+        
         # Gera nome único para o arquivo
         import uuid
         
@@ -1609,6 +1611,7 @@ def send_document(request):
                     
                 except Exception as s3_check_error:
                     logger.error(f"[WHATSAPP PDF] ❌ ARQUIVO NÃO EXISTE NO S3: {s3_check_error}")
+                    logger.error(f"[WHATSAPP PDF] 🔍 Tentativa de verificar: Bucket={settings.AWS_STORAGE_BUCKET_NAME}, Key={saved_path}")
                     message.status = 'failed'
                     message.error_message = f"Arquivo não foi salvo no S3: {str(s3_check_error)}"
                     message.save()
