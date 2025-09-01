@@ -1521,7 +1521,11 @@ def send_document(request):
                 protocol = 'https' if not settings.DEBUG else 'http'
                 file_url = f"{protocol}://{current_site.domain}{file_url}"
         
-        logger.info(f"Documento salvo: {saved_path} -> {file_url}")
+        logger.info(f"[WHATSAPP PDF] ✅ Documento salvo no Django Storage")
+        logger.info(f"[WHATSAPP PDF] 📂 Caminho retornado: {saved_path}")
+        logger.info(f"[WHATSAPP PDF] 🔗 URL inicial gerada: {file_url}")
+        logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
+        logger.info(f"[WHATSAPP PDF] 🔒 URL começa com https: {file_url.startswith('https://')}")
         
         # Cria mensagem no banco PRIMEIRO (para poder usar get_signed_media_url)
         message = WhatsAppMessage.objects.create(
@@ -1543,10 +1547,13 @@ def send_document(request):
         # NOVO: Usa o método que JÁ FUNCIONA para gerar URL assinada
         try:
             signed_url = message.get_signed_media_url(expires_in=3600)
-            logger.info(f"[WHATSAPP PDF] 🎯 Usando get_signed_media_url(): {signed_url[:100]}...")
+            logger.info(f"[WHATSAPP PDF] 🎯 get_signed_media_url() funcionou!")
+            logger.info(f"[WHATSAPP PDF] 🔗 URL assinada: {signed_url}")
+            logger.info(f"[WHATSAPP PDF] 📏 URL assinada tem {len(signed_url)} caracteres") 
             file_url = signed_url  # Substitui pela URL que realmente funciona
         except Exception as signed_error:
             logger.error(f"[WHATSAPP PDF] ❌ Erro com get_signed_media_url: {signed_error}")
+            logger.info(f"[WHATSAPP PDF] ⚠️ Usando URL original: {file_url}")
             # Mantém a URL original se falhar
         
         # Envia via API do WhatsApp
