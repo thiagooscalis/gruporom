@@ -1398,15 +1398,58 @@ def send_template(request):
 @require_POST
 def send_document_new(request):
     """
-    NOVA função para testar PDF upload - LIMPA
+    NOVA função para upload PDF - IMPLEMENTAÇÃO LIMPA
     """
     import logging
-    logger = logging.getLogger(__name__)
-    logger.error(f"🚀 NOVA FUNÇÃO EXECUTADA - {timezone.now()}")
+    import boto3
+    import uuid
+    from django.shortcuts import get_object_or_404
+    from django.conf import settings
+    from django.utils import timezone
+    from core.forms.whatsapp import SendDocumentForm
     
-    # Teste básico primeiro
+    logger = logging.getLogger(__name__)
+    logger.info(f"[PDF] 🚀 Iniciando upload PDF limpo")
+    
+    # Validação básica
+    conversation_id = request.POST.get('conversation_id')
+    if not conversation_id:
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': 'ID da conversa não informado'
+        })
+    
+    logger.info(f"[PDF] 📋 Conversation ID: {conversation_id}")
+    
+    # Busca conversa
+    try:
+        conversation = get_object_or_404(
+            WhatsAppConversation.objects.select_related('account', 'contact'),
+            id=conversation_id,
+            assigned_to=request.user
+        )
+        logger.info(f"[PDF] ✅ Conversa encontrada: {conversation.contact.phone_number}")
+    except:
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': 'Conversa não encontrada'
+        })
+    
+    # Validação do formulário
+    form = SendDocumentForm(request.POST, request.FILES)
+    if not form.is_valid():
+        logger.error(f"[PDF] ❌ Formulário inválido: {form.errors}")
+        return render(request, 'comercial/whatsapp/partials/send_document_form.html', {
+            'form': form,
+            'conversation': conversation
+        })
+    
+    document = form.cleaned_data['document']
+    caption = form.cleaned_data.get('caption', '').strip()
+    
+    logger.info(f"[PDF] 📄 Arquivo recebido: {document.name} ({document.size} bytes)")
+    
+    # IMPLEMENTAÇÃO SIMPLES E DIRETA
     return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-        'error': 'TESTE: Nova função funcionando - agora vou implementar o upload real'
+        'error': f'TESTE 2: Validações OK - Arquivo: {document.name} ({document.size} bytes)'
     })
     
     conversation_id = request.POST.get('conversation_id')
