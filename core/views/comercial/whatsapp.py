@@ -1529,6 +1529,17 @@ def _upload_pdf_to_s3(document):
     )
     
     logger.info(f"[PDF] 🔗 URL assinada: {len(signed_url)} chars")
+    logger.info(f"[PDF] 🔗 URL completa: {signed_url}")
+    
+    # Debug da URL
+    from urllib.parse import urlparse, parse_qs
+    parsed = urlparse(signed_url)
+    query_params = parse_qs(parsed.query)
+    
+    logger.info(f"[PDF] 🌐 Host: {parsed.netloc}")
+    logger.info(f"[PDF] 📂 Path: {parsed.path}")
+    logger.info(f"[PDF] ⏰ Expires: {query_params.get('Expires', ['N/A'])[0]}")
+    logger.info(f"[PDF] 🔐 AWSAccessKeyId: {query_params.get('AWSAccessKeyId', ['N/A'])[0]}")
     
     return s3_key, signed_url
 
@@ -1547,6 +1558,11 @@ def _send_pdf_whatsapp(conversation, document, signed_url, caption):
     logger.info(f"[PDF] 🧪 Status URL: {test_response.status_code}")
     
     if test_response.status_code != 200:
+        # Log detalhado do erro 403
+        logger.error(f"[PDF] ❌ HTTP {test_response.status_code} - Headers: {dict(test_response.headers)}")
+        if test_response.text:
+            logger.error(f"[PDF] ❌ Response body: {test_response.text}")
+        
         raise Exception(f"URL não acessível: HTTP {test_response.status_code}")
     
     # Envio via API WhatsApp
