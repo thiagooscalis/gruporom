@@ -289,7 +289,11 @@ class WhatsAppMessage(models.Model):
         max_length=100, blank=True, verbose_name="ID da Mídia"
     )
 
-    media_url = models.URLField(blank=True, verbose_name="URL da Mídia")
+    media_url = models.URLField(
+        max_length=2048,  # URLs assinadas do S3 podem ser muito longas
+        blank=True, 
+        verbose_name="URL da Mídia"
+    )
 
     media_filename = models.CharField(
         max_length=255, blank=True, verbose_name="Nome do Arquivo"
