@@ -72,6 +72,29 @@
         </div>
     </div>
 
+    <!-- Debug Tools -->
+    {% if user.is_staff %}
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card border-warning">
+                <div class="card-body py-2">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-bug text-warning me-2"></i>
+                            <small class="text-muted">Debug Tools</small>
+                        </div>
+                        <a href="{% url 'comercial:debug_failed_messages' %}" 
+                           class="btn btn-outline-warning btn-sm">
+                            <i class="fas fa-search me-1"></i>
+                            Mensagens PDF Falhadas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Conversas Aguardando Atendimento -->
     <div class="row mb-4">
         <div class="col">

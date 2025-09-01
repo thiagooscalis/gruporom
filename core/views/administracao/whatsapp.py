@@ -438,6 +438,33 @@ def _process_status_update_sync(account, status_data):
                     # Se foi lida, também foi entregue
                     if not message.delivered_at:
                         message.delivered_at = status_timestamp
+                elif status == 'failed':
+                    # NOVO: Captura detalhes do erro quando mensagem falha
+                    errors = status_data.get('errors', [])
+                    if errors:
+                        error_info = errors[0]  # Primeiro erro
+                        error_msg = f"WhatsApp API Error - Code: {error_info.get('code', 'N/A')}"
+                        if error_info.get('title'):
+                            error_msg += f", Title: {error_info.get('title')}"
+                        if error_info.get('message'):
+                            error_msg += f", Message: {error_info.get('message')}"
+                        if error_info.get('error_data', {}).get('details'):
+                            error_msg += f", Details: {error_info['error_data']['details']}"
+                        
+                        message.error_message = error_msg
+                        logger.error(f"📱 PDF FALHOU - Mensagem {wamid}: {error_msg}")
+                        
+                        # Log especial para PDFs para debug
+                        if message.message_type == 'document':
+                            logger.error(f"🚨 PDF FAILED DETAILS:")
+                            logger.error(f"   - File: {message.media_filename}")
+                            logger.error(f"   - URL: {message.media_url[:100] if message.media_url else 'N/A'}...")
+                            logger.error(f"   - Phone: {message.contact.phone_number}")
+                            logger.error(f"   - Error: {error_msg}")
+                            logger.error(f"   - Full status data: {status_data}")
+                    else:
+                        message.error_message = "Mensagem falhou sem detalhes específicos"
+                        logger.error(f"Mensagem {wamid} falhou sem detalhes de erro")
             
             message.save()
             

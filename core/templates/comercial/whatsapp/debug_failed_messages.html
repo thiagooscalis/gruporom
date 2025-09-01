@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-bug text-warning me-2"></i>{{ title }}</h2>
+                <button class="btn btn-outline-secondary" onclick="location.reload()">
+                    <i class="fas fa-refresh me-1"></i> Atualizar
+                </button>
+            </div>
+
+            <!-- Mensagens que Falharam -->
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-times-circle me-2"></i>
+                        Mensagens PDF que Falharam (24h)
+                        <span class="badge bg-light text-dark ms-2">{{ failed_messages|length }}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if failed_messages %}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Horário</th>
+                                        <th>Arquivo</th>
+                                        <th>Contato</th>
+                                        <th>Erro</th>
+                                        <th>URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for msg in failed_messages %}
+                                    <tr>
+                                        <td>
+                                            <div class="small">
+                                                <strong>{{ msg.criado_em|date:"d/m H:i" }}</strong><br>
+                                                <span class="text-muted">ID: {{ msg.id }}</span><br>
+                                                <code class="small">{{ msg.wamid|truncatechars:20 }}</code>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <i class="fas fa-file-pdf text-danger me-1"></i>
+                                                <strong>{{ msg.media_filename|default:"N/A" }}</strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="small">
+                                                <strong>{{ msg.contact.phone_number }}</strong><br>
+                                                <span class="text-muted">{{ msg.contact.name|default:"Sem nome" }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="small">
+                                                {% if msg.error_message %}
+                                                    <div class="alert alert-danger p-2 mb-0">
+                                                        {{ msg.error_message }}
+                                                    </div>
+                                                {% else %}
+                                                    <span class="text-muted">Sem detalhes</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="small">
+                                                {% if msg.media_url %}
+                                                    <span class="badge bg-info">{{ msg.media_url|length }} chars</span><br>
+                                                    <code class="text-break">{{ msg.media_url|truncatechars:50 }}</code>
+                                                {% else %}
+                                                    <span class="text-muted">Sem URL</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="p-4 text-center text-muted">
+                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i><br>
+                            <h5>Nenhuma mensagem PDF falhou nas últimas 24 horas!</h5>
+                            <p>Isso é uma boa notícia. 🎉</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Mensagens Pendentes (podem estar com problema) -->
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>
+                        Mensagens PDF Pendentes (30min+)
+                        <span class="badge bg-dark text-white ms-2">{{ pending_messages|length }}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if pending_messages %}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Enviada</th>
+                                        <th>Arquivo</th>
+                                        <th>Contato</th>
+                                        <th>Status</th>
+                                        <th>Tempo Esperando</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for msg in pending_messages %}
+                                    <tr>
+                                        <td>
+                                            <div class="small">
+                                                <strong>{{ msg.criado_em|date:"d/m H:i" }}</strong><br>
+                                                <span class="text-muted">ID: {{ msg.id }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <i class="fas fa-file-pdf text-warning me-1"></i>
+                                                <strong>{{ msg.media_filename|default:"N/A" }}</strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="small">
+                                                <strong>{{ msg.contact.phone_number }}</strong><br>
+                                                <span class="text-muted">{{ msg.contact.name|default:"Sem nome" }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if msg.status == 'sent' %}
+                                                <span class="badge bg-primary">{{ msg.status }}</span>
+                                            {% elif msg.status == 'sending' %}
+                                                <span class="badge bg-info">{{ msg.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="small text-warning">
+                                                <i class="fas fa-hourglass-half me-1"></i>
+                                                {{ msg.criado_em|timesince }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="p-4 text-center text-muted">
+                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i><br>
+                            <h5>Nenhuma mensagem PDF está pendente por muito tempo!</h5>
+                            <p>Todas as mensagens recentes foram processadas rapidamente.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Instruções -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Como usar esta página</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>💥 Mensagens Falhadas</h6>
+                            <ul class="small">
+                                <li>Mostra PDFs que falharam nas últimas 24h</li>
+                                <li>Detalhes do erro do WhatsApp API</li>
+                                <li>Informações do arquivo e contato</li>
+                                <li>Agora captura erros detalhados via webhook!</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>⏳ Mensagens Pendentes</h6>
+                            <ul class="small">
+                                <li>PDFs enviados há mais de 30 minutos</li>
+                                <li>Status "sent" ou "sending" por muito tempo</li>
+                                <li>Podem indicar problemas na API</li>
+                                <li>Clique em "Atualizar" para verificar mudanças</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

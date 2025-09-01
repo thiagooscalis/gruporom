@@ -1610,37 +1610,29 @@ def send_document(request):
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 def debug_failed_messages(request):
     """
-    View temporária para debug - mostrar últimas mensagens que falharam
+    View para monitorar mensagens PDF que falharam em produção
     """
-    from django.http import JsonResponse
     from django.utils import timezone
     from datetime import timedelta
     
+    # Mensagens que falharam nas últimas 24 horas
     failed_messages = WhatsAppMessage.objects.filter(
         message_type='document',
         status='failed',
-        criado_em__gte=timezone.now() - timedelta(hours=1)  # Última hora
-    ).order_by('-criado_em')[:5]
+        criado_em__gte=timezone.now() - timedelta(hours=24)
+    ).select_related('contact', 'conversation').order_by('-atualizado_em')[:20]
     
-    messages_data = []
-    for msg in failed_messages:
-        messages_data.append({
-            'id': msg.id,
-            'wamid': msg.wamid,
-            'arquivo': msg.media_filename,
-            'erro': msg.error_message or 'Sem mensagem de erro',
-            'horario': msg.criado_em.strftime('%H:%M:%S'),
-            'phone': msg.contact.phone_number,
-            'url_tamanho': len(msg.media_url) if msg.media_url else 0,
-            'status_timeline': {
-                'criado': msg.criado_em.strftime('%H:%M:%S'),
-                'atualizado': msg.atualizado_em.strftime('%H:%M:%S'),
-                'timestamp_msg': msg.timestamp.strftime('%H:%M:%S')
-            }
-        })
+    # Também buscar mensagens que foram enviadas mas ainda não tiveram resposta
+    pending_messages = WhatsAppMessage.objects.filter(
+        message_type='document',
+        status__in=['sent', 'sending'],
+        criado_em__gte=timezone.now() - timedelta(minutes=30)  # Mais de 30min sem resposta pode ser problema
+    ).select_related('contact', 'conversation').order_by('-criado_em')[:10]
     
-    return JsonResponse({
-        'mensagens_falharam': messages_data,
-        'total': len(messages_data),
-        'agora': timezone.now().strftime('%H:%M:%S')
-    }, json_dumps_params={'indent': 2})
+    context = {
+        'failed_messages': failed_messages,
+        'pending_messages': pending_messages,
+        'title': 'Debug - Mensagens PDF Falhadas'
+    }
+    
+    return render(request, 'comercial/whatsapp/debug_failed_messages.html', context)
