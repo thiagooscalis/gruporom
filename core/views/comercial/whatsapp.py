@@ -1546,7 +1546,42 @@ def send_document(request):
                 logger.info(f"[WHATSAPP PDF] URL tamanho: {len(file_url)} caracteres")
                 logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
                 
-                # NOVO: Testa se a URL S3 está acessível antes de enviar para WhatsApp
+                # NOVO: Verifica se arquivo realmente existe no S3 antes de testar URL
+                try:
+                    import boto3
+                    # Usa as mesmas credenciais para verificar se arquivo existe
+                    s3_client = boto3.client(
+                        's3',
+                        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                        region_name=settings.AWS_S3_REGION_NAME
+                    )
+                    
+                    # Testa se arquivo existe diretamente no S3
+                    logger.info(f"[WHATSAPP PDF] 🔍 Verificando se arquivo existe no S3...")
+                    logger.info(f"[WHATSAPP PDF] Bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
+                    logger.info(f"[WHATSAPP PDF] Key: {saved_path}")
+                    
+                    head_response = s3_client.head_object(
+                        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                        Key=saved_path
+                    )
+                    
+                    logger.info(f"[WHATSAPP PDF] ✅ Arquivo EXISTE no S3!")
+                    logger.info(f"[WHATSAPP PDF] ✅ Tamanho: {head_response.get('ContentLength')} bytes")
+                    logger.info(f"[WHATSAPP PDF] ✅ Content-Type: {head_response.get('ContentType')}")
+                    logger.info(f"[WHATSAPP PDF] ✅ Last-Modified: {head_response.get('LastModified')}")
+                    
+                except Exception as s3_check_error:
+                    logger.error(f"[WHATSAPP PDF] ❌ ARQUIVO NÃO EXISTE NO S3: {s3_check_error}")
+                    message.status = 'failed'
+                    message.error_message = f"Arquivo não foi salvo no S3: {str(s3_check_error)}"
+                    message.save()
+                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                        'error': f'Arquivo não foi salvo corretamente: {str(s3_check_error)}'
+                    })
+                
+                # Agora testa se a URL está acessível
                 try:
                     import requests
                     logger.info(f"[WHATSAPP PDF] 🧪 Testando acesso à URL S3...")
