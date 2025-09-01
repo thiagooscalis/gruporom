@@ -1449,19 +1449,18 @@ def send_document(request):
         
         # Para WhatsApp, precisamos de URL assinada temporária se bucket for privado
         if hasattr(default_storage, 'bucket'):
-            # NOVO: Usa o mesmo método que funciona para mídias recebidas
-            # Reutiliza a conexão S3 do Django Storage em vez de criar nova
+            # NOVO: Usa EXATAMENTE o mesmo método que funciona para mídias recebidas
+            # Removido parâmetros extras que podem estar causando problema
             if hasattr(default_storage, 'connection') and hasattr(default_storage.connection.meta.client, 'generate_presigned_url'):
                 file_url = default_storage.connection.meta.client.generate_presigned_url(
                     'get_object',
                     Params={
                         'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                        'Key': saved_path,
-                        'ResponseContentType': 'application/pdf',
-                        'ResponseContentDisposition': f'inline; filename="{document.name}"'
+                        'Key': saved_path  # Sem parâmetros extras como ResponseContentType
                     },
                     ExpiresIn=3600  # 1 hora de validade
                 )
+                logger.info(f"[WHATSAPP PDF] ✅ Usando conexão Django Storage para URL assinada")
             else:
                 # Fallback: método anterior se não tiver conexão disponível
                 import boto3
@@ -1479,12 +1478,11 @@ def send_document(request):
                     'get_object',
                     Params={
                         'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                        'Key': saved_path,
-                        'ResponseContentType': 'application/pdf',
-                        'ResponseContentDisposition': f'inline; filename="{document.name}"'
+                        'Key': saved_path  # Removido parâmetros extras também aqui
                     },
                     ExpiresIn=3600  # 1 hora de validade
                 )
+                logger.info(f"[WHATSAPP PDF] ⚠️ Usando fallback boto3 client para URL assinada")
         else:
             # Storage local ou outro - usa URL padrão
             file_url = default_storage.url(saved_path)
