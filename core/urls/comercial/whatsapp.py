@@ -33,6 +33,7 @@ urlpatterns = [
     
     # Debug
     path('test-websocket/', views.test_websocket, name='test_websocket'),
+    path('debug-failed-messages/', views.debug_failed_messages, name='debug_failed_messages'),
     # path('finish/<int:conversation_id>/', views.finish_conversation, name='finish_conversation'),  # Removido - conclusão em outro módulo
     
     # Removido: conversation_detail - usar dashboard com ?conversation=ID

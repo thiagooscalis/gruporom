@@ -1541,7 +1541,9 @@ def send_document(request):
                     message.wamid = api_response['message_id']
                     message.status = 'sent'
                     message.save()
-                    logger.info(f"Documento enviado via API: {document.name} -> {phone_number}")
+                    logger.info(f"[WHATSAPP PDF] ✅ Documento enviado com sucesso!")
+                    logger.info(f"[WHATSAPP PDF] WAMID: {message.wamid}")
+                    logger.info(f"[WHATSAPP PDF] Arquivo: {document.name} -> {phone_number}")
                 else:
                     # Falha na API
                     error_msg = api_response.get('error', 'Erro desconhecido na API')
@@ -1596,16 +1598,49 @@ def send_document(request):
             'document_name': document.name,
             'file_size': document.size
         })
-        
+    
     except Exception as e:
-        logger.error(f"Erro ao enviar documento: {e}")
-        # Remove arquivo do storage se houver erro
-        try:
-            if 'saved_path' in locals():
-                default_storage.delete(saved_path)
-        except:
-            pass
-        
+        logger.error(f"Erro interno ao enviar documento: {e}")
         return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
             'error': f'Erro interno ao enviar documento: {str(e)}'
         })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def debug_failed_messages(request):
+    """
+    View temporária para debug - mostrar últimas mensagens que falharam
+    """
+    from django.http import JsonResponse
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    failed_messages = WhatsAppMessage.objects.filter(
+        message_type='document',
+        status='failed',
+        criado_em__gte=timezone.now() - timedelta(hours=1)  # Última hora
+    ).order_by('-criado_em')[:5]
+    
+    messages_data = []
+    for msg in failed_messages:
+        messages_data.append({
+            'id': msg.id,
+            'wamid': msg.wamid,
+            'arquivo': msg.media_filename,
+            'erro': msg.error_message or 'Sem mensagem de erro',
+            'horario': msg.criado_em.strftime('%H:%M:%S'),
+            'phone': msg.contact.phone_number,
+            'url_tamanho': len(msg.media_url) if msg.media_url else 0,
+            'status_timeline': {
+                'criado': msg.criado_em.strftime('%H:%M:%S'),
+                'atualizado': msg.atualizado_em.strftime('%H:%M:%S'),
+                'timestamp_msg': msg.timestamp.strftime('%H:%M:%S')
+            }
+        })
+    
+    return JsonResponse({
+        'mensagens_falharam': messages_data,
+        'total': len(messages_data),
+        'agora': timezone.now().strftime('%H:%M:%S')
+    }, json_dumps_params={'indent': 2})
