@@ -1554,14 +1554,36 @@ def _send_pdf_whatsapp(conversation, document, signed_url, caption):
     
     # Testa URL primeiro
     logger.info(f"[PDF] 🧪 Testando URL assinada...")
-    test_response = requests.head(signed_url, timeout=10)
+    
+    # IMPORTANTE: Usar GET em vez de HEAD para capturar corpo da resposta XML
+    test_response = requests.get(signed_url, timeout=10, stream=True)
     logger.info(f"[PDF] 🧪 Status URL: {test_response.status_code}")
     
     if test_response.status_code != 200:
-        # Log detalhado do erro 403
+        # Log detalhado do erro 403 com XML response
         logger.error(f"[PDF] ❌ HTTP {test_response.status_code} - Headers: {dict(test_response.headers)}")
-        if test_response.text:
-            logger.error(f"[PDF] ❌ Response body: {test_response.text}")
+        
+        # Captura o XML de erro do AWS S3
+        try:
+            response_body = test_response.text
+            logger.error(f"[PDF] ❌ AWS S3 Error Response: {response_body}")
+            
+            # Parse básico do XML para extrair Code e Message
+            if '<Code>' in response_body and '<Message>' in response_body:
+                import re
+                code_match = re.search(r'<Code>(.*?)</Code>', response_body)
+                message_match = re.search(r'<Message>(.*?)</Message>', response_body)
+                
+                if code_match and message_match:
+                    aws_code = code_match.group(1)
+                    aws_message = message_match.group(1)
+                    logger.error(f"[PDF] 🚨 AWS Error Code: {aws_code}")
+                    logger.error(f"[PDF] 🚨 AWS Error Message: {aws_message}")
+                    
+                    raise Exception(f"AWS S3 Error: {aws_code} - {aws_message}")
+        
+        except Exception as parse_error:
+            logger.error(f"[PDF] ❌ Erro ao parsear resposta AWS: {parse_error}")
         
         raise Exception(f"URL não acessível: HTTP {test_response.status_code}")
     
