@@ -1400,6 +1400,9 @@ def send_document(request):
     """
     Envia documento PDF via WhatsApp (HTMX)
     """
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.error(f"🚀 SEND_DOCUMENT EXECUTADO - {timezone.now()}")
     import os
     from django.core.files.storage import default_storage
     from core.services.whatsapp_api import WhatsAppAPIService
