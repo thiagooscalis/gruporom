@@ -601,6 +601,60 @@
     </div>
 </div>
 
+<!-- Modal de Envio de Documento PDF -->
+<div class="modal fade" id="sendDocumentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-file-pdf me-2"></i>
+                    Enviar Documento PDF
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Container para resultado do HTMX -->
+                <div id="documentFormResult">
+                    <!-- Formulário inicial -->
+                    <form hx-post="{% url 'comercial:send_document' %}" 
+                          hx-target="#documentFormResult"
+                          hx-swap="innerHTML"
+                          hx-encoding="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="conversation_id" value="{{ selected_conversation.id }}" id="sendDocumentConversationId">
+                        
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">
+                                Documento PDF <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" class="form-control" id="documentFile" name="document" 
+                                   accept=".pdf" required>
+                            <div class="form-text">Arquivo PDF (máx. 16MB)</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="documentCaption" class="form-label">Legenda (opcional)</label>
+                            <textarea class="form-control" id="documentCaption" name="caption" 
+                                      rows="2" placeholder="Adicione uma legenda ao documento..."></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i>
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                Enviar Documento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Container para Modal de Novo Contato (carregado via HTMX) -->
 <div id="modalNovoContatoContainer"
      hx-get="{% url 'comercial:whatsapp_novo_contato' %}"
@@ -1452,6 +1506,19 @@ function updateTemplateModalConversationId(conversationId) {
     }
 }
 
+// Função para atualizar conversation_id do modal de documento
+function updateDocumentModalConversationId(conversationId) {
+    console.log('🔧 Atualizando conversation_id do modal de documento:', conversationId);
+    
+    const sendDocumentField = document.getElementById('sendDocumentConversationId');
+    if (sendDocumentField) {
+        sendDocumentField.value = conversationId;
+        console.log('✅ Campo sendDocumentConversationId atualizado:', sendDocumentField.value);
+    } else {
+        console.log('❌ Campo sendDocumentConversationId não encontrado!');
+    }
+}
+
 // Função removida - agora usa abordagem mais simples via templates HTMX
 
 // Função para validar formulário de template antes do envio
@@ -1513,6 +1580,62 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             console.log('✅ Modal de template limpo');
+        });
+    }
+    
+    // Limpa formulário quando modal de documento é fechado
+    const sendDocumentModal = document.getElementById('sendDocumentModal');
+    if (sendDocumentModal) {
+        sendDocumentModal.addEventListener('hidden.bs.modal', function() {
+            console.log('🧹 Limpando modal de documento...');
+            
+            // Reseta o container para o formulário inicial
+            const documentFormResult = document.getElementById('documentFormResult');
+            if (documentFormResult) {
+                documentFormResult.innerHTML = `
+                    <!-- Formulário inicial -->
+                    <form hx-post="{% url 'comercial:send_document' %}" 
+                          hx-target="#documentFormResult"
+                          hx-swap="innerHTML"
+                          hx-encoding="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="conversation_id" value="" id="sendDocumentConversationId">
+                        
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">
+                                Documento PDF <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" class="form-control" id="documentFile" name="document" 
+                                   accept=".pdf" required>
+                            <div class="form-text">Arquivo PDF (máx. 16MB)</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="documentCaption" class="form-label">Legenda (opcional)</label>
+                            <textarea class="form-control" id="documentCaption" name="caption" 
+                                      rows="2" placeholder="Adicione uma legenda ao documento..."></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i>
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                Enviar Documento
+                            </button>
+                        </div>
+                    </form>
+                `;
+                
+                // Re-registra HTMX se necessário
+                if (typeof htmx !== 'undefined') {
+                    htmx.process(documentFormResult);
+                }
+            }
+            
+            console.log('✅ Modal de documento limpo');
         });
     }
     

@@ -925,3 +925,57 @@ class NovoContatoForm(forms.Form):
                     if param_num.isdigit():
                         params[int(param_num)] = value
         return params
+
+
+class SendDocumentForm(forms.Form):
+    """
+    Formulário para envio de documentos PDF no WhatsApp
+    """
+    
+    document = forms.FileField(
+        label="Documento PDF",
+        widget=forms.FileInput(
+            attrs={
+                "class": "form-control",
+                "accept": ".pdf",
+                "capture": False
+            }
+        ),
+        help_text="Arquivo PDF (máx. 16MB)",
+    )
+    
+    caption = forms.CharField(
+        label="Legenda (opcional)",
+        max_length=1024,
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": 2,
+                "placeholder": "Adicione uma legenda ao documento..."
+            }
+        ),
+    )
+    
+    def clean_document(self):
+        document = self.cleaned_data.get('document')
+        
+        if document:
+            # Verifica tipo de arquivo
+            if not document.name.lower().endswith('.pdf'):
+                raise forms.ValidationError("Apenas arquivos PDF são permitidos.")
+            
+            # Verifica tamanho (16MB - limite do WhatsApp)
+            max_size = 16 * 1024 * 1024  # 16MB
+            if document.size > max_size:
+                raise forms.ValidationError("Arquivo muito grande. Máximo permitido: 16MB.")
+                
+            # Verifica se é realmente um PDF (magic number)
+            document.seek(0)
+            header = document.read(1024)
+            document.seek(0)
+            
+            if not header.startswith(b'%PDF'):
+                raise forms.ValidationError("Arquivo não é um PDF válido.")
+        
+        return document

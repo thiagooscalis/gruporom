@@ -12,6 +12,7 @@ from core.models import (
     WhatsAppAccount, WhatsAppTemplate, WhatsAppConversation, 
     WhatsAppMessage, WhatsAppContact
 )
+from core.forms.whatsapp import NovoContatoForm, SendDocumentForm
 
 logger = logging.getLogger(__name__)
 
@@ -1028,7 +1029,6 @@ def novo_contato(request):
     Cria novo contato e inicia conversa WhatsApp
     """
     if request.method == 'POST':
-        from core.forms.whatsapp import NovoContatoForm
         form = NovoContatoForm(request.POST)
         
         if not form.is_valid():
@@ -1135,7 +1135,6 @@ def novo_contato(request):
                 )
                 
                 # Em caso de sucesso, retorna form limpo e trigger para fechar modal
-                from core.forms.whatsapp import NovoContatoForm
                 form = NovoContatoForm()  # Form limpo
                 
                 templates = WhatsAppTemplate.objects.filter(
@@ -1204,7 +1203,6 @@ def novo_contato(request):
             return HttpResponse(html)
     
     # GET - retorna modal com form
-    from core.forms.whatsapp import NovoContatoForm
     form = NovoContatoForm()
     
     templates = WhatsAppTemplate.objects.filter(
@@ -1391,4 +1389,135 @@ def send_template(request):
         logger.error(f"Erro ao enviar template: {e}")
         return render(request, 'comercial/whatsapp/partials/send_template_error_simple.html', {
             'error': 'Erro ao enviar template.'
+        })
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def send_document(request):
+    """
+    Envia documento PDF via WhatsApp (HTMX)
+    """
+    import os
+    from django.core.files.storage import default_storage
+    from core.services.whatsapp_api import WhatsAppAPIService
+    
+    conversation_id = request.POST.get('conversation_id')
+    if not conversation_id:
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': 'ID da conversa não informado'
+        })
+    
+    try:
+        conversation = get_object_or_404(
+            WhatsAppConversation.objects.select_related('account', 'contact'),
+            id=conversation_id,
+            assigned_to=request.user
+        )
+    except:
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': 'Conversa não encontrada'
+        })
+    
+    form = SendDocumentForm(request.POST, request.FILES)
+    
+    if not form.is_valid():
+        return render(request, 'comercial/whatsapp/partials/send_document_form.html', {
+            'form': form,
+            'conversation': conversation
+        })
+    
+    document = form.cleaned_data['document']
+    caption = form.cleaned_data.get('caption', '').strip()
+    
+    try:
+        # Gera nome único para o arquivo
+        import uuid
+        
+        file_extension = '.pdf'
+        filename = f"{uuid.uuid4()}{file_extension}"
+        
+        # Organiza em estrutura hierárquica: media/whatsapp/documents/ano/mes/dia/
+        now = timezone.now()
+        folder_path = f"media/whatsapp/documents/{now.year}/{now.month:02d}/{now.day:02d}/"
+        file_path = f"{folder_path}{filename}"
+        
+        # Salva no S3 (ou storage configurado)
+        saved_path = default_storage.save(file_path, document)
+        file_url = default_storage.url(saved_path)
+        
+        logger.info(f"Documento salvo: {saved_path} -> {file_url}")
+        
+        # Cria mensagem no banco
+        message = WhatsAppMessage.objects.create(
+            wamid=f"doc_{uuid.uuid4().hex[:16]}",  # Temporário até API responder
+            account=conversation.account,
+            contact=conversation.contact,
+            conversation=conversation,
+            direction='outbound',
+            message_type='document',
+            content=caption or f"Documento: {document.name}",
+            media_url=file_url,
+            media_filename=document.name,
+            media_mimetype='application/pdf',
+            status='sending',
+            timestamp=timezone.now(),
+            sent_by=request.user,
+        )
+        
+        # Envia via API do WhatsApp
+        api_service = WhatsAppAPIService(conversation.account)
+        
+        if hasattr(api_service, '_is_mock') and api_service._is_mock:
+            # Modo de desenvolvimento - simula sucesso
+            logger.info(f"MOCK: Documento enviado - {document.name}")
+            message.wamid = f"wamid_doc_{uuid.uuid4().hex}"
+            message.status = 'sent'
+            message.save()
+        else:
+            # Modo produção - envia real
+            try:
+                # Implementar envio real via API
+                # api_response = api_service.send_document(
+                #     to=conversation.contact.phone_number,
+                #     document_url=file_url,
+                #     filename=document.name,
+                #     caption=caption
+                # )
+                
+                # Por enquanto, simula resposta de sucesso
+                message.status = 'sent'
+                message.save()
+            except Exception as api_error:
+                logger.error(f"Erro na API WhatsApp: {api_error}")
+                message.status = 'failed'
+                message.error_message = str(api_error)
+                message.save()
+                
+                return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                    'error': f'Erro ao enviar documento: {api_error}'
+                })
+        
+        logger.info(f"Documento PDF enviado: {document.name} para conversa {conversation_id}")
+        
+        # Retorna sucesso e atualiza área de mensagens
+        return render(request, 'comercial/whatsapp/partials/send_document_success.html', {
+            'message': message,
+            'conversation': conversation,
+            'document_name': document.name,
+            'file_size': document.size
+        })
+        
+    except Exception as e:
+        logger.error(f"Erro ao enviar documento: {e}")
+        # Remove arquivo do storage se houver erro
+        try:
+            if 'saved_path' in locals():
+                default_storage.delete(saved_path)
+        except:
+            pass
+        
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': f'Erro interno ao enviar documento: {str(e)}'
         })

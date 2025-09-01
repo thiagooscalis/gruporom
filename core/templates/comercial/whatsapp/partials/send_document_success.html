@@ -1,0 +1,28 @@
+<!-- Sucesso no envio de documento -->
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <strong>Documento enviado com sucesso!</strong>
+    <br>
+    <small>
+        📄 <strong>{{ document_name }}</strong> 
+        ({{ file_size|filesizeformat }}) enviado para {{ conversation.contact.display_name }}
+    </small>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<!-- Trigger para atualizar mensagens -->
+<div hx-get="{% url 'comercial:conversation_messages' conversation.id %}"
+     hx-target="#messages-container"
+     hx-swap="innerHTML"
+     hx-trigger="load"></div>
+
+<!-- Trigger para fechar modal -->
+<script>
+    // Fecha o modal após sucesso
+    setTimeout(() => {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('sendDocumentModal'));
+        if (modal) {
+            modal.hide();
+        }
+    }, 1500);
+</script>

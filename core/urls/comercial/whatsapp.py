@@ -28,6 +28,7 @@ urlpatterns = [
     path('preview-template/', views.preview_template, name='whatsapp_preview_template'),
     path('template-preview/', views.template_preview, name='template_preview'),
     path('send-template/', views.send_template, name='send_template'),
+    path('send-document/', views.send_document, name='send_document'),
     path('novo-contato/', views.novo_contato, name='whatsapp_novo_contato'),
     
     # Debug
