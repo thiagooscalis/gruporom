@@ -1538,6 +1538,27 @@ def send_document(request):
                     ExpiresIn=3600  # 1 hora de validade
                 )
                 logger.info(f"[WHATSAPP PDF] ⚠️ Usando fallback boto3 client para URL assinada")
+                logger.info(f"[WHATSAPP PDF] 🔗 URL assinada gerada (primeiros 200 chars): {file_url[:200]}...")
+                logger.info(f"[WHATSAPP PDF] 📏 URL assinada tem {len(file_url)} caracteres")
+                
+                # NOVO: Verificação de tamanho da URL
+                if len(file_url) > 2048:
+                    logger.warning(f"[WHATSAPP PDF] ⚠️ URL muito longa! {len(file_url)} chars (limite recomendado: 2048)")
+                elif len(file_url) > 1024:
+                    logger.warning(f"[WHATSAPP PDF] ⚠️ URL longa: {len(file_url)} chars")
+                else:
+                    logger.info(f"[WHATSAPP PDF] ✅ Tamanho da URL OK: {len(file_url)} chars")
+                
+                # Mostra componentes da URL para debug
+                from urllib.parse import urlparse, parse_qs
+                parsed = urlparse(file_url)
+                query_params = parse_qs(parsed.query)
+                
+                logger.info(f"[WHATSAPP PDF] 🌐 Host: {parsed.netloc}")
+                logger.info(f"[WHATSAPP PDF] 📂 Path: {parsed.path}")
+                logger.info(f"[WHATSAPP PDF] 🔑 Query params: {len(parsed.query)} chars")
+                logger.info(f"[WHATSAPP PDF] ⏰ Expires: {query_params.get('Expires', ['N/A'])[0]}")
+                logger.info(f"[WHATSAPP PDF] 🔐 Signature: {query_params.get('Signature', ['N/A'])[0][:20] if query_params.get('Signature') else 'N/A'}...")
         else:
             # Storage local ou outro - usa URL padrão
             file_url = default_storage.url(saved_path)
@@ -1594,6 +1615,7 @@ def send_document(request):
             message.status = 'sent'
             message.save()
         else:
+            logger.info(f"[WHATSAPP PDF] 🚀 MODO PRODUÇÃO: Iniciando envio real via API")
             # Modo produção - envia real via API
             try:
                 # Limpa o número do telefone (remove caracteres não numéricos)
@@ -1610,6 +1632,7 @@ def send_document(request):
                 logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
                 
                 # NOVO: Verifica se arquivo realmente existe no S3 antes de testar URL
+                logger.info(f"[WHATSAPP PDF] 🔍 INICIANDO verificação se arquivo existe no S3...")
                 try:
                     import boto3
                     # Usa as mesmas credenciais para verificar se arquivo existe
