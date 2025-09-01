@@ -1484,6 +1484,18 @@ def send_document(request):
             logger.info(f"[WHATSAPP PDF] ✅ Arquivo enviado direto para S3!")
             saved_path = file_path  # Usa o caminho que definimos
             
+            # VERIFICAÇÃO IMEDIATA: Testa se arquivo realmente chegou no S3
+            try:
+                verify_response = s3_client.head_object(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                    Key=file_path
+                )
+                logger.info(f"[WHATSAPP PDF] ✅ VERIFICAÇÃO: Arquivo EXISTE no S3!")
+                logger.info(f"[WHATSAPP PDF] ✅ Tamanho confirmado: {verify_response.get('ContentLength')} bytes")
+            except Exception as verify_error:
+                logger.error(f"[WHATSAPP PDF] ❌ VERIFICAÇÃO FALHOU: {verify_error}")
+                raise Exception(f"Arquivo não chegou ao S3: {verify_error}")
+            
         except Exception as direct_save_error:
             logger.error(f"[WHATSAPP PDF] ❌ ERRO NO UPLOAD DIRETO: {direct_save_error}")
             return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
