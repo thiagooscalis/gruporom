@@ -1455,29 +1455,41 @@ def send_document(request):
         logger.info(f"[WHATSAPP PDF] Caminho destino: {file_path}")
         logger.info(f"[WHATSAPP PDF] Tamanho do arquivo: {document.size} bytes")
         
+        # NOVO: BYPASS do Django Storage - salvar direto via boto3
+        logger.info(f"[WHATSAPP PDF] 🔧 BYPASS: Salvando direto via boto3 (Django Storage falhou)")
+        
         try:
-            saved_path = default_storage.save(file_path, document)
-            logger.info(f"[WHATSAPP PDF] ✅ default_storage.save() retornou: {saved_path}")
+            import boto3
             
-            # IMPORTANTE: Verifica se arquivo realmente foi salvo
-            if not default_storage.exists(saved_path):
-                raise Exception(f"Arquivo não existe após save(): {saved_path}")
-                
-            # Verifica tamanho do arquivo salvo
-            try:
-                file_size = default_storage.size(saved_path)
-                logger.info(f"[WHATSAPP PDF] ✅ Arquivo salvo com {file_size} bytes")
-                
-                if file_size != document.size:
-                    raise Exception(f"Tamanho incorreto: esperado {document.size}, obtido {file_size}")
-                    
-            except Exception as size_error:
-                logger.warning(f"[WHATSAPP PDF] ⚠️ Não foi possível verificar tamanho: {size_error}")
-                
-        except Exception as save_error:
-            logger.error(f"[WHATSAPP PDF] ❌ ERRO AO SALVAR NO S3: {save_error}")
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_S3_REGION_NAME
+            )
+            
+            # Lê o conteúdo do arquivo para upload direto
+            document.seek(0)  # Volta ao início do arquivo
+            file_content = document.read()
+            
+            logger.info(f"[WHATSAPP PDF] 📄 Arquivo lido: {len(file_content)} bytes")
+            
+            # Upload direto para S3
+            s3_client.put_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=file_path,
+                Body=file_content,
+                ContentType='application/pdf',
+                ContentDisposition=f'inline; filename="{document.name}"'
+            )
+            
+            logger.info(f"[WHATSAPP PDF] ✅ Arquivo enviado direto para S3!")
+            saved_path = file_path  # Usa o caminho que definimos
+            
+        except Exception as direct_save_error:
+            logger.error(f"[WHATSAPP PDF] ❌ ERRO NO UPLOAD DIRETO: {direct_save_error}")
             return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                'error': f'Erro ao salvar arquivo: {str(save_error)}'
+                'error': f'Erro ao salvar arquivo diretamente: {str(direct_save_error)}'
             })
         
         # Para WhatsApp, precisamos de URL assinada temporária se bucket for privado
