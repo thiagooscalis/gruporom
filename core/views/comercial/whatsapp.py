@@ -1463,7 +1463,9 @@ def send_document_new(request):
         if success:
             return render(request, 'comercial/whatsapp/partials/send_document_success.html', {
                 'message': 'PDF enviado com sucesso!',
-                'document_name': document.name
+                'conversation': conversation,
+                'document_name': document.name,
+                'file_size': document.size
             })
         else:
             return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
