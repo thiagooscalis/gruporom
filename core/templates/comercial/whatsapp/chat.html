@@ -2025,5 +2025,105 @@ document.body.addEventListener('refreshConversations', function(event) {
         showToast('✅ Conversa criada com sucesso!', 'success');
     }
 });
+
+// ========== SISTEMA DE EMOJIS ==========
+
+// Função para inserir emoji no campo de texto
+function insertEmoji(emoji) {
+    const messageInput = document.getElementById('message-input');
+    if (messageInput) {
+        const currentValue = messageInput.value;
+        const cursorPosition = messageInput.selectionStart;
+        
+        // Insere o emoji na posição do cursor
+        const newValue = currentValue.slice(0, cursorPosition) + emoji + currentValue.slice(cursorPosition);
+        messageInput.value = newValue;
+        
+        // Reposiciona o cursor após o emoji
+        messageInput.focus();
+        messageInput.setSelectionRange(cursorPosition + emoji.length, cursorPosition + emoji.length);
+    }
+}
+
+// Event listeners para botões de emoji
+document.addEventListener('DOMContentLoaded', function() {
+    // Listener para todos os botões de emoji (rápidos e dropdown)
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('emoji-btn')) {
+            e.preventDefault();
+            const emoji = e.target.getAttribute('data-emoji');
+            if (emoji) {
+                insertEmoji(emoji);
+            }
+        }
+    });
+});
 </script>
+
+<style>
+/* ========== ESTILOS PARA EMOJIS ========== */
+
+.emoji-btn {
+    border: none !important;
+    padding: 4px 8px !important;
+    font-size: 16px;
+    line-height: 1;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emoji-btn:hover {
+    background-color: #e9ecef !important;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+}
+
+.emoji-dropdown {
+    width: 280px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    max-width: 240px;
+}
+
+.emoji-grid .emoji-btn {
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 4px;
+}
+
+.emoji-grid .emoji-btn:hover {
+    background-color: #dee2e6 !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .emoji-btn {
+        font-size: 14px;
+        min-width: 28px;
+        height: 28px;
+        padding: 2px 6px !important;
+    }
+    
+    .emoji-dropdown {
+        width: 240px;
+    }
+    
+    .emoji-grid {
+        grid-template-columns: repeat(6, 1fr);
+        max-width: 200px;
+    }
+}
+</style>
+
 {% endblock %}

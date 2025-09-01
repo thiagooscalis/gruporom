@@ -471,85 +471,30 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 13/08/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, sistema robusto de mídias, paginação HTMX moderna, janela 24h automática e multi-área operacional  
-**Módulos**: 10+ modelos de dados (Pessoa, Usuario, Fornecedor, Colaborador, Cargo, Turno, Cambio, Pais, WhatsApp), sistema completo de mídias (imagens, vídeos, áudios, documentos), URLs S3 assinadas, verificação de janela 24h, UX otimizada
+**Última atualização**: 09/12/2025  
+**Status**: Sistema empresarial completo com WhatsApp Business integrado, correções no envio de PDFs e sistema de emojis  
+**Módulos**: 10+ modelos de dados, sistema completo de mídias, upload de documentos corrigido, interface de chat otimizada
 
 ## 🆕 Últimas Atualizações
 
-### Agosto 2025 - Sistema de Países e Seeds Otimizados
-- **🌍 Base de Dados Completa**: 193 países com nomes em português e códigos ISO-2
-- **📁 Arquivo JSON Estruturado**: `/core/data/paises.json` com formato padronizado
-- **⚡ Seeder Otimizado**: 
-  - Verificação eficiente com 1 consulta vs 193 individuais
-  - Bulk insert para máxima performance
-  - Zero duplicatas com verificação por conjunto de ISOs
-- **🔧 Integração Command Seed**: 
-  - `python manage.py seed --seeder paises` - Seeder específico
-  - `python manage.py seed` - Inclui países no seeder geral
-- **📊 Feedback Visual**: Emojis e contadores informativos
-- **🚀 Pronto para Uso**: Model Pais disponível para formulários Django
+### 2025 - Melhorias e Funcionalidades Implementadas
+- **🌍 Sistema de Países**: 193 países com ISO-2, seeder otimizado via `python manage.py seed --seeder paises`
+- **📱 Paginação Moderna**: Sistema "Carregar mais" com HTMX, contador dinâmico de itens restantes
+- **🏢 Área Comercial**: Sistema multi-área com grupos, atendimento WhatsApp integrado
+- **💬 WhatsApp Business**: 
+  - Atendimento completo com fila de conversas e atribuição
+  - Sistema de mídias (imagens, vídeos, áudios, documentos) com S3
+  - Verificação automática de janela 24h
+  - Templates e respostas rápidas
 
-### Agosto 2025 - Paginação Moderna "Carregar Mais"
-- **📱 UX Moderna**: Substituição da paginação tradicional por botão "Carregar mais" com HTMX
-- **⚡ Performance HTMX**: 
-  - Filtros via botão (sem auto-trigger)
-  - Carregamento incremental sem reload de página
-  - URL atualizada com `hx-push-url="true"`
-- **🔧 Padrão Reutilizável**: Estrutura padronizada para todas as listagens
-  - `partial_lista.html` → Tabela completa + botão carregar mais
-  - `partial_linhas.html` → Apenas `<tr>` para append incremental
-  - Context com `restantes` calculado na view
-- **📊 Contador Dinâmico**: Mostra quantos registros restam para carregar
-- **🎯 Auto-hide**: Botão desaparece automaticamente na última página
-- **🧪 Testes Completos**: 7 testes automatizados para validar funcionalidade
-- **📋 Padronização**: Aplicado inicialmente em Pessoas, pronto para expansão
-
-### Agosto 2025 - Área Comercial e WhatsApp Atendimento
-- **🏢 Área Comercial Completa**: Nova área de acesso com grupo "Comercial" e interface dedicada
-- **💬 WhatsApp Atendimento Comercial**: Sistema completo de atendimento ao cliente via WhatsApp
-  - Dashboard com conversas aguardando atendimento
-  - Sistema de atribuição de conversas aos atendentes
-  - Interface de chat para atendimento individual
-  - Espelhamento automático via webhook (mensagens → conversas)
-- **🔄 Modelo WhatsAppConversation**: Gestão de conversas com status, atendente e controle de fluxo
-- **🎯 Fluxo Comercial Otimizado**: 
-  - Mensagens chegam via webhook → Criam conversas pendentes
-  - Comercial visualiza fila de atendimento
-  - Clica "Atender" → Conversa é atribuída ao usuário
-  - Interface de chat individual para responder cliente
-- **🏗️ Arquitetura Padronizada**: Conversão para Function-Based Views (FBVs) com decorators `user_passes_test`
-- **🔀 Sistema Multi-Área**: Menu de alternância entre áreas (Administração ↔ Comercial)
-- **📊 Context Processor Inteligente**: Detecção automática da área atual baseada em grupos do usuário
-- **🧪 Dados de Teste**: Script automatizado para criar conversas de teste
-
-### Agosto 2025 - Sistema Completo de Mídias WhatsApp
-- **📱 Visualização Completa de Mídias**: Sistema robusto para exibir todos os tipos de mídia do WhatsApp
-  - **🖼️ Imagens**: Modal HTMX com visualização expandida e URLs S3 assinadas
-  - **🎵 Áudio**: Player personalizado com Web Audio API para demonstração
-  - **🎬 Vídeos**: Player nativo HTML5 com fallback inteligente para erros
-  - **📄 Documentos**: Preview com download direto via URLs assinadas
-- **🔐 URLs S3 Assinadas**: Método `get_signed_media_url()` para acesso seguro a mídias privadas
-- **⚡ Tratamento de Erros Robusto**: Sistema de fallback automático quando mídias falham ao carregar
-  - Logs detalhados de debug no console
-  - Mensagens de erro amigáveis com opção "Tentar novamente"
-  - Substituição automática de players com erro por mensagens informativas
-- **🎯 Estrutura de Templates Otimizada**: Lógica reorganizada para detectar corretamente tipos de mídia
-- **📂 Organização S3 Profissional**: Estrutura hierárquica `media/whatsapp/tipo/ano/mes/dia/arquivo`
-- **🚀 Integração HTMX**: Modais carregados dinamicamente com JavaScript local para máxima compatibilidade
-
-### Agosto 2025 - Interface de Chat Profissional e Janela 24h
-- **⏰ Verificação Automática de Janela 24h**: Sistema inteligente que verifica se a conversa está dentro da janela de 24h do WhatsApp
-  - Método `is_within_24h_window()` no model WhatsAppConversation
-  - Endpoint AJAX `/comercial/whatsapp/check-24h-window/` para verificação em tempo real
-  - Bloqueio automático de mensagens quando fora da janela com toast informativo
-  - Redirecionamento para envio de templates quando necessário reativar conversa
-- **🎯 UX Otimizada para Atendimento**: Interface profissional com foco na experiência do atendente
-  - Layout responsivo com altura fixa para evitar scroll indesejado
-  - Botão flutuante inteligente para ir ao final da conversa (aparece/desaparece conforme scroll)
-  - Modais HTMX para envio de templates com limpeza automática após uso
-  - Sistema de eventos HTMX (`afterSwap`) para sincronização automática de componentes
-- **🛠️ Ambiente de Desenvolvimento**: Mocks completos para desenvolvimento sem API real
-  - Mock responses para WhatsApp API em modo DEBUG
-  - Simulação realística de envio de mensagens e templates
-  - Logs coloridos e informativos para debug
+### Dezembro 2025 - Correções e Melhorias WhatsApp
+- **📄 PDF Upload Corrigido**: Mensagens PDF agora aparecem corretamente na conversa após envio
+  - Criação da mensagem no banco antes do envio via API
+  - Status atualizado baseado na resposta da API
+  - Função `_send_pdf_whatsapp` refatorada com criação de mensagem
+- **😀 Sistema de Emojis**: Seletor dropdown com 38 emojis essenciais para atendimento
+  - Inserção inteligente na posição do cursor
+  - Interface limpa sem poluir a área de mensagem
+  - JavaScript integrado para compatibilidade HTMX
+- **⏰ Verificação de Janela 24h**: Bloqueio automático quando fora da janela do WhatsApp
+- **🎯 UX Otimizada**: Interface profissional com botão scroll e modais inteligentes
