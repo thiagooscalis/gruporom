@@ -1441,10 +1441,14 @@ def send_document(request):
         file_extension = '.pdf'
         filename = f"{uuid.uuid4()}{file_extension}"
         
-        # Organiza em estrutura hierárquica: media/whatsapp/documents/ano/mes/dia/
+        # NOVO: Usar mesmo padrão que FUNCIONA para áudios
+        # Vamos mudar de "documents" para "audio" temporariamente para testar
         now = timezone.now()
-        folder_path = f"media/whatsapp/documents/{now.year}/{now.month:02d}/{now.day:02d}/"
+        folder_path = f"media/whatsapp/audio/{now.year}/{now.month:02d}/{now.day:02d}/"
         file_path = f"{folder_path}{filename}"
+        
+        logger.info(f"[WHATSAPP PDF] 🧪 TESTE: Salvando como 'audio' para usar caminho que funciona")
+        logger.info(f"[WHATSAPP PDF] 📂 Caminho de teste: {file_path}")
         
         # Salva no S3 (ou storage configurado) com validação
         logger.info(f"[WHATSAPP PDF] 💾 Salvando arquivo no S3...")
