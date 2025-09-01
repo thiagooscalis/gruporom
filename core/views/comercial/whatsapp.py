@@ -1447,10 +1447,125 @@ def send_document_new(request):
     
     logger.info(f"[PDF] 📄 Arquivo recebido: {document.name} ({document.size} bytes)")
     
-    # IMPLEMENTAÇÃO SIMPLES E DIRETA
-    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-        'error': f'TESTE 2: Validações OK - Arquivo: {document.name} ({document.size} bytes)'
-    })
+    # Upload para S3
+    try:
+        s3_key, signed_url = _upload_pdf_to_s3(document)
+        logger.info(f"[PDF] ✅ Upload S3 concluído")
+    except Exception as upload_error:
+        logger.error(f"[PDF] ❌ Erro no upload: {upload_error}")
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': f'Erro no upload: {str(upload_error)}'
+        })
+    
+    # Envio via WhatsApp
+    try:
+        success = _send_pdf_whatsapp(conversation, document, signed_url, caption)
+        if success:
+            return render(request, 'comercial/whatsapp/partials/send_document_success.html', {
+                'message': 'PDF enviado com sucesso!',
+                'document_name': document.name
+            })
+        else:
+            return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                'error': 'Falha no envio via WhatsApp'
+            })
+    except Exception as send_error:
+        logger.error(f"[PDF] ❌ Erro no envio: {send_error}")
+        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+            'error': f'Erro no envio: {str(send_error)}'
+        })
+
+
+def _upload_pdf_to_s3(document):
+    """Método privado para upload de PDF para S3"""
+    import boto3
+    import uuid
+    from django.conf import settings
+    from django.utils import timezone
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Gera caminho único
+    filename = f"{uuid.uuid4()}.pdf"
+    now = timezone.now()
+    s3_key = f"media/whatsapp/documents/{now.year}/{now.month:02d}/{now.day:02d}/{filename}"
+    
+    logger.info(f"[PDF] 📂 Caminho S3: {s3_key}")
+    
+    # Cliente S3
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_S3_REGION_NAME
+    )
+    
+    # Upload
+    document.seek(0)
+    file_content = document.read()
+    
+    logger.info(f"[PDF] 🚀 Fazendo upload para S3...")
+    
+    s3_client.put_object(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Key=s3_key,
+        Body=file_content,
+        ContentType='application/pdf'
+    )
+    
+    # Verificação
+    head_response = s3_client.head_object(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Key=s3_key
+    )
+    logger.info(f"[PDF] ✅ Arquivo confirmado: {head_response.get('ContentLength')} bytes")
+    
+    # URL assinada
+    signed_url = s3_client.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': s3_key},
+        ExpiresIn=3600
+    )
+    
+    logger.info(f"[PDF] 🔗 URL assinada: {len(signed_url)} chars")
+    
+    return s3_key, signed_url
+
+
+def _send_pdf_whatsapp(conversation, document, signed_url, caption):
+    """Método privado para envio via WhatsApp"""
+    import logging
+    import requests
+    from core.services.whatsapp_api import WhatsAppAPIService
+    
+    logger = logging.getLogger(__name__)
+    
+    # Testa URL primeiro
+    logger.info(f"[PDF] 🧪 Testando URL assinada...")
+    test_response = requests.head(signed_url, timeout=10)
+    logger.info(f"[PDF] 🧪 Status URL: {test_response.status_code}")
+    
+    if test_response.status_code != 200:
+        raise Exception(f"URL não acessível: HTTP {test_response.status_code}")
+    
+    # Envio via API WhatsApp
+    phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
+    api_service = WhatsAppAPIService(conversation.account)
+    
+    logger.info(f"[PDF] 📱 Enviando para: {phone_number}")
+    
+    api_response = api_service.send_media_message(
+        to=phone_number,
+        media_type='document',
+        media_url=signed_url,
+        caption=caption or None,
+        filename=document.name
+    )
+    
+    logger.info(f"[PDF] 📡 Resposta API: {api_response}")
+    
+    return api_response.get('success', False)
     
     conversation_id = request.POST.get('conversation_id')
     if not conversation_id:
