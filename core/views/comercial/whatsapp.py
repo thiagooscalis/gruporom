@@ -1441,14 +1441,12 @@ def send_document(request):
         file_extension = '.pdf'
         filename = f"{uuid.uuid4()}{file_extension}"
         
-        # NOVO: Usar mesmo padrão que FUNCIONA para áudios
-        # Vamos mudar de "documents" para "audio" temporariamente para testar
+        # Volta para pasta documents já que upload direto deve funcionar
         now = timezone.now()
-        folder_path = f"media/whatsapp/audio/{now.year}/{now.month:02d}/{now.day:02d}/"
+        folder_path = f"media/whatsapp/documents/{now.year}/{now.month:02d}/{now.day:02d}/"
         file_path = f"{folder_path}{filename}"
         
-        logger.info(f"[WHATSAPP PDF] 🧪 TESTE: Salvando como 'audio' para usar caminho que funciona")
-        logger.info(f"[WHATSAPP PDF] 📂 Caminho de teste: {file_path}")
+        logger.info(f"[WHATSAPP PDF] 📂 Salvando em: {file_path}")
         
         # Salva no S3 (ou storage configurado) com validação
         logger.info(f"[WHATSAPP PDF] 💾 Salvando arquivo no S3...")
@@ -1674,6 +1672,10 @@ def send_document(request):
                 try:
                     import requests
                     logger.info(f"[WHATSAPP PDF] 🧪 Testando acesso à URL S3...")
+                    logger.info(f"[WHATSAPP PDF] 🔗 URL sendo testada: {file_url}")
+                    logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
+                    logger.info(f"[WHATSAPP PDF] 🔒 URL começa com https: {file_url.startswith('https://')}")
+                    
                     test_response = requests.head(file_url, timeout=10)
                     logger.info(f"[WHATSAPP PDF] ✅ Teste URL S3 - Status: {test_response.status_code}")
                     logger.info(f"[WHATSAPP PDF] ✅ Headers: Content-Length={test_response.headers.get('Content-Length')}, Content-Type={test_response.headers.get('Content-Type')}")
