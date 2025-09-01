@@ -91,7 +91,7 @@ class WhatsAppAPIService:
             raise Exception(error_message)
     
     def send_media_message(self, to: str, media_type: str, media_id: str = None, 
-                          media_url: str = None, caption: str = None) -> Dict[str, Any]:
+                          media_url: str = None, caption: str = None, filename: str = None) -> Dict[str, Any]:
         """
         Envia mensagem de mídia (imagem, documento, audio, video)
         
@@ -101,6 +101,7 @@ class WhatsAppAPIService:
             media_id: ID da mídia já carregada (opcional)
             media_url: URL da mídia (opcional)
             caption: Legenda da mídia (opcional)
+            filename: Nome do arquivo (obrigatório para documents)
         """
         url = f"{self.BASE_URL}/{self.phone_number_id}/messages"
         
@@ -123,9 +124,13 @@ class WhatsAppAPIService:
                 'data': None
             }
         
-        # Adiciona caption se fornecido (apenas para image e video)
-        if caption and media_type in ['image', 'video']:
+        # Adiciona caption se fornecido (para image, video e document)
+        if caption and media_type in ['image', 'video', 'document']:
             media_payload["caption"] = caption
+        
+        # Adiciona filename para documents (OBRIGATÓRIO na API do WhatsApp)
+        if media_type == 'document' and filename:
+            media_payload["filename"] = filename
         
         payload[media_type] = media_payload
         

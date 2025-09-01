@@ -8,6 +8,7 @@ from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.conf import settings
 from core.models import (
     WhatsAppAccount, WhatsAppTemplate, WhatsAppConversation, 
     WhatsAppMessage, WhatsAppContact
@@ -1469,26 +1470,45 @@ def send_document(request):
         # Envia via API do WhatsApp
         api_service = WhatsAppAPIService(conversation.account)
         
-        if hasattr(api_service, '_is_mock') and api_service._is_mock:
+        if settings.DEBUG:
             # Modo de desenvolvimento - simula sucesso
             logger.info(f"MOCK: Documento enviado - {document.name}")
             message.wamid = f"wamid_doc_{uuid.uuid4().hex}"
             message.status = 'sent'
             message.save()
         else:
-            # Modo produção - envia real
+            # Modo produção - envia real via API
             try:
-                # Implementar envio real via API
-                # api_response = api_service.send_document(
-                #     to=conversation.contact.phone_number,
-                #     document_url=file_url,
-                #     filename=document.name,
-                #     caption=caption
-                # )
+                # Limpa o número do telefone (remove caracteres não numéricos)
+                phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
                 
-                # Por enquanto, simula resposta de sucesso
-                message.status = 'sent'
-                message.save()
+                # Envia documento via API usando send_media_message
+                api_response = api_service.send_media_message(
+                    to=phone_number,
+                    media_type='document',
+                    media_url=file_url,
+                    caption=caption or None,
+                    filename=document.name  # IMPORTANTE: WhatsApp requer filename para documents
+                )
+                
+                if api_response.get('success'):
+                    # Sucesso na API - atualiza mensagem
+                    message.wamid = api_response['message_id']
+                    message.status = 'sent'
+                    message.save()
+                    logger.info(f"Documento enviado via API: {document.name} -> {phone_number}")
+                else:
+                    # Falha na API
+                    error_msg = api_response.get('error', 'Erro desconhecido na API')
+                    message.status = 'failed'
+                    message.error_message = error_msg
+                    message.save()
+                    
+                    logger.error(f"Falha na API WhatsApp: {error_msg}")
+                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                        'error': f'Erro ao enviar documento: {error_msg}'
+                    })
+                
             except Exception as api_error:
                 logger.error(f"Erro na API WhatsApp: {api_error}")
                 message.status = 'failed'
