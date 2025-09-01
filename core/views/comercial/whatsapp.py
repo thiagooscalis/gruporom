@@ -1564,13 +1564,14 @@ def send_document(request):
                 # Limpa o número do telefone (remove caracteres não numéricos)
                 phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
                 
-                # Log detalhado para debug
+                # Log detalhado para debug (MOVIDO PARA ANTES DA VERIFICAÇÃO S3)
                 logger.info(f"[WHATSAPP PDF] Iniciando envio...")
                 logger.info(f"[WHATSAPP PDF] Telefone: {phone_number}")
                 logger.info(f"[WHATSAPP PDF] Arquivo: {document.name}")
                 logger.info(f"[WHATSAPP PDF] Tamanho: {document.size} bytes")
-                logger.info(f"[WHATSAPP PDF] URL completa: {file_url}")
-                logger.info(f"[WHATSAPP PDF] URL tamanho: {len(file_url)} caracteres")
+                logger.info(f"[WHATSAPP PDF] 🎯 URL COMPLETA GERADA: {file_url}")
+                logger.info(f"[WHATSAPP PDF] 📏 URL tem {len(file_url)} caracteres")
+                logger.info(f"[WHATSAPP PDF] 🔗 URL começa com https: {file_url.startswith('https://')}")
                 logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
                 
                 # NOVO: Verifica se arquivo realmente existe no S3 antes de testar URL
