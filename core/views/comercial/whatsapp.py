@@ -1517,6 +1517,14 @@ def send_document(request):
                 # Limpa o número do telefone (remove caracteres não numéricos)
                 phone_number = ''.join(filter(str.isdigit, conversation.contact.phone_number))
                 
+                # Log detalhado para debug
+                logger.info(f"[WHATSAPP PDF] Iniciando envio...")
+                logger.info(f"[WHATSAPP PDF] Telefone: {phone_number}")
+                logger.info(f"[WHATSAPP PDF] Arquivo: {document.name}")
+                logger.info(f"[WHATSAPP PDF] Tamanho: {document.size} bytes")
+                logger.info(f"[WHATSAPP PDF] URL (primeiros 100 chars): {file_url[:100]}...")
+                logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
+                
                 # Envia documento via API usando send_media_message
                 api_response = api_service.send_media_message(
                     to=phone_number,
@@ -1525,6 +1533,8 @@ def send_document(request):
                     caption=caption or None,
                     filename=document.name  # IMPORTANTE: WhatsApp requer filename para documents
                 )
+                
+                logger.info(f"[WHATSAPP PDF] Resposta da API: {api_response}")
                 
                 if api_response.get('success'):
                     # Sucesso na API - atualiza mensagem
@@ -1535,11 +1545,24 @@ def send_document(request):
                 else:
                     # Falha na API
                     error_msg = api_response.get('error', 'Erro desconhecido na API')
+                    error_details = api_response.get('error_details', {})
+                    
+                    # Mensagem de erro mais informativa
+                    if error_details:
+                        error_code = error_details.get('code', '')
+                        error_subcode = error_details.get('error_subcode', '')
+                        error_user_msg = error_details.get('error_user_msg', '')
+                        
+                        if error_user_msg:
+                            error_msg = error_user_msg
+                        
+                        logger.error(f"[WHATSAPP PDF] Falha na API - Código: {error_code}, Subcódigo: {error_subcode}")
+                    
                     message.status = 'failed'
                     message.error_message = error_msg
                     message.save()
                     
-                    logger.error(f"Falha na API WhatsApp: {error_msg}")
+                    logger.error(f"[WHATSAPP PDF] Erro final: {error_msg}")
                     return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
                         'error': f'Erro ao enviar documento: {error_msg}'
                     })

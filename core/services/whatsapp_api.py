@@ -148,9 +148,27 @@ class WhatsAppAPIService:
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro ao enviar mensagem de mídia: {e}")
+            
+            # Tenta extrair detalhes do erro
+            error_message = str(e)
+            error_details = {}
+            
+            if hasattr(e, 'response') and e.response is not None:
+                try:
+                    error_data = e.response.json()
+                    error_details = error_data.get('error', {})
+                    error_message = error_details.get('message', str(e))
+                    
+                    logger.error(f"[WHATSAPP API] Status HTTP: {e.response.status_code}")
+                    logger.error(f"[WHATSAPP API] Erro detalhado: {error_details}")
+                    logger.error(f"[WHATSAPP API] Payload enviado: type={media_type}, url={media_url[:100] if media_url else 'None'}...")
+                except:
+                    logger.error(f"[WHATSAPP API] Resposta não-JSON: {e.response.text[:500]}")
+            
             return {
                 'success': False,
-                'error': str(e),
+                'error': error_message,
+                'error_details': error_details,
                 'data': None
             }
     
