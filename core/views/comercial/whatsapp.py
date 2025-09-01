@@ -1496,7 +1496,7 @@ def send_document(request):
         
         logger.info(f"Documento salvo: {saved_path} -> {file_url}")
         
-        # Cria mensagem no banco
+        # Cria mensagem no banco PRIMEIRO (para poder usar get_signed_media_url)
         message = WhatsAppMessage.objects.create(
             wamid=f"doc_{uuid.uuid4().hex[:16]}",  # Temporário até API responder
             account=conversation.account,
@@ -1512,6 +1512,15 @@ def send_document(request):
             timestamp=timezone.now(),
             sent_by=request.user,
         )
+        
+        # NOVO: Usa o método que JÁ FUNCIONA para gerar URL assinada
+        try:
+            signed_url = message.get_signed_media_url(expires_in=3600)
+            logger.info(f"[WHATSAPP PDF] 🎯 Usando get_signed_media_url(): {signed_url[:100]}...")
+            file_url = signed_url  # Substitui pela URL que realmente funciona
+        except Exception as signed_error:
+            logger.error(f"[WHATSAPP PDF] ❌ Erro com get_signed_media_url: {signed_error}")
+            # Mantém a URL original se falhar
         
         # Envia via API do WhatsApp
         api_service = WhatsAppAPIService(conversation.account)
