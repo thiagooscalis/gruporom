@@ -1396,16 +1396,18 @@ def send_template(request):
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
 @require_POST
-def send_document(request):
+def send_document_new(request):
     """
-    Envia documento PDF via WhatsApp (HTMX)
+    NOVA função para testar PDF upload - LIMPA
     """
     import logging
     logger = logging.getLogger(__name__)
-    logger.error(f"🚀 SEND_DOCUMENT EXECUTADO - {timezone.now()}")
-    import os
-    from django.core.files.storage import default_storage
-    from core.services.whatsapp_api import WhatsAppAPIService
+    logger.error(f"🚀 NOVA FUNÇÃO EXECUTADA - {timezone.now()}")
+    
+    # Teste básico primeiro
+    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+        'error': 'TESTE: Nova função funcionando - agora vou implementar o upload real'
+    })
     
     conversation_id = request.POST.get('conversation_id')
     if not conversation_id:
