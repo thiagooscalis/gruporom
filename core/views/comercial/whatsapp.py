@@ -1522,8 +1522,35 @@ def send_document(request):
                 logger.info(f"[WHATSAPP PDF] Telefone: {phone_number}")
                 logger.info(f"[WHATSAPP PDF] Arquivo: {document.name}")
                 logger.info(f"[WHATSAPP PDF] Tamanho: {document.size} bytes")
-                logger.info(f"[WHATSAPP PDF] URL (primeiros 100 chars): {file_url[:100]}...")
+                logger.info(f"[WHATSAPP PDF] URL completa: {file_url}")
+                logger.info(f"[WHATSAPP PDF] URL tamanho: {len(file_url)} caracteres")
                 logger.info(f"[WHATSAPP PDF] Caption: {caption or '(sem legenda)'}")
+                
+                # NOVO: Testa se a URL S3 está acessível antes de enviar para WhatsApp
+                try:
+                    import requests
+                    logger.info(f"[WHATSAPP PDF] 🧪 Testando acesso à URL S3...")
+                    test_response = requests.head(file_url, timeout=10)
+                    logger.info(f"[WHATSAPP PDF] ✅ Teste URL S3 - Status: {test_response.status_code}")
+                    logger.info(f"[WHATSAPP PDF] ✅ Headers: Content-Length={test_response.headers.get('Content-Length')}, Content-Type={test_response.headers.get('Content-Type')}")
+                    
+                    if test_response.status_code != 200:
+                        logger.error(f"[WHATSAPP PDF] ❌ URL S3 não está acessível! Status: {test_response.status_code}")
+                        message.status = 'failed'
+                        message.error_message = f"URL S3 não acessível: HTTP {test_response.status_code}"
+                        message.save()
+                        return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                            'error': f'URL do arquivo não está acessível (HTTP {test_response.status_code})'
+                        })
+                        
+                except Exception as url_test_error:
+                    logger.error(f"[WHATSAPP PDF] ❌ Erro ao testar URL S3: {url_test_error}")
+                    message.status = 'failed' 
+                    message.error_message = f"Erro ao validar URL S3: {str(url_test_error)}"
+                    message.save()
+                    return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
+                        'error': f'Não foi possível validar o arquivo no S3: {str(url_test_error)}'
+                    })
                 
                 # Envia documento via API usando send_media_message
                 api_response = api_service.send_media_message(
