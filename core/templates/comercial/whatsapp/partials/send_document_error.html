@@ -4,5 +4,30 @@
     <strong>Erro ao enviar documento</strong>
     <br>
     <small>{{ error }}</small>
+    
+    {% if error_details %}
+    <hr class="my-2">
+    <div class="small">
+        <strong>Detalhes técnicos:</strong>
+        <ul class="mb-0 mt-1">
+            {% if error_details.code %}
+                <li><strong>Código:</strong> {{ error_details.code }}</li>
+            {% endif %}
+            {% if error_details.error_subcode %}
+                <li><strong>Subcódigo:</strong> {{ error_details.error_subcode }}</li>
+            {% endif %}
+            {% if error_details.message %}
+                <li><strong>Mensagem API:</strong> {{ error_details.message }}</li>
+            {% endif %}
+            {% if error_details.error_user_title %}
+                <li><strong>Título:</strong> {{ error_details.error_user_title }}</li>
+            {% endif %}
+            {% if error_details.error_user_msg %}
+                <li><strong>Descrição:</strong> {{ error_details.error_user_msg }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>

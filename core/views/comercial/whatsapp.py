@@ -1564,7 +1564,8 @@ def send_document(request):
                     
                     logger.error(f"[WHATSAPP PDF] Erro final: {error_msg}")
                     return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                        'error': f'Erro ao enviar documento: {error_msg}'
+                        'error': error_msg,
+                        'error_details': error_details  # Passa detalhes para o template
                     })
                 
             except Exception as api_error:
@@ -1573,8 +1574,17 @@ def send_document(request):
                 message.error_message = str(api_error)
                 message.save()
                 
+                # Tenta extrair mais informações do erro
+                error_details = {}
+                if hasattr(api_error, '__dict__'):
+                    error_details = {
+                        'message': str(api_error),
+                        'type': type(api_error).__name__
+                    }
+                
                 return render(request, 'comercial/whatsapp/partials/send_document_error.html', {
-                    'error': f'Erro ao enviar documento: {api_error}'
+                    'error': f'Erro ao enviar documento: {api_error}',
+                    'error_details': error_details
                 })
         
         logger.info(f"Documento PDF enviado: {document.name} para conversa {conversation_id}")

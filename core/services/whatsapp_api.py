@@ -111,6 +111,10 @@ class WhatsAppAPIService:
             "type": media_type
         }
         
+        # Para documents, adiciona recipient_type conforme documentação oficial
+        if media_type == 'document':
+            payload["recipient_type"] = "individual"
+        
         # Configura mídia baseado no tipo
         media_payload = {}
         if media_id:
