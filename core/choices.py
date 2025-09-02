@@ -43,3 +43,33 @@ CATEGORIA_TAREFA_CHOICES = [
     ("Terrestre", "Terrestre"),
     ("Passageiro", "Passageiro"),
 ]
+
+STATUS_VENDA_CHOICES = [
+    ('rascunho', 'Rascunho'),
+    ('orcamento', 'Orçamento'),
+    ('aguardando_pagamento', 'Aguardando Pagamento'),
+    ('parcialmente_pago', 'Parcialmente Pago'),
+    ('pago', 'Pago'),
+    ('confirmada', 'Confirmada'),
+    ('cancelada', 'Cancelada'),
+    ('concluida', 'Concluída'),
+]
+
+FORMA_PAGAMENTO_CHOICES = [
+    ('dinheiro', 'Dinheiro'),
+    ('pix', 'PIX'),
+    ('cartao_credito', 'Cartão de Crédito'),
+    ('cartao_debito', 'Cartão de Débito'),
+    ('boleto', 'Boleto'),
+    ('transferencia', 'Transferência Bancária'),
+    ('cheque', 'Cheque'),
+    ('deposito', 'Depósito'),
+]
+
+STATUS_PAGAMENTO_CHOICES = [
+    ('pendente', 'Pendente'),
+    ('processando', 'Processando'),
+    ('confirmado', 'Confirmado'),
+    ('cancelado', 'Cancelado'),
+    ('estornado', 'Estornado'),
+]

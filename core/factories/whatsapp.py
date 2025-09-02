@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import factory
 from factory.django import DjangoModelFactory
+from django.utils import timezone
 from core.models import WhatsAppAccount, WhatsAppTemplate, WhatsAppContact, WhatsAppConversation, WhatsAppMessage
 from .usuario import UsuarioFactory
 
@@ -74,9 +75,9 @@ class WhatsAppConversationFactory(DjangoModelFactory):
     contact = factory.SubFactory(WhatsAppContactFactory)
     status = 'pending'
     assigned_to = factory.SubFactory(UsuarioFactory)
-    first_message_at = factory.Faker('date_time_this_year')
-    assigned_at = factory.Faker('date_time_this_year')
-    last_activity = factory.Faker('date_time_this_year')
+    first_message_at = factory.LazyFunction(timezone.now)
+    assigned_at = factory.LazyFunction(timezone.now)
+    last_activity = factory.LazyFunction(timezone.now)
 
 
 class WhatsAppMessageFactory(DjangoModelFactory):
@@ -92,5 +93,5 @@ class WhatsAppMessageFactory(DjangoModelFactory):
     direction = 'inbound'
     message_type = 'text'
     content = factory.Faker('text', max_nb_chars=100, locale='pt_BR')
-    timestamp = factory.Faker('date_time_this_year')
+    timestamp = factory.LazyFunction(timezone.now)
     status = 'delivered'

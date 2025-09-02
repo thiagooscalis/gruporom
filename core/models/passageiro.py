@@ -10,6 +10,16 @@ class Passageiro(models.Model):
     tipo = models.CharField(max_length=10, choices=TIPO_PASSAGEIRO_CHOICES, blank=True, null=True, verbose_name="Tipo")
     single = models.BooleanField(default=False, verbose_name="Single")
     
+    # Venda relacionada
+    venda = models.ForeignKey(
+        'VendaBloqueio',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="passageiros",
+        verbose_name="Venda"
+    )
+    
     class Meta:
         verbose_name = "Passageiro"
         verbose_name_plural = "Passageiros"

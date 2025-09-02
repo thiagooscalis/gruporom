@@ -1,6 +1,6 @@
-# Grupo ROM - Sistema de Gestão Empresarial
+# Grupo ROM - Sistema de GestÃ£o Empresarial
 
-Sistema web Django para gerenciamento empresarial com autenticação baseada em grupos.
+Sistema web Django para gerenciamento empresarial com autenticaÃ§Ã£o baseada em grupos.
 
 ## Tecnologias
 
@@ -9,17 +9,17 @@ Sistema web Django para gerenciamento empresarial com autenticação baseada em gr
 - PostgreSQL
 - Python 3.11+
 
-## Instalação
+## InstalaÃ§Ã£o
 
 ```bash
-# Dependências
+# DependÃªncias
 uv install
 npm install
 
 # Build assets
 npm run build
 
-# Migrações
+# MigraÃ§Ãµes
 uv run manage.py migrate
 
 # Criar admin

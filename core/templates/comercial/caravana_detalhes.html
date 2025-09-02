@@ -412,5 +412,31 @@ function verificarSelecao() {
         btnIniciar.classList.add('btn-secondary');
     }
 }
+
+// Função para iniciar venda
+function iniciarVenda() {
+    if (!bloqueioSelecionado) {
+        alert('Por favor, selecione um bloqueio primeiro.');
+        return;
+    }
+    
+    const quantidade = document.getElementById('quantidadeSelect').value;
+    if (!quantidade) {
+        alert('Por favor, selecione a quantidade de passageiros.');
+        return;
+    }
+    
+    // Redirecionar para página de nova venda com parâmetros
+    const url = `/comercial/nova-venda/caravanas/{{ caravana.id }}/?bloqueio=${bloqueioSelecionado.id}&quantidade=${quantidade}`;
+    window.location.href = url;
+}
+
+// Adicionar evento ao botão
+document.addEventListener('DOMContentLoaded', function() {
+    const btnIniciar = document.getElementById('btnIniciarVenda');
+    if (btnIniciar) {
+        btnIniciar.addEventListener('click', iniciarVenda);
+    }
+});
 </script>
 {% endblock %}

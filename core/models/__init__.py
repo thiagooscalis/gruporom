@@ -20,6 +20,7 @@ from .dia_roteiro import DiaRoteiro
 from .extra import Extra
 from .tarefa import Tarefa
 from .nota import Nota
+from .venda import VendaBloqueio, ExtraVenda, Pagamento
 from .whatsapp import WhatsAppAccount, WhatsAppContact, WhatsAppMessage, WhatsAppTemplate, WhatsAppConversation, WhatsAppWebhookQueue
 
 __all__ = [
@@ -45,6 +46,9 @@ __all__ = [
     "Extra",
     "Tarefa",
     "Nota",
+    "VendaBloqueio",
+    "ExtraVenda",
+    "Pagamento",
     "WhatsAppAccount",
     "WhatsAppContact",
     "WhatsAppMessage",

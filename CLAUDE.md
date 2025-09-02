@@ -1,7 +1,7 @@
 # Projeto Grupo ROM - Sistema Empresarial Completo
 
 ## Resumo do Projeto
-Sistema web Django para gerenciamento empresarial completo com autenticação baseada em grupos, interface responsiva Bootstrap 5, módulos CRUD funcionais para gestão de pessoas, colaboradores, fornecedores, câmbio e WhatsApp Business integrado. Sistema inclui máscaras de entrada inteligentes, modais HTMX, autocomplete avançado e segurança robusta.
+Sistema web Django para gerenciamento empresarial completo com **arquitetura Services + Managers + Properties**, autenticação baseada em grupos, interface responsiva Bootstrap 5, módulos CRUD funcionais para gestão de pessoas, colaboradores, fornecedores, câmbio, **sistema de vendas de turismo** e WhatsApp Business integrado. Sistema inclui máscaras de entrada inteligentes, modais HTMX, autocomplete avançado e segurança robusta.
 
 ## Estrutura do Projeto Atual
 
@@ -18,12 +18,19 @@ gruporom/
 │   │   ├── autocomplete.js  # Sistema de autocomplete reutilizável
 │   │   ├── masks.js         # Máscaras de entrada (CPF, CNPJ, Passaporte, Telefone)
 │   │   └── style.scss       # Bootstrap customizado (cor primária: #d3a156)
-│   ├── choices.py           # Choices centralizados (TIPO_DOC, SEXO)
+│   ├── choices.py           # Choices centralizados (TIPO_DOC, SEXO, STATUS_VENDA)
+│   ├── services/            # 🆕 Services Layer - Lógica de negócio
+│   │   ├── venda_service.py # VendaService com regras de negócio
+│   │   └── exceptions.py    # Exceções customizadas
+│   ├── forms/               # 🆕 Forms para validação
+│   │   └── venda_forms.py   # Forms de vendas (CriarVenda, Pagamento)
 │   ├── managers/
-│   │   └── usuario.py       # UsuarioManager customizado
+│   │   ├── usuario.py       # UsuarioManager customizado
+│   │   └── venda_manager.py # 🆕 VendaBloqueioManager com queries otimizadas
 │   ├── models/
 │   │   ├── pessoa.py        # Model Pessoa (dados pessoais)
-│   │   └── usuario.py       # Model Usuario (AbstractBaseUser)
+│   │   ├── usuario.py       # Model Usuario (AbstractBaseUser)
+│   │   └── venda.py         # 🆕 VendaBloqueio + Pagamento + ExtraVenda (+ Properties)
 │   ├── data/
 │   │   └── paises.json      # Base de dados com 193 países (nome + ISO-2)
 │   ├── seeds/
@@ -84,6 +91,11 @@ gruporom/
   - `Cargo`: Cargos organizacionais com salário base
   - `Turno`: Turnos de trabalho (manhã, tarde, noite)
   - `Cambio`: Sistema automático de cotação USD/BRL via AwesomeAPI
+  - **🆕 Sistema de Vendas**:
+    - `VendaBloqueio`: Vendas de pacotes turísticos com Properties inteligentes
+    - `Pagamento`: Múltiplos pagamentos por venda com controle de status
+    - `ExtraVenda`: Relacionamento de extras com quantidades
+    - `PassageiroVenda`: Passageiros vinculados a vendas específicas
   - **Sistema de Turismo Completo**:
     - `CiaArea`: Companhias aéreas com código IATA único
     - `Pais`: Países com código ISO de 2 dígitos único
@@ -113,6 +125,44 @@ gruporom/
   - Username: `thiago`
   - Password: `admin123`
   - Grupos: `Administração`, `Comercial`, `Operacional`
+
+## 🏗️ Arquitetura: Services + Managers + Properties
+
+### **Services Layer (Lógica de Negócio)**
+```python
+# core/services/venda_service.py
+class VendaService:
+    def criar_venda_bloqueio(dados) -> VendaBloqueio    # Regras de negócio centralizadas
+    def registrar_pagamento(...)                        # Controle de múltiplos pagamentos  
+    def listar_vendas_usuario(...)                      # Consultas otimizadas
+    # + validações, cálculos, eventos de negócio
+```
+
+### **Custom Managers (Queries Otimizadas)**
+```python
+# core/managers/venda_manager.py  
+class VendaBloqueioManager:
+    def com_totais_calculados()     # Evita N+1 queries
+    def dashboard_resumo()          # Estatísticas agregadas
+    def vencendo_em_breve()         # Alertas automáticos
+    # + busca, filtros, paginação otimizada
+```
+
+### **Properties Inteligentes (Templates)**
+```python
+# Templates usam properties diretamente
+{{ venda.status_display_pt }}      # "Em elaboração" vs "rascunho"
+{{ venda.valor_formatado }}        # "R$ 1.500,00" 
+{{ venda.dias_ate_viagem }}        # Cálculo automático
+<span class="bg-{{ venda.css_status_class }}">  # Classes Bootstrap
+```
+
+### **Vantagens da Arquitetura:**
+- ✅ **Views Magras**: Focadas apenas em apresentação (15-20 linhas)
+- ✅ **Lógica Centralizada**: Regras reutilizáveis entre views/APIs/tasks
+- ✅ **Queries Otimizadas**: Managers evitam N+1 queries automaticamente
+- ✅ **Fácil Manutenção**: Mudança em um local afeta todo sistema
+- ✅ **Testabilidade**: Services isolados, testáveis sem Django/banco
 
 ## ✅ Funcionalidades Implementadas
 
@@ -147,6 +197,8 @@ gruporom/
 - [x] **Turno**: Gestão de horários de trabalho
 - [x] **Cambio**: Cotação automática USD/BRL via API externa
 - [x] **Pais**: Sistema de países com códigos ISO-2 (193 países)
+- [x] **🆕 VendaBloqueio**: Vendas de turismo com Properties e Manager customizado
+- [x] **🆕 Pagamento**: Sistema de múltiplos pagamentos por venda
 - [x] **WhatsAppConversation**: Gestão de conversas comerciais com atendentes
 - [x] Choices centralizados e validações robustas
 - [x] Relacionamentos otimizados com ForeignKey/ManyToMany
@@ -158,6 +210,12 @@ gruporom/
 - [x] **Colaboradores**: Gestão RH completa
 - [x] **Cargos**: Estrutura organizacional
 - [x] **Turnos**: Controle de horários
+- [x] **🆕 Vendas**: Sistema completo de vendas de bloqueios turísticos
+  - [x] Criação de venda com validação de disponibilidade
+  - [x] Seleção de passageiros e extras
+  - [x] Múltiplos pagamentos com controle de status
+  - [x] Forms com validação robusta (Django Forms)
+  - [x] Interface responsiva com Bootstrap + HTMX
 - [x] **Paginação Moderna**: Sistema "Carregar mais" com HTMX (20 itens/página)
 - [x] Sistema de busca integrado com autocomplete AJAX
 - [x] Validações frontend (máscaras) e backend
@@ -250,16 +308,17 @@ gruporom/
 - [x] Configurações de segurança robustas (CSRF, HSTS, CSP)
 - [x] Interface administrativa Django restrita
 
-## 🚀 Status Atual: Sistema Empresarial Completo com WhatsApp Business e Mídias
+## 🚀 Status Atual: Sistema Empresarial com Arquitetura Services + Vendas
 
 **O projeto está em estado PRODUTIVO COMPLETO** com:
-- **3 áreas operacionais**: Administração (gestão) + Comercial (atendimento) + Operacional (turismo)
-- **WhatsApp Business completo**: Configuração (admin) + Atendimento (comercial) + **Mídias integradas** + **Janela 24h**
-- **Sistema de mídias robusto**: Imagens, vídeos, áudios e documentos com S3 e fallback
-- **Sistema de turismo empresarial**: 14 models interconectados para gestão completa
-- **Sistema de conversas avançado**: Webhook → Fila → Atribuição → Chat individual → **Verificação 24h** → **Templates automáticos**
-- **135 testes implementados**: Sistema de testes robusto com InMemoryStorage
-- **UX profissional** com botão scroll, modais inteligentes e layout otimizado
+- **🏗️ Arquitetura Services**: Lógica de negócio centralizada, queries otimizadas, properties inteligentes
+- **💼 Sistema de Vendas**: Vendas de turismo completas com múltiplos pagamentos e controle de status
+- **3 áreas operacionais**: Administração (gestão) + Comercial (vendas + atendimento) + Operacional (turismo)
+- **WhatsApp Business completo**: Configuração + Atendimento + Mídias integradas + Janela 24h
+- **Sistema de turismo empresarial**: 14+ models interconectados para gestão completa
+- **Sistema de conversas avançado**: Webhook → Fila → Atribuição → Chat → Templates automáticos
+- **135 testes implementados**: Sistema robusto com InMemoryStorage
+- **Views magras**: 15-20 linhas focadas em apresentação
 - **Segurança robusta** e **arquitetura escalável**
 
 ## 🔮 Próximas Expansões Sugeridas
@@ -471,9 +530,9 @@ if request.headers.get('HX-Request'):
 
 ---
 
-**Última atualização**: 09/12/2025  
-**Status**: Sistema empresarial completo com WhatsApp Business integrado, correções no envio de PDFs e sistema de emojis  
-**Módulos**: 10+ modelos de dados, sistema completo de mídias, upload de documentos corrigido, interface de chat otimizada
+**Última atualização**: 02/09/2025  
+**Status**: Sistema empresarial com arquitetura Services + sistema de vendas de turismo integrado  
+**Módulos**: 15+ modelos de dados, arquitetura Services+Managers+Properties, sistema de vendas completo
 
 ## 🆕 Últimas Atualizações
 
