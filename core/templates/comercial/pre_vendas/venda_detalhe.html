@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            {% url 'comercial:pre_vendas_lista' as pre_vendas_url %}
+            {% include 'includes/breadcrumbs.html' with prev_page="Pré-vendas" prev_url=pre_vendas_url cur_page=venda.codigo %}
+        </div>
+    </div>
+    
+    <!-- Cabeçalho da Venda -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h1 class="h2 mb-2">
+                                <i class="fas fa-file-invoice-dollar me-3"></i>
+                                Pré-venda {{ venda.codigo }}
+                            </h1>
+                            <p class="mb-0 opacity-75">
+                                <i class="fas fa-user me-2"></i>
+                                Cliente: {{ venda.cliente.nome }}
+                            </p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="text-center">
+                                <span class="badge bg-{{ venda.css_status_class }} fs-6 px-3 py-2">
+                                    {{ venda.status_display_pt }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Informações da Venda -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Informações da Venda
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Vendedor</small>
+                        <strong>{{ venda.vendedor.get_full_name|default:venda.vendedor.username }}</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Data da Venda</small>
+                        <strong>{{ venda.data_venda|date:"d/m/Y H:i" }}</strong>
+                    </div>
+                    
+                    {% if venda.bloqueio %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Bloqueio</small>
+                        <strong>{{ venda.bloqueio.descricao }}</strong>
+                        <div class="small text-muted">
+                            Saída: {{ venda.bloqueio.saida|date:"d/m/Y" }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Número de Passageiros</small>
+                        <strong>{{ venda.numero_passageiros }}</strong>
+                    </div>
+                    
+                    {% if venda.observacoes %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Observações</small>
+                        <div class="small">{{ venda.observacoes }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Valores e Pagamentos -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-dollar-sign me-2"></i>
+                        Valores
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td>Passageiros:</td>
+                                    <td class="text-end">R$ {{ venda.valor_passageiros|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Extras:</td>
+                                    <td class="text-end">R$ {{ venda.valor_extras|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Seguro:</td>
+                                    <td class="text-end">R$ {{ venda.valor_seguro|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Taxas:</td>
+                                    <td class="text-end">R$ {{ venda.valor_taxas|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Desconto:</td>
+                                    <td class="text-end text-danger">- R$ {{ venda.valor_desconto|floatformat:2 }}</td>
+                                </tr>
+                                <tr class="fw-bold border-top">
+                                    <td>Total:</td>
+                                    <td class="text-end text-primary">{{ venda.valor_formatado }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {% if venda.valor_pago > 0 %}
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Valor Pago:</span>
+                        <strong class="text-success">R$ {{ venda.valor_pago|floatformat:2 }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Valor Pendente:</span>
+                        <strong class="text-warning">{{ venda.valor_pendente_formatado }}</strong>
+                    </div>
+                    
+                    <div class="progress mt-3" style="height: 25px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ venda.percentual_pago }}%"
+                             aria-valuenow="{{ venda.percentual_pago }}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ venda.percentual_pago|floatformat:0 }}%
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Ações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {% if venda.pode_editar %}
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>
+                            Editar Venda
+                        </button>
+                        
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-users me-2"></i>
+                            Gerenciar Passageiros
+                        </button>
+                        
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Adicionar Extras
+                        </button>
+                        {% endif %}
+                        
+                        {% if venda.pode_adicionar_pagamento %}
+                        <button class="btn btn-success">
+                            <i class="fas fa-credit-card me-2"></i>
+                            Registrar Pagamento
+                        </button>
+                        {% endif %}
+                        
+                        {% if venda.pode_gerar_contrato %}
+                        <button class="btn btn-info">
+                            <i class="fas fa-file-contract me-2"></i>
+                            Gerar Contrato
+                        </button>
+                        {% endif %}
+                        
+                        {% if venda.pode_confirmar %}
+                        <button class="btn btn-warning">
+                            <i class="fas fa-check-double me-2"></i>
+                            Confirmar Venda
+                        </button>
+                        {% endif %}
+                        
+                        {% if venda.pode_cancelar %}
+                        <button class="btn btn-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            Cancelar Venda
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passageiros -->
+    {% if venda.passageiros.exists %}
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        Passageiros ({{ venda.numero_passageiros }})
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for passageiro in venda.passageiros.all %}
+                                <tr>
+                                    <td>{{ passageiro.pessoa.nome }}</td>
+                                    <td>{{ passageiro.pessoa.cpf|default:passageiro.pessoa.passaporte|default:"-" }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {{ passageiro.get_tipo_display|default:"Normal" }}
+                                        </span>
+                                    </td>
+                                    <td>R$ {{ passageiro.valor_venda|floatformat:2 }}</td>
+                                    <td>
+                                        {% if venda.pode_alterar_passageiros %}
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Pagamentos -->
+    {% if venda.pagamentos.exists %}
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-credit-card me-2"></i>
+                        Histórico de Pagamentos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Forma</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th>Referência</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pagamento in venda.historico_pagamentos %}
+                                <tr>
+                                    <td>{{ pagamento.data_pagamento|date:"d/m/Y H:i" }}</td>
+                                    <td>{{ pagamento.get_forma_pagamento_display }}</td>
+                                    <td>R$ {{ pagamento.valor|floatformat:2 }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ pagamento.status|yesno:'success,warning,secondary' }}">
+                                            {{ pagamento.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ pagamento.referencia|default:"-" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Ações de Navegação -->
+    <div class="row mt-4">
+        <div class="col">
+            <a href="{% url 'comercial:pre_vendas_lista' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Voltar às Pré-vendas
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
