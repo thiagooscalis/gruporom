@@ -426,9 +426,40 @@ function iniciarVenda() {
         return;
     }
     
-    // Redirecionar para página de nova venda com parâmetros
-    const url = `/comercial/nova-venda/caravanas/{{ caravana.id }}/?bloqueio=${bloqueioSelecionado.id}&quantidade=${quantidade}`;
-    window.location.href = url;
+    // Criar um formulário para fazer POST
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% url "comercial:iniciar_venda_caravana" caravana.id %}';
+    
+    // Adicionar CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (csrfToken) {
+        form.appendChild(csrfToken.cloneNode());
+    } else {
+        // Se não encontrar o token no DOM, adicionar manualmente
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = '{{ csrf_token }}';
+        form.appendChild(csrfInput);
+    }
+    
+    // Adicionar campos com os dados selecionados
+    const bloqueioInput = document.createElement('input');
+    bloqueioInput.type = 'hidden';
+    bloqueioInput.name = 'bloqueio_id';
+    bloqueioInput.value = bloqueioSelecionado.id;
+    form.appendChild(bloqueioInput);
+    
+    const quantidadeInput = document.createElement('input');
+    quantidadeInput.type = 'hidden';
+    quantidadeInput.name = 'quantidade';
+    quantidadeInput.value = quantidade;
+    form.appendChild(quantidadeInput);
+    
+    // Adicionar formulário ao DOM e submeter
+    document.body.appendChild(form);
+    form.submit();
 }
 
 // Adicionar evento ao botão
