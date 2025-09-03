@@ -8,6 +8,7 @@ mantendo as views focadas apenas em apresentação.
 
 from decimal import Decimal
 from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 from django.contrib import messages
 from typing import Dict, List, Optional
@@ -61,7 +62,7 @@ class VendaService:
             bloqueio=bloqueio,
             cliente_id=dados_venda['cliente_id'],
             vendedor=dados_venda['vendedor'],
-            status='rascunho',
+            status='pre-venda',
             data_venda=timezone.now(),
             numero_passageiros=quantidade,
             valor_passageiros=valores['valor_passageiros'],
@@ -237,12 +238,16 @@ class VendaService:
         
         # Filtrar por vendedor se não for admin
         if not usuario.is_superuser:
-            queryset = queryset.do_vendedor(usuario)
+            queryset = queryset.filter(vendedor=usuario)
         
         # Aplicar filtros
         if filtros:
             if 'status' in filtros and filtros['status']:
-                queryset = queryset.por_status(filtros['status'])
+                status = filtros['status']
+                if isinstance(status, list):
+                    queryset = queryset.filter(status__in=status)
+                else:
+                    queryset = queryset.filter(status=status)
             
             if 'data_inicio' in filtros and filtros['data_inicio']:
                 queryset = queryset.filter(data_venda__date__gte=filtros['data_inicio'])
@@ -251,7 +256,14 @@ class VendaService:
                 queryset = queryset.filter(data_venda__date__lte=filtros['data_fim'])
                 
             if 'busca' in filtros and filtros['busca']:
-                queryset = queryset.buscar(filtros['busca'])
+                termo = filtros['busca']
+                queryset = queryset.filter(
+                    Q(codigo__icontains=termo) |
+                    Q(cliente__nome__icontains=termo) |
+                    Q(cliente__cpf__icontains=termo) |
+                    Q(cliente__cnpj__icontains=termo) |
+                    Q(observacoes__icontains=termo)
+                )
         
         return queryset.order_by('-data_venda')
     
@@ -268,19 +280,33 @@ class VendaService:
         # Base query
         vendas_base = VendaBloqueio.objects.all()
         if not usuario.is_superuser:
-            vendas_base = vendas_base.do_vendedor(usuario)
+            vendas_base = vendas_base.filter(vendedor=usuario)
         
-        # Estatísticas gerais
-        resumo_geral = vendas_base.dashboard_resumo()
+        # Estatísticas gerais - usando aggregate diretamente
+        from django.db.models import Count, Sum
+        resumo_geral = vendas_base.aggregate(
+            total_vendas=Count('id'),
+            total_valor=Sum('valor_total'),
+            vendas_pre_venda=Count('id', filter=Q(status='pre-venda')),
+            vendas_confirmadas=Count('id', filter=Q(status='confirmada')),
+        )
         
         # Vendas do mês atual
-        vendas_mes = vendas_base.do_mes_atual().com_totais_calculados()[:10]
+        hoje = timezone.now()
+        vendas_mes = vendas_base.filter(
+            data_venda__year=hoje.year,
+            data_venda__month=hoje.month
+        )[:10]
         
         # Vendas com pagamento pendente
-        pendentes = vendas_base.com_pagamento_pendente()[:5]
+        pendentes = vendas_base.filter(valor_pendente__gt=0)[:5]
         
         # Viagens próximas
-        viagens_proximas = vendas_base.vencendo_em_breve()[:5]
+        data_limite = hoje.date() + timezone.timedelta(days=7)
+        viagens_proximas = vendas_base.filter(
+            bloqueio__saida__range=[hoje.date(), data_limite],
+            status__in=['confirmada', 'concluida']
+        )[:5]
         
         return {
             'resumo_geral': resumo_geral,
@@ -315,7 +341,7 @@ class VendaService:
         vendidos = Passageiro.objects.filter(
             bloqueio=bloqueio,
             venda__isnull=False,
-            venda__status__in=['confirmada', 'pago', 'parcialmente_pago', 'aguardando_pagamento']
+            venda__status__in=['confirmada', 'concluida']
         ).count()
         
         disponiveis = bloqueio.caravana.quantidade - vendidos

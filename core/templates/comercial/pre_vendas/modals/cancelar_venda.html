@@ -1,0 +1,86 @@
+<!-- Modal para Cancelar Venda -->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form hx-post="{% url 'comercial:cancelar_venda' venda.id %}"
+              hx-target="body"
+              hx-swap="beforeend"
+              hx-on::after-request="if(event.detail.successful) { setTimeout(() => location.reload(), 1500); }">
+            {% csrf_token %}
+            
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-times-circle me-2"></i>
+                    Cancelar Venda
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita. A venda será cancelada permanentemente.
+                </div>
+                
+                <div class="card bg-light mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Informações da Venda</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Código</small>
+                                <strong>{{ venda.codigo }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Cliente</small>
+                                <strong>{{ venda.cliente.nome }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Valor Total</small>
+                                <strong>{{ venda.valor_formatado }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Status Atual</small>
+                                <strong>{{ venda.status_display_pt }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if venda.valor_pago > 0 %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Importante:</strong> Esta venda possui pagamentos registrados no valor de 
+                    <strong>R$ {{ venda.valor_pago|floatformat:2 }}</strong>. 
+                    Será necessário processar o estorno/devolução manualmente.
+                </div>
+                {% endif %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Motivo do Cancelamento <span class="text-danger">*</span></label>
+                    <textarea name="motivo" 
+                              class="form-control" 
+                              rows="3" 
+                              required 
+                              placeholder="Descreva o motivo do cancelamento..."></textarea>
+                    <small class="text-muted">Este motivo ficará registrado no histórico da venda.</small>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cancelarCheck" required>
+                    <label class="form-check-label" for="cancelarCheck">
+                        Confirmo que desejo cancelar esta venda e estou ciente de que esta ação não pode ser desfeita.
+                    </label>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Voltar
+                </button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-times-circle me-2"></i>
+                    Cancelar Venda
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

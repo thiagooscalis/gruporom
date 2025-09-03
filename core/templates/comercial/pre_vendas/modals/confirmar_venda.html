@@ -1,0 +1,86 @@
+<!-- Modal para Confirmar Venda -->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form hx-post="{% url 'comercial:confirmar_venda' venda.id %}"
+              hx-target="body"
+              hx-swap="beforeend"
+              hx-on::after-request="if(event.detail.successful) { setTimeout(() => location.reload(), 1500); }">
+            {% csrf_token %}
+            
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-double me-2"></i>
+                    Confirmar Venda
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Atenção!</strong> Ao confirmar a venda, ela não poderá mais ser editada.
+                </div>
+                
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title">Resumo da Venda</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Código</small>
+                                <strong>{{ venda.codigo }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Cliente</small>
+                                <strong>{{ venda.cliente.nome }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Bloqueio</small>
+                                <strong>{{ venda.bloqueio.descricao }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Passageiros</small>
+                                <strong>{{ venda.numero_passageiros }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Valor Total</small>
+                                <strong class="text-primary">{{ venda.valor_formatado }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Status Pagamento</small>
+                                {% if venda.valor_pendente == 0 %}
+                                    <strong class="text-success">Pago Totalmente</strong>
+                                {% else %}
+                                    <strong class="text-warning">Pendente: {{ venda.valor_pendente_formatado }}</strong>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if venda.valor_pendente > 0 %}
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Nota:</strong> Esta venda ainda possui pagamento pendente. Tem certeza que deseja confirmar?
+                </div>
+                {% endif %}
+                
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" id="confirmarCheck" required>
+                    <label class="form-check-label" for="confirmarCheck">
+                        Confirmo que revisei todas as informações e desejo confirmar esta venda.
+                    </label>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-check-double me-2"></i>
+                    Confirmar Venda
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

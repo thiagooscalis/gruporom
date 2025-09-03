@@ -169,7 +169,12 @@
                             Editar Venda
                         </button>
                         
-                        <button class="btn btn-outline-primary">
+                        <button class="btn btn-outline-primary"
+                                hx-get="{% url 'comercial:gerenciar_passageiros_modal' venda.id %}"
+                                hx-target="#modal-container"
+                                hx-swap="innerHTML"
+                                data-bs-toggle="modal"
+                                data-bs-target="#htmxModal">
                             <i class="fas fa-users me-2"></i>
                             Gerenciar Passageiros
                         </button>
@@ -181,7 +186,12 @@
                         {% endif %}
                         
                         {% if venda.pode_adicionar_pagamento %}
-                        <button class="btn btn-success">
+                        <button class="btn btn-success"
+                                hx-get="{% url 'comercial:registrar_pagamento_modal' venda.id %}"
+                                hx-target="#modal-container"
+                                hx-swap="innerHTML"
+                                data-bs-toggle="modal"
+                                data-bs-target="#htmxModal">
                             <i class="fas fa-credit-card me-2"></i>
                             Registrar Pagamento
                         </button>
@@ -195,14 +205,24 @@
                         {% endif %}
                         
                         {% if venda.pode_confirmar %}
-                        <button class="btn btn-warning">
+                        <button class="btn btn-warning"
+                                hx-get="{% url 'comercial:confirmar_venda_modal' venda.id %}"
+                                hx-target="#modal-container"
+                                hx-swap="innerHTML"
+                                data-bs-toggle="modal"
+                                data-bs-target="#htmxModal">
                             <i class="fas fa-check-double me-2"></i>
                             Confirmar Venda
                         </button>
                         {% endif %}
                         
                         {% if venda.pode_cancelar %}
-                        <button class="btn btn-danger">
+                        <button class="btn btn-danger"
+                                hx-get="{% url 'comercial:cancelar_venda_modal' venda.id %}"
+                                hx-target="#modal-container"
+                                hx-swap="innerHTML"
+                                data-bs-toggle="modal"
+                                data-bs-target="#htmxModal">
                             <i class="fas fa-times-circle me-2"></i>
                             Cancelar Venda
                         </button>
@@ -322,6 +342,13 @@
                 Voltar às Pré-vendas
             </a>
         </div>
+    </div>
+</div>
+
+<!-- Modal HTMX Container -->
+<div class="modal fade" id="htmxModal" tabindex="-1">
+    <div id="modal-container">
+        <!-- Conteúdo do modal será carregado aqui via HTMX -->
     </div>
 </div>
 {% endblock %}

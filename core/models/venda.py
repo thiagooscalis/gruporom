@@ -266,22 +266,22 @@ class VendaBloqueio(models.Model):
     @property
     def pode_editar(self):
         """Verifica se a venda pode ser editada"""
-        return self.status in ['rascunho', 'orcamento']
+        return self.status == 'pre-venda'
     
     @property
     def pode_adicionar_pagamento(self):
         """Verifica se pode adicionar pagamentos"""
-        return self.status not in ['cancelada', 'concluida'] and self.valor_pendente > 0
+        return self.status in ['pre-venda', 'confirmada'] and self.valor_pendente > 0
     
     @property
     def pode_cancelar(self):
         """Verifica se a venda pode ser cancelada"""
-        return self.status not in ['cancelada', 'concluida']
+        return self.status in ['pre-venda', 'confirmada']
     
     @property
     def pode_confirmar(self):
         """Verifica se a venda pode ser confirmada"""
-        return self.status in ['pago'] and self.valor_pendente <= 0
+        return self.status == 'pre-venda' and self.valor_pendente <= 0
     
     @property
     def percentual_pago(self):
@@ -298,16 +298,12 @@ class VendaBloqueio(models.Model):
     
     @property
     def status_display_pt(self):
-        """Status da venda em português mais amigável"""
+        """Status da venda em português"""
         status_map = {
-            'rascunho': 'Em elaboração',
-            'orcamento': 'Aguardando aprovação',
-            'aguardando_pagamento': 'Aguardando pagamento',
-            'parcialmente_pago': 'Pagamento parcial',
-            'pago': 'Pago integralmente',
-            'confirmada': 'Confirmado',
-            'cancelada': 'Cancelado',
-            'concluida': 'Viagem realizada'
+            'pre-venda': 'Pré-venda',
+            'confirmada': 'Confirmada',
+            'concluida': 'Concluída',
+            'cancelada': 'Cancelada'
         }
         return status_map.get(self.status, self.get_status_display())
     
@@ -374,21 +370,17 @@ class VendaBloqueio(models.Model):
     def css_status_class(self):
         """Classe CSS para o status (útil em templates)"""
         classes = {
-            'rascunho': 'secondary',
-            'orcamento': 'info', 
-            'aguardando_pagamento': 'warning',
-            'parcialmente_pago': 'warning',
-            'pago': 'success',
-            'confirmada': 'primary',
-            'cancelada': 'danger',
-            'concluida': 'dark'
+            'pre-venda': 'warning',
+            'confirmada': 'success',
+            'concluida': 'primary',
+            'cancelada': 'danger'
         }
         return classes.get(self.status, 'secondary')
     
     @property
     def pode_gerar_contrato(self):
         """Verifica se pode gerar contrato"""
-        return self.status in ['pago', 'confirmada'] and self.cliente
+        return self.status in ['confirmada', 'concluida'] and self.cliente
     
     @property
     def alerta_viagem_proxima(self):

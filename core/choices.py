@@ -45,14 +45,10 @@ CATEGORIA_TAREFA_CHOICES = [
 ]
 
 STATUS_VENDA_CHOICES = [
-    ('rascunho', 'Rascunho'),
-    ('orcamento', 'Orçamento'),
-    ('aguardando_pagamento', 'Aguardando Pagamento'),
-    ('parcialmente_pago', 'Parcialmente Pago'),
-    ('pago', 'Pago'),
+    ('pre-venda', 'Pré-venda'),
     ('confirmada', 'Confirmada'),
-    ('cancelada', 'Cancelada'),
     ('concluida', 'Concluída'),
+    ('cancelada', 'Cancelada'),
 ]
 
 FORMA_PAGAMENTO_CHOICES = [

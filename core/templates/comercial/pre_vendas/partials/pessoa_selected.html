@@ -1,0 +1,13 @@
+<div class="alert alert-success py-2 mt-2" id="pessoa-search-results">
+    <i class="fas fa-check-circle me-2"></i>
+    Selecionado: <strong>{{ pessoa_nome }}</strong>
+    <button type="button" 
+            class="btn-close btn-sm float-end"
+            hx-post="{% url 'comercial:limpar_pessoa_passageiro' %}"
+            hx-target="#pessoa-search-results"
+            hx-swap="innerHTML"></button>
+</div>
+<script>
+    document.getElementById('pessoa-id-hidden').value = '{{ pessoa_id }}';
+    document.querySelector('[name="pessoa_search"]').value = '{{ pessoa_nome }}';
+</script>

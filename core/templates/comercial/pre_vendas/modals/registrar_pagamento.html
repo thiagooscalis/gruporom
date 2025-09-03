@@ -1,0 +1,130 @@
+<!-- Modal para Registrar Pagamento -->
+<div class="modal-dialog modal-md">
+    <div class="modal-content">
+        <form hx-post="{% url 'comercial:registrar_pagamento' venda.id %}"
+              hx-target="#pagamentos-feedback"
+              hx-swap="innerHTML"
+              hx-on::after-request="if(event.detail.successful) { this.reset(); setTimeout(() => location.reload(), 1500); }">
+            {% csrf_token %}
+            
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-credit-card me-2"></i>
+                    Registrar Pagamento
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Informações da Venda -->
+                <div class="alert alert-info mb-4">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <small class="text-muted d-block">Venda</small>
+                            <strong>{{ venda.codigo }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Cliente</small>
+                            <strong>{{ venda.cliente.nome }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Valor Total</small>
+                            <strong class="text-primary">{{ venda.valor_formatado }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Valor Pendente</small>
+                            <strong class="text-warning">{{ venda.valor_pendente_formatado }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Container -->
+                <div id="pagamentos-feedback"></div>
+                
+                <!-- Formulário de Pagamento -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Valor do Pagamento <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" 
+                                   name="valor" 
+                                   class="form-control" 
+                                   step="0.01" 
+                                   min="0.01"
+                                   max="{{ venda.valor_pendente }}"
+                                   placeholder="0,00"
+                                   required>
+                        </div>
+                        <small class="text-muted">Máximo: {{ venda.valor_pendente_formatado }}</small>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Forma de Pagamento <span class="text-danger">*</span></label>
+                        <select name="forma_pagamento" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
+                            <option value="cartao_credito">Cartão de Crédito</option>
+                            <option value="cartao_debito">Cartão de Débito</option>
+                            <option value="transferencia">Transferência Bancária</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="cheque">Cheque</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label">Referência/Comprovante</label>
+                        <input type="text" 
+                               name="referencia" 
+                               class="form-control" 
+                               placeholder="Número do comprovante, transação, etc.">
+                        <small class="text-muted">Ex: Código PIX, número do cheque, ID da transação</small>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label">Observações</label>
+                        <textarea name="observacoes" 
+                                  class="form-control" 
+                                  rows="2" 
+                                  placeholder="Observações adicionais sobre o pagamento"></textarea>
+                    </div>
+                </div>
+
+                <!-- Sugestões de Valores -->
+                {% if venda.valor_pendente > 0 %}
+                <div class="mt-3">
+                    <small class="text-muted d-block mb-2">Sugestões rápidas:</small>
+                    <div class="btn-group" role="group">
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="document.querySelector('[name=valor]').value = '{{ venda.valor_pendente|floatformat:2 }}'.replace(',', '.')">
+                            Total Pendente
+                        </button>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="document.querySelector('[name=valor]').value = '{{ venda.valor_pendente|floatformat:2|slice:":"|add:"2" }}'.replace(',', '.')">
+                            50%
+                        </button>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="document.querySelector('[name=valor]').value = Math.round({{ venda.valor_pendente }} * 0.3 * 100) / 100">
+                            30%
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check me-2"></i>
+                    Registrar Pagamento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
