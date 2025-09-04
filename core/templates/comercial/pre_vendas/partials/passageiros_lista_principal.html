@@ -1,0 +1,75 @@
+{% if venda.passageiros.exists %}
+<div class="row mt-4">
+    <div class="col">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Passageiros ({{ venda.numero_passageiros }})
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Documento</th>
+                                <th width="150">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for passageiro in venda.passageiros.all %}
+                            <tr>
+                                <td>
+                                    {{ passageiro.pessoa.nome }}
+                                    {% if passageiro.pessoa.passaporte_copia %}
+                                    <i class="fas fa-passport text-success ms-2" title="Passaporte anexado" data-bs-toggle="tooltip"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ passageiro.pessoa.doc|default:passageiro.pessoa.passaporte_numero|default:"-" }}</td>
+                                <td>
+                                    {% if venda.pode_alterar_passageiros %}
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-info" 
+                                                title="Carregar Passaporte"
+                                                data-bs-toggle="tooltip"
+                                                hx-get="{% url 'comercial:upload_passaporte_modal' passageiro.pessoa.id %}"
+                                                hx-target="#modal-container"
+                                                hx-swap="innerHTML">
+                                            <i class="fas fa-passport"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                                title="Remover Passageiro"
+                                                data-bs-toggle="tooltip"
+                                                hx-delete="{% url 'comercial:remover_passageiro' venda.id passageiro.id %}"
+                                                hx-target="#passageiros-lista-principal"
+                                                hx-swap="innerHTML"
+                                                hx-confirm="Tem certeza que deseja remover este passageiro?">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                    {% if passageiro.pessoa.passaporte_copia %}
+                                    <a href="{{ passageiro.pessoa.passaporte_copia.url }}" 
+                                       target="_blank" 
+                                       class="btn btn-sm btn-outline-info"
+                                       title="Ver Passaporte"
+                                       data-bs-toggle="tooltip">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,103 @@
+<!-- Modal para Upload de Passaporte -->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+            <h5 class="modal-title">
+                <i class="fas fa-passport me-2"></i>
+                Carregar Passaporte - {{ pessoa.nome }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <form hx-post="{% url 'comercial:upload_passaporte' pessoa.id %}"
+              hx-target="#upload-feedback"
+              hx-swap="innerHTML"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="modal-body">
+                <!-- Informações atuais do passaporte -->
+                {% if pessoa.passaporte_numero or pessoa.passaporte_nome or pessoa.passaporte_validade %}
+                <div class="alert alert-info mb-4">
+                    <h6 class="mb-2"><i class="fas fa-info-circle me-1"></i>Dados atuais do passaporte:</h6>
+                    {% if pessoa.passaporte_numero %}
+                    <div><strong>Número:</strong> {{ pessoa.passaporte_numero }}</div>
+                    {% endif %}
+                    {% if pessoa.passaporte_nome %}
+                    <div><strong>Nome:</strong> {{ pessoa.passaporte_nome }}</div>
+                    {% endif %}
+                    {% if pessoa.passaporte_validade %}
+                    <div><strong>Validade:</strong> {{ pessoa.passaporte_validade|date:"d/m/Y" }}</div>
+                    {% endif %}
+                    {% if pessoa.passaporte_copia %}
+                    <div class="mt-2">
+                        <a href="{{ pessoa.passaporte_copia.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye me-1"></i>Ver arquivo atual
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Formulário de upload -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Número do Passaporte</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="passaporte_numero"
+                               value="{{ pessoa.passaporte_numero|default:'' }}"
+                               placeholder="Digite o número">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Data de Validade</label>
+                        <input type="date" 
+                               class="form-control" 
+                               name="passaporte_validade"
+                               value="{{ pessoa.passaporte_validade|date:'Y-m-d'|default:'' }}">
+                    </div>
+                </div>
+                
+                <div class="row g-3 mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label">Nome no Passaporte</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="passaporte_nome"
+                               value="{{ pessoa.passaporte_nome|default:'' }}"
+                               placeholder="Nome exatamente como aparece no passaporte">
+                    </div>
+                </div>
+                
+                <div class="row g-3 mt-3">
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <i class="fas fa-upload me-1"></i>
+                            {% if pessoa.passaporte_copia %}Substituir arquivo{% else %}Carregar arquivo{% endif %}
+                        </label>
+                        <input type="file" 
+                               class="form-control" 
+                               name="passaporte_copia"
+                               accept="image/*,.pdf">
+                        <div class="form-text">
+                            Formatos aceitos: JPG, PNG, PDF (máximo 10MB)
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="upload-feedback" class="mt-3"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="submit" class="btn btn-info">
+                    <i class="fas fa-upload me-2"></i>
+                    {% if pessoa.passaporte_copia %}Atualizar{% else %}Carregar{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -49,8 +49,7 @@
                  style="cursor: pointer;"
                  hx-get="{% url 'comercial:selecionar_cliente_modal' venda.id %}"
                  hx-target="#modal-container"
-                 hx-swap="innerHTML"
-                 hx-on::after-request="bootstrap.Modal.getOrCreateInstance(document.getElementById('htmxModal')).show()">
+                 hx-swap="innerHTML">
                 <div class="card-body text-center py-4">
                     <div class="position-absolute top-0 end-0 m-2">
                         <span class="badge bg-danger">Obrigatório</span>
@@ -87,9 +86,7 @@
                  style="cursor: pointer;"
                  hx-get="{% url 'comercial:gerenciar_passageiros_modal' venda.id %}"
                  hx-target="#modal-container"
-                 hx-swap="innerHTML"
-                 data-bs-toggle="modal"
-                 data-bs-target="#htmxModal">
+                 hx-swap="innerHTML">
                 <div class="card-body text-center py-4">
                     <div class="position-absolute top-0 end-0 m-2">
                         <span class="badge bg-danger">Obrigatório</span>
@@ -104,16 +101,13 @@
                     <h5 class="card-title mb-1">
                         <i class="fas fa-users me-2"></i>Passageiros
                     </h5>
-                    <p class="mb-2">
+                    <p class="mb-0">
                         {% if venda.tem_passageiros %}
-                        <strong class="text-success">{{ venda.numero_passageiros }} cadastrado(s)</strong>
+                        <strong class="text-success">{{ venda.passageiros.count }} / {{ venda.numero_passageiros }}</strong>
                         {% else %}
                         <span class="text-danger fw-bold">Adicionar passageiros</span>
                         {% endif %}
                     </p>
-                    {% if venda.tem_passageiros %}
-                    <small class="text-muted">Valor: R$ {{ venda.valor_passageiros|floatformat:2 }}</small>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -125,8 +119,7 @@
                  hx-get="{% url 'comercial:gerenciar_pagamentos_modal' venda.id %}"
                  hx-target="#modal-container"
                  hx-swap="innerHTML"
-                 data-bs-toggle="modal"
-                 data-bs-target="#htmxModal">
+                 >
                 <div class="card-body text-center py-4">
                     <div class="position-absolute top-0 end-0 m-2">
                         <span class="badge bg-danger">Obrigatório</span>
@@ -168,8 +161,7 @@
                  hx-get="{% url 'comercial:gerenciar_extras_modal' venda.id %}"
                  hx-target="#modal-container"
                  hx-swap="innerHTML"
-                 data-bs-toggle="modal"
-                 data-bs-target="#htmxModal">
+                 >
                 <div class="card-body text-center py-4">
                     <div class="position-absolute top-0 end-0 m-2">
                         <span class="badge bg-info">Opcional</span>
@@ -255,6 +247,11 @@
                         </div>
                     </div>
                     {% endif %}
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Quantidade de Passageiros</small>
+                        <strong>{{ venda.numero_passageiros }}</strong>
+                    </div>
                     
                     <div class="mb-3">
                         <small class="text-muted d-block">Status da Venda</small>
@@ -403,59 +400,9 @@
     </div>
 
     <!-- Passageiros -->
-    {% if venda.passageiros.exists %}
-    <div class="row mt-4">
-        <div class="col">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-users me-2"></i>
-                        Passageiros ({{ venda.numero_passageiros }})
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Documento</th>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for passageiro in venda.passageiros.all %}
-                                <tr>
-                                    <td>{{ passageiro.pessoa.nome }}</td>
-                                    <td>{{ passageiro.pessoa.cpf|default:passageiro.pessoa.passaporte|default:"-" }}</td>
-                                    <td>
-                                        <span class="badge bg-secondary">
-                                            {{ passageiro.get_tipo_display|default:"Normal" }}
-                                        </span>
-                                    </td>
-                                    <td>R$ {{ passageiro.valor_venda|floatformat:2 }}</td>
-                                    <td>
-                                        {% if venda.pode_alterar_passageiros %}
-                                        <button class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="passageiros-lista-principal">
+        {% include 'comercial/pre_vendas/partials/passageiros_lista_principal.html' %}
     </div>
-    {% endif %}
 
     <!-- Pagamentos -->
     {% if venda.pagamentos.exists %}
@@ -515,9 +462,10 @@
 </div>
 
 <!-- Modal HTMX Container -->
-<div class="modal fade" id="htmxModal" tabindex="-1">
+<div class="modal fade" id="htmxModal" tabindex="-1" aria-labelledby="htmxModalLabel" aria-hidden="true">
     <div id="modal-container">
         <!-- Conteúdo do modal será carregado aqui via HTMX -->
+        <!-- A estrutura modal-dialog será inserida aqui -->
     </div>
 </div>
 
@@ -528,6 +476,25 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    });
+    
+    // Garantir que o modal seja mostrado após carregamento HTMX
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        // Se o target foi o modal-container
+        if (event.detail.target.id === 'modal-container') {
+            // Aguardar um momento para o DOM se estabilizar
+            setTimeout(function() {
+                // Obter ou criar instância do modal
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('htmxModal'));
+                // Mostrar o modal
+                modal.show();
+            }, 100);
+        }
+    });
+    
+    // Limpar o conteúdo do modal quando fechado
+    document.getElementById('htmxModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('modal-container').innerHTML = '';
     });
 </script>
 {% endblock %}

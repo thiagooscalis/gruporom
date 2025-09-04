@@ -104,7 +104,7 @@ def iniciar_venda_caravana(request, caravana_id):
             cliente=None,  # Cliente deve ser definido após criação da pré-venda
             vendedor=request.user,
             status='pre-venda',
-            numero_passageiros=0,  # Passageiros também devem ser adicionados após criação
+            numero_passageiros=int(quantidade) if quantidade else 1,  # Usar a quantidade informada
             observacoes=f'Venda iniciada a partir da caravana: {caravana.nome}'
         )
         
@@ -221,30 +221,80 @@ def limpar_pessoa_passageiro(request):
 @require_POST
 def adicionar_passageiro(request, venda_id):
     """
-    View para adicionar passageiro à venda
+    View para adicionar passageiro à venda usando o PessoaForm
     """
     venda = get_object_or_404(VendaBloqueio, pk=venda_id)
-    pessoa_id = request.POST.get('pessoa_id')
-    tipo = request.POST.get('tipo', '')
     
-    if not pessoa_id:
-        messages.error(request, 'Selecione uma pessoa para adicionar como passageiro.')
-    else:
-        try:
+    try:
+        # Verificar se ainda pode adicionar passageiros
+        if venda.passageiros.count() >= venda.numero_passageiros:
+            messages.error(request, f'Limite de passageiros atingido. Máximo permitido: {venda.numero_passageiros}')
+            return render(request, 'comercial/pre_vendas/partials/passageiros_lista_principal.html', {'venda': venda})
+        
+        documento = request.POST.get('doc', '').strip()
+        tipo = request.POST.get('tipo', '')
+        
+        if not documento:
+            messages.error(request, 'Documento é obrigatório.')
+            return render(request, 'comercial/pre_vendas/partials/passageiros_lista_principal.html', {'venda': venda})
+        
+        # Limpar documento
+        doc_limpo = ''.join(filter(str.isalnum, documento))
+        
+        # Verificar se já existe
+        pessoa = Pessoa.objects.filter(
+            Q(doc=doc_limpo) | 
+            Q(passaporte_numero=doc_limpo)
+        ).first()
+        
+        if pessoa:
+            # Atualizar pessoa existente com dados do form
+            form = PessoaForm(request.POST, instance=pessoa)
+        else:
+            # Criar nova pessoa
+            form = PessoaForm(request.POST)
+            
+            # Definir tipo de documento baseado no formato
+            form_data = form.data.copy()
+            if len(doc_limpo) == 14:
+                form_data['doc'] = doc_limpo
+                form_data['tipo_doc'] = 'CNPJ'
+            elif len(doc_limpo) == 11 and doc_limpo.isdigit():
+                form_data['doc'] = doc_limpo
+                form_data['tipo_doc'] = 'CPF'
+            else:
+                # Se não for CPF nem CNPJ, considerar como passaporte
+                form_data['passaporte_numero'] = doc_limpo
+                form_data['doc'] = doc_limpo
+                form_data['tipo_doc'] = 'Passaporte'
+            form.data = form_data
+        
+        if form.is_valid():
+            pessoa = form.save()
+            
+            # Usar o service para adicionar passageiro
             service = VendaService()
             passageiro = service.adicionar_passageiro_venda(
                 venda_id=venda.id,
-                pessoa_id=pessoa_id
+                pessoa_id=pessoa.id
             )
             
-            # Se tipo especial foi selecionado, atualizar
+            # Definir tipo (sempre normal neste contexto)
             if tipo:
                 passageiro.tipo = tipo
                 passageiro.save()
             
-            messages.success(request, f'Passageiro {passageiro.pessoa.nome} adicionado com sucesso!')
-        except Exception as e:
-            messages.error(request, str(e))
+            messages.success(request, f'Passageiro {pessoa.nome} adicionado com sucesso!')
+        else:
+            # Retornar erros do formulário
+            errors = []
+            for field, errs in form.errors.items():
+                for err in errs:
+                    errors.append(f"{field}: {err}")
+            messages.error(request, f'Erro ao cadastrar passageiro: {"; ".join(errors)}')
+        
+    except Exception as e:
+        messages.error(request, f'Erro ao adicionar passageiro: {str(e)}')
     
     # Recarregar venda com dados atualizados
     venda.refresh_from_db()
@@ -263,7 +313,7 @@ def adicionar_passageiro(request, venda_id):
         'passageiros_disponiveis': passageiros_disponiveis,
     }
     
-    return render(request, 'comercial/pre_vendas/partials/lista_passageiros.html', context)
+    return render(request, 'comercial/pre_vendas/partials/passageiros_lista_principal.html', context)
 
 
 @login_required
@@ -306,7 +356,7 @@ def remover_passageiro(request, venda_id, passageiro_id):
         'passageiros_disponiveis': passageiros_disponiveis,
     }
     
-    return render(request, 'comercial/pre_vendas/partials/lista_passageiros.html', context)
+    return render(request, 'comercial/pre_vendas/partials/passageiros_lista_principal.html', context)
 
 @login_required
 @user_passes_test(lambda u: u.groups.filter(name="Comercial").exists())
@@ -878,7 +928,7 @@ def listar_passageiros(request, venda_id):
         'venda': venda,
     }
     
-    return render(request, 'comercial/pre_vendas/partials/lista_passageiros.html', context)
+    return render(request, 'comercial/pre_vendas/partials/passageiros_lista_principal.html', context)
 
 
 @login_required  
@@ -928,6 +978,117 @@ def buscar_por_documento(request):
         
     except Exception as e:
         return HttpResponse('')
+
+
+@login_required  
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def buscar_por_documento_passageiro(request):
+    """
+    View para buscar pessoa por documento via HTMX (para passageiros)
+    """
+    documento = request.POST.get('doc', '').strip()
+    
+    if not documento:
+        return HttpResponse('')
+    
+    # Limpar documento removendo formatação
+    doc_limpo = ''.join(filter(str.isalnum, documento))
+    
+    try:
+        # Buscar pessoa por documento ou passaporte
+        pessoa = Pessoa.objects.filter(
+            Q(doc=doc_limpo) | 
+            Q(passaporte_numero=doc_limpo)
+        ).first()
+        
+        # Obter lista de países para o formulário
+        paises = Pais.objects.all().order_by('nome')
+        
+        if pessoa:
+            # Se encontrou, criar form com instance
+            form = PessoaForm(instance=pessoa)
+            context = {
+                'form': form,
+                'pessoa': pessoa,
+                'pessoa_encontrada': True,
+                'paises': paises,
+                'is_passageiro': True  # Flag para identificar que é para passageiro
+            }
+        else:
+            # Se não encontrou, criar form vazio
+            form = PessoaForm()
+            context = {
+                'form': form,
+                'pessoa_encontrada': False,
+                'paises': paises,
+                'is_passageiro': True  # Flag para identificar que é para passageiro
+            }
+            
+        return render(request, 'comercial/pre_vendas/partials/dados_pessoa_passageiro.html', context)
+        
+    except Exception as e:
+        return HttpResponse('')
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def upload_passaporte_modal(request, pessoa_id):
+    """
+    View para exibir modal de upload de passaporte
+    """
+    pessoa = get_object_or_404(Pessoa, pk=pessoa_id)
+    
+    context = {
+        'pessoa': pessoa,
+    }
+    
+    return render(request, 'comercial/pre_vendas/modals/upload_passaporte.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def upload_passaporte(request, pessoa_id):
+    """
+    View para fazer upload do passaporte
+    """
+    pessoa = get_object_or_404(Pessoa, pk=pessoa_id)
+    
+    try:
+        if 'passaporte_copia' in request.FILES:
+            pessoa.passaporte_copia = request.FILES['passaporte_copia']
+        
+        # Atualizar outros campos de passaporte se fornecidos
+        passaporte_numero = request.POST.get('passaporte_numero', '').strip()
+        passaporte_nome = request.POST.get('passaporte_nome', '').strip()
+        passaporte_validade = request.POST.get('passaporte_validade', '').strip()
+        
+        if passaporte_numero:
+            pessoa.passaporte_numero = passaporte_numero
+        if passaporte_nome:
+            pessoa.passaporte_nome = passaporte_nome
+        if passaporte_validade:
+            from datetime import datetime
+            try:
+                pessoa.passaporte_validade = datetime.strptime(passaporte_validade, '%Y-%m-%d').date()
+            except ValueError:
+                pass
+        
+        pessoa.save()
+        
+        return HttpResponse(
+            '<div class="alert alert-success">Passaporte carregado com sucesso!</div>'
+            '<script>setTimeout(() => { '
+            'document.getElementById("htmxModal").querySelector(".btn-close").click(); '
+            'location.reload(); '
+            '}, 1000);</script>'
+        )
+        
+    except Exception as e:
+        return HttpResponse(
+            f'<div class="alert alert-danger">Erro ao carregar passaporte: {str(e)}</div>'
+        )
 
 
 @login_required
@@ -1003,5 +1164,46 @@ def cadastrar_comprador(request, venda_id):
     except Exception as e:
         return HttpResponse(
             f'<div class="alert alert-danger">Erro ao cadastrar comprador: {str(e)}</div>'
+        )
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_http_methods(["DELETE"])
+def remover_venda(request, venda_id):
+    """
+    View para remover venda (apenas pré-vendas podem ser removidas)
+    """
+    from django.http import HttpResponse
+    
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    # Verificar se pode remover (apenas pré-vendas)
+    if venda.status != 'pre-venda':
+        return HttpResponse(
+            '<div class="alert alert-danger">Apenas pré-vendas podem ser removidas.</div>',
+            status=403
+        )
+    
+    try:
+        # Remover passageiros da venda (desvincula, não deleta)
+        venda.passageiros.update(venda=None)
+        
+        # Deletar pagamentos
+        venda.pagamentos.all().delete()
+        
+        # Deletar extras
+        venda.extravenda_set.all().delete()
+        
+        # Deletar a venda
+        venda.delete()
+        
+        # Retornar resposta vazia para o HTMX remover a linha
+        return HttpResponse('')
+        
+    except Exception as e:
+        return HttpResponse(
+            f'<div class="alert alert-danger">Erro ao remover venda: {str(e)}</div>',
+            status=500
         )
 

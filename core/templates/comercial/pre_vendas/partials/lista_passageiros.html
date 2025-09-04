@@ -18,21 +18,32 @@
                 {% for passageiro in venda.passageiros.all %}
                 <tr>
                     <td>{{ passageiro.pessoa.nome }}</td>
-                    <td>{{ passageiro.pessoa.cpf|default:passageiro.pessoa.passaporte|default:"-" }}</td>
+                    <td>{{ passageiro.pessoa.doc|default:passageiro.pessoa.passaporte_numero|default:"-" }}</td>
                     <td>
                         <span class="badge bg-{{ passageiro.tipo|default:'secondary' }}">
                             {{ passageiro.get_tipo_display|default:"Normal" }}
                         </span>
                     </td>
                     <td>
-                        <button type="button" 
-                                class="btn btn-sm btn-outline-danger"
-                                hx-delete="{% url 'comercial:remover_passageiro' venda.id passageiro.id %}"
-                                hx-target="#passageiros-container"
-                                hx-swap="innerHTML"
-                                hx-confirm="Tem certeza que deseja remover este passageiro?">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="btn-group" role="group">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-info" 
+                                    title="Carregar Passaporte"
+                                    data-bs-toggle="tooltip"
+                                    hx-get="{% url 'comercial:upload_passaporte_modal' passageiro.pessoa.id %}"
+                                    hx-target="#modal-container"
+                                    hx-swap="innerHTML">
+                                <i class="fas fa-passport"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    hx-delete="{% url 'comercial:remover_passageiro' venda.id passageiro.id %}"
+                                    hx-target="#passageiros-container"
+                                    hx-swap="innerHTML"
+                                    hx-confirm="Tem certeza que deseja remover este passageiro?">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}

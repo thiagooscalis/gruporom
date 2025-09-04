@@ -15,6 +15,7 @@ from core.views.comercial.pre_vendas import (
     confirmar_venda,
     cancelar_venda_modal,
     cancelar_venda,
+    remover_venda,
     # Novas views para extras e pagamentos
     gerenciar_extras_modal,
     adicionar_extra,
@@ -30,7 +31,10 @@ from core.views.comercial.pre_vendas import (
     definir_cliente,
     buscar_clientes_autocomplete,
     buscar_por_documento,
+    buscar_por_documento_passageiro,
     cadastrar_comprador,
+    upload_passaporte_modal,
+    upload_passaporte,
 )
 
 urlpatterns = [
@@ -66,11 +70,17 @@ urlpatterns = [
     path('<int:venda_id>/confirmar/', confirmar_venda, name='confirmar_venda'),
     path('<int:venda_id>/cancelar/modal/', cancelar_venda_modal, name='cancelar_venda_modal'),
     path('<int:venda_id>/cancelar/', cancelar_venda, name='cancelar_venda'),
+    path('<int:venda_id>/remover/', remover_venda, name='remover_venda'),
     
     # Gerenciamento de cliente
     path('<int:venda_id>/cliente/modal/', selecionar_cliente_modal, name='selecionar_cliente_modal'),
     path('<int:venda_id>/cliente/definir/', definir_cliente, name='definir_cliente'),
     path('buscar-clientes-autocomplete/', buscar_clientes_autocomplete, name='buscar_clientes_autocomplete'),
     path('buscar-por-documento/', buscar_por_documento, name='buscar_por_documento'),
+    path('buscar-por-documento-passageiro/', buscar_por_documento_passageiro, name='buscar_por_documento_passageiro'),
     path('<int:venda_id>/cadastrar-comprador/', cadastrar_comprador, name='cadastrar_comprador'),
+    
+    # Upload de passaporte
+    path('passaporte/<int:pessoa_id>/modal/', upload_passaporte_modal, name='upload_passaporte_modal'),
+    path('passaporte/<int:pessoa_id>/upload/', upload_passaporte, name='upload_passaporte'),
 ]

@@ -44,75 +44,23 @@
         </div>
     </td>
     <td>
-        <div class="btn-group btn-group-sm">
+        <div class="btn-group btn-group-sm" role="group">
             <a href="{% url 'comercial:pre_venda_detalhe' venda.id %}" 
                class="btn btn-outline-primary" 
-               title="Ver detalhes">
-                <i class="fas fa-eye"></i>
+               title="Ver detalhes"
+               data-bs-toggle="tooltip">
+                <i class="fas fa-plus"></i>
             </a>
-            {% if venda.pode_editar %}
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" 
-                        type="button" 
-                        data-bs-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" 
-                           hx-get="{% url 'comercial:gerenciar_passageiros_modal' venda.id %}"
-                           hx-target="#modal-container"
-                           hx-swap="innerHTML"
-                           data-bs-toggle="modal"
-                           data-bs-target="#htmxModal">
-                            <i class="fas fa-users me-2"></i>
-                            Gerenciar Passageiros
-                        </a>
-                    </li>
-                    {% if venda.pode_adicionar_pagamento %}
-                    <li>
-                        <a class="dropdown-item"
-                           hx-get="{% url 'comercial:registrar_pagamento_modal' venda.id %}"
-                           hx-target="#modal-container"
-                           hx-swap="innerHTML"
-                           data-bs-toggle="modal"
-                           data-bs-target="#htmxModal">
-                            <i class="fas fa-credit-card me-2"></i>
-                            Registrar Pagamento
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if venda.pode_confirmar %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item text-success"
-                           hx-get="{% url 'comercial:confirmar_venda_modal' venda.id %}"
-                           hx-target="#modal-container"
-                           hx-swap="innerHTML"
-                           data-bs-toggle="modal"
-                           data-bs-target="#htmxModal">
-                            <i class="fas fa-check-double me-2"></i>
-                            Confirmar Venda
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if venda.pode_cancelar %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item text-danger"
-                           hx-get="{% url 'comercial:cancelar_venda_modal' venda.id %}"
-                           hx-target="#modal-container"
-                           hx-swap="innerHTML"
-                           data-bs-toggle="modal"
-                           data-bs-target="#htmxModal">
-                            <i class="fas fa-times-circle me-2"></i>
-                            Cancelar Venda
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-            {% endif %}
+            <button type="button"
+                    class="btn btn-outline-danger"
+                    title="Remover venda"
+                    data-bs-toggle="tooltip"
+                    hx-delete="{% url 'comercial:remover_venda' venda.id %}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML swap:1s"
+                    hx-confirm="Tem certeza que deseja remover esta venda?">
+                <i class="fas fa-trash"></i>
+            </button>
         </div>
     </td>
 </tr>

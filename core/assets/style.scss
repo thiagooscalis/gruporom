@@ -1,12 +1,12 @@
-// Cores do projeto
-$primary: #d3a156; // Cor do texto do logo
-$secondary: #6c757d;
-$success: #198754;
-$info: #0dcaf0;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #f8f9fa;
-$dark: #212529;
+// Cores do projeto - Paleta mais neutra e profissional
+$primary: #4a5568; // Cinza azulado elegante (slate-600)
+$secondary: #718096; // Cinza médio (gray-500)
+$success: #48bb78; // Verde suave
+$info: #4299e1; // Azul suave
+$warning: #ed8936; // Laranja suave
+$danger: #f56565; // Vermelho suave
+$light: #f7fafc; // Cinza muito claro
+$dark: #2d3748; // Cinza escuro
 
 @import "bootstrap/scss/bootstrap";
 
@@ -256,10 +256,10 @@ main#main {
 
 // Customização do offcanvas para ficar igual ao aside
 .offcanvas#sidebar {
-    background-color: #333333;
+    background-color: #2d3748; // Usando a cor $dark
     
     .offcanvas-header {
-        border-bottom: 1px solid #6c757d;
+        border-bottom: 1px solid #718096; // Usando a cor $secondary
         
         .offcanvas-title {
             color: #ffffff;
@@ -274,11 +274,11 @@ main#main {
         color: #ffffff;
         
         .border-bottom, .border-secondary {
-            border-color: #6c757d !important;
+            border-color: #718096 !important; // Usando a cor $secondary
         }
         
         hr.border-secondary {
-            border-color: #6c757d !important;
+            border-color: #718096 !important; // Usando a cor $secondary
             opacity: 1;
         }
         
@@ -295,7 +295,7 @@ main#main {
             }
             
             &.active {
-                background-color: #d3a156;
+                background-color: #4a5568; // Usando a cor $primary
                 color: #ffffff;
             }
             

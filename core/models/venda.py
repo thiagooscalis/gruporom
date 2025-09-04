@@ -227,11 +227,15 @@ class VendaBloqueio(models.Model):
     
     def calcular_totais(self):
         """Recalcula todos os valores da venda"""
-        # Calcula valor dos passageiros
+        # Calcula valor dos passageiros (baseado no valor do bloqueio dividido pela quantidade)
         from .passageiro import Passageiro
-        self.valor_passageiros = sum(
-            p.valor_venda or Decimal('0') for p in self.passageiros.all()
-        ) if self.pk else Decimal('0')
+        if self.pk and self.bloqueio and self.bloqueio.caravana:
+            # Valor por passageiro = valor do bloqueio / quantidade de pessoas na caravana
+            quantidade_caravana = self.bloqueio.caravana.quantidade or 1
+            valor_por_passageiro = (self.bloqueio.valor or Decimal('0')) / quantidade_caravana
+            self.valor_passageiros = valor_por_passageiro * self.numero_passageiros
+        else:
+            self.valor_passageiros = Decimal('0')
         
         # Calcula valor dos extras
         self.valor_extras = sum(
@@ -253,9 +257,6 @@ class VendaBloqueio(models.Model):
         ) if self.pk else Decimal('0')
         
         self.valor_pendente = self.valor_total - self.valor_pago
-        
-        # Atualiza número de passageiros
-        self.numero_passageiros = self.passageiros.count() if self.pk else 0
         
         # Atualiza status baseado nos pagamentos
         if self.valor_pendente <= 0 and self.valor_total > 0:
@@ -370,7 +371,7 @@ class VendaBloqueio(models.Model):
     @property
     def pode_alterar_passageiros(self):
         """Verifica se pode alterar passageiros"""
-        return self.status in ['rascunho', 'orcamento'] and (
+        return self.status in ['pre-venda', 'confirmada'] and (
             not self.dias_ate_viagem or self.dias_ate_viagem > 7
         )
     

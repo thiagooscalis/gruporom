@@ -10,10 +10,10 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <strong>{{ pessoa.nome }}</strong>
-                {% if pessoa.cpf %}
-                    <small class="text-muted ms-2">CPF: {{ pessoa.cpf }}</small>
-                {% elif pessoa.passaporte %}
-                    <small class="text-muted ms-2">Passaporte: {{ pessoa.passaporte }}</small>
+                {% if pessoa.doc %}
+                    <small class="text-muted ms-2">{{ pessoa.tipo_doc }}: {{ pessoa.doc }}</small>
+                {% elif pessoa.passaporte_numero %}
+                    <small class="text-muted ms-2">Passaporte: {{ pessoa.passaporte_numero }}</small>
                 {% endif %}
             </div>
             {% if pessoa.email %}
