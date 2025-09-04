@@ -1,0 +1,199 @@
+<!-- Modal para Gerenciar Pagamentos -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+                <i class="fas fa-credit-card me-2"></i>
+                Gerenciar Pagamentos - {{ venda.codigo }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Resumo Financeiro -->
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <small class="text-muted">Valor Total</small>
+                            <h5 class="mb-0">{{ venda.valor_formatado }}</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted">Total Pago</small>
+                            <h5 class="mb-0 text-success">R$ {{ venda.valor_pago|floatformat:2 }}</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted">Pendente</small>
+                            <h5 class="mb-0 text-warning">{{ venda.valor_pendente_formatado }}</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress mt-3" style="height: 25px;">
+                                <div class="progress-bar bg-success" 
+                                     role="progressbar" 
+                                     style="width: {{ venda.percentual_pago }}%"
+                                     aria-valuenow="{{ venda.percentual_pago }}">
+                                    {{ venda.percentual_pago|floatformat:0 }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de Pagamentos -->
+            <div id="pagamentos-container">
+                {% include 'comercial/pre_vendas/partials/lista_pagamentos.html' %}
+            </div>
+            
+            {% if venda.pode_adicionar_pagamento %}
+            <hr>
+            
+            <!-- Formulário para Adicionar Pagamento -->
+            <h6 class="text-muted mb-3">Registrar Novo Pagamento</h6>
+            <form hx-post="{% url 'comercial:adicionar_pagamento' venda.id %}"
+                  hx-target="#pagamentos-container"
+                  hx-swap="innerHTML"
+                  hx-on::after-request="if(event.detail.successful) { this.reset(); htmx.trigger('#pagamentos-container', 'pagamento-adicionado'); }">
+                {% csrf_token %}
+                
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Forma de Pagamento</label>
+                        <select name="forma_pagamento" class="form-select" required
+                                hx-get="{% url 'comercial:buscar_campos_pagamento' %}"
+                                hx-trigger="change"
+                                hx-target="#campos-adicionais"
+                                hx-swap="innerHTML">
+                            <option value="">Selecione...</option>
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
+                            <option value="cartao_credito">Cartão de Crédito</option>
+                            <option value="cartao_debito">Cartão de Débito</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="boleto">Boleto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Valor</label>
+                        <input type="text" 
+                               name="valor" 
+                               class="form-control money-mask" 
+                               placeholder="R$ 0,00"
+                               value="R$ {{ venda.valor_pendente|floatformat:2 }}"
+                               required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Data do Pagamento</label>
+                        <input type="datetime-local" 
+                               name="data_pagamento" 
+                               class="form-control"
+                               value="{% now 'Y-m-d\TH:i' %}"
+                               required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="confirmado">Confirmado</option>
+                            <option value="pendente">Pendente</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Campos adicionais baseados na forma de pagamento -->
+                <div id="campos-adicionais" class="row g-3 mt-1"></div>
+                
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <label class="form-label">Referência/Comprovante</label>
+                        <input type="text" 
+                               name="referencia" 
+                               class="form-control" 
+                               placeholder="Número do comprovante, transação, etc.">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Observações</label>
+                        <input type="text" 
+                               name="observacoes" 
+                               class="form-control" 
+                               placeholder="Observações adicionais">
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>
+                        Registrar Pagamento
+                    </button>
+                    
+                    <button type="button" 
+                            class="btn btn-outline-primary"
+                            hx-get="{% url 'comercial:sugerir_parcelamento' venda.id %}"
+                            hx-target="#sugestao-parcelamento"
+                            hx-swap="innerHTML">
+                        <i class="fas fa-calculator me-2"></i>
+                        Sugerir Parcelamento
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Container para sugestão de parcelamento -->
+            <div id="sugestao-parcelamento" class="mt-3"></div>
+            {% endif %}
+        </div>
+        
+        <div class="modal-footer bg-light">
+            <div class="d-flex justify-content-between w-100 align-items-center">
+                <div>
+                    {% if venda.esta_quitada %}
+                    <span class="badge bg-success fs-6">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Venda Quitada
+                    </span>
+                    {% else %}
+                    <small class="text-muted">
+                        Faltam <strong class="text-warning">{{ venda.valor_pendente_formatado }}</strong> para quitar
+                    </small>
+                    {% endif %}
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Máscara de dinheiro
+    document.querySelectorAll('.money-mask').forEach(function(el) {
+        if (!el.hasAttribute('data-imask-initialized')) {
+            IMask(el, {
+                mask: 'R$ num',
+                blocks: {
+                    num: {
+                        mask: Number,
+                        thousandsSeparator: '.',
+                        radix: ',',
+                        scale: 2,
+                        padFractionalZeros: true,
+                    }
+                }
+            });
+            el.setAttribute('data-imask-initialized', 'true');
+        }
+    });
+    
+    // Atualizar resumo financeiro quando pagamento for adicionado
+    document.body.addEventListener('pagamento-adicionado', function() {
+        htmx.ajax('GET', '{% url "comercial:atualizar_resumo_financeiro" venda.id %}', {
+            target: '.card.bg-light',
+            swap: 'outerHTML'
+        });
+    });
+</script>

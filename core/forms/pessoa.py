@@ -8,6 +8,25 @@ from core.utils.validators import validate_documento_pessoa, limpar_documento
 
 class PessoaForm(forms.ModelForm):
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Definir Brasil como país padrão se não houver instância
+        if not self.instance.pk:
+            try:
+                brasil = Pais.objects.get(nome='Brasil')
+                self.fields['pais'].initial = brasil
+                # Definir DDI padrão como 55 para o Brasil
+                self.fields['ddi1'].initial = '55'
+            except Pais.DoesNotExist:
+                # Tentar buscar por ISO ou nome similar
+                try:
+                    brasil = Pais.objects.get(iso='BR')
+                    self.fields['pais'].initial = brasil
+                    self.fields['ddi1'].initial = '55'
+                except Pais.DoesNotExist:
+                    # Mesmo sem encontrar o Brasil, definir DDI 55 como padrão
+                    self.fields['ddi1'].initial = '55'
+    
     class Meta:
         model = Pessoa
         fields = [

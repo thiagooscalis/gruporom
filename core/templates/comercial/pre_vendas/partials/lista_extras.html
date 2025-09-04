@@ -1,0 +1,75 @@
+<!-- Lista de Extras Partial -->
+<div id="extras-container">
+    {% if venda.extras.exists %}
+    <div class="mb-4">
+        <h6 class="text-muted mb-3">
+            Extras Adicionados ({{ venda.extras.count }})
+        </h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Extra</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unit.</th>
+                        <th>Total</th>
+                        <th>Observações</th>
+                        {% if venda.pode_editar %}
+                        <th width="50">Ações</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for extra_venda in venda.extras.all %}
+                    <tr>
+                        <td>
+                            <i class="fas fa-plus-circle text-primary me-2"></i>
+                            {{ extra_venda.extra.nome }}
+                        </td>
+                        <td>{{ extra_venda.quantidade }}</td>
+                        <td>R$ {{ extra_venda.valor_unitario|floatformat:2 }}</td>
+                        <td class="fw-bold">R$ {{ extra_venda.valor_total|floatformat:2 }}</td>
+                        <td>
+                            {% if extra_venda.observacoes %}
+                            <small class="text-muted">{{ extra_venda.observacoes|truncatechars:30 }}</small>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        {% if venda.pode_editar %}
+                        <td>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    hx-delete="{% url 'comercial:remover_extra' venda.id extra_venda.id %}"
+                                    hx-target="#extras-container"
+                                    hx-swap="outerHTML"
+                                    hx-confirm="Tem certeza que deseja remover este extra?">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold bg-light">
+                        <td colspan="3" class="text-end">Total:</td>
+                        <td class="text-success">R$ {{ venda.valor_extras|floatformat:2 }}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Atualizar total no rodapé do modal -->
+    <script>
+        document.getElementById('total-extras-valor').textContent = 'R$ {{ venda.valor_extras|floatformat:2 }}';
+    </script>
+    {% else %}
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        Nenhum extra adicionado ainda.
+    </div>
+    {% endif %}
+</div>

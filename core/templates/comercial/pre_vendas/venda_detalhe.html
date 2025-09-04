@@ -25,7 +25,7 @@
                             </h1>
                             <p class="mb-0 opacity-75">
                                 <i class="fas fa-user me-2"></i>
-                                Cliente: {{ venda.cliente.nome }}
+                                Cliente: {% if venda.cliente %}{{ venda.cliente.nome }}{% else %}Não definido{% endif %}
                             </p>
                         </div>
                         <div class="col-auto">
@@ -40,6 +40,190 @@
             </div>
         </div>
     </div>
+
+    <!-- Cards de Gerenciamento -->
+    <div class="row g-4 mb-4">
+        <!-- Card Comprador (OBRIGATÓRIO) -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm h-100 {% if venda.tem_cliente %}border-success border-2{% else %}border-danger{% endif %}" 
+                 style="cursor: pointer;"
+                 hx-get="{% url 'comercial:selecionar_cliente_modal' venda.id %}"
+                 hx-target="#modal-container"
+                 hx-swap="innerHTML"
+                 hx-on::after-request="bootstrap.Modal.getOrCreateInstance(document.getElementById('htmxModal')).show()">
+                <div class="card-body text-center py-4">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-danger">Obrigatório</span>
+                    </div>
+                    <div class="mb-3">
+                        {% if venda.tem_cliente %}
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        {% else %}
+                        <i class="fas fa-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title mb-1">
+                        <i class="fas fa-user-tie me-2"></i>Comprador
+                    </h5>
+                    <p class="mb-2">
+                        {% if venda.tem_cliente %}
+                        <strong class="text-success">{{ venda.cliente.nome|truncatechars:20 }}</strong>
+                        {% else %}
+                        <span class="text-danger fw-bold">Definir comprador</span>
+                        {% endif %}
+                    </p>
+                    {% if venda.tem_cliente %}
+                    <small class="text-muted">
+                        {% if venda.cliente.cpf %}CPF: {{ venda.cliente.cpf }}{% elif venda.cliente.email %}{{ venda.cliente.email }}{% else %}Cliente definido{% endif %}
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Passageiros (OBRIGATÓRIO) -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm h-100 {% if venda.tem_passageiros %}border-success border-2{% else %}border-danger{% endif %}" 
+                 style="cursor: pointer;"
+                 hx-get="{% url 'comercial:gerenciar_passageiros_modal' venda.id %}"
+                 hx-target="#modal-container"
+                 hx-swap="innerHTML"
+                 data-bs-toggle="modal"
+                 data-bs-target="#htmxModal">
+                <div class="card-body text-center py-4">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-danger">Obrigatório</span>
+                    </div>
+                    <div class="mb-3">
+                        {% if venda.tem_passageiros %}
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        {% else %}
+                        <i class="fas fa-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title mb-1">
+                        <i class="fas fa-users me-2"></i>Passageiros
+                    </h5>
+                    <p class="mb-2">
+                        {% if venda.tem_passageiros %}
+                        <strong class="text-success">{{ venda.numero_passageiros }} cadastrado(s)</strong>
+                        {% else %}
+                        <span class="text-danger fw-bold">Adicionar passageiros</span>
+                        {% endif %}
+                    </p>
+                    {% if venda.tem_passageiros %}
+                    <small class="text-muted">Valor: R$ {{ venda.valor_passageiros|floatformat:2 }}</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Pagamentos (OBRIGATÓRIO) -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm h-100 {% if venda.tem_pagamentos %}border-success border-2{% else %}border-danger{% endif %}" 
+                 style="cursor: pointer;"
+                 hx-get="{% url 'comercial:gerenciar_pagamentos_modal' venda.id %}"
+                 hx-target="#modal-container"
+                 hx-swap="innerHTML"
+                 data-bs-toggle="modal"
+                 data-bs-target="#htmxModal">
+                <div class="card-body text-center py-4">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-danger">Obrigatório</span>
+                    </div>
+                    <div class="mb-3">
+                        {% if venda.tem_pagamentos %}
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        {% else %}
+                        <i class="fas fa-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title mb-1">
+                        <i class="fas fa-credit-card me-2"></i>Pagamentos
+                    </h5>
+                    <p class="mb-2">
+                        {% if venda.tem_pagamentos %}
+                        <strong class="text-success">{{ venda.pagamentos.count }} pagamento(s)</strong>
+                        {% else %}
+                        <span class="text-danger fw-bold">Registrar pagamento</span>
+                        {% endif %}
+                    </p>
+                    {% if venda.tem_pagamentos %}
+                    <small class="text-muted">Total pago: R$ {{ venda.valor_pago|floatformat:2 }}</small>
+                    <div class="progress mt-2" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ venda.percentual_pago }}%"
+                             aria-valuenow="{{ venda.percentual_pago }}" 
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Extras (OPCIONAL) -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm h-100 {% if venda.extras.exists %}border-info border-2{% endif %}" 
+                 style="cursor: pointer;"
+                 hx-get="{% url 'comercial:gerenciar_extras_modal' venda.id %}"
+                 hx-target="#modal-container"
+                 hx-swap="innerHTML"
+                 data-bs-toggle="modal"
+                 data-bs-target="#htmxModal">
+                <div class="card-body text-center py-4">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-info">Opcional</span>
+                    </div>
+                    <div class="mb-3">
+                        {% if venda.extras.exists %}
+                        <i class="fas fa-check-circle text-info" style="font-size: 3rem;"></i>
+                        {% else %}
+                        <i class="fas fa-plus-circle text-muted" style="font-size: 3rem;"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title mb-1">
+                        <i class="fas fa-plus-circle me-2"></i>Extras
+                    </h5>
+                    <p class="text-muted mb-2">
+                        {% if venda.extras.exists %}
+                        <strong class="text-info">{{ venda.extras.count }} extra(s) adicionado(s)</strong>
+                        {% else %}
+                        <span class="text-muted">Nenhum extra adicionado</span>
+                        {% endif %}
+                    </p>
+                    {% if venda.extras.exists %}
+                    <small class="text-muted">Valor: R$ {{ venda.valor_extras|floatformat:2 }}</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alerta de Requisitos para Confirmação -->
+    {% if not venda.pode_confirmar and venda.status == 'pre-venda' %}
+    <div class="row mb-4">
+        <div class="col">
+            <div class="alert alert-warning border-warning">
+                <h5 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Requisitos Pendentes para Confirmar a Venda
+                </h5>
+                <p class="mb-2">Complete os seguintes itens obrigatórios:</p>
+                <ul class="mb-0">
+                    {% if not venda.tem_cliente %}
+                    <li><strong>Comprador/Cliente:</strong> Defina quem é o comprador da venda</li>
+                    {% endif %}
+                    {% if not venda.tem_passageiros %}
+                    <li><strong>Passageiros:</strong> Adicione pelo menos um passageiro</li>
+                    {% endif %}
+                    {% if not venda.tem_pagamentos %}
+                    <li><strong>Pagamentos:</strong> Registre pelo menos um pagamento</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="row g-4">
         <!-- Informações da Venda -->
@@ -73,8 +257,10 @@
                     {% endif %}
                     
                     <div class="mb-3">
-                        <small class="text-muted d-block">Número de Passageiros</small>
-                        <strong>{{ venda.numero_passageiros }}</strong>
+                        <small class="text-muted d-block">Status da Venda</small>
+                        <span class="badge bg-{{ venda.css_status_class }} fs-6">
+                            {{ venda.status_display_pt }}
+                        </span>
                     </div>
                     
                     {% if venda.observacoes %}
@@ -168,33 +354,6 @@
                             <i class="fas fa-edit me-2"></i>
                             Editar Venda
                         </button>
-                        
-                        <button class="btn btn-outline-primary"
-                                hx-get="{% url 'comercial:gerenciar_passageiros_modal' venda.id %}"
-                                hx-target="#modal-container"
-                                hx-swap="innerHTML"
-                                data-bs-toggle="modal"
-                                data-bs-target="#htmxModal">
-                            <i class="fas fa-users me-2"></i>
-                            Gerenciar Passageiros
-                        </button>
-                        
-                        <button class="btn btn-outline-primary">
-                            <i class="fas fa-plus-circle me-2"></i>
-                            Adicionar Extras
-                        </button>
-                        {% endif %}
-                        
-                        {% if venda.pode_adicionar_pagamento %}
-                        <button class="btn btn-success"
-                                hx-get="{% url 'comercial:registrar_pagamento_modal' venda.id %}"
-                                hx-target="#modal-container"
-                                hx-swap="innerHTML"
-                                data-bs-toggle="modal"
-                                data-bs-target="#htmxModal">
-                            <i class="fas fa-credit-card me-2"></i>
-                            Registrar Pagamento
-                        </button>
                         {% endif %}
                         
                         {% if venda.pode_gerar_contrato %}
@@ -213,6 +372,16 @@
                                 data-bs-target="#htmxModal">
                             <i class="fas fa-check-double me-2"></i>
                             Confirmar Venda
+                        </button>
+                        {% else %}
+                        <button class="btn btn-warning disabled" 
+                                disabled
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="left"
+                                title="Complete os requisitos obrigatórios: {% for req in venda.requisitos_confirmacao %}{{ req }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                            <i class="fas fa-lock me-2"></i>
+                            Confirmar Venda
+                            <span class="badge bg-danger ms-2">{{ venda.requisitos_confirmacao|length }}</span>
                         </button>
                         {% endif %}
                         
@@ -351,4 +520,14 @@
         <!-- Conteúdo do modal será carregado aqui via HTMX -->
     </div>
 </div>
+
+<script>
+    // Inicializar tooltips do Bootstrap
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
 {% endblock %}

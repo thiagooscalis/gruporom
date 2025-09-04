@@ -1,0 +1,89 @@
+<!-- Modal para Cadastrar/Definir Comprador -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+                <i class="fas fa-user-tie me-2"></i>
+                {% if venda.tem_cliente %}Alterar{% else %}Cadastrar{% endif %} Comprador
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+            {% if venda.tem_cliente %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Comprador atual:</strong> {{ venda.cliente.nome }}
+                {% if venda.cliente.cpf %}(CPF: {{ venda.cliente.cpf }}){% endif %}
+            </div>
+            {% endif %}
+            
+            <form id="form-comprador"
+                  hx-post="{% url 'comercial:cadastrar_comprador' venda.id %}"
+                  hx-target="#feedback-comprador"
+                  hx-swap="innerHTML">
+                {% csrf_token %}
+                
+                <!-- Documento - Campo principal -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-id-card me-1"></i>
+                        Documento *
+                    </label>
+                    <div class="input-group">
+                        <input type="text" 
+                               class="form-control" 
+                               name="doc"
+                               id="documento-input"
+                               placeholder="Digite CPF, CNPJ ou Passaporte"
+                               required>
+                        <button type="button" 
+                                class="btn btn-primary"
+                                hx-post="{% url 'comercial:buscar_por_documento' %}"
+                                hx-target="#dados-pessoa"
+                                hx-swap="innerHTML"
+                                hx-include="#documento-input, [name='csrfmiddlewaretoken']"
+                                hx-indicator="#spinner-documento">
+                            <i class="fas fa-search me-2"></i>Buscar
+                        </button>
+                    </div>
+                    <div class="form-text">Digite o documento para buscar pessoa existente</div>
+                </div>
+                
+                <div class="text-center mb-3">
+                    <span id="spinner-documento" class="htmx-indicator">
+                        <i class="fas fa-spinner fa-spin me-2"></i>Buscando pessoa...
+                    </span>
+                </div>
+                
+                <!-- Dados da Pessoa -->
+                <div id="dados-pessoa">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-search fa-2x mb-3"></i>
+                        <p>Digite um documento e clique em "Buscar" para carregar os dados da pessoa</p>
+                    </div>
+                </div>
+                
+                <div id="feedback-comprador" class="mt-3"></div>
+                
+                <div id="form-actions"></div>
+            </form>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <i class="fas fa-times me-2"></i>
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Após sucesso, recarregar página
+    document.body.addEventListener('comprador-cadastrado', function() {
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    });
+</script>

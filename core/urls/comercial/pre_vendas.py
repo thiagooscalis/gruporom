@@ -15,6 +15,22 @@ from core.views.comercial.pre_vendas import (
     confirmar_venda,
     cancelar_venda_modal,
     cancelar_venda,
+    # Novas views para extras e pagamentos
+    gerenciar_extras_modal,
+    adicionar_extra,
+    remover_extra,
+    gerenciar_pagamentos_modal,
+    adicionar_pagamento,
+    cancelar_pagamento,
+    confirmar_pagamento,
+    buscar_pessoas_autocomplete,
+    listar_passageiros,
+    # Views para cliente
+    selecionar_cliente_modal,
+    definir_cliente,
+    buscar_clientes_autocomplete,
+    buscar_por_documento,
+    cadastrar_comprador,
 )
 
 urlpatterns = [
@@ -25,12 +41,23 @@ urlpatterns = [
     # Gerenciamento de passageiros
     path('<int:venda_id>/passageiros/modal/', gerenciar_passageiros_modal, name='gerenciar_passageiros_modal'),
     path('buscar-pessoa/', buscar_pessoa_passageiro, name='buscar_pessoa_passageiro'),
+    path('buscar-pessoas-autocomplete/', buscar_pessoas_autocomplete, name='buscar_pessoas_autocomplete'),
     path('selecionar-pessoa/', selecionar_pessoa_passageiro, name='selecionar_pessoa_passageiro'),
     path('limpar-pessoa/', limpar_pessoa_passageiro, name='limpar_pessoa_passageiro'),
     path('<int:venda_id>/passageiros/adicionar/', adicionar_passageiro, name='adicionar_passageiro'),
     path('<int:venda_id>/passageiros/<int:passageiro_id>/remover/', remover_passageiro, name='remover_passageiro'),
+    path('<int:venda_id>/passageiros/listar/', listar_passageiros, name='listar_passageiros'),
+    
+    # Gerenciamento de extras
+    path('<int:venda_id>/extras/modal/', gerenciar_extras_modal, name='gerenciar_extras_modal'),
+    path('<int:venda_id>/extras/adicionar/', adicionar_extra, name='adicionar_extra'),
+    path('<int:venda_id>/extras/<int:extra_id>/remover/', remover_extra, name='remover_extra'),
     
     # Gerenciamento de pagamentos
+    path('<int:venda_id>/pagamentos/modal/', gerenciar_pagamentos_modal, name='gerenciar_pagamentos_modal'),
+    path('<int:venda_id>/pagamentos/adicionar/', adicionar_pagamento, name='adicionar_pagamento'),
+    path('pagamentos/<int:pagamento_id>/cancelar/', cancelar_pagamento, name='cancelar_pagamento'),
+    path('pagamentos/<int:pagamento_id>/confirmar/', confirmar_pagamento, name='confirmar_pagamento'),
     path('<int:venda_id>/pagamento/modal/', registrar_pagamento_modal, name='registrar_pagamento_modal'),
     path('<int:venda_id>/pagamento/registrar/', registrar_pagamento, name='registrar_pagamento'),
     
@@ -39,4 +66,11 @@ urlpatterns = [
     path('<int:venda_id>/confirmar/', confirmar_venda, name='confirmar_venda'),
     path('<int:venda_id>/cancelar/modal/', cancelar_venda_modal, name='cancelar_venda_modal'),
     path('<int:venda_id>/cancelar/', cancelar_venda, name='cancelar_venda'),
+    
+    # Gerenciamento de cliente
+    path('<int:venda_id>/cliente/modal/', selecionar_cliente_modal, name='selecionar_cliente_modal'),
+    path('<int:venda_id>/cliente/definir/', definir_cliente, name='definir_cliente'),
+    path('buscar-clientes-autocomplete/', buscar_clientes_autocomplete, name='buscar_clientes_autocomplete'),
+    path('buscar-por-documento/', buscar_por_documento, name='buscar_por_documento'),
+    path('<int:venda_id>/cadastrar-comprador/', cadastrar_comprador, name='cadastrar_comprador'),
 ]

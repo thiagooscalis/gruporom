@@ -39,7 +39,9 @@ class VendaBloqueio(models.Model):
         Pessoa,
         on_delete=models.PROTECT,
         related_name="vendas_bloqueio_cliente",
-        verbose_name="Cliente"
+        verbose_name="Cliente",
+        null=True,
+        blank=True
     )
     
     vendedor = models.ForeignKey(
@@ -281,7 +283,57 @@ class VendaBloqueio(models.Model):
     @property
     def pode_confirmar(self):
         """Verifica se a venda pode ser confirmada"""
-        return self.status == 'pre-venda' and self.valor_pendente <= 0
+        # Venda deve estar em pré-venda
+        if self.status != 'pre-venda':
+            return False
+        
+        # Deve ter pelo menos um passageiro
+        if not self.passageiros.exists():
+            return False
+        
+        # Deve ter cliente (comprador) definido
+        if not self.cliente_id:
+            return False
+        
+        # Deve ter pelo menos um pagamento
+        if not self.pagamentos.exists():
+            return False
+        
+        return True
+    
+    @property
+    def requisitos_confirmacao(self):
+        """Retorna lista de requisitos pendentes para confirmação"""
+        requisitos = []
+        
+        if not self.passageiros.exists():
+            requisitos.append('Adicionar pelo menos um passageiro')
+        
+        if not self.cliente_id:
+            requisitos.append('Definir o comprador/cliente')
+        
+        if not self.pagamentos.exists():
+            requisitos.append('Registrar pelo menos um pagamento')
+        
+        if self.status != 'pre-venda':
+            requisitos.append('Venda deve estar em status pré-venda')
+        
+        return requisitos
+    
+    @property
+    def tem_passageiros(self):
+        """Verifica se tem passageiros"""
+        return self.passageiros.exists()
+    
+    @property
+    def tem_pagamentos(self):
+        """Verifica se tem pagamentos"""
+        return self.pagamentos.exists()
+    
+    @property
+    def tem_cliente(self):
+        """Verifica se tem cliente/comprador definido"""
+        return bool(self.cliente_id)
     
     @property
     def percentual_pago(self):

@@ -10,8 +10,10 @@ from core.models.caravana import Caravana
 from core.models.venda import VendaBloqueio
 from core.models.bloqueio import Bloqueio
 from core.models.pessoa import Pessoa
+from core.models.pais import Pais
 from core.models.passageiro import Passageiro
 from core.services.venda_service import VendaService
+from core.forms.pessoa import PessoaForm
 
 
 @login_required
@@ -96,17 +98,17 @@ def iniciar_venda_caravana(request, caravana_id):
         if bloqueio_id:
             bloqueio = get_object_or_404(Bloqueio, pk=bloqueio_id)
         
-        # Criar a venda em pré-venda
+        # Criar a venda em pré-venda (sem cliente definido inicialmente)
         venda = VendaBloqueio.objects.create(
             bloqueio=bloqueio,
-            cliente=caravana.responsavel,  # Usar o responsável da caravana como cliente inicial
+            cliente=None,  # Cliente deve ser definido após criação da pré-venda
             vendedor=request.user,
             status='pre-venda',
-            numero_passageiros=int(quantidade) if quantidade else 0,
+            numero_passageiros=0,  # Passageiros também devem ser adicionados após criação
             observacoes=f'Venda iniciada a partir da caravana: {caravana.nome}'
         )
         
-        messages.success(request, f'Venda {venda.codigo} criada com sucesso!')
+        messages.success(request, f'Pré-venda {venda.codigo} criada com sucesso! Agora defina o comprador, adicione passageiros e registre pagamentos.')
         return redirect('comercial:pre_venda_detalhe', venda_id=venda.id)
         
     except Exception as e:
@@ -496,4 +498,510 @@ def cancelar_venda(request, venda_id):
     except Exception as e:
         messages.error(request, str(e))
         return HttpResponse(f'<div class="alert alert-danger m-3">{str(e)}</div>')
+
+
+# Views para gerenciar extras
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def gerenciar_extras_modal(request, venda_id):
+    """
+    View para exibir modal de gerenciamento de extras
+    """
+    from core.models.extra import Extra
+    
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    # Buscar extras disponíveis
+    extras_disponiveis = Extra.objects.filter(ativo=True)
+    
+    context = {
+        'venda': venda,
+        'extras_disponiveis': extras_disponiveis,
+    }
+    
+    return render(request, 'comercial/pre_vendas/modals/gerenciar_extras.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def adicionar_extra(request, venda_id):
+    """
+    View para adicionar extra à venda
+    """
+    from core.models.extra import Extra, ExtraVenda
+    
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    extra_id = request.POST.get('extra_id')
+    quantidade = int(request.POST.get('quantidade', 1))
+    valor_unitario = float(request.POST.get('valor_unitario', 0).replace('R$', '').replace('.', '').replace(',', '.'))
+    observacoes = request.POST.get('observacoes', '')
+    
+    try:
+        extra = get_object_or_404(Extra, pk=extra_id)
+        
+        # Criar o extra da venda
+        extra_venda = ExtraVenda.objects.create(
+            venda=venda,
+            extra=extra,
+            quantidade=quantidade,
+            valor_unitario=valor_unitario or extra.valor,
+            observacoes=observacoes
+        )
+        
+        # Recalcular totais
+        service = VendaService()
+        service._recalcular_totais_venda(venda)
+        
+        messages.success(request, f'Extra {extra.nome} adicionado com sucesso!')
+    except Exception as e:
+        messages.error(request, f'Erro ao adicionar extra: {str(e)}')
+    
+    venda.refresh_from_db()
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_extras.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_http_methods(["DELETE"])
+def remover_extra(request, venda_id, extra_id):
+    """
+    View para remover extra da venda
+    """
+    from core.models.extra import ExtraVenda
+    
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    extra_venda = get_object_or_404(ExtraVenda, pk=extra_id, venda=venda)
+    
+    try:
+        nome_extra = extra_venda.extra.nome
+        extra_venda.delete()
+        
+        # Recalcular totais
+        service = VendaService()
+        service._recalcular_totais_venda(venda)
+        
+        messages.success(request, f'Extra {nome_extra} removido com sucesso!')
+    except Exception as e:
+        messages.error(request, f'Erro ao remover extra: {str(e)}')
+    
+    venda.refresh_from_db()
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_extras.html', context)
+
+
+# Views para gerenciar pagamentos
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def gerenciar_pagamentos_modal(request, venda_id):
+    """
+    View para exibir modal de gerenciamento de pagamentos
+    """
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/modals/gerenciar_pagamentos.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def adicionar_pagamento(request, venda_id):
+    """
+    View para adicionar pagamento à venda
+    """
+    from datetime import datetime
+    
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    try:
+        valor = float(request.POST.get('valor', 0).replace('R$', '').replace('.', '').replace(',', '.'))
+        forma_pagamento = request.POST.get('forma_pagamento')
+        data_pagamento = request.POST.get('data_pagamento')
+        status = request.POST.get('status', 'confirmado')
+        referencia = request.POST.get('referencia', '')
+        observacoes = request.POST.get('observacoes', '')
+        
+        # Converter data
+        if data_pagamento:
+            data_pagamento = datetime.strptime(data_pagamento, '%Y-%m-%dT%H:%M')
+        else:
+            data_pagamento = None
+        
+        # Usar o service para registrar o pagamento
+        service = VendaService()
+        pagamento = service.registrar_pagamento(
+            venda_id=venda.id,
+            dados_pagamento={
+                'valor': valor,
+                'forma_pagamento': forma_pagamento,
+                'data_pagamento': data_pagamento,
+                'status': status,
+                'referencia': referencia,
+                'observacoes': observacoes,
+            }
+        )
+        
+        messages.success(request, f'Pagamento de R$ {valor:.2f} registrado com sucesso!')
+        
+        if venda.esta_quitada:
+            messages.info(request, 'Venda totalmente quitada!')
+            
+    except Exception as e:
+        messages.error(request, f'Erro ao registrar pagamento: {str(e)}')
+    
+    venda.refresh_from_db()
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_pagamentos.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_http_methods(["DELETE"])
+def cancelar_pagamento(request, pagamento_id):
+    """
+    View para cancelar pagamento
+    """
+    from core.models.pagamento import Pagamento
+    
+    pagamento = get_object_or_404(Pagamento, pk=pagamento_id)
+    venda = pagamento.venda
+    
+    try:
+        pagamento.status = 'cancelado'
+        pagamento.save()
+        
+        # Recalcular totais
+        service = VendaService()
+        service._recalcular_totais_venda(venda)
+        
+        messages.success(request, 'Pagamento cancelado com sucesso!')
+    except Exception as e:
+        messages.error(request, f'Erro ao cancelar pagamento: {str(e)}')
+    
+    venda.refresh_from_db()
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_pagamentos.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def confirmar_pagamento(request, pagamento_id):
+    """
+    View para confirmar pagamento pendente
+    """
+    from core.models.pagamento import Pagamento
+    
+    pagamento = get_object_or_404(Pagamento, pk=pagamento_id)
+    venda = pagamento.venda
+    
+    try:
+        pagamento.status = 'confirmado'
+        pagamento.save()
+        
+        # Recalcular totais
+        service = VendaService()
+        service._recalcular_totais_venda(venda)
+        
+        messages.success(request, 'Pagamento confirmado com sucesso!')
+    except Exception as e:
+        messages.error(request, f'Erro ao confirmar pagamento: {str(e)}')
+    
+    venda.refresh_from_db()
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_pagamentos.html', context)
+
+
+# Views para gerenciar cliente/comprador
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def selecionar_cliente_modal(request, venda_id):
+    """
+    View para exibir modal de seleção de cliente
+    """
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/modals/selecionar_cliente.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def definir_cliente(request, venda_id):
+    """
+    View para definir/alterar cliente da venda
+    """
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    cliente_id = request.POST.get('cliente_id')
+    
+    if not cliente_id:
+        return HttpResponse(
+            '<div class="alert alert-danger">Selecione um cliente.</div>'
+        )
+    
+    try:
+        cliente = get_object_or_404(Pessoa, pk=cliente_id)
+        venda.cliente = cliente
+        venda.save()
+        
+        messages.success(request, f'Cliente {cliente.nome} definido com sucesso!')
+        
+        # Trigger evento para recarregar página
+        return HttpResponse("""
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i>
+                Cliente definido com sucesso!
+            </div>
+            <script>
+                document.body.dispatchEvent(new Event('cliente-definido'));
+            </script>
+        """)
+    except Exception as e:
+        return HttpResponse(
+            f'<div class="alert alert-danger">Erro ao definir cliente: {str(e)}</div>'
+        )
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def buscar_clientes_autocomplete(request):
+    """
+    View para autocomplete de clientes
+    """
+    query = request.POST.get('busca_cliente', '')
+    
+    if len(query) < 2:
+        return HttpResponse('')
+    
+    clientes = Pessoa.objects.filter(
+        Q(nome__icontains=query) |
+        Q(cpf__icontains=query) |
+        Q(email__icontains=query)
+    )[:10]
+    
+    html = '<div class="list-group position-absolute w-100 shadow" style="z-index: 1000; max-height: 300px; overflow-y: auto;">'
+    for cliente in clientes:
+        html += f'''
+        <button type="button" class="list-group-item list-group-item-action"
+                onclick="selecionarCliente({cliente.id}, '{cliente.nome}', '{cliente.cpf or ""}', '{cliente.email or ""}')">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{cliente.nome}</strong>
+                    <br>
+                    <small class="text-muted">
+                        {f"CPF: {cliente.cpf}" if cliente.cpf else ""}
+                        {f" | {cliente.email}" if cliente.email else ""}
+                    </small>
+                </div>
+                <i class="fas fa-chevron-right text-muted"></i>
+            </div>
+        </button>
+        '''
+    html += '</div>'
+    
+    return HttpResponse(html)
+
+
+# Views auxiliares HTMX
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def buscar_pessoas_autocomplete(request):
+    """
+    View para autocomplete de pessoas
+    """
+    query = request.POST.get('busca_pessoa', '')
+    
+    if len(query) < 2:
+        return HttpResponse('')
+    
+    pessoas = Pessoa.objects.filter(
+        Q(nome__icontains=query) |
+        Q(cpf__icontains=query) |
+        Q(passaporte__icontains=query)
+    )[:10]
+    
+    html = '<div class="list-group position-absolute w-100 shadow" style="z-index: 1000; max-height: 300px; overflow-y: auto;">'
+    for pessoa in pessoas:
+        doc = pessoa.cpf or pessoa.passaporte or 'Sem documento'
+        html += f'''
+        <button type="button" class="list-group-item list-group-item-action"
+                onclick="selecionarPessoa({pessoa.id}, '{pessoa.nome}')">
+            <div class="d-flex justify-content-between">
+                <strong>{pessoa.nome}</strong>
+                <small class="text-muted">{doc}</small>
+            </div>
+        </button>
+        '''
+    html += '</div>'
+    
+    return HttpResponse(html)
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+def listar_passageiros(request, venda_id):
+    """
+    View para listar passageiros da venda via HTMX
+    """
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    context = {
+        'venda': venda,
+    }
+    
+    return render(request, 'comercial/pre_vendas/partials/lista_passageiros.html', context)
+
+
+@login_required  
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def buscar_por_documento(request):
+    """
+    View para buscar pessoa por documento via HTMX
+    """
+    documento = request.POST.get('doc', '').strip()
+    
+    if not documento:
+        return HttpResponse('')
+    
+    # Limpar documento removendo formatação
+    doc_limpo = ''.join(filter(str.isalnum, documento))
+    
+    try:
+        # Buscar pessoa por documento ou passaporte
+        pessoa = Pessoa.objects.filter(
+            Q(doc=doc_limpo) | 
+            Q(passaporte_numero=doc_limpo)
+        ).first()
+        
+        # Obter lista de países para o formulário
+        paises = Pais.objects.all().order_by('nome')
+        
+        if pessoa:
+            # Se encontrou, criar form com instance
+            form = PessoaForm(instance=pessoa)
+            context = {
+                'form': form,
+                'pessoa': pessoa,
+                'pessoa_encontrada': True,
+                'paises': paises
+            }
+        else:
+            # Se não encontrou, criar form vazio
+            form = PessoaForm()
+            context = {
+                'form': form,
+                'pessoa_encontrada': False,
+                'paises': paises
+            }
+            
+        return render(request, 'comercial/pre_vendas/partials/dados_pessoa.html', context)
+        
+    except Exception as e:
+        return HttpResponse('')
+
+
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Comercial').exists())
+@require_POST
+def cadastrar_comprador(request, venda_id):
+    """
+    View para cadastrar/atualizar comprador via HTMX
+    """
+    venda = get_object_or_404(VendaBloqueio, pk=venda_id)
+    
+    try:
+        documento = request.POST.get('doc', '').strip()
+        
+        if not documento:
+            return HttpResponse(
+                '<div class="alert alert-danger">Documento é obrigatório.</div>'
+            )
+        
+        # Limpar documento
+        doc_limpo = ''.join(filter(str.isalnum, documento))
+        
+        # Verificar se já existe
+        pessoa = Pessoa.objects.filter(
+            Q(doc=doc_limpo) | 
+            Q(passaporte_numero=doc_limpo)
+        ).first()
+        
+        if pessoa:
+            # Atualizar pessoa existente
+            form = PessoaForm(request.POST, instance=pessoa)
+        else:
+            # Criar nova pessoa
+            form = PessoaForm(request.POST)
+            
+            # Definir tipo de documento baseado no formato
+            if len(doc_limpo) == 14:
+                form.data = form.data.copy()
+                form.data['doc'] = doc_limpo
+                form.data['tipo_doc'] = 'CNPJ'
+            elif len(doc_limpo) == 11 and doc_limpo.isdigit():
+                form.data = form.data.copy()
+                form.data['doc'] = doc_limpo
+                form.data['tipo_doc'] = 'CPF'
+            else:
+                # Se não for CPF nem CNPJ, considerar como passaporte
+                form.data = form.data.copy()
+                form.data['passaporte_numero'] = doc_limpo
+                form.data['doc'] = doc_limpo
+                form.data['tipo_doc'] = 'Passaporte'
+        
+        if form.is_valid():
+            pessoa = form.save()
+            
+            # Associar pessoa à venda
+            venda.cliente = pessoa
+            venda.save()
+            
+            # Disparar evento JavaScript para recarregar página
+            response = HttpResponse(
+                '<div class="alert alert-success">Comprador cadastrado com sucesso!</div>'
+                '<script>document.body.dispatchEvent(new CustomEvent("comprador-cadastrado"));</script>'
+            )
+            
+            return response
+        else:
+            # Retornar erros do formulário
+            errors = '<br>'.join([f"{field}: {', '.join(errs)}" for field, errs in form.errors.items()])
+            return HttpResponse(
+                f'<div class="alert alert-danger">Erro ao cadastrar comprador:<br>{errors}</div>'
+            )
+        
+    except Exception as e:
+        return HttpResponse(
+            f'<div class="alert alert-danger">Erro ao cadastrar comprador: {str(e)}</div>'
+        )
 

@@ -1,0 +1,96 @@
+<!-- Lista de Pagamentos Partial -->
+<div id="pagamentos-container">
+    {% if venda.pagamentos.exists %}
+    <div class="mb-4">
+        <h6 class="text-muted mb-3">
+            Histórico de Pagamentos ({{ venda.pagamentos.count }})
+        </h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Forma</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Referência</th>
+                        {% if venda.pode_editar %}
+                        <th width="100">Ações</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in venda.pagamentos.all %}
+                    <tr>
+                        <td>
+                            <small>{{ pagamento.data_pagamento|date:"d/m/Y H:i" }}</small>
+                        </td>
+                        <td>
+                            <i class="fas fa-{{ pagamento.icone_forma_pagamento }} text-muted me-1"></i>
+                            {{ pagamento.get_forma_pagamento_display }}
+                        </td>
+                        <td class="fw-bold">R$ {{ pagamento.valor|floatformat:2 }}</td>
+                        <td>
+                            <span class="badge bg-{{ pagamento.css_status_class }}">
+                                {{ pagamento.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if pagamento.referencia %}
+                            <small class="text-muted">{{ pagamento.referencia|truncatechars:20 }}</small>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        {% if venda.pode_editar %}
+                        <td>
+                            {% if pagamento.status == 'pendente' %}
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-success"
+                                    hx-post="{% url 'comercial:confirmar_pagamento' pagamento.id %}"
+                                    hx-target="#pagamentos-container"
+                                    hx-swap="outerHTML"
+                                    title="Confirmar pagamento">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            {% endif %}
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    hx-delete="{% url 'comercial:cancelar_pagamento' pagamento.id %}"
+                                    hx-target="#pagamentos-container"
+                                    hx-swap="outerHTML"
+                                    hx-confirm="Tem certeza que deseja cancelar este pagamento?">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold bg-light">
+                        <td colspan="2" class="text-end">Total Pago:</td>
+                        <td class="text-success">R$ {{ venda.valor_pago|floatformat:2 }}</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr class="fw-bold bg-light">
+                        <td colspan="2" class="text-end">Valor Pendente:</td>
+                        <td class="text-warning">{{ venda.valor_pendente_formatado }}</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Trigger atualização do resumo financeiro -->
+    <script>
+        htmx.trigger(document.body, 'pagamento-atualizado');
+    </script>
+    {% else %}
+    <div class="alert alert-warning mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Nenhum pagamento registrado ainda.
+    </div>
+    {% endif %}
+</div>

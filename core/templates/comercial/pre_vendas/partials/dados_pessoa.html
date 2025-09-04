@@ -1,0 +1,152 @@
+{% load crispy_forms_tags %}
+{% if pessoa_encontrada %}
+    <!-- Pessoa encontrada - preencher dados -->
+    <div class="alert alert-info">
+        <i class="fas fa-user-check me-2"></i>
+        <strong>Pessoa encontrada:</strong> {{ pessoa.nome }}
+        {% if pessoa.doc %}({{ pessoa.tipo_doc }}: {{ pessoa.doc }}){% endif %}
+        {% if pessoa.passaporte_numero %}(Passaporte: {{ pessoa.passaporte_numero }}){% endif %}
+    </div>
+    
+    <!-- Tipo de pessoa automaticamente detectado -->
+    {% if form.tipo_doc %}
+    <input type="hidden" name="tipo_doc" value="{{ pessoa.tipo_doc }}">
+    {% endif %}
+    
+    <div class="row g-3">
+        <div class="col-md-12">
+            {{ form.nome|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            {{ form.email1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-2">
+            {{ form.ddi1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-1">
+            {{ form.ddd1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.telefone1|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div class="row g-3 mt-2">
+        <div class="col-md-4">
+            {{ form.cep|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-8">
+            {{ form.endereco|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div id="endereco-fields" class="row g-3 mt-2">
+        <div class="col-md-3">
+            {{ form.cidade|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.estado|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.bairro|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.pais|as_crispy_field }}
+        </div>
+    </div>
+    
+    <!-- Botão de submit -->
+    <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check me-2"></i>
+            Atualizar Comprador
+        </button>
+    </div>
+    
+{% else %}
+    <!-- Pessoa não encontrada - campos vazios -->
+    <div class="alert alert-warning">
+        <i class="fas fa-user-plus me-2"></i>
+        <strong>Pessoa não encontrada.</strong> Preencha os dados para cadastrar.
+    </div>
+    
+    <!-- Campo de documento oculto para manter valor -->
+    <input type="hidden" name="doc" value="{{ request.POST.doc }}">
+    
+    <div class="row g-3">
+        <div class="col-md-12">
+            {{ form.nome|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            {{ form.email1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-2">
+            {{ form.ddi1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-1">
+            {{ form.ddd1|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.telefone1|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div class="row g-3 mt-2">
+        <div class="col-md-4">
+            {{ form.cep|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-8">
+            {{ form.endereco|as_crispy_field }}
+        </div>
+    </div>
+    
+    <div id="endereco-fields" class="row g-3 mt-2">
+        <div class="col-md-3">
+            {{ form.cidade|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.estado|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.bairro|as_crispy_field }}
+        </div>
+        
+        <div class="col-md-3">
+            {{ form.pais|as_crispy_field }}
+        </div>
+    </div>
+    
+    <!-- Botão de submit -->
+    <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check me-2"></i>
+            Cadastrar Comprador
+        </button>
+    </div>
+    
+    <script>
+        // Re-aplicar máscaras após carregar conteúdo
+        if (typeof initAllMasks === 'function') {
+            initAllMasks();
+        }
+    </script>
+{% endif %}

@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './autocomplete.js';
 import './multiple-autocomplete.js';
 import './masks.js';
+import './cep.js';
 
 // Make htmx available globally
 window.htmx = htmx;

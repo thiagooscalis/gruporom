@@ -1,0 +1,131 @@
+<!-- Modal para Gerenciar Extras -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+                <i class="fas fa-plus-circle me-2"></i>
+                Gerenciar Extras - {{ venda.codigo }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Lista de Extras Atuais -->
+            <div id="extras-container">
+                {% include 'comercial/pre_vendas/partials/lista_extras.html' %}
+            </div>
+            
+            <hr>
+            
+            <!-- Formulário para Adicionar Extra -->
+            <h6 class="text-muted mb-3">Adicionar Novo Extra</h6>
+            <form hx-post="{% url 'comercial:adicionar_extra' venda.id %}"
+                  hx-target="#extras-container"
+                  hx-swap="innerHTML"
+                  hx-on::after-request="if(event.detail.successful) this.reset();">
+                {% csrf_token %}
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Extra</label>
+                        <select name="extra_id" class="form-select" required
+                                hx-get="{% url 'comercial:buscar_valor_extra' %}"
+                                hx-trigger="change"
+                                hx-target="#valor-extra"
+                                hx-swap="outerHTML">
+                            <option value="">Selecione um extra...</option>
+                            {% for extra in extras_disponiveis %}
+                            <option value="{{ extra.id }}" data-valor="{{ extra.valor }}">
+                                {{ extra.nome }} - R$ {{ extra.valor|floatformat:2 }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">Quantidade</label>
+                        <input type="number" 
+                               name="quantidade" 
+                               class="form-control" 
+                               value="1" 
+                               min="1" 
+                               required
+                               hx-post="{% url 'comercial:calcular_total_extra' %}"
+                               hx-trigger="input"
+                               hx-include="[name='extra_id']"
+                               hx-target="#total-extra"
+                               hx-swap="innerHTML">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">Valor Unit.</label>
+                        <input type="text" 
+                               id="valor-extra"
+                               name="valor_unitario" 
+                               class="form-control money-mask" 
+                               placeholder="R$ 0,00"
+                               required>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">Total</label>
+                        <div id="total-extra" class="form-control-plaintext fw-bold text-success">
+                            R$ 0,00
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-3 mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label">Observações</label>
+                        <textarea name="observacoes" 
+                                  class="form-control" 
+                                  rows="2" 
+                                  placeholder="Observações opcionais sobre este extra..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>
+                        Adicionar Extra
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="modal-footer bg-light">
+            <div class="d-flex justify-content-between w-100 align-items-center">
+                <div>
+                    <strong>Total de Extras:</strong> 
+                    <span class="text-primary fw-bold" id="total-extras-valor">R$ {{ venda.valor_extras|floatformat:2 }}</span>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Máscara de dinheiro para valores
+    document.querySelectorAll('.money-mask').forEach(function(el) {
+        if (!el.hasAttribute('data-imask-initialized')) {
+            IMask(el, {
+                mask: 'R$ num',
+                blocks: {
+                    num: {
+                        mask: Number,
+                        thousandsSeparator: '.',
+                        radix: ',',
+                        scale: 2,
+                        padFractionalZeros: true,
+                    }
+                }
+            });
+            el.setAttribute('data-imask-initialized', 'true');
+        }
+    });
+</script>
