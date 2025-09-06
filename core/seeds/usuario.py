@@ -63,8 +63,6 @@ class UsuarioSeeder:
                             nome=f"ROM {tipo_empresa}",
                             doc=f"12345678{len(empresas):03d}001",
                             tipo_doc="CNPJ",
-                            email=f"contato@rom{tipo_empresa.lower().replace(' ', '')}.com.br",
-                            telefone="11888888888",
                             empresa_gruporom=True,
                             tipo_empresa=tipo_empresa
                         )
@@ -83,8 +81,6 @@ class UsuarioSeeder:
             nome="Thiago Martins",
             doc="12345678901",  # CPF somente números
             tipo_doc="CPF",
-            email="thiago@gruporom.com.br",
-            telefone="11999999999",  # Telefone somente números
         )
 
         # Cria o usuário administrador
@@ -102,8 +98,6 @@ class UsuarioSeeder:
                 nome=f"ROM {tipo_empresa}",
                 doc=f"12345678{len(empresas):03d}001",  # CNPJ sequencial
                 tipo_doc="CNPJ",
-                email=f"contato@rom{tipo_empresa.lower().replace(' ', '')}.com.br",
-                telefone="11888888888",
                 empresa_gruporom=True,
                 tipo_empresa=tipo_empresa
             )
